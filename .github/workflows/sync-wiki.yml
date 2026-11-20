@@ -12,6 +12,8 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # the job pushes to the repo's wiki
     steps:
       - name: Checkout main repository
         uses: actions/checkout@v4
