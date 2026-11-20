@@ -1,0 +1,1 @@
+Claude, Copilot, Muse, and Grokbot open branches and draft pull requests; only the repository owner merges to `main`. The `main` branch is locked by the `main: history` and `main: owner merges` rulesets.
