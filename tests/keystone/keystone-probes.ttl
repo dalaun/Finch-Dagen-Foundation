@@ -1,0 +1,169 @@
+@prefix : <http://example.org/trust-domain#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# Failure probes for the keystone, cascade and asset-to-program checks.
+# Loaded with the core ontology by validate_keystone.py. Each probe is a way
+# an idea or a dollar could sit outside the mission's lens. No verdict is
+# stated here: the shapes grade each case and expected.ttl is the answer key.
+# All amounts are illustrative.
+
+# F1. Help today, nothing lasting: pays residents' AI subscriptions for a
+#     month, no training, no capability named. Authorized by Opportunity,
+#     so it fails only the mission's second half.
+:Probe_SubscriptionHandout a :AuthorizedActivity ;
+    :advancesPurpose :FoundationOpportunityMission ;
+    rdfs:label "Probe: one month of residents' AI subscriptions, no training" .
+:FoundationOpportunityMission :authorizes :Probe_SubscriptionHandout .
+
+# F2. The founder's own for-profit venture run as a "program". No purpose
+#     authorizes it, so its staff pay cannot trace back either.
+:Probe_FounderVenture a :AuthorizedActivity ;
+    :requires :Probe_VentureRole ;
+    :buildsCapability :Cap_ResidentAgentOperators ;
+    rdfs:label "Probe: founder's own for-profit venture run as a program" .
+:Probe_VentureRole a :OperatorInRole ;
+    :servesActivity :Probe_FounderVenture ;
+    :necessitates :Probe_CompDomain_Venture ;
+    rdfs:label "Probe: venture staff" .
+:Probe_CompDomain_Venture a :CompensationDomain ;
+    :sustains :Probe_VentureRole ;
+    :manifestsAs :Probe_VenturePayment ;
+    :enablesPrivately :Probe_VenturePay .
+:Probe_VenturePayment a :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "5000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Probe: venture staff pay, claimed under Opportunity" .
+:Probe_VenturePay a :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Probe_FounderVenture ;
+    rdfs:label "Probe: venture staff pay" .
+
+# F3. The ontology steward paid over market: $8,000 a month is $96,000 a
+#     year against the $78,000 benchmark. The excess is separable.
+:Probe_CompDomain_StewardOver a :CompensationDomain ;
+    :sustains :Role_OntologySteward ;
+    :manifestsAs :Probe_StewardOverPayment ;
+    :enablesPrivately :Probe_StewardOverPay .
+:Role_OntologySteward :necessitates :Probe_CompDomain_StewardOver .
+:Probe_StewardOverPayment a :ActualSpend ;
+    :tracesBackTo :FoundationInnovationMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "8000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Probe: steward pay at $8,000 a month" .
+:Probe_StewardOverPay a :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationInnovationMission ;
+    :isInseparableFrom :Program_InstitutionalCapacity ;
+    :hasMarketBenchmark :Benchmark_OntologySteward ;
+    rdfs:label "Probe: steward pay over market" .
+
+# F4. The founder's personal travel, claimed as incidental to
+#     Opportunity. No program requires them and no domain pays an operator.
+:Probe_PersonalTravel a :PrivateEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Program_AIAgentTraining ;
+    rdfs:label "Probe: founder's personal travel" .
+:Probe_TravelPayment a :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "12000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :OneTime ] ;
+    rdfs:label "Probe: personal travel invoice" .
+
+# F5. A salary with no links at all (the case the old model passed by category).
+:Probe_UnlinkedSalary a :EmployeeCompensationEnablement ;
+    rdfs:label "Probe: salary with no links" .
+
+# F6. Hand-labelled permissible, with claims but no payment path.
+:Probe_HandLabelledPermissible a :PermissiblePrivateEnablement ;
+    :satisfiesKeystoneConstraint :TheKeystoneConstraint ;
+    :isIncidentalTo :FoundationEducationMission ;
+    :isInseparableFrom :Program_ChicagoGridLiteracy ;
+    rdfs:label "Probe: labelled permissible, no evidence" .
+
+# F7. An asset the trust holds with no program: a vehicle bought "because
+#     it might be useful". The asset-to-program pipeline rejects it.
+:Probe_IdleVehicle a :TangibleAsset ;
+    rdfs:label "Probe: vehicle with no program" .
+:ExampleFoundationTrust :controls :Probe_IdleVehicle .
+
+# F8. A trust that names a purpose but exercises no authority it legitimizes.
+:Probe_TrustWithoutAuthority a :TrustEntity ;
+    :hasPurpose :FoundationMission ;
+    rdfs:label "Probe: trust with purpose but no authority" .
+
+# F9. Steward pay booked to Health. The path runs through Innovation, so the
+#     trace to Health is not confirmed.
+:Probe_CompDomain_StewardHealth a :CompensationDomain ;
+    :sustains :Role_OntologySteward ;
+    :manifestsAs :Probe_StewardHealthPayment .
+:Probe_StewardHealthPayment a :ActualSpend ;
+    :tracesBackTo :FoundationHealthMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "6000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Probe: steward pay booked to Health" .
+
+# ----- Health program probes (added 2026-11-20) -----
+
+# F10. The founder's own functional-medicine visit, paid by the foundation
+#      and booked to Health. No program path backs it, and it benefits a
+#      disqualified person.
+:Probe_FounderCareVisit a :ActualSpend ;
+    :tracesBackTo :FoundationHealthMission ;
+    :benefitsPerson :Founder ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "450.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :OneTime ] ;
+    rdfs:label "Probe: founder's own care visit paid by the foundation" .
+
+# F11. A grant under the Health program to build the founder's own health
+#      graph. The cascade is complete (C1 passes), which is the point: a
+#      path to the mission does not cure self-dealing.
+:Probe_FounderHealthGraphGrant a :Grant ;
+    :grantAmount "5000.00"^^xsd:decimal ;
+    :grantedUnder :Program_ResidentHealthGraphGrants ;
+    :tracesBackTo :FoundationHealthMission ;
+    :benefitsPerson :Founder ;
+    :occursDuring :FiscalYear2027 ;
+    rdfs:label "Probe: grant to build the founder's own health graph" .
+:Program_ResidentHealthGraphGrants a :GrantmakingActivity ;
+    :advancesPurpose :FoundationHealthMission ;
+    :buildsCapability :Cap_ResidentHealthBaseline ;
+    rdfs:label "Probe: health graph grants (exists only to carry F11)" .
+:FoundationHealthMission :authorizes :Program_ResidentHealthGraphGrants .
+
+# F12. A record the program keeps with no resident owner.
+:Probe_UnownedRecord a :ParticipantRecord ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    rdfs:label "Probe: health record with no resident owner" .
+
+# F13. The foundation keeps a resident's record as its own data asset.
+:Probe_RecordAsFoundationAsset a :ParticipantRecord ;
+    :ownedBy :Participant_A ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    :deployedIn :Program_ResidentHealthGraph ;
+    rdfs:label "Probe: foundation copy of a resident's record" .
+:ExampleFoundationTrust :controls :Probe_RecordAsFoundationAsset .
+
+# F14. A resident's record sent to a research buyer with no consent.
+:Probe_RecordSoldWithoutConsent a :ParticipantRecord ;
+    :ownedBy :Participant_B ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    :sharedWith :Probe_ResearchBuyer ;
+    rdfs:label "Probe: record shared with a research buyer, no consent" .
+:Probe_ResearchBuyer rdfs:label "Probe: research data buyer (unnamed)" .
+
+# F15. Consent "given" by program staff, not by the record's owner.
+:Probe_StaffConsentedRecord a :ParticipantRecord ;
+    :ownedBy :Participant_A ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    :sharedWith :Probe_ResearchBuyer ;
+    :hasConsent :Probe_StaffConsent ;
+    rdfs:label "Probe: record shared on staff's consent, not the owner's" .
+:Probe_StaffConsent a :ConsentRecord ;
+    :grantedBy :Role_HealthNavigator ;
+    :consentFor :Probe_ResearchBuyer ;
+    :consentScope :DeidentifiedResearch ;
+    :consentRevocable true .

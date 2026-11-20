@@ -211,6 +211,39 @@ Then:
 
 ---
 
+## How the Graph Runs This Test
+
+The OWL classes above say what the keystone **means**. OWL reasons open-world: a missing link is "unknown", so on its own it can never fail a payment. Before this check existed, a salary with no links at all was classified permissible just by being "compensation", and the failing examples were labelled by hand.
+
+The test itself now lives in `trust-domain-keystone-shapes.ttl` (SHACL) and reads only linked evidence. Every private enablement is graded on five checks:
+
+| Check | Passes when |
+|---|---|
+| K1 Incidental claim | it names a purpose inside a trust's mission (`isIncidentalTo`) |
+| K2 Incidental backing | an expense domain pays it, sustains an operator, and an activity that purpose `authorizes` requires that operator |
+| K3 Inseparable | the activity it is `isInseparableFrom` is the one that requires the operator it sustains |
+| K4 Amount evidence | it has paid amounts and a market benchmark (`hasMarketBenchmark`) |
+| K5 Within market rate | no payment, annualized, exceeds the benchmark |
+
+Nothing is permissible by category or label: the verdict is the check's output. Amounts use the gist money pattern (`gist:Magnitude`, `gist:numericValue`, `gist:hasUnitOfMeasure`) with `:hasPaymentPeriod` (`:PerMonth`, `:PerYear`, `:OneTime`).
+
+One judgment call remains: the market benchmark. The check can only be as good as the benchmark's source, so each benchmark carries `dcterms:source`. The example benchmarks are illustrative, not a market survey.
+
+Run it:
+
+```
+pip install rdflib pyshacl
+python3 validate_keystone.py
+```
+
+It checks the foundation model in `trust-domain-ontology.ttl` plus the failure probes in `tests/keystone/`, and grades the results against the answer key in `tests/keystone/expected.ttl`. The model's examples come from the foundation's own programs, and every amount is illustrative:
+
+- The ontology steward's $6,000 a month, against a $78,000 a year benchmark, passes all five checks. The same role paid $8,000 a month fails K5 only: $96,000 a year is over the benchmark, so the excess is separable.
+- The founder's personal travel, claimed as incidental to Opportunity, fail K2, K3 and K4: no program requires them and no expense domain pays an operator.
+- Staff pay for the founder's own for-profit venture fails K2 and K4: no purpose authorizes the venture.
+
+The older narrative examples on this page and on [Examples](Examples.md) are the original illustration and have not been rebuilt yet.
+
 ## Automated Validation
 
 ### SPARQL Query: Find Improper Enablement

@@ -17,7 +17,7 @@ This page shows concrete individuals from the ontology demonstrating permissible
 ```turtle
 # 1. MISSION
 :FoundationMission rdf:type :CharitablePurpose ;
-    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity" ;
+    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability." ;
     :hasSubPurpose :FoundationHealthMission .
 
 # 2. PURPOSE DOMAIN
@@ -123,7 +123,7 @@ This page shows concrete individuals from the ontology demonstrating permissible
 
 ```
 Attempted cascade:
-1. Mission: "Empowering lives through..."
+1. Mission: "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability."
    ↓
 2. Purpose Domain: ???
    ❌ NO PURPOSE SERVES PERSONAL LUXURY

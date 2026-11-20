@@ -8,7 +8,7 @@ The Trust Domain Ontology is a formal OWL 2 DL ontology that models private & fo
 
 ## Mission
 
-**"Empowering lives through health, education, innovation, and opportunity"**
+**"Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability."**
 
 This ontology formalizes how this mission statement becomes the authorizing document that legitimizes every operational instrument and expenditure.
 

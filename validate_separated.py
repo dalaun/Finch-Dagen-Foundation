@@ -91,10 +91,40 @@ try:
     print(f"   - Combined (vocab + compliance): {total_triples} triples")
     print(f"   - Difference: {abs(total_triples - original_count)} triples")
 
-    if abs(total_triples - original_count) < 10:  # Allow small difference for metadata
-        print("   ✓ Separation successful (similar triple count)")
-    else:
-        print(f"   ⚠ WARNING: Significant difference in triple count")
+    # A count can hide lost content (the v3 split lost 8 property-chain
+    # triples and still looked close). Compare content instead: expand every
+    # blank node (lists, restrictions) into its full structure, skip the
+    # ontology header, and ignore explicit "a owl:Class" on anonymous classes.
+    from rdflib import BNode, RDF, OWL
+
+    def expand(node, g, seen=()):
+        if not isinstance(node, BNode) or node in seen:
+            return node
+        return tuple(sorted(
+            (str(p), str(expand(o, g, seen + (node,))))
+            for p, o in g.predicate_objects(node)
+            if not (p == RDF.type and o == OWL.Class)))
+
+    def content(g):
+        headers = set(g.subjects(RDF.type, OWL.Ontology))
+        return {(s, p, expand(o, g)) for s, p, o in g
+                if not isinstance(s, BNode) and s not in headers}
+
+    combined_g = Graph()
+    combined_g.parse("trust-domain-vocabulary.ttl", format="turtle")
+    combined_g.parse("trust-domain-compliance.ttl", format="turtle")
+    lost = content(original) - content(combined_g)
+    added = content(combined_g) - content(original)
+    print(f"   - Statements in original but not in split: {len(lost)}")
+    print(f"   - Statements in split but not in original: {len(added)}")
+    for s, p, o in sorted(lost, key=str)[:10]:
+        print(f"     lost:  {s.split('#')[-1]} {p.split('#')[-1]}")
+    for s, p, o in sorted(added, key=str)[:10]:
+        print(f"     added: {s.split('#')[-1]} {p.split('#')[-1]}")
+    if lost or added:
+        print("   ✗ Split does not carry the same content as the original")
+        exit(1)
+    print("   ✓ Same content as the original (header and anonymous-class typing aside)")
 
 except Exception as e:
     print(f"   ✗ FAILED: {e}")

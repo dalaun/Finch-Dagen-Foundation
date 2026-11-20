@@ -1,0 +1,59 @@
+@prefix : <http://example.org/trust-domain#> .
+@prefix t: <http://example.org/trust-domain/tests#> .
+
+# Answer key for validate_keystone.py. Each checked node lists the checks it
+# is expected to fail; t:none means it is expected to pass every check that
+# targets it. This file is the eval, not evidence: the shapes never read it.
+
+# Mission-grounded model (trust-domain-ontology.ttl): expected to pass
+:ExampleFoundationTrust              t:expectFail t:none .
+:Program_InstitutionalCapacity       t:expectFail t:none .
+:Program_ChicagoGridLiteracy         t:expectFail t:none .
+:Program_AIAgentTraining             t:expectFail t:none .
+:Program_HempCurriculumGrants        t:expectFail t:none .
+:Asset_PatternLibrary                t:expectFail t:none .
+:Asset_LocalAIWorkstation            t:expectFail t:none .
+:Asset_GridCurriculumKit             t:expectFail t:none .
+:Asset_AgentTrainingTemplate         t:expectFail t:none .
+:Enable_OntologyStewardStipend       t:expectFail t:none .
+:Enable_WorkshopInstructorFee        t:expectFail t:none .
+:Enable_AITrainerPay                 t:expectFail t:none .
+:Enable_AITrainerBenefits            t:expectFail t:none .
+:Pay_OntologySteward_Jan2027         t:expectFail t:none .
+:Pay_WorkshopInstructor_Mar2027      t:expectFail t:none .
+:Pay_AITrainer_Feb2027               t:expectFail t:none .
+:Pay_AITrainerBenefits_Feb2027       t:expectFail t:none .
+:Grant_HempCurriculum                t:expectFail t:none .
+
+# Failure probes (tests/keystone/keystone-probes.ttl)
+:Probe_SubscriptionHandout           t:expectFail :C4_BuildsCapability .
+:Probe_FounderVenture                t:expectFail :C2_ActivityAuthorized .
+:Probe_VenturePayment                t:expectFail :C1_SpendTrace .
+:Probe_VenturePay                    t:expectFail :K2_IncidentalBacking , :K4_AmountEvidence .
+:Probe_StewardOverPayment            t:expectFail t:none .
+:Probe_StewardOverPay                t:expectFail :K5_WithinMarketRate .
+:Probe_PersonalTravel               t:expectFail :K2_IncidentalBacking , :K3_Inseparable , :K4_AmountEvidence .
+:Probe_TravelPayment                t:expectFail :C1_SpendTrace .
+:Probe_UnlinkedSalary                t:expectFail :K1_IncidentalClaim , :K2_IncidentalBacking , :K3_Inseparable , :K4_AmountEvidence .
+:Probe_HandLabelledPermissible       t:expectFail :K2_IncidentalBacking , :K3_Inseparable , :K4_AmountEvidence .
+:Probe_IdleVehicle                   t:expectFail :A1_AssetToProgram .
+:Probe_TrustWithoutAuthority         t:expectFail :C3_MissionLegitimizes .
+:Probe_StewardHealthPayment          t:expectFail :C1_SpendTrace .
+
+# Health program (model): expected to pass
+:Program_ResidentHealthGraph         t:expectFail t:none .
+:Asset_ResidentHealthGraphApp        t:expectFail t:none .
+:Asset_ScreeningIntakeTablets        t:expectFail t:none .
+:Enable_HealthNavigatorPay           t:expectFail t:none .
+:Pay_HealthNavigator_Apr2027         t:expectFail t:none .
+:Record_ParticipantA                 t:expectFail t:none .
+:Record_ParticipantB                 t:expectFail t:none .
+
+# Health program probes
+:Probe_FounderCareVisit              t:expectFail :C1_SpendTrace , :S1_NoSelfDealing .
+:Probe_FounderHealthGraphGrant       t:expectFail :S1_NoSelfDealing .
+:Program_ResidentHealthGraphGrants   t:expectFail t:none .
+:Probe_UnownedRecord                 t:expectFail :D1_OwnedByParticipant .
+:Probe_RecordAsFoundationAsset       t:expectFail :D2_NotFoundationAsset .
+:Probe_RecordSoldWithoutConsent      t:expectFail :D3_ConsentedSharing .
+:Probe_StaffConsentedRecord          t:expectFail :D3_ConsentedSharing .
