@@ -39,7 +39,7 @@ The foundation's mission statement:
 
 ```turtle
 :FoundationMission rdf:type :CharitablePurpose ;
-    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity" .
+    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability." .
 ```
 
 **What it does**: Legitimizes all authority exercised by the trust
@@ -124,7 +124,7 @@ Concrete expenditures - the actual dollars out:
 
 ```
 1. MISSION
-   "Empowering lives through health, education, innovation, and opportunity"
+   "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability."
    (:FoundationMission)
    ↓ legitimizes FiduciaryAuthority
    ↓ has sub-purpose
@@ -266,7 +266,7 @@ The ontology **enforces** these relationships via OWL restrictions:
 
 ```
 1. MISSION
-   "Empowering lives through..."
+   "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability."
    ↓
 2. PURPOSE DOMAIN
    ??? (no purpose serves personal luxury)
