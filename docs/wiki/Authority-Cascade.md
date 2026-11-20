@@ -303,6 +303,27 @@ Result: Private inurement (unnecessary enrichment)
 
 ---
 
+## The Cascade in the Graph
+
+The cascade is now data, with the asset-to-program pipeline in it: no asset without a program, no program without a purpose and a lasting capability, no dollar without a path back to the mission.
+
+- Link 1: `:FoundationMission :legitimizes :FoundationAuthority`, and `:ExampleFoundationTrust :exercisesAuthority :FoundationAuthority`.
+- Link 2: each purpose domain `:authorizes` its programs. Innovation authorizes Canonical Governance Infrastructure for nonprofits; Education authorizes the Chicago street-grid workshops and the industrial hemp curriculum grants; Opportunity authorizes AI agent training for residents; Health authorizes resident-owned personal health knowledge graphs.
+- Each program `:buildsCapability` a `:LongTermCapability` with a `:capabilityTest`, and each asset the trust `:controls` is `:deployedIn` a program.
+- A grant is `:grantedUnder` its grantmaking program.
+
+`trust-domain-keystone-shapes.ttl` checks the whole chain closed-world:
+
+- **C1 Spend trace**: each `tracesBackTo` on a payment must be confirmed by the path payment, expense domain, operator, activity, authorizing purpose (or, for a grant, grant, grantmaking program, authorizing purpose). A payment that only asserts its trace fails.
+- **C2 Activity authorized**: every authorized activity is authorized by a purpose inside a trust's mission.
+- **C3 Mission legitimizes**: a trust's purpose legitimizes an authority the trust exercises.
+- **C4 Builds capability**: every authorized activity names the lasting capability it builds and how that is tested. This is the mission's second half, "in furtherance of long-term human and systemic capability". A program that helps today and builds nothing lasting fails here.
+- **A1 Asset to program**: every asset the trust controls is deployed in a program its mission authorizes.
+- **S1 No self-dealing**: no payment or grant benefits a disqualified person (the founder, a foundation manager, a substantial contributor or their family) other than as pay for services. A complete path to the mission does not cure it.
+- **D1 to D3 Participant records**: a resident's health record is owned by that resident, is never a foundation asset, and goes to anyone else only on a revocable consent the resident gave for that recipient. Sharing is off by default.
+
+Run `python3 validate_keystone.py`. All five programs, their assets, pay, the grant and the residents' records pass; each failure probe fails exactly the check it was written to break.
+
 ## Automated Validation
 
 ### SPARQL Query: Find Broken Cascades

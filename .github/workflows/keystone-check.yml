@@ -1,0 +1,23 @@
+name: Keystone check
+
+on:
+  push:
+    paths: ['**.ttl', 'validate_keystone.py', 'tests/**']
+  pull_request:
+    paths: ['**.ttl', 'validate_keystone.py', 'tests/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keystone:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install rdflib pyshacl
+      - name: Run keystone and cascade checks against the answer key
+        run: python3 validate_keystone.py

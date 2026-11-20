@@ -417,8 +417,7 @@ ep:basisAmount a owl:DatatypeProperty ;
 ep:beneficialInterestInCorpus a owl:ObjectProperty ;
     rdfs:label "beneficial interest in corpus"@en ;
     rdfs:comment "Beneficiary holds beneficial interest in trust corpus"@en ;
-    owl:propertyChainAxiom [ rdf:first ep:holdsInterest ;
-            rdf:rest [ ] ] .
+    owl:propertyChainAxiom ( ep:holdsInterest ep:createdBy ep:holdsCorpus ) .
 
 ep:canTransitionTo a owl:ObjectProperty ;
     rdfs:label "can transition to"@en ;
@@ -548,8 +547,7 @@ ep:recognitionDate a owl:DatatypeProperty ;
 ep:requiresFiduciaryDuty a owl:ObjectProperty ;
     rdfs:label "requires fiduciary duty"@en ;
     rdfs:comment "Trust requires fiduciary duty through trustee relationship"@en ;
-    owl:propertyChainAxiom [ rdf:first :hasTrustee ;
-            rdf:rest [ ] ] .
+    owl:propertyChainAxiom ( :hasTrustee ep:owes ) .
 
 ep:situsJurisdiction a owl:DatatypeProperty ;
     rdfs:label "situs jurisdiction"@en ;
@@ -598,8 +596,7 @@ ep:trustDate a owl:DatatypeProperty ;
 ep:ultimatelyHolds a owl:ObjectProperty ;
     rdfs:label "ultimately holds"@en ;
     rdfs:comment "Trust ultimately holds assets through corpus"@en ;
-    owl:propertyChainAxiom [ rdf:first ep:holdsCorpus ;
-            rdf:rest [ ] ] .
+    owl:propertyChainAxiom ( ep:holdsCorpus ep:formOfHolding ) .
 
 ep:validityDeterminationDate a owl:DatatypeProperty ;
     rdfs:label "validity determination date"@en ;

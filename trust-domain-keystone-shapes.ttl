@@ -1,0 +1,315 @@
+@prefix : <http://example.org/trust-domain#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Keystone and Authority Cascade checks (DRAFT, proposed 2026-11-19, revised 2026-11-20)
+#
+# The OWL ontology says what the keystone MEANS. These shapes decide
+# whether a given payment PASSES. OWL works open-world: a missing link is
+# "unknown", so it can never fail anything. Authority needs closed-world
+# answers ("Meaning can tolerate ambiguity. Authority cannot."), so the
+# test lives here, in SHACL, and reads only linked evidence:
+#
+#   K1 Incidental claim   - the enablement names a purpose inside the mission
+#   K2 Incidental backing - an expense domain pays it, sustains an operator,
+#                           and an activity authorized by that purpose
+#                           requires that operator
+#   K3 Inseparable        - the activity it is "inseparable from" is the one
+#                           that requires the operator it sustains
+#   K4 Amount evidence    - it has paid amounts and a market benchmark
+#   K5 Within market rate - no payment, annualized, exceeds the benchmark
+#
+#   C1 Spend trace        - each tracesBackTo on a payment is confirmed by the
+#                           path payment <- domain -> operator <- activity <-
+#                           purpose (cascade links 3 to 7)
+#   C2 Activity authorized- every authorized activity is authorized by a
+#                           purpose inside a trust's mission (cascade link 2)
+#   C3 Mission legitimizes- a trust's root purpose legitimizes an authority
+#                           the trust exercises (cascade link 1)
+#   C4 Builds capability  - every authorized activity names the lasting
+#                           capability it builds and how that is tested
+#                           (the mission's second half: "in furtherance of
+#                           long-term human and systemic capability")
+#   A1 Asset to program   - every asset the trust controls is deployed in a
+#                           program its mission authorizes (asset-to-program
+#                           pipeline: no asset without a program)
+#
+#   S1 No self-dealing    - no payment or grant benefits a disqualified
+#                           person, except pay for services (which K1-K5
+#                           test for reasonableness)
+#   D1 Owned by resident  - a participant record is owned by a participant
+#                           in the program it is held under
+#   D2 Not a foundation asset - the foundation never controls a participant
+#                           record
+#   D3 Consented sharing  - every recipient of a record is covered by a
+#                           revocable consent its owner granted
+#
+#   A grant passes C1 through its own branch: grant -> grantedUnder ->
+#   grantmaking activity <- purpose.
+#
+# A private enablement PASSES the keystone when it has no K violation.
+# Nothing is permissible by category or by label. Run: python3 validate_keystone.py
+# =====================================================================
+
+<http://example.org/trust-domain/keystone-shapes> a owl:Ontology ;
+    rdfs:label "Trust Domain keystone and cascade shapes"@en ;
+    owl:versionInfo "0.2.0-proposed" ;
+    sh:declare [ sh:prefix "td" ; sh:namespace "http://example.org/trust-domain#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ,
+               [ sh:prefix "gist" ; sh:namespace "https://w3id.org/semanticarts/ns/ontology/gist/"^^xsd:anyURI ] .
+
+# ---------------------------------------------------------------------
+# Keystone: every private enablement that is not itself an expense domain
+# ---------------------------------------------------------------------
+:KeystoneShape a sh:NodeShape ;
+    rdfs:label "Keystone constraint check"@en ;
+    sh:target [ a sh:SPARQLTarget ;
+        sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+        sh:select """
+            SELECT ?this WHERE {
+              ?this rdf:type td:PrivateEnablement .
+              FILTER NOT EXISTS { ?this rdf:type td:ExpenseDomain }
+            }""" ] ;
+    sh:sparql :K1_IncidentalClaim , :K2_IncidentalBacking , :K3_Inseparable ,
+              :K4_AmountEvidence , :K5_WithinMarketRate .
+
+:K1_IncidentalClaim a sh:SPARQLConstraint ;
+    rdfs:label "K1 incidental claim"@en ;
+    sh:message "K1: not incidental - names no purpose inside a trust's mission" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:isIncidentalTo ?p .
+            ?trust td:hasPurpose ?root .
+            ?root td:hasSubPurpose* ?p .
+          }
+        }""" .
+
+:K2_IncidentalBacking a sh:SPARQLConstraint ;
+    rdfs:label "K2 incidental backing"@en ;
+    sh:message "K2: incidental claim not backed - no expense domain pays it for an operator required by an activity that its purpose authorizes" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:isIncidentalTo ?p .
+            ?d td:enablesPrivately $this ;
+               td:sustains ?o .
+            ?a td:requires ?o .
+            ?p td:hasSubPurpose* ?x .
+            ?x td:authorizes ?a .
+          }
+        }""" .
+
+:K3_Inseparable a sh:SPARQLConstraint ;
+    rdfs:label "K3 inseparable"@en ;
+    sh:message "K3: not inseparable - the activity it names does not require the operator it sustains" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:isInseparableFrom ?a .
+            ?d td:enablesPrivately $this ;
+               td:sustains ?o .
+            ?a td:requires ?o .
+          }
+        }""" .
+
+:K4_AmountEvidence a sh:SPARQLConstraint ;
+    rdfs:label "K4 amount evidence"@en ;
+    sh:message "K4: no amount evidence - needs paid amounts and a market benchmark to show nothing is separable excess" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER ( NOT EXISTS { $this td:hasMarketBenchmark/gist:numericValue ?b }
+                || NOT EXISTS { ?d td:enablesPrivately $this ; td:manifestsAs/gist:hasMagnitude/gist:numericValue ?v } )
+        }""" .
+
+:K5_WithinMarketRate a sh:SPARQLConstraint ;
+    rdfs:label "K5 within market rate"@en ;
+    sh:message "K5: excess over market rate - a payment, annualized, exceeds the benchmark; the excess is separable" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this td:hasMarketBenchmark ?bm .
+          ?bm gist:numericValue ?b .
+          OPTIONAL { ?bm td:hasPaymentPeriod ?bp }
+          ?d td:enablesPrivately $this ; td:manifestsAs ?s .
+          ?s gist:hasMagnitude ?m .
+          ?m gist:numericValue ?v .
+          OPTIONAL { ?m td:hasPaymentPeriod ?mp }
+          BIND ( IF(?mp = td:PerMonth, ?v * 12, ?v) AS ?value )
+          BIND ( IF(?bp = td:PerMonth, ?b * 12, ?b) AS ?limit )
+          FILTER ( ?value > ?limit )
+        }""" .
+
+# ---------------------------------------------------------------------
+# Authority cascade
+# ---------------------------------------------------------------------
+:SpendTraceShape a sh:NodeShape ;
+    rdfs:label "Actual spend traces back through the cascade"@en ;
+    sh:targetClass :ActualSpend ;
+    sh:sparql :C1_SpendTrace .
+
+:C1_SpendTrace a sh:SPARQLConstraint ;
+    rdfs:label "C1 spend trace"@en ;
+    sh:message "C1: trace not confirmed - no domain, operator, activity and purpose path backs this payment's tracesBackTo" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          { $this td:tracesBackTo ?value }
+          UNION
+          { FILTER NOT EXISTS { $this td:tracesBackTo ?any } BIND("no tracesBackTo" AS ?value) }
+          FILTER NOT EXISTS {
+            $this td:tracesBackTo ?p .
+            FILTER ( ?p = ?value )
+            { ?d td:manifestsAs $this ; td:sustains ?o .
+              ?a td:requires ?o . }
+            UNION
+            { $this td:grantedUnder ?a . }
+            ?p td:hasSubPurpose* ?x .
+            ?x td:authorizes ?a .
+          }
+        }""" .
+
+:ActivityAuthorizedShape a sh:NodeShape ;
+    rdfs:label "Authorized activity is authorized by the mission and builds capability"@en ;
+    sh:targetClass :AuthorizedActivity ;
+    sh:sparql :C2_ActivityAuthorized , :C4_BuildsCapability .
+
+:C2_ActivityAuthorized a sh:SPARQLConstraint ;
+    rdfs:label "C2 activity authorized"@en ;
+    sh:message "C2: activity not authorized - no purpose inside a trust's mission authorizes it" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            ?x td:authorizes $this .
+            ?trust td:hasPurpose ?root .
+            ?root td:hasSubPurpose* ?x .
+          }
+        }""" .
+
+:MissionLegitimizesShape a sh:NodeShape ;
+    rdfs:label "Mission legitimizes the authority the trust exercises"@en ;
+    sh:targetSubjectsOf :hasPurpose ;
+    sh:sparql :C3_MissionLegitimizes .
+
+:C3_MissionLegitimizes a sh:SPARQLConstraint ;
+    rdfs:label "C3 mission legitimizes"@en ;
+    sh:message "C3: authority not legitimized - the trust's purpose legitimizes no authority the trust exercises" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:hasPurpose ?root ;
+                  td:exercisesAuthority ?auth .
+            ?root td:legitimizes ?auth .
+          }
+        }""" .
+
+:C4_BuildsCapability a sh:SPARQLConstraint ;
+    rdfs:label "C4 builds capability"@en ;
+    sh:message "C4: no lasting capability - the activity names no long-term capability with a test for it, so it fails the mission's second half" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:buildsCapability ?c .
+            ?c rdf:type td:LongTermCapability ;
+               td:capabilityTest ?test .
+          }
+        }""" .
+
+# ---------------------------------------------------------------------
+# Asset-to-program pipeline
+# ---------------------------------------------------------------------
+:AssetProgramShape a sh:NodeShape ;
+    rdfs:label "Every asset the trust controls has a program"@en ;
+    sh:targetClass :Asset ;
+    sh:sparql :A1_AssetToProgram .
+
+:A1_AssetToProgram a sh:SPARQLConstraint ;
+    rdfs:label "A1 asset to program"@en ;
+    sh:message "A1: asset without a program - not held by a trust and deployed in an activity that trust's mission authorizes" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            ?trust td:controls $this ;
+                   td:hasPurpose ?root .
+            $this td:deployedIn ?a .
+            ?root td:hasSubPurpose* ?x .
+            ?x td:authorizes ?a .
+          }
+        }""" .
+
+# ---------------------------------------------------------------------
+# Self-dealing (IRC §4941)
+# ---------------------------------------------------------------------
+:SelfDealingShape a sh:NodeShape ;
+    rdfs:label "No payment or grant benefits a disqualified person"@en ;
+    sh:targetClass :ActualSpend , :Grant ;
+    sh:sparql :S1_NoSelfDealing .
+
+:S1_NoSelfDealing a sh:SPARQLConstraint ;
+    rdfs:label "S1 no self-dealing"@en ;
+    sh:message "S1: self-dealing - this payment or grant benefits a disqualified person and is not pay for services; tracing to the mission does not cure it" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this td:benefitsPerson ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { ?d rdf:type td:CompensationDomain ; td:manifestsAs $this . }
+        }""" .
+
+# ---------------------------------------------------------------------
+# Participant records: resident-owned, consent to share
+# ---------------------------------------------------------------------
+:ParticipantRecordShape a sh:NodeShape ;
+    rdfs:label "Participant records belong to participants"@en ;
+    sh:targetClass :ParticipantRecord ;
+    sh:sparql :D1_OwnedByParticipant , :D2_NotFoundationAsset , :D3_ConsentedSharing .
+
+:D1_OwnedByParticipant a sh:SPARQLConstraint ;
+    rdfs:label "D1 owned by participant"@en ;
+    sh:message "D1: not resident-owned - the record has no owner who participates in the program it is held under" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this td:ownedBy ?p ;
+                  td:heldUnder ?a .
+            ?p td:participatesIn ?a .
+          }
+        }""" .
+
+:D2_NotFoundationAsset a sh:SPARQLConstraint ;
+    rdfs:label "D2 not a foundation asset"@en ;
+    sh:message "D2: foundation holds the record - a participant's record is theirs, never a foundation asset" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          ?value td:controls $this .
+        }""" .
+
+:D3_ConsentedSharing a sh:SPARQLConstraint ;
+    rdfs:label "D3 consented sharing"@en ;
+    sh:message "D3: shared without the owner's consent - no revocable consent from the record's owner covers this recipient" ;
+    sh:prefixes <http://example.org/trust-domain/keystone-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this td:sharedWith ?value .
+          FILTER NOT EXISTS {
+            $this td:ownedBy ?owner ;
+                  td:hasConsent ?c .
+            ?c td:grantedBy ?owner ;
+               td:consentFor ?value ;
+               td:consentRevocable true .
+          }
+        }""" .

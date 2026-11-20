@@ -4,6 +4,8 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 @base <http://example.org/trust-domain#> .
 
 <http://example.org/trust-domain> rdf:type owl:Ontology ;
@@ -267,6 +269,153 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
     rdfs:range :KeystoneConstraint ;
     rdfs:label "violates keystone constraint"@en ;
     rdfs:comment "Private enablement violates keystone constraint - not incidental or separable from purpose"@en .
+
+###  http://example.org/trust-domain#hasMarketBenchmark
+:hasMarketBenchmark rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf gist:hasMagnitude ;
+    rdfs:domain :PrivateEnablement ;
+    rdfs:range gist:Magnitude ;
+    rdfs:label "has market benchmark"@en ;
+    rdfs:comment "The market-rate amount for comparable services, as a gist:Magnitude in USD with hasPaymentPeriod and dcterms:source. Spend above it is the separable excess the keystone check fails. (Proposed 2026-11-19.)"@en .
+
+###  http://example.org/trust-domain#hasPaymentPeriod
+:hasPaymentPeriod rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf gist:isCategorizedBy ;
+    rdfs:range :PaymentPeriod ;
+    rdfs:label "has payment period"@en ;
+    rdfs:comment "How often an amount recurs (per month, per year, one time), so the keystone check can compare a payment with its benchmark. (Proposed 2026-11-19.)"@en .
+
+###  http://example.org/trust-domain#buildsCapability
+:buildsCapability rdf:type owl:ObjectProperty ;
+    rdfs:domain :AuthorizedActivity ;
+    rdfs:range :LongTermCapability ;
+    rdfs:label "builds capability"@en ;
+    rdfs:comment "Links a program (authorized activity) to the lasting capability it builds. This is the second half of the mission: health, education, innovation and opportunity are the means; long-term human and systemic capability is the end. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#capabilityTest
+:capabilityTest rdf:type owl:DatatypeProperty ;
+    rdfs:domain :LongTermCapability ;
+    rdfs:range xsd:string ;
+    rdfs:label "capability test"@en ;
+    rdfs:comment "The evidence that would show the capability lasted, stated before the money is spent. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#deployedIn
+:deployedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain :Asset ;
+    rdfs:range :AuthorizedActivity ;
+    rdfs:label "deployed in"@en ;
+    rdfs:comment "The asset-to-program link: the program an asset is held for. No asset sits outside a program. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#grantedUnder
+:grantedUnder rdf:type owl:ObjectProperty ;
+    rdfs:domain :Grant ;
+    rdfs:range :GrantmakingActivity ;
+    rdfs:label "granted under"@en ;
+    rdfs:comment "The grantmaking program a grant is made under, so a grant traces back through the cascade like any other spend. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#ProgramParticipant
+:ProgramParticipant rdf:type owl:Class ;
+    rdfs:subClassOf gist:Person ;
+    rdfs:label "Program participant"@en ;
+    rdfs:comment "A member of the public a program serves. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#participatesIn
+:participatesIn rdf:type owl:ObjectProperty ;
+    rdfs:domain :ProgramParticipant ;
+    rdfs:range :AuthorizedActivity ;
+    rdfs:label "participates in"@en .
+
+###  http://example.org/trust-domain#ParticipantRecord
+:ParticipantRecord rdf:type owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "Participant record"@en ;
+    rdfs:comment "A record a participant keeps about themselves through a program, such as their own health graph. It belongs to the participant, not the foundation: it is never a foundation asset, and it leaves the participant's hands only with their own revocable consent. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#ownedBy
+:ownedBy rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :ParticipantRecord ;
+    rdfs:range :ProgramParticipant ;
+    rdfs:label "owned by"@en .
+
+###  http://example.org/trust-domain#heldUnder
+:heldUnder rdf:type owl:ObjectProperty ;
+    rdfs:domain :ParticipantRecord ;
+    rdfs:range :AuthorizedActivity ;
+    rdfs:label "held under"@en ;
+    rdfs:comment "The program that gives the participant the tools to keep the record."@en .
+
+###  http://example.org/trust-domain#sharedWith
+:sharedWith rdf:type owl:ObjectProperty ;
+    rdfs:domain :ParticipantRecord ;
+    rdfs:label "shared with"@en ;
+    rdfs:comment "Anyone outside the participant's own device who receives the record or part of it."@en .
+
+###  http://example.org/trust-domain#ConsentRecord
+:ConsentRecord rdf:type owl:Class ;
+    rdfs:label "Consent record"@en ;
+    rdfs:comment "One consent, given by the record's owner, to one named recipient for one scope, always revocable. Sharing is off by default. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#hasConsent
+:hasConsent rdf:type owl:ObjectProperty ;
+    rdfs:domain :ParticipantRecord ;
+    rdfs:range :ConsentRecord ;
+    rdfs:label "has consent"@en .
+
+###  http://example.org/trust-domain#grantedBy
+:grantedBy rdf:type owl:ObjectProperty ;
+    rdfs:domain :ConsentRecord ;
+    rdfs:range :ProgramParticipant ;
+    rdfs:label "granted by"@en .
+
+###  http://example.org/trust-domain#consentFor
+:consentFor rdf:type owl:ObjectProperty ;
+    rdfs:domain :ConsentRecord ;
+    rdfs:label "consent for"@en ;
+    rdfs:comment "The named recipient the consent covers."@en .
+
+###  http://example.org/trust-domain#consentScope
+:consentScope rdf:type owl:ObjectProperty ;
+    rdfs:domain :ConsentRecord ;
+    rdfs:range :ConsentScope ;
+    rdfs:label "consent scope"@en .
+
+###  http://example.org/trust-domain#consentRevocable
+:consentRevocable rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ConsentRecord ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "consent revocable"@en ;
+    rdfs:comment "Must be true: the owner can withdraw it at any time."@en .
+
+###  http://example.org/trust-domain#ConsentScope
+:ConsentScope rdf:type owl:Class ;
+    rdfs:subClassOf gist:Category ;
+    rdfs:label "Consent scope"@en .
+:LocalOnly rdf:type owl:NamedIndividual , :ConsentScope ;
+    rdfs:label "Local only (default: nothing leaves the owner's device)"@en .
+:SharedWithNamedRecipient rdf:type owl:NamedIndividual , :ConsentScope ;
+    rdfs:label "Shared with one named recipient the owner chose"@en .
+:DeidentifiedResearch rdf:type owl:NamedIndividual , :ConsentScope ;
+    rdfs:label "De-identified research contribution"@en .
+
+###  http://example.org/trust-domain#benefitsPerson
+:benefitsPerson rdf:type owl:ObjectProperty ;
+    rdfs:range gist:Person ;
+    rdfs:label "benefits person"@en ;
+    rdfs:comment "A specific person a payment or grant benefits. The self-dealing check fails any that benefits a disqualified person other than as pay for services, which the keystone check tests for reasonableness. (Proposed 2026-11-20.)"@en .
+
+###  http://example.org/trust-domain#PaymentPeriod
+:PaymentPeriod rdf:type owl:Class ;
+    rdfs:subClassOf gist:Category ;
+    rdfs:label "Payment period"@en .
+:PerMonth rdf:type owl:NamedIndividual , :PaymentPeriod ; rdfs:label "Per month"@en .
+:PerYear rdf:type owl:NamedIndividual , :PaymentPeriod ; rdfs:label "Per year"@en .
+:OneTime rdf:type owl:NamedIndividual , :PaymentPeriod ; rdfs:label "One time"@en .
+
+###  http://example.org/trust-domain#LongTermCapability
+:LongTermCapability rdf:type owl:Class ;
+    rdfs:subClassOf :Purpose ;
+    rdfs:label "Long-term capability"@en ;
+    rdfs:comment "A lasting human or systemic capability a program builds: the end the mission names after 'in furtherance of'."@en .
 
 ###  http://example.org/trust-domain#legitimizes
 :legitimizes rdf:type owl:ObjectProperty ;
@@ -1265,15 +1414,15 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 
 ###  http://example.org/trust-domain#EmployeeCompensationEnablement
 :EmployeeCompensationEnablement rdf:type owl:Class ;
-    rdfs:subClassOf :PermissiblePrivateEnablement ;
+    rdfs:subClassOf :PrivateEnablement ;
     rdfs:label "Employee Compensation Enablement"@en ;
-    rdfs:comment "Compensation to employees for work advancing the mission - incidental to and inseparable from execution"@en .
+    rdfs:comment "Compensation to employees. Being compensation does NOT make it permissible: the keystone check (trust-domain-keystone-shapes.ttl) decides that from linked evidence and amount."@en .
 
 ###  http://example.org/trust-domain#OperationalBenefitEnablement
 :OperationalBenefitEnablement rdf:type owl:Class ;
-    rdfs:subClassOf :PermissiblePrivateEnablement ;
+    rdfs:subClassOf :PrivateEnablement ;
     rdfs:label "Operational Benefit Enablement"@en ;
-    rdfs:comment "Benefits (health insurance, retirement, etc.) necessary to sustain workforce capability - incidental to and inseparable from mission execution"@en .
+    rdfs:comment "Benefits (health insurance, retirement, etc.) to staff. Being a benefit does NOT make it permissible: the keystone check (trust-domain-keystone-shapes.ttl) decides that from linked evidence and amount."@en .
 
 ###  http://example.org/trust-domain#BeneficiaryDistributionEnablement
 :BeneficiaryDistributionEnablement rdf:type owl:Class ;
@@ -1761,33 +1910,8 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
       owl:someValuesFrom :PrivateEnablement
     ] .
 
-###  Employee Compensation Enablement is incidental to Purpose
-:EmployeeCompensationEnablement rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty :isIncidentalTo ;
-      owl:someValuesFrom :Purpose
-    ] .
-
-###  Employee Compensation Enablement is inseparable from Operational Activity
-:EmployeeCompensationEnablement rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty :isInseparableFrom ;
-      owl:someValuesFrom :OperationalActivity
-    ] .
-
-###  Operational Benefit Enablement is incidental to Purpose
-:OperationalBenefitEnablement rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty :isIncidentalTo ;
-      owl:someValuesFrom :Purpose
-    ] .
-
-###  Operational Benefit Enablement is inseparable from sustaining HumanCapability
-:OperationalBenefitEnablement rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty :isInseparableFrom ;
-      owl:someValuesFrom :OperationalActivity
-    ] .
+###  (Removed in the keystone fix: four axioms that made every compensation and benefit
+###  incidental and inseparable by category. The keystone check now derives that from evidence.)
 
 ###  Keystone Constraint prevents Authority Collapse
 :KeystoneConstraint rdfs:subClassOf :SafeguardMechanism .
@@ -2090,7 +2214,6 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
     :hasCourtJurisdiction "Nevis High Court" ;
     :hasControlLocation "Nevis" ;
     :establishedDate "2024-01-15"^^xsd:date ;
-    :hasEIN "98-1234567" ;
     :hasSystemIdentifier :ExampleForeignTrust_EIN ;
     :hasTrustee :ExampleTrustee ;
     rdfs:label "Example Foreign Private Irrevocable Non-Grantor Trust"@en ;
@@ -2099,7 +2222,7 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 ###  http://example.org/trust-domain#ExampleForeignTrust_EIN
 :ExampleForeignTrust_EIN rdf:type owl:NamedIndividual ,
                                   :EIN ;
-    rdfs:label "EIN 98-1234567"@en ;
+    rdfs:label "Example EIN (system identifier; no number recorded)"@en ;
     rdfs:comment "System identifier for ExampleForeignTrust - enables interaction but is NOT an instrument"@en .
 
 ###  http://example.org/trust-domain#ExampleTrustee
@@ -2146,285 +2269,430 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
     rdfs:label "IRC §7701 Jurisdictional Identity"@en ;
     rdfs:comment "Determines which sovereign's rules apply via court test and control test"@en .
 
-###  http://example.org/trust-domain#FoundationMission
+#################################################################
+#    FINCH-DAGEN FOUNDATION MODEL (mission-grounded examples)
+#
+#    Rebuilt 2026-11-20 on the owner's full mission statement and his own
+#    program ideas, run through the asset-to-program pipeline:
+#      Asset -> Program (authorized activity) -> Operator in role ->
+#      Expense domain -> Actual spend -> traces back to Purpose,
+#      and every program names the lasting capability it builds.
+#    This is a model (a digital twin). No trust or foundation has been
+#    formed, nothing here has been filed, and every amount is illustrative.
+#################################################################
+
+###  Mission and purpose domains
+
 :FoundationMission rdf:type owl:NamedIndividual ,
                             :CharitablePurpose ;
-    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity" ;
-    :purposeDescription "The foundation advances charitable purposes by investing in health initiatives, educational programs, innovation and scientific research, and economic opportunity for underserved communities. This multi-faceted mission legitimizes the foundation's authority to deploy resources across four complementary domains." ;
+    :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability." ;
+    :purposeDescription "Health, education, innovation and opportunity are the means; long-term human and systemic capability is the end. A program that helps today but builds nothing lasting passes the first half of the mission and fails the second." ;
     :hasSubPurpose :FoundationHealthMission ,
                    :FoundationEducationMission ,
                    :FoundationInnovationMission ,
                    :FoundationOpportunityMission ;
-    rdfs:label "Foundation Mission: Empowering Lives"@en ;
-    rdfs:comment "The overarching exempt purpose that legitimizes the foundation's authority and governs instrument selection"@en .
+    :legitimizes :FoundationAuthority ;
+    rdfs:label "Foundation Mission"@en ;
+    rdfs:comment "The overarching exempt purpose that legitimizes the foundation's authority. Every program, asset and dollar must trace back to it."@en .
 
-###  http://example.org/trust-domain#FoundationHealthMission
 :FoundationHealthMission rdf:type owl:NamedIndividual ,
                                   :HealthPurpose ;
-    :purposeDescription "Advancing health and wellness through medical research grants, healthcare access programs, and public health initiatives" ;
-    rdfs:label "Health Mission Component"@en ;
-    rdfs:comment "Health sub-purpose of the foundation mission"@en .
+    :authorizes :Program_ResidentHealthGraph ;
+    rdfs:label "Health"@en .
 
-###  http://example.org/trust-domain#FoundationEducationMission
 :FoundationEducationMission rdf:type owl:NamedIndividual ,
                                      :EducationalPurpose ;
-    :purposeDescription "Advancing education through scholarship programs, educational technology, curriculum development, and teacher training initiatives" ;
-    rdfs:label "Education Mission Component"@en ;
-    rdfs:comment "Educational sub-purpose of the foundation mission"@en .
+    :authorizes :Program_ChicagoGridLiteracy ,
+                :Program_HempCurriculumGrants ;
+    rdfs:label "Education"@en .
 
-###  http://example.org/trust-domain#FoundationInnovationMission
 :FoundationInnovationMission rdf:type owl:NamedIndividual ,
                                       :InnovationPurpose ;
-    :purposeDescription "Advancing innovation through scientific research grants, technology development, and support for breakthrough discoveries" ;
-    rdfs:label "Innovation Mission Component"@en ;
-    rdfs:comment "Innovation sub-purpose of the foundation mission"@en .
+    :authorizes :Program_InstitutionalCapacity ;
+    rdfs:label "Innovation"@en .
 
-###  http://example.org/trust-domain#FoundationOpportunityMission
 :FoundationOpportunityMission rdf:type owl:NamedIndividual ,
                                        :OpportunityPurpose ;
-    :purposeDescription "Advancing economic opportunity through workforce development, entrepreneurship programs, and initiatives that expand access to capital and resources for underserved populations" ;
-    rdfs:label "Opportunity Mission Component"@en ;
-    rdfs:comment "Opportunity sub-purpose of the foundation mission"@en .
+    :authorizes :Program_AIAgentTraining ;
+    rdfs:label "Opportunity"@en .
 
-###  http://example.org/trust-domain#ExampleFoundationTrust
+###  The foundation (modeled, not formed)
+
 :ExampleFoundationTrust rdf:type owl:NamedIndividual ,
                                  :ForeignPrivateIrrevocableNonGrantorTrust ;
     :isRevocable "false"^^xsd:boolean ;
     :isGrantorTrust "false"^^xsd:boolean ;
-    :isForeign "true"^^xsd:boolean ;
-    :isDomestic "false"^^xsd:boolean ;
-    :jurisdiction "Nevis" ;
-    :hasCourtJurisdiction "Nevis High Court" ;
-    :hasControlLocation "Nevis" ;
-    :establishedDate "2024-01-15"^^xsd:date ;
-    :hasEIN "98-7654321" ;
     :hasPurpose :FoundationMission ;
+    :exercisesAuthority :FoundationAuthority ;
     :hasTrustee :FoundationTrustee ;
-    rdfs:label "Example Foundation Trust"@en ;
-    rdfs:comment "Foreign private irrevocable non-grantor trust operating as a private foundation with mission to empower lives through health, education, innovation, and opportunity. Purpose legitimizes authority, which enables deployment of instruments."@en .
+    :controls :Asset_PatternLibrary , :Asset_LocalAIWorkstation ,
+              :Asset_GridCurriculumKit , :Asset_AgentTrainingTemplate ,
+              :Asset_ResidentHealthGraphApp , :Asset_ScreeningIntakeTablets ;
+    rdfs:label "Finch-Dagen Foundation (model)"@en ;
+    rdfs:comment "Modeled private foundation. Not formed, no identifier issued, nothing filed. The trust class and jurisdiction are the repo's original example structure, not a decision; structure is for counsel."@en .
 
-###  http://example.org/trust-domain#FoundationTrustee
+:FoundationAuthority rdf:type owl:NamedIndividual ,
+                              :FiduciaryAuthority ;
+    rdfs:label "Foundation Authority"@en ;
+    rdfs:comment "Cascade link 1: the fiduciary authority the foundation exercises, legitimized by the mission."@en .
+
 :FoundationTrustee rdf:type owl:NamedIndividual ,
                             :Trustee ;
     rdfs:label "Foundation Trustee"@en ;
-    rdfs:comment "Fiduciary exercising authority to advance the foundation's charitable mission"@en .
+    rdfs:comment "Fiduciary exercising authority to advance the mission."@en .
 
-###  http://example.org/trust-domain#TheKeystoneConstraint
 :TheKeystoneConstraint rdf:type owl:NamedIndividual ,
                                 :KeystoneConstraint ;
     rdfs:label "The Keystone Constraint"@en ;
-    rdfs:comment "THE fundamental rule: Private enablement is permissible when and only when it is BOTH incidental to AND inseparable from purpose-driven execution. This is the boundary between legitimate operation and private inurement."@en .
+    rdfs:comment "Private enablement is permissible when and only when it is BOTH incidental to AND inseparable from purpose-driven execution. Graded by trust-domain-keystone-shapes.ttl."@en .
 
-###  http://example.org/trust-domain#ExamplePermissibleCompensation
-:ExamplePermissibleCompensation rdf:type owl:NamedIndividual ,
-                                         :EmployeeCompensationEnablement ,
-                                         :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationMission ;
-    :isInseparableFrom :ExampleResearchActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Example: Permissible Researcher Compensation"@en ;
-    rdfs:comment "Compensation paid to research scientist conducting medical research grants aligned with health mission. This is INCIDENTAL TO (health mission) AND INSEPARABLE FROM (research cannot occur without researcher) purpose-driven execution - therefore permissible."@en .
-
-###  http://example.org/trust-domain#ExamplePermissibleHealthBenefit
-:ExamplePermissibleHealthBenefit rdf:type owl:NamedIndividual ,
-                                          :OperationalBenefitEnablement ,
-                                          :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationMission ;
-    :isInseparableFrom :ExampleResearchActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Example: Permissible Health Insurance Benefit"@en ;
-    rdfs:comment "Health insurance provided to research staff. This is INCIDENTAL TO (not the purpose, but enables the purpose) AND INSEPARABLE FROM (sustaining workforce capability required for execution) mission advancement - therefore permissible."@en .
-
-###  http://example.org/trust-domain#ExampleImproperLavishExpense
-:ExampleImproperLavishExpense rdf:type owl:NamedIndividual ,
-                                       :ImproperPrivateEnablement ;
-    :violatesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Example: Improper Lavish Personal Expense"@en ;
-    rdfs:comment "Luxury vacation for trustee unrelated to mission activities. This is NOT INCIDENTAL (serves no mission purpose) and IS SEPARABLE (can be removed without affecting execution) - therefore VIOLATES keystone constraint and constitutes private inurement."@en .
-
-###  http://example.org/trust-domain#ExampleImproperExcessCompensation
-:ExampleImproperExcessCompensation rdf:type owl:NamedIndividual ,
-                                            :ImproperPrivateEnablement ;
-    :violatesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Example: Improper Excessive Compensation"@en ;
-    rdfs:comment "Compensation far exceeding market rate for comparable services. While some compensation is incidental and inseparable, the EXCESS portion is SEPARABLE from execution and serves enrichment rather than purpose - therefore the excess VIOLATES keystone constraint."@en .
-
-###  http://example.org/trust-domain#ExampleResearchActivity
-:ExampleResearchActivity rdf:type owl:NamedIndividual ,
-                                  :OperationalActivity ;
-    :advancesPurpose :FoundationHealthMission ;
-    :withinBoundary :ExampleOperatingBoundary ;
-    rdfs:label "Example: Medical Research Activity"@en ;
-    rdfs:comment "Conducting medical research grants to advance health mission"@en .
-
-###  http://example.org/trust-domain#ExampleOperatingBoundary
 :ExampleOperatingBoundary rdf:type owl:NamedIndividual ,
                                    :OperatingBoundary ;
-    rdfs:label "Example Operating Boundary"@en ;
-    rdfs:comment "The perimeter defining what belongs inside the foundation's operational system"@en .
+    rdfs:label "Foundation Operating Boundary"@en .
 
-###  THE AUTHORITY CASCADE - Complete Traceable Example
+:FiscalYear2027 rdf:type owl:NamedIndividual ,
+                         :FiscalYear ;
+    :fiscalYearStart "2027-01-01"^^xsd:date ;
+    :fiscalYearEnd "2027-12-31"^^xsd:date ;
+    :yearNumber "2027"^^xsd:integer ;
+    rdfs:label "Fiscal Year 2027 (modeled)"@en .
 
-###  http://example.org/trust-domain#ClinicalTrialsActivity
-:ClinicalTrialsActivity rdf:type owl:NamedIndividual ,
-                                 :AuthorizedActivity ;
-    :advancesPurpose :FoundationHealthMission ;
+:USD_Unit_Note rdfs:comment "Amounts use gist:Magnitude in US dollars; all are illustrative."@en .
+<http://qudt.org/vocab/currency/USD> rdf:type gist:UnitOfMeasure ;
+    rdfs:label "US dollar"@en .
+
+#################################################################
+#    PROGRAM 1 - Innovation: Canonical Governance Infrastructure
+#    (the owner's institutional capacity program for nonprofits)
+#################################################################
+
+:Program_InstitutionalCapacity rdf:type owl:NamedIndividual ,
+                                        :AuthorizedActivity ;
+    :advancesPurpose :FoundationInnovationMission ;
     :withinBoundary :ExampleOperatingBoundary ;
-    :requires :ResearchScientistDrSmith ;
-    :performedBy :ResearchScientistDrSmith ;
-    rdfs:label "Clinical Trials Activity"@en ;
-    rdfs:comment "Authorized activity: Conducting clinical trials for novel cancer treatments - authorized by health mission purpose domain"@en .
+    :requires :Role_OntologySteward ;
+    :buildsCapability :Cap_NonprofitSemanticCapacity ;
+    rdfs:label "Canonical Governance Infrastructure for nonprofits"@en ;
+    rdfs:comment "Delivers institutional capacity to nonprofits as shared vocabularies, governance patterns and reference implementations, run on local AI for underserved neighborhoods."@en .
 
-###  http://example.org/trust-domain#ResearchScientistDrSmith
-:ResearchScientistDrSmith rdf:type owl:NamedIndividual ,
-                                   :OperatorInRole ;
-    :servesActivity :ClinicalTrialsActivity ;
-    :necessitates :CompensationDomain_DrSmith ,
-                  :BenefitsDomain_DrSmith ;
-    rdfs:label "Dr. Smith (Research Scientist)"@en ;
-    rdfs:comment "Operator in role: Research scientist conducting clinical trials - required by the authorized activity"@en .
+:Cap_NonprofitSemanticCapacity rdf:type owl:NamedIndividual , :LongTermCapability ;
+    :capabilityTest "A governance pattern reaches Emerging: replicated in two partner nonprofits beyond its first two pilots, and still in use a year later." ;
+    rdfs:label "Nonprofits run their own shared vocabularies and governance patterns, without vendor lock-in"@en .
 
-###  http://example.org/trust-domain#CompensationDomain_DrSmith
-:CompensationDomain_DrSmith rdf:type owl:NamedIndividual ,
-                                     :CompensationDomain ;
-    :sustains :ResearchScientistDrSmith ;
-    :manifestsAs :SalaryPayment_DrSmith_January2024 ;
-    :enablesPrivately :SalaryEnablement_DrSmith ;
-    rdfs:label "Compensation Domain: Dr. Smith"@en ;
-    rdfs:comment "Expense domain: Compensation for Dr. Smith - necessitated by her role as research scientist"@en .
+:Asset_PatternLibrary rdf:type owl:NamedIndividual , :IntangibleAsset ;
+    :deployedIn :Program_InstitutionalCapacity ;
+    rdfs:label "A Pattern Language for Public Benefit (pattern library)"@en .
 
-###  http://example.org/trust-domain#BenefitsDomain_DrSmith
-:BenefitsDomain_DrSmith rdf:type owl:NamedIndividual ,
-                                 :BenefitsDomain ;
-    :sustains :ResearchScientistDrSmith ;
-    :manifestsAs :HealthInsurance_DrSmith_January2024 ;
-    :enablesPrivately :BenefitsEnablement_DrSmith ;
-    rdfs:label "Benefits Domain: Dr. Smith"@en ;
-    rdfs:comment "Expense domain: Health insurance and retirement benefits for Dr. Smith"@en .
+:Asset_LocalAIWorkstation rdf:type owl:NamedIndividual , :TangibleAsset ;
+    :deployedIn :Program_InstitutionalCapacity ;
+    rdfs:label "Local AI workstation for neighborhood deployments"@en .
 
-###  http://example.org/trust-domain#SalaryPayment_DrSmith_January2024
-:SalaryPayment_DrSmith_January2024 rdf:type owl:NamedIndividual ,
-                                            :ActualSpend ;
-    :tracesBackTo :FoundationHealthMission ;
-    rdfs:label "Actual Spend: Dr. Smith Salary (Jan 2024) - $12,500"@en ;
-    rdfs:comment "ACTUAL SPEND: $12,500 salary payment to Dr. Smith for January 2024. TRACES BACK TO: FoundationHealthMission → ClinicalTrialsActivity → ResearchScientistDrSmith → CompensationDomain_DrSmith → THIS SPEND. The complete traceable chain PROVES keystone constraint satisfaction: incidental to health mission AND inseparable from clinical trials execution."@en .
+:Role_OntologySteward rdf:type owl:NamedIndividual , :OperatorInRole ;
+    :servesActivity :Program_InstitutionalCapacity ;
+    :necessitates :CompDomain_OntologySteward ;
+    rdfs:label "Ontology steward"@en .
 
-###  http://example.org/trust-domain#HealthInsurance_DrSmith_January2024
-:HealthInsurance_DrSmith_January2024 rdf:type owl:NamedIndividual ,
-                                              :ActualSpend ;
-    :tracesBackTo :FoundationHealthMission ;
-    rdfs:label "Actual Spend: Dr. Smith Health Insurance (Jan 2024) - $850"@en ;
-    rdfs:comment "ACTUAL SPEND: $850 health insurance premium for Dr. Smith for January 2024. TRACES BACK TO: FoundationHealthMission → ClinicalTrialsActivity → ResearchScientistDrSmith → BenefitsDomain_DrSmith → THIS SPEND. Sustaining workforce capability is incidental to AND inseparable from mission execution."@en .
+:CompDomain_OntologySteward rdf:type owl:NamedIndividual , :CompensationDomain ;
+    :sustains :Role_OntologySteward ;
+    :manifestsAs :Pay_OntologySteward_Jan2027 ;
+    :enablesPrivately :Enable_OntologyStewardStipend ;
+    rdfs:label "Compensation domain: ontology steward"@en .
 
-###  http://example.org/trust-domain#SalaryEnablement_DrSmith
-:SalaryEnablement_DrSmith rdf:type owl:NamedIndividual ,
-                                   :EmployeeCompensationEnablement ,
-                                   :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;
-    :isInseparableFrom :ClinicalTrialsActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Private Enablement: Dr. Smith Salary"@en ;
-    rdfs:comment "PERMISSIBLE: Dr. Smith's salary is incidental to the health mission (not the mission itself) AND inseparable from clinical trials (trials cannot occur without qualified researcher). Satisfies both keystone tests."@en .
+:Pay_OntologySteward_Jan2027 rdf:type owl:NamedIndividual , :ActualSpend ;
+    :tracesBackTo :FoundationInnovationMission ;
+    :occursDuring :FiscalYear2027 ;
+    gist:hasMagnitude [ rdf:type gist:Magnitude ; gist:numericValue "6000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Ontology steward stipend, January 2027: $6,000 (illustrative)"@en .
 
-###  http://example.org/trust-domain#BenefitsEnablement_DrSmith
-:BenefitsEnablement_DrSmith rdf:type owl:NamedIndividual ,
-                                     :OperationalBenefitEnablement ,
-                                     :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;
-    :isInseparableFrom :ClinicalTrialsActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint ;
-    rdfs:label "Private Enablement: Dr. Smith Benefits"@en ;
-    rdfs:comment "PERMISSIBLE: Dr. Smith's health benefits sustain her capability to perform research, incidental to mission AND inseparable from execution."@en .
+:Enable_OntologyStewardStipend rdf:type owl:NamedIndividual , :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationInnovationMission ;
+    :isInseparableFrom :Program_InstitutionalCapacity ;
+    :hasMarketBenchmark :Benchmark_OntologySteward ;
+    rdfs:label "Ontology steward stipend"@en ;
+    rdfs:comment "Expected to pass the keystone check: $72,000 a year against a $78,000 benchmark."@en .
 
-###  http://example.org/trust-domain#TheAuthorityCascade
+:Benchmark_OntologySteward rdf:type gist:Magnitude ;
+    gist:numericValue "78000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    :hasPaymentPeriod :PerYear ;
+    dcterms:source "Illustrative value, not a market survey" ;
+    rdfs:label "Market rate: ontology steward, $78,000 per year (illustrative)"@en .
+
+#################################################################
+#    PROGRAM 2 - Education: Chicago street-grid and history literacy
+#################################################################
+
+:Program_ChicagoGridLiteracy rdf:type owl:NamedIndividual ,
+                                      :AuthorizedActivity ;
+    :advancesPurpose :FoundationEducationMission ;
+    :withinBoundary :ExampleOperatingBoundary ;
+    :requires :Role_WorkshopInstructor ;
+    :buildsCapability :Cap_IndependentNavigation ;
+    rdfs:label "Chicago street-grid and neighborhood history workshops"@en .
+
+:Cap_IndependentNavigation rdf:type owl:NamedIndividual , :LongTermCapability ;
+    :capabilityTest "Participants pass a no-GPS route test six months after the workshop." ;
+    rdfs:label "Residents find their way by the city grid without GPS and know their neighborhood's history"@en .
+
+:Asset_GridCurriculumKit rdf:type owl:NamedIndividual , :IntangibleAsset ;
+    :deployedIn :Program_ChicagoGridLiteracy ;
+    rdfs:label "Street-grid curriculum and drill set"@en .
+
+:Role_WorkshopInstructor rdf:type owl:NamedIndividual , :OperatorInRole ;
+    :servesActivity :Program_ChicagoGridLiteracy ;
+    :necessitates :CompDomain_WorkshopInstructor ;
+    rdfs:label "Workshop instructor"@en .
+
+:CompDomain_WorkshopInstructor rdf:type owl:NamedIndividual , :CompensationDomain ;
+    :sustains :Role_WorkshopInstructor ;
+    :manifestsAs :Pay_WorkshopInstructor_Mar2027 ;
+    :enablesPrivately :Enable_WorkshopInstructorFee ;
+    rdfs:label "Compensation domain: workshop instructor"@en .
+
+:Pay_WorkshopInstructor_Mar2027 rdf:type owl:NamedIndividual , :ActualSpend ;
+    :tracesBackTo :FoundationEducationMission ;
+    :occursDuring :FiscalYear2027 ;
+    gist:hasMagnitude [ rdf:type gist:Magnitude ; gist:numericValue "1500.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Workshop instructor fee, March 2027: $1,500 (illustrative)"@en .
+
+:Enable_WorkshopInstructorFee rdf:type owl:NamedIndividual , :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationEducationMission ;
+    :isInseparableFrom :Program_ChicagoGridLiteracy ;
+    :hasMarketBenchmark :Benchmark_WorkshopInstructor ;
+    rdfs:label "Workshop instructor fee"@en ;
+    rdfs:comment "Expected to pass: $18,000 a year against a $24,000 benchmark."@en .
+
+:Benchmark_WorkshopInstructor rdf:type gist:Magnitude ;
+    gist:numericValue "24000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    :hasPaymentPeriod :PerYear ;
+    dcterms:source "Illustrative value, not a market survey" ;
+    rdfs:label "Market rate: part-time workshop instructor, $24,000 per year (illustrative)"@en .
+
+#################################################################
+#    PROGRAM 3 - Opportunity: AI agent training for residents
+#################################################################
+
+:Program_AIAgentTraining rdf:type owl:NamedIndividual ,
+                                  :AuthorizedActivity ;
+    :advancesPurpose :FoundationOpportunityMission ;
+    :withinBoundary :ExampleOperatingBoundary ;
+    :requires :Role_AITrainer ;
+    :buildsCapability :Cap_ResidentAgentOperators ;
+    rdfs:label "AI agent training for South Side residents"@en ;
+    rdfs:comment "Hands residents a working agent setup as a template, then trains them to run it themselves."@en .
+
+:Cap_ResidentAgentOperators rdf:type owl:NamedIndividual , :LongTermCapability ;
+    :capabilityTest "Graduates are still running their own agent workflow 90 days after training." ;
+    rdfs:label "Residents run their own AI agent workflows for work or business"@en .
+
+:Asset_AgentTrainingTemplate rdf:type owl:NamedIndividual , :IntangibleAsset ;
+    :deployedIn :Program_AIAgentTraining ;
+    rdfs:label "Starter agent template and training guide"@en .
+
+:Role_AITrainer rdf:type owl:NamedIndividual , :OperatorInRole ;
+    :servesActivity :Program_AIAgentTraining ;
+    :necessitates :CompDomain_AITrainer , :BenefitsDomain_AITrainer ;
+    rdfs:label "AI trainer"@en .
+
+:CompDomain_AITrainer rdf:type owl:NamedIndividual , :CompensationDomain ;
+    :sustains :Role_AITrainer ;
+    :manifestsAs :Pay_AITrainer_Feb2027 ;
+    :enablesPrivately :Enable_AITrainerPay ;
+    rdfs:label "Compensation domain: AI trainer"@en .
+
+:Pay_AITrainer_Feb2027 rdf:type owl:NamedIndividual , :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    :occursDuring :FiscalYear2027 ;
+    gist:hasMagnitude [ rdf:type gist:Magnitude ; gist:numericValue "4000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "AI trainer pay, February 2027: $4,000 (illustrative)"@en .
+
+:Enable_AITrainerPay rdf:type owl:NamedIndividual , :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Program_AIAgentTraining ;
+    :hasMarketBenchmark :Benchmark_AITrainer ;
+    rdfs:label "AI trainer pay"@en ;
+    rdfs:comment "Expected to pass: $48,000 a year against a $55,000 benchmark."@en .
+
+:Benchmark_AITrainer rdf:type gist:Magnitude ;
+    gist:numericValue "55000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    :hasPaymentPeriod :PerYear ;
+    dcterms:source "Illustrative value, not a market survey" ;
+    rdfs:label "Market rate: technology trainer, $55,000 per year (illustrative)"@en .
+
+:BenefitsDomain_AITrainer rdf:type owl:NamedIndividual , :BenefitsDomain ;
+    :sustains :Role_AITrainer ;
+    :manifestsAs :Pay_AITrainerBenefits_Feb2027 ;
+    :enablesPrivately :Enable_AITrainerBenefits ;
+    rdfs:label "Benefits domain: AI trainer"@en .
+
+:Pay_AITrainerBenefits_Feb2027 rdf:type owl:NamedIndividual , :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    :occursDuring :FiscalYear2027 ;
+    gist:hasMagnitude [ rdf:type gist:Magnitude ; gist:numericValue "600.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "AI trainer benefits, February 2027: $600 (illustrative)"@en .
+
+:Enable_AITrainerBenefits rdf:type owl:NamedIndividual , :OperationalBenefitEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Program_AIAgentTraining ;
+    :hasMarketBenchmark :Benchmark_StaffBenefits ;
+    rdfs:label "AI trainer benefits"@en ;
+    rdfs:comment "Expected to pass: $7,200 a year against a $9,000 benchmark."@en .
+
+:Benchmark_StaffBenefits rdf:type gist:Magnitude ;
+    gist:numericValue "9000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    :hasPaymentPeriod :PerYear ;
+    dcterms:source "Illustrative value, not a market survey" ;
+    rdfs:label "Market rate: staff benefits, $9,000 per year (illustrative)"@en .
+
+#################################################################
+#    PROGRAM 4 - Education (grantmaking): industrial hemp curriculum
+#################################################################
+
+:Program_HempCurriculumGrants rdf:type owl:NamedIndividual ,
+                                       :GrantmakingActivity ;
+    :advancesPurpose :FoundationEducationMission ;
+    :hasTemporalExtent :FiscalYear2027 ;
+    :buildsCapability :Cap_HempWorkforce ;
+    rdfs:label "Grants for an industrial hemp and textiles curriculum"@en ;
+    rdfs:comment "Grantmaking, distinct from operations: funds a public charity to teach industrial hemp and textile skills. No intoxicating or cannabis products."@en .
+
+:Cap_HempWorkforce rdf:type owl:NamedIndividual , :LongTermCapability ;
+    :capabilityTest "A cohort completes the curriculum and the grantee keeps offering it without a second grant." ;
+    rdfs:label "Local learners qualified for industrial hemp and textile work"@en .
+
+:Grant_HempCurriculum rdf:type owl:NamedIndividual , :Grant ;
+    :grantAmount "40000.00"^^xsd:decimal ;
+    :grantedUnder :Program_HempCurriculumGrants ;
+    :tracesBackTo :FoundationEducationMission ;
+    :satisfiesQualifyingDistribution :QD_HempCurriculumGrant ;
+    :occursDuring :FiscalYear2027 ;
+    rdfs:label "Hemp curriculum grant: $40,000 (illustrative)"@en .
+
+:Grantee_CommunityCollege rdf:type owl:NamedIndividual , :PublicCharity ;
+    :receivesGrant :Grant_HempCurriculum ;
+    rdfs:label "Community college (public charity, unnamed)"@en .
+
+:QD_HempCurriculumGrant rdf:type owl:NamedIndividual , :QualifyingDistribution ;
+    rdfs:label "Qualifying distribution: hemp curriculum grant"@en ;
+    rdfs:comment "A grant to a public charity counts toward the IRC §4942 minimum distribution."@en .
+
 :TheAuthorityCascade rdf:type owl:NamedIndividual ,
                               :AuthorityCascade ;
     rdfs:label "The Authority Cascade: Mission to Spend"@en ;
-    rdfs:comment """THE COMPLETE AUTHORITY CASCADE EXAMPLE:
+    rdfs:comment """THE CASCADE, WITH THE ASSET-TO-PROGRAM PIPELINE (AI trainer example):
 
-1. MISSION: 'Empowering lives through health...' (FoundationMission)
-   ↓ legitimizes Authority
-   ↓ has sub-purpose
+1. MISSION (FoundationMission) legitimizes FoundationAuthority
+2. PURPOSE DOMAIN (FoundationOpportunityMission) authorizes the program
+3. PROGRAM (Program_AIAgentTraining) builds a lasting capability (Cap_ResidentAgentOperators) and holds its asset (Asset_AgentTrainingTemplate)
+4. OPERATOR IN ROLE (Role_AITrainer) is required by the program
+5. EXPENSE DOMAINS (CompDomain_AITrainer, BenefitsDomain_AITrainer) sustain the operator
+6. ACTUAL SPEND (Pay_AITrainer_Feb2027, Pay_AITrainerBenefits_Feb2027), within market rate
+7. TRACES BACK TO the Opportunity purpose, confirmed by the path above
 
-2. PURPOSE DOMAIN: Health mission (FoundationHealthMission)
-   ↓ authorizes
+trust-domain-keystone-shapes.ttl checks every link; validate_keystone.py runs it."""@en .
 
-3. AUTHORIZED ACTIVITY: Conducting clinical trials (ClinicalTrialsActivity)
-   ↓ requires
 
-4. OPERATOR IN ROLE: Research scientist Dr. Smith (ResearchScientistDrSmith)
-   ↓ necessitates
+#################################################################
+#    PROGRAM 5 - Health: resident-owned personal health knowledge graphs
+#################################################################
 
-5. EXPENSE DOMAINS: Compensation + Benefits (CompensationDomain_DrSmith, BenefitsDomain_DrSmith)
-   ↓ manifest as
-
-6. ACTUAL SPEND: $12,500 salary + $850 insurance (SalaryPayment_DrSmith_January2024, HealthInsurance_DrSmith_January2024)
-   ↓ traces back to
-
-7. PURPOSE: FoundationHealthMission ✓
-
-RESULT: Every dollar spent is PROVABLY:
-- Incidental to purpose (serves health mission, not enrichment)
-- Inseparable from execution (clinical trials require qualified researcher)
-
-This is PROOF OF LEGITIMACY. The cascade cannot be completed for improper private enablement."""@en .
-
-###  TEMPORAL EXAMPLES
-
-###  http://example.org/trust-domain#FiscalYear2024
-:FiscalYear2024 rdf:type owl:NamedIndividual ,
-                         :FiscalYear ;
-    :fiscalYearStart "2024-01-01"^^xsd:date ;
-    :fiscalYearEnd "2024-12-31"^^xsd:date ;
-    :yearNumber "2024"^^xsd:integer ;
-    :minimumDistributionRequired "500000.00"^^xsd:decimal ;
-    :qualifyingDistributionsMade "625000.00"^^xsd:decimal ;
-    rdfs:label "Fiscal Year 2024"@en ;
-    rdfs:comment "Foundation fiscal year 2024 - made $625K qualifying distributions, exceeding $500K minimum requirement"@en .
-
-###  http://example.org/trust-domain#DNI_2024
-:DNI_2024 rdf:type owl:NamedIndividual ,
-                   :DistributableNetIncome ;
-    :computedFor :FiscalYear2024 ;
-    :dniAmount "850000.00"^^xsd:decimal ;
-    rdfs:label "DNI for Fiscal Year 2024"@en ;
-    rdfs:comment "Distributable Net Income computed for fiscal year 2024"@en .
-
-###  Expenditure with temporal binding
-:SalaryPayment_DrSmith_January2024 :occursDuring :FiscalYear2024 ;
-                                   :expenditureDate "2024-01-15"^^xsd:date .
-
-###  GRANTMAKING EXAMPLES
-
-###  http://example.org/trust-domain#CancerResearchGrantActivity
-:CancerResearchGrantActivity rdf:type owl:NamedIndividual ,
-                                      :GrantmakingActivity ;
+:Program_ResidentHealthGraph rdf:type owl:NamedIndividual ,
+                                      :AuthorizedActivity ;
     :advancesPurpose :FoundationHealthMission ;
-    :hasTemporalExtent :FiscalYear2024 ;
-    rdfs:label "Cancer Research Grantmaking Activity"@en ;
-    rdfs:comment "Grantmaking activity to fund cancer research - DISTINCT from operational research"@en .
+    :withinBoundary :ExampleOperatingBoundary ;
+    :requires :Role_HealthNavigator ;
+    :buildsCapability :Cap_ResidentHealthBaseline ;
+    rdfs:label "Resident-owned personal health knowledge graphs"@en ;
+    rdfs:comment "For residents of neighborhoods with food deserts and thin access to care. Each resident keeps their own health graph, on their own device, gathering results over time from free community screenings (kidney checks, blood panels, dental) and their own doctor visits, read against optimal ranges as well as reference ranges, so they hold a baseline. The resident owns the record; the foundation owns only the tools."@en .
 
-###  http://example.org/trust-domain#GrantToStanfordMedicine
-:GrantToStanfordMedicine rdf:type owl:NamedIndividual ,
-                                  :Grant ;
-    :grantAmount "250000.00"^^xsd:decimal ;
-    :receivesGrant :StanfordMedicine ;
-    :satisfiesQualifyingDistribution :QD_StanfordGrant ;
-    :occursDuring :FiscalYear2024 ;
-    rdfs:label "Grant to Stanford Medicine - $250,000"@en ;
-    rdfs:comment "Charitable grant to Stanford Medicine for cancer research"@en .
+:Cap_ResidentHealthBaseline rdf:type owl:NamedIndividual , :LongTermCapability ;
+    :capabilityTest "Twelve months after joining, participants still keep their own record, it holds results from at least two separate screenings, and they can show or share it with a clinician of their choosing." ;
+    rdfs:label "Residents hold and use their own longitudinal health baseline"@en .
 
-###  http://example.org/trust-domain#StanfordMedicine
-:StanfordMedicine rdf:type owl:NamedIndividual ,
-                           :PublicCharity ;
-    rdfs:label "Stanford Medicine (Public Charity)"@en ;
-    rdfs:comment "IRC §509(a) public charity - qualifying grantee"@en .
+:Asset_ResidentHealthGraphApp rdf:type owl:NamedIndividual , :IntangibleAsset ;
+    :deployedIn :Program_ResidentHealthGraph ;
+    rdfs:label "Open-source on-device health record app and health ontology"@en .
 
-###  http://example.org/trust-domain#QD_StanfordGrant
-:QD_StanfordGrant rdf:type owl:NamedIndividual ,
-                           :QualifyingDistribution ;
-    rdfs:label "Qualifying Distribution: Stanford Grant"@en ;
-    rdfs:comment "Grant to public charity counts toward IRC §4942 minimum distribution"@en .
+:Asset_ScreeningIntakeTablets rdf:type owl:NamedIndividual , :TangibleAsset ;
+    :deployedIn :Program_ResidentHealthGraph ;
+    rdfs:label "Tablets for loading results at community screening events"@en .
+
+:Role_HealthNavigator rdf:type owl:NamedIndividual , :OperatorInRole ;
+    :servesActivity :Program_ResidentHealthGraph ;
+    :necessitates :CompDomain_HealthNavigator ;
+    rdfs:label "Community health navigator"@en .
+
+:CompDomain_HealthNavigator rdf:type owl:NamedIndividual , :CompensationDomain ;
+    :sustains :Role_HealthNavigator ;
+    :manifestsAs :Pay_HealthNavigator_Apr2027 ;
+    :enablesPrivately :Enable_HealthNavigatorPay ;
+    rdfs:label "Compensation domain: community health navigator"@en .
+
+:Pay_HealthNavigator_Apr2027 rdf:type owl:NamedIndividual , :ActualSpend ;
+    :tracesBackTo :FoundationHealthMission ;
+    :occursDuring :FiscalYear2027 ;
+    gist:hasMagnitude [ rdf:type gist:Magnitude ; gist:numericValue "3500.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; :hasPaymentPeriod :PerMonth ] ;
+    rdfs:label "Health navigator pay, April 2027: $3,500 (illustrative)"@en .
+
+:Enable_HealthNavigatorPay rdf:type owl:NamedIndividual , :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationHealthMission ;
+    :isInseparableFrom :Program_ResidentHealthGraph ;
+    :hasMarketBenchmark :Benchmark_HealthNavigator ;
+    rdfs:label "Health navigator pay"@en ;
+    rdfs:comment "Expected to pass: $42,000 a year against a $52,000 benchmark."@en .
+
+:Benchmark_HealthNavigator rdf:type gist:Magnitude ;
+    gist:numericValue "52000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    :hasPaymentPeriod :PerYear ;
+    dcterms:source "Illustrative value, not a market survey" ;
+    rdfs:label "Market rate: community health worker, $52,000 per year (illustrative)"@en .
+
+###  Two participants (anonymous, illustrative). No health data is modeled.
+
+:Participant_A rdf:type owl:NamedIndividual , :ProgramParticipant ;
+    :participatesIn :Program_ResidentHealthGraph ;
+    rdfs:label "Participant A (anonymous)"@en .
+
+:Record_ParticipantA rdf:type owl:NamedIndividual , :ParticipantRecord ;
+    :ownedBy :Participant_A ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    rdfs:label "Participant A's health graph (local only)"@en .
+
+:Participant_B rdf:type owl:NamedIndividual , :ProgramParticipant ;
+    :participatesIn :Program_ResidentHealthGraph ;
+    rdfs:label "Participant B (anonymous)"@en .
+
+:Record_ParticipantB rdf:type owl:NamedIndividual , :ParticipantRecord ;
+    :ownedBy :Participant_B ;
+    :heldUnder :Program_ResidentHealthGraph ;
+    :sharedWith :Recipient_ParticipantBClinician ;
+    :hasConsent :Consent_ParticipantB_Clinician ;
+    rdfs:label "Participant B's health graph, shared with B's own clinician"@en .
+
+:Recipient_ParticipantBClinician rdf:type owl:NamedIndividual ;
+    rdfs:label "Participant B's own clinician (unnamed)"@en .
+
+:Consent_ParticipantB_Clinician rdf:type owl:NamedIndividual , :ConsentRecord ;
+    :grantedBy :Participant_B ;
+    :consentFor :Recipient_ParticipantBClinician ;
+    :consentScope :SharedWithNamedRecipient ;
+    :consentRevocable "true"^^xsd:boolean ;
+    rdfs:label "B's consent to share with their own clinician"@en .
+
+###  The founder, as the graph must see him: a disqualified person.
+
+:Founder rdf:type owl:NamedIndividual , :FoundationManager , :SubstantialContributor ;
+    rdfs:label "Founder (disqualified person)"@en ;
+    rdfs:comment "Foundation manager and substantial contributor, so a disqualified person under IRC §4946, as are family members. Foundation money cannot pay for his own care or build his own health records."@en .
 
 ###  IRC §§4941-4945 VIOLATION EXAMPLES
 
