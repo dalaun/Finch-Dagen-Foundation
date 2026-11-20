@@ -2,9 +2,9 @@ name: Keystone check
 
 on:
   push:
-    paths: ['**.ttl', 'validate_keystone.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'tests/**']
   pull_request:
-    paths: ['**.ttl', 'validate_keystone.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'tests/**']
   workflow_dispatch:
 
 permissions:
@@ -19,5 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install rdflib pyshacl
+      - name: OWL lint (hasValue on a class, restrictions on rdf:type, doubled onProperty)
+        run: python3 validate_owl_lint.py
       - name: Run keystone and cascade checks against the answer key
         run: python3 validate_keystone.py
