@@ -34,3 +34,33 @@ k:K13 a rh:TestCase ; rdfs:label "Rent on the founder's own residence paid by th
   rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:NoRouteYet ;
   rh:expectedReason "IRC 4941(d)(1)(E)" ;
   rh:wouldNeed "No lawful foundation route. The only way foundation money reaches his living costs is wages for real, necessary services under 4941(d)(2)(E), which he then spends as income." .
+
+# Added 2026-11-20: the founder's four ideas (register section F).
+k:K14 a rh:TestCase ; rdfs:label "Founder borrows against appreciated assets he holds, under a real loan; proceeds spent personally" ;
+  rh:proposedLayer rh:L5_EstateAndLegacy ; rh:expectedVerdict rh:Green ; rh:expectedReason "Woodsam Associates, 198 F.2d 357: borrowing is not a disposition; interest is personal under 163(h)(1)" .
+k:K15 a rh:TestCase ; rdfs:label "Foundation lends to the founder at a market rate" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(B): lending is self-dealing whatever the rate" .
+k:K16 a rh:TestCase ; rdfs:label "Founder lends to the Foundation interest-free; proceeds used only for programs" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 4941(d)(2)(B)" .
+k:K17 a rh:TestCase ; rdfs:label "Founder gives an appreciated asset to a relative who dies within a year and leaves it back to him; basis reset claimed" ;
+  rh:proposedLayer rh:L5_EstateAndLegacy ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 1014(e)" .
+k:K18 a rh:TestCase ; rdfs:label "Founder, paid wages by the management company, deducts a home office on his own return" ;
+  rh:proposedLayer rh:L0_Personal ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 67(h); 280A(c)(1): route is reimbursement under the company's accountable plan" .
+k:K19 a rh:TestCase ; rdfs:label "Home office that doubles as a guest room" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 280A(c)(1): exclusive use" .
+k:K20 a rh:TestCase ; rdfs:label "Foundation-owned art hung in the founder's home; public visits by appointment he controls" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(E); Rev. Rul. 74-600" .
+k:K21 a rh:TestCase ; rdfs:label "Operating foundation museum at its own site, open to the public, spending 90% of adjusted net income running it, most assets in the collection" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 4942(j)(3)(A), (B)(i); Treas. Reg. 53.4942(b)-1" .
+k:K22 a rh:TestCase ; rdfs:label "Business suits for client meetings bought by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "Pevsner, 628 F.2d 467: adaptable to street wear" .
+k:K23 a rh:TestCase ; rdfs:label "Required crew uniforms, not street wear, bought by the operating company from the apparel company at its outside-customer price" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 162(a); 132(a)(3); 482; Pevsner" .
+k:K24 a rh:TestCase ; rdfs:label "Same uniforms sold to a sister company at twice the outside price" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 482; structure check S8" .
+k:K25 a rh:TestCase ; rdfs:label "Plain polos with only a company logo, given to staff" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "Pevsner street-wear test; no source read settles logo-only clothing" .
+k:K26 a rh:TestCase ; rdfs:label "Foundation buys program shirts from the apparel company" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Amber ; rh:expectedReason "IRC 4941(d)(1)(A), (C); 4946: red if the apparel company is a disqualified person" .
+k:K27 a rh:TestCase ; rdfs:label "Entities in the stack lend to each other in a circle at interest, each deducting interest, with no outside purpose" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 7701(o); Notice 97-24; structure checks S8, S11" .

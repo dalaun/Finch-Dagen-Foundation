@@ -42,6 +42,13 @@ Bring: the trust instruments, operating agreements, EIN letters, and any returns
 20. Once there are assets: dynasty trust with the GST exemption, a grantor trust sale, a charitable lead or remainder trust. Which fits my numbers, and what does each cost to run?
 21. Which of these routes, if I use them, should be disclosed on a return (Form 8275) so a challenge would not carry the 40% undisclosed-penalty rate (6662(i))?
 
+## Ideas the founder raised (register section F)
+
+22. **Borrowing against assets.** Once there are appreciated assets, what does a loan against them cost and risk compared with selling? If the Family Trust lends to me, what rate and paperwork does it need, and does the loan change the trust's grantor status?
+23. **The home.** If I'm paid wages by the management company, should it adopt an accountable plan that reimburses a home office instead of my deducting it? Later, is a personal residence trust worth it, and what happens if I outlive its term and keep living there, or die during it?
+24. **A foundation museum.** Would an operating foundation running a museum meet the income test and the assets test? Can the museum use space I own rent-free without self-dealing? What happens to a gift of art the museum doesn't display?
+25. **Uniforms.** Do plain clothes with only a company logo count as unsuited to street wear, or only clothing that no one would wear off the job? What price and paperwork make the apparel company's sales to sister companies hold up, and can the Foundation ever buy from it?
+
 ## About the legal plan
 
-22. Ask the plan first: are trust documents, entity work and tax questions covered, or only some of them? Plans like this often cover wills and basic estate documents but limit business and tax matters. Check the plan's own terms before relying on it.
+26. Ask the plan first: are trust documents, entity work and tax questions covered, or only some of them? Plans like this often cover wills and basic estate documents but limit business and tax matters. Check the plan's own terms before relying on it.

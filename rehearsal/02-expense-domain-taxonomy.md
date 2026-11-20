@@ -29,8 +29,8 @@ Each domain has a **default layer**: where the line lives if nothing proves othe
 | D6 | General online retail | L0 | Sort by line item, then re-route | Line items |
 | D7 | Meals | L0 | L1 business meals (generally 50%) | Who, why, where, amount (274(d)) |
 | D8 | Building materials and repairs | L2 | L2 already; L1 if the building is moved into an entity | Invoices tied to the unit; repair vs improvement call |
-| D9 | Clothing and footwear | L0 | None for ordinary clothing | Only costume or protective gear not suitable for everyday wear |
-| D10 | Housing (own residence) | L0 | L1 home office under 280A(c)(1), narrowly; L3 trust-owned residence with fair rent | Exclusive, regular business use; or a lease at market rent |
+| D9 | Clothing and footwear | L0 | L1 required uniforms bought by the employer (register F4); none for ordinary clothing or suits | Written dress policy; clothing not adaptable to street wear (Pevsner); employer invoice. Logo-only clothing is amber |
+| D10 | Housing (own residence) | L0 | L1 home office under 280A(c)(1), narrowly, or reimbursed under an accountable plan if he is an employee; under-15-day rental to a separate-taxpayer entity (280A(g)); L5 personal residence trust for estate purposes (register F2) | Exclusive, regular business use; meeting records and fair rent; trust instrument. The home itself has no route |
 | D11 | Phone and internet | L0 | L1 business share | Business-use percentage with a basis |
 | D12 | Vehicles and fuel | L0 | L1 business share (listed property, 274(d)) | Mileage log |
 | D13 | Insurance | L0 | L1 business policies; L3 trust-owned life insurance | Policy owner and beneficiary match the layer |

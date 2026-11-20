@@ -104,7 +104,7 @@ Every step is logged as a dated event: what changed, the register version, both 
 
 ## First increments to rehearse, in order
 
-1. **Sort the ledger** and run both answer keys. No optimizing until K1 to K13 and SK1 to SK16 all match.
+1. **Sort the ledger** and run both answer keys. No optimizing until K1 to K27 and SK1 to SK16 all match.
 2. **Move business-shaped lines to the operating companies** (D1, D5, business share of D3, D11, D12) with an accountable plan. Expected: the first real gain, no trust needed.
 3. **Fix classification facts** in the model (the business trust as a business entity; the management company's real classification), then rehearse the flat version: an ordinary business entity in place of the business trust, paying the founder market wages. Expected: some routes close, and structure checks S5, S11 and S12 move toward passing; better now than in an audit.
 4. **Price the founder's Foundation role** for one program at a benchmark. Expected: lawful wages, a cost to the Foundation, no tax saving; it tests the one door.
@@ -117,7 +117,7 @@ Steps 5 and 6 stop for the attorney and CPA before anything real happens.
 
 1. The optimizer may not reclassify a line to win. Reclassification needs new evidence, and a person confirms it.
 2. The register is version-pinned per run. Changing a rule is its own step with a source quote.
-3. The answer key below must pass before any optimizer output is trusted.
+3. The answer keys (below, and in the structure checks) must pass before any optimizer output is trusted.
 4. A route that only changes labels, not who owns or pays, fails G5.
 5. A structure change that only renames an entity is not a step. The structure checks must give identical verdicts before and after any rename.
 
@@ -140,3 +140,17 @@ These are cases where the law gives a clear answer. The twin must reproduce ever
 | K11 | Daily commute rides paid by the management company | Fail: personal | 262(a) |
 | K12 | Tuition paid directly to a school for a family member | Pass: excluded from gift tax | 2503(e) |
 | K13 | Rent on the founder's own residence paid by the foundation | No route yet: only wages for real work can reach it | 4941(d)(1)(E), (d)(2)(E) |
+| K14 | Founder borrows against appreciated assets he holds, under a real loan; proceeds spent personally | Pass: proceeds are not income; interest not deductible | Woodsam Associates, 198 F.2d 357: borrowing is not a disposition; interest is personal under 163(h)(1) |
+| K15 | Foundation lends to the founder at a market rate | Fail: self-dealing | IRC 4941(d)(1)(B): lending is self-dealing whatever the rate |
+| K16 | Founder lends to the Foundation interest-free; proceeds used only for programs | Pass | IRC 4941(d)(2)(B) |
+| K17 | Founder gives an appreciated asset to a relative who dies within a year and leaves it back to him; basis reset claimed | Fail: no basis reset | IRC 1014(e) |
+| K18 | Founder, paid wages by the management company, deducts a home office on his own return | Fail: employee deduction suspended | IRC 67(h); 280A(c)(1): route is reimbursement under the company's accountable plan |
+| K19 | Home office that doubles as a guest room | Fail: not exclusive | IRC 280A(c)(1): exclusive use |
+| K20 | Foundation-owned art hung in the founder's home; public visits by appointment he controls | Fail: self-dealing | IRC 4941(d)(1)(E); Rev. Rul. 74-600 |
+| K21 | Operating foundation museum at its own site, open to the public, spending 90% of adjusted net income running it, most assets in the collection | Pass | IRC 4942(j)(3)(A), (B)(i); Treas. Reg. 53.4942(b)-1 |
+| K22 | Business suits for client meetings bought by the management company | Fail: personal | Pevsner, 628 F.2d 467: adaptable to street wear |
+| K23 | Required crew uniforms, not street wear, bought by the operating company from the apparel company at its outside-customer price | Pass | IRC 162(a); 132(a)(3); 482; Pevsner |
+| K24 | Same uniforms sold to a sister company at twice the outside price | Fail: not arm's length | IRC 482; structure check S8 |
+| K25 | Plain polos with only a company logo, given to staff | Amber: CPA question | Pevsner street-wear test; no source read settles logo-only clothing |
+| K26 | Foundation buys program shirts from the apparel company | Amber: attorney question | IRC 4941(d)(1)(A), (C); 4946: red if the apparel company is a disqualified person |
+| K27 | Entities in the stack lend to each other in a circle at interest, each deducting interest, with no outside purpose | Fail: no substance | IRC 7701(o); Notice 97-24; structure checks S8, S11 |
