@@ -35,3 +35,7 @@ Each case is a synthetic line with a proposed layer, an expected verdict (pass, 
 2. **Outcome later:** when a real return is filed or a professional answers, did the twin's verdict hold? Each professional decision is recorded as an event, so the history itself becomes the grader.
 
 Section citations are kept as text, not as links to the section classes, so the sketch does not repeat the core's open issue of using classes as values.
+
+## Structure checks (added 2026-11-20)
+
+`rh:StructureVersion` is one configuration of the stack. `rh:StructureCheck` (a kind of `rh:Gate`) tests a whole version and lists the fact fields it reads with `rh:readsFact`; names are never among them. Ledger cases (`rh:TestCase`) and structure cases (`rh:StructureCase`) share the parent `rh:EvalCase`, so both answer keys use the same `rh:expectedVerdict` and `rh:expectedReason`. `rh:sameVerdictsAs` encodes rename invariance: two cases that differ only in names must get identical verdicts. `rh:candidateChange` on a red or amber result records the fact change that would make it pass, as a candidate, never a conclusion.

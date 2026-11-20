@@ -1,0 +1,157 @@
+@prefix rh: <http://example.org/trust-domain/rehearsal#> .
+@prefix s: <http://example.org/trust-domain/rehearsal/structure#> .
+@prefix sk: <http://example.org/trust-domain/rehearsal/structure-cases#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Structure integrity checks and eval cases (synthetic, no real data).
+# Source quotes are in 07-structure-integrity-checks.md.
+# Every check reads fact fields only. The twin must reproduce every case,
+# and must give identical verdicts after all names are randomized (SK15, SK16).
+
+s:S1 a rh:StructureCheck ; rdfs:label "S1. Tax position matches who controls the assets" ;
+  rh:readsFact "who can direct distributions, investments and sales" , "who can remove the trustee" , "how each trust files" ;
+  rdfs:comment "Source: IRS Notice 97-24, III.2; grantor trust rules IRC 671-677" .
+
+s:S2 a rh:StructureCheck ; rdfs:label "S2. Trustee exercises independent control" ;
+  rh:readsFact "trustee identity and relationship to the founder" , "trustee decision log, including declined requests" , "who prepares and approves trust transactions" ;
+  rdfs:comment "Source: IRS Notice 97-24, II; IRS Talking points" .
+
+s:S3 a rh:StructureCheck ; rdfs:label "S3. Payment tools in the trustee's hands only" ;
+  rh:readsFact "signers on each trust account" , "names on any trust card" , "any signature stamp" ;
+  rdfs:comment "Source: IRS Notice 97-24, II" .
+
+s:S4 a rh:StructureCheck ; rdfs:label "S4. Transactions follow the trust's own terms" ;
+  rh:readsFact "each distribution matched to the instrument's standard" , "trustee minutes" ;
+  rdfs:comment "Source: IRS Notice 97-24, III.1 (Markosian, 73 T.C. 1235)" .
+
+s:S5 a rh:StructureCheck ; rdfs:label "S5. Founder's relationship to the property materially changed" ;
+  rh:readsFact "who uses the property" , "who pays its costs" , "rent set at market and actually paid" , "founder's day-to-day role" ;
+  rdfs:comment "Source: IRS Notice 97-24, III.1 (Markosian); IRS Facts Section III" .
+
+s:S6 a rh:StructureCheck ; rdfs:label "S6. No personal, living, family or education deductions, and no trust set-up cost deductions" ;
+  rh:readsFact "every deducted ledger line and its domain" ;
+  rdfs:comment "Source: IRC 262; IRS Notice 97-24, III.5" .
+
+s:S7 a rh:StructureCheck ; rdfs:label "S7. No residence depreciation and no stepped-up basis on transfer to a controlled trust" ;
+  rh:readsFact "depreciation schedules" , "basis claimed on assets received from the founder" ;
+  rdfs:comment "Source: IRS Notice 97-24, Example 3 and III.2; Rev. Rul. 85-13" .
+
+s:S8 a rh:StructureCheck ; rdfs:label "S8. Related-party flows at market, documented, real and paid" ;
+  rh:readsFact "contract" , "benchmark" , "service or use record" , "payment" ;
+  rdfs:comment "Source: IRS Notice 97-24, I and Example 2; IRC 482" .
+
+s:S9 a rh:StructureCheck ; rdfs:label "S9. Income taxed to whoever earned it" ;
+  rh:readsFact "who performed the services" , "name and taxpayer number on contract and invoice" , "where the payment landed" ;
+  rdfs:comment "Source: Lucas v. Earl, 281 U.S. 111 (1930); IRS Questions and answers" .
+
+s:S10 a rh:StructureCheck ; rdfs:label "S10. No self-employment or payroll tax reduction claimed from the arrangement" ;
+  rh:readsFact "how the founder is paid for his work" , "whether self-employment or payroll tax is paid" ;
+  rdfs:comment "Source: IRS Notice 97-24, Example 1; IRS Talking points" .
+
+s:S11 a rh:StructureCheck ; rdfs:label "S11. Each layer of a chain has its own purpose and its own deductions stand" ;
+  rh:readsFact "income flow graph" , "each layer's purpose and activity" ;
+  rdfs:comment "Source: IRS Notice 97-24, I and Example 5; IRS Talking points" .
+
+s:S12 a rh:StructureCheck ; rdfs:label "S12. A business is run by an entity classified as a business" ;
+  rh:readsFact "what the entity does" , "how it files" ;
+  rdfs:comment "Source: Treas. Reg. 301.7701-4(b); IRS Talking points" .
+
+s:S13 a rh:StructureCheck ; rdfs:label "S13. Any charity is real and pays nothing for family costs" ;
+  rh:readsFact "exemption letter or filed Form 1023" , "program records" , "each payment's recipient and purpose" ;
+  rdfs:comment "Source: IRS Notice 97-24, Example 4 and III.6; IRC 4941" .
+
+s:S14 a rh:StructureCheck ; rdfs:label "S14. All trusts domestic, or every foreign transfer and distribution reported" ;
+  rh:readsFact "domestic or foreign status of each trust" , "Forms 3520 and 3520-A" ;
+  rdfs:comment "Source: IRC 679; IRS Notice 97-24, III.2 and III.7" .
+
+s:S15 a rh:StructureCheck ; rdfs:label "S15. Every transfer reported the same way by both sides" ;
+  rh:readsFact "characterization on the founder's return" , "characterization on the receiving entity's return" ;
+  rdfs:comment "Source: IRS Notice 97-24, Examples 2 and 3" .
+
+s:S16 a rh:StructureCheck ; rdfs:label "S16. Property the founder keeps using is counted in his estate" ;
+  rh:readsFact "retained use, enjoyment or income" , "the version's estate assumption" ;
+  rdfs:comment "Source: IRC 2036(a); IRS Notice 97-24, III.4 and Example 1" .
+
+s:S17 a rh:StructureCheck ; rdfs:label "S17. Stated purpose free of every promoter claim the IRS lists as false" ;
+  rh:readsFact "written purpose of each entity and each optimization step" ;
+  rdfs:comment "Source: IRS Talking points" .
+
+sk:SK1 a rh:StructureCase ; rdfs:label "A trust owns the business; the founder as trustee runs it day to day; the trust files as a trust and deducts payments to his other trusts" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S1 , s:S5 , s:S12 ;
+  rh:expectedReason "Fails S1, S5, S12" .
+
+sk:SK2 a rh:StructureCase ; rdfs:label "The business is owned by an LLC that the Family Trust holds; the founder is paid market wages with payroll tax; the LLC files as a business" ;
+  rh:expectedVerdict rh:Green ;
+  rh:passesCheck s:S5 , s:S9 , s:S10 , s:S12 ;
+  rh:expectedReason "Passes S5, S9, S10, S12" .
+
+sk:SK3 a rh:StructureCase ; rdfs:label "Family residence moved to a trust; the family keeps living there; little rent is paid; the trust deducts depreciation, utilities and upkeep" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S5 , s:S6 , s:S7 , s:S8 ;
+  rh:expectedReason "Fails S5, S6, S7, S8" .
+
+sk:SK4 a rh:StructureCase ; rdfs:label "Trustee is a relative who signs whatever the founder sends; the founder holds pre-signed trust checks; the trust is reported as a separate taxpayer" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S1 , s:S2 , s:S3 ;
+  rh:expectedReason "Fails S1, S2, S3" .
+
+sk:SK5 a rh:StructureCase ; rdfs:label "Professional trustee unrelated to the founder; the decision log shows a declined distribution request; the trust is reported as a separate taxpayer" ;
+  rh:expectedVerdict rh:Green ;
+  rh:passesCheck s:S1 , s:S2 , s:S3 ;
+  rh:expectedReason "Passes S1, S2, S3" .
+
+sk:SK6 a rh:StructureCase ; rdfs:label "The management company bills the operating company a fee with no services performed and no benchmark" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S8 ;
+  rh:expectedReason "Fails S8" .
+
+sk:SK7 a rh:StructureCase ; rdfs:label "The same fee with a written agreement, market benchmark, service records and payments" ;
+  rh:expectedVerdict rh:Green ;
+  rh:passesCheck s:S8 ;
+  rh:expectedReason "Passes S8" .
+
+sk:SK8 a rh:StructureCase ; rdfs:label "The founder signs a client contract personally; payment goes to a trust, which reports it" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S9 ;
+  rh:expectedReason "Fails S9" .
+
+sk:SK9 a rh:StructureCase ; rdfs:label "An organization with no exemption letter and no filed application receives gifts deducted as charitable" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S13 ;
+  rh:expectedReason "Fails S13" .
+
+sk:SK10 a rh:StructureCase ; rdfs:label "The foundation pays a family member's school tuition" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S13 ;
+  rh:expectedReason "Fails S13" .
+
+sk:SK11 a rh:StructureCase ; rdfs:label "Three entities in a chain, each paying the next and deducting the payment, the last paying almost no tax, none with its own activity" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S11 ;
+  rh:expectedReason "Fails S11" .
+
+sk:SK12 a rh:StructureCase ; rdfs:label "Foreign trust with a U.S. beneficiary; no Form 3520 filed" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S14 ;
+  rh:expectedReason "Fails S14" .
+
+sk:SK13 a rh:StructureCase ; rdfs:label "Asset transferred to a trust; the trust claims fair market value basis; the founder reports no gain and no gift" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S15 , s:S7 ;
+  rh:expectedReason "Fails S15, S7" .
+
+sk:SK14 a rh:StructureCase ; rdfs:label "The founder keeps living in a house placed in a trust until death; the version assumes it is out of his estate" ;
+  rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S16 ;
+  rh:expectedReason "Fails S16" .
+
+sk:SK15 a rh:StructureCase ; rdfs:label "SK1 with every name and label replaced by random ids" ;
+  rh:sameVerdictsAs sk:SK1 ; rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S1 , s:S5 , s:S12 ;
+  rh:expectedReason "Rename invariance: names are never evidence" .
+
+sk:SK16 a rh:StructureCase ; rdfs:label "SK3 with the trust renamed to an LLC-style name and no fact changed" ;
+  rh:sameVerdictsAs sk:SK3 ; rh:expectedVerdict rh:Red ;
+  rh:failsCheck s:S5 , s:S6 , s:S7 , s:S8 ;
+  rh:expectedReason "Renaming fixes nothing: substance, not form, controls" .

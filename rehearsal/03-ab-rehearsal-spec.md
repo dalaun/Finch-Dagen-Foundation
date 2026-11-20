@@ -14,6 +14,10 @@ The twin takes twelve months of real transactions and runs them twice. Arm A is 
 | Instrument register | [Register](01-instrument-register.md) | Versioned. Every run records the register version it used |
 | Cost table | Quotes from the CPA, trustee, registered agent | Parameters, not guesses. Missing costs block a run rather than default to zero |
 
+## Before any run: the structure checks
+
+Every structure version (which entities exist, who controls what, how money flows between them) must pass the [structure integrity checks](07-structure-integrity-checks.md) S1 to S17 before its ledger routes are scored. They turn the IRS's descriptions of abusive trust arrangements (Notice 97-24 and its abusive-trust guidance) into yes/no questions about facts. Any red check removes the whole version; any amber check blocks it and becomes a professional question. Checks read fact fields only, and every check run is repeated with all names randomized: the verdicts must not change.
+
 ## Arm A: personal
 
 Every line is paid by the founder as an individual and treated as it is today: wages, Schedule E for the building, the existing business returns. Arm A is the baseline, not a straw man.
@@ -100,9 +104,9 @@ Every step is logged as a dated event: what changed, the register version, both 
 
 ## First increments to rehearse, in order
 
-1. **Sort the ledger** and run the answer key. No optimizing until K1 to K13 all match.
+1. **Sort the ledger** and run both answer keys. No optimizing until K1 to K13 and SK1 to SK16 all match.
 2. **Move business-shaped lines to the operating companies** (D1, D5, business share of D3, D11, D12) with an accountable plan. Expected: the first real gain, no trust needed.
-3. **Fix classification facts** in the model (the business trust as a business entity; the management company's real classification). Expected: some routes close; better now than in an audit.
+3. **Fix classification facts** in the model (the business trust as a business entity; the management company's real classification), then rehearse the flat version: an ordinary business entity in place of the business trust, paying the founder market wages. Expected: some routes close, and structure checks S5, S11 and S12 move toward passing; better now than in an audit.
 4. **Price the founder's Foundation role** for one program at a benchmark. Expected: lawful wages, a cost to the Foundation, no tax saving; it tests the one door.
 5. **Fund the Family Trust in the model** with one named asset, grantor first, then non-grantor. Expected: this is where Arm B can start to beat Arm A, and it shows how large an asset has to be before the stack's fixed costs are covered.
 6. **Compare Foundation vs donor-advised fund** at the modeled asset level. Expected: the fund wins while assets are small; the Foundation wins once there is enough to support staff and a 5% payout.
@@ -115,6 +119,7 @@ Steps 5 and 6 stop for the attorney and CPA before anything real happens.
 2. The register is version-pinned per run. Changing a rule is its own step with a source quote.
 3. The answer key below must pass before any optimizer output is trusted.
 4. A route that only changes labels, not who owns or pays, fails G5.
+5. A structure change that only renames an entity is not a step. The structure checks must give identical verdicts before and after any rename.
 
 ## Answer key (the eval)
 

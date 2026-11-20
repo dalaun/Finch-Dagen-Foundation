@@ -21,6 +21,8 @@ What turns the result around is not routing spending. It is **assets**. The stru
 
 A second finding, about the structure itself: the IRS's own warning on abusive trusts (Notice 97-24) describes a business trust plus a family trust, the same names this stack uses. That is not a verdict on this stack. It means each trust has to prove it is real: its own accounts, a trustee who follows its terms, and a founder whose relationship to the assets actually changed. The twin treats that as gates G5 and G6, and the first attorney questions are about it.
 
+**Designing away from the abusive pattern, on the facts.** The [structure checks](07-structure-integrity-checks.md) turn every red flag in that IRS guidance into a yes/no question about facts: who controls, who signs, who lives in the property, what was paid and at what price, how each transfer was reported. Names and labels are never evidence; renaming an entity changes no verdict. Today's stack, in roles, passes the checks the design already controls (no personal deductions, no residence depreciation, no self-employment tax claim) and is amber on the rest because the trustee, filing and transfer facts aren't on file. The single change that clears the most checks is replacing the business trust with an ordinary business entity that pays the founder market wages: it removes the IRS's first example pattern instead of defending it.
+
 A third likely finding: some business-shaped spending (software and AI tools, hosting, research, business travel, building costs) does have strong routes today, through the operating companies and the building's Schedule E. That is where the twin's early wins are, and none of them need a trust.
 
 ## The layers, as the twin sees them
@@ -40,6 +42,7 @@ A third likely finding: some business-shaped spending (software and AI tools, ho
 | [03-ab-rehearsal-spec.md](03-ab-rehearsal-spec.md) | The two arms, the route search, the gates, the costs, the score, the increment loop, and the answer key |
 | [04-ontology-notes.md](04-ontology-notes.md) and [rehearsal-ontology.ttl](rehearsal-ontology.ttl) | Ontology sketch on gist, reusing the trust-domain core |
 | [answer-key-cases.ttl](answer-key-cases.ttl) | The cases the twin must get right before its optimizer is trusted |
+| [07-structure-integrity-checks.md](07-structure-integrity-checks.md) and [structure-check-cases.ttl](structure-check-cases.ttl) | Checks S1 to S17 every structure version must pass, from the IRS's abusive-trust guidance; today's stack scored in roles; eval cases SK1 to SK16 |
 | [05-questions-for-attorney-and-cpa.md](05-questions-for-attorney-and-cpa.md) | What to ask, in plain words |
 | [06-handoff-transaction-export.md](06-handoff-transaction-export.md) | The one thing only the founder can supply |
 

@@ -172,15 +172,58 @@ rh:StoppedForProfessional a rh:StepOutcome ;
 
 ########## Answer key ##########
 
+rh:EvalCase a owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "eval case"@en ;
+    rdfs:comment "Any synthetic case whose right verdict the law settles: a ledger-line case or a structure case."@en .
+
 rh:TestCase a owl:Class ;
-    rdfs:subClassOf rh:LedgerLine ;
+    rdfs:subClassOf rh:LedgerLine , rh:EvalCase ;
     rdfs:label "answer-key case"@en ;
     rdfs:comment "A synthetic line whose right verdict the law settles. The twin must match every case before its optimizer is trusted."@en .
 
 rh:expectedVerdict a owl:ObjectProperty ;
-    rdfs:domain rh:TestCase ; rdfs:range rh:Verdict .
+    rdfs:domain rh:EvalCase ; rdfs:range rh:Verdict .
 rh:expectedReason a owl:DatatypeProperty ;
-    rdfs:domain rh:TestCase ; rdfs:range xsd:string ;
+    rdfs:domain rh:EvalCase ; rdfs:range xsd:string ;
     rdfs:comment "Citation as text (e.g. 'IRC 4941(d)(1)(E)'). Kept as a string so section classes are not used as values."@en .
 rh:proposedLayer a owl:ObjectProperty ;
     rdfs:domain rh:TestCase ; rdfs:range rh:Layer .
+
+########## Structure integrity checks (see 07-structure-integrity-checks.md) ##########
+
+rh:StructureVersion a owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "structure version"@en ;
+    rdfs:comment "One configuration of the stack the twin rehearses: which entities exist, who controls and owns what, and how money flows between them. Must pass every structure check before its routes are scored."@en .
+
+rh:StructureCheck a owl:Class ;
+    rdfs:subClassOf rh:Gate ;
+    rdfs:label "structure check"@en ;
+    rdfs:comment "A yes/no test on a whole structure version, drawn from the IRS's descriptions of abusive trust arrangements (S1 ... S17). Reads fact fields only; entity names and type labels are never inputs."@en .
+
+rh:readsFact a owl:DatatypeProperty ;
+    rdfs:domain rh:StructureCheck ; rdfs:range xsd:string ;
+    rdfs:comment "A fact field the check reads (for example 'signers on each trust account'). Never a name or label."@en .
+
+rh:sourceQuote a owl:DatatypeProperty ;
+    rdfs:domain rh:Gate ; rdfs:range xsd:string ;
+    rdfs:comment "Verbatim words from the primary source the gate rests on."@en .
+
+rh:StructureCase a owl:Class ;
+    rdfs:subClassOf rh:StructureVersion , rh:EvalCase ;
+    rdfs:label "structure case"@en ;
+    rdfs:comment "A synthetic structure version whose verdict the law settles."@en .
+
+rh:failsCheck a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCheck .
+rh:passesCheck a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCheck .
+
+rh:sameVerdictsAs a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCase ;
+    rdfs:comment "Rename invariance: this case differs from the other only in names and labels, so every check must give the same verdict."@en .
+
+rh:candidateChange a owl:DatatypeProperty ;
+    rdfs:domain rh:GateResult ; rdfs:range xsd:string ;
+    rdfs:comment "For a red or amber result: a change to the structure's facts that would make the check pass. A candidate to rehearse, never a conclusion. A change that only renames is not a candidate."@en .
