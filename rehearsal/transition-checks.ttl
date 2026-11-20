@@ -1,0 +1,89 @@
+@prefix rh: <http://example.org/trust-domain/rehearsal#> .
+@prefix t: <http://example.org/trust-domain/rehearsal/transition#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Transition checks T1-T16 (W-2 to business owner). Synthetic design, no real data.
+# Same rules as the structure checks: facts only, unknown is amber, renaming changes nothing.
+# Source quotes are in 08-w2-to-owner-transition.md. The executable version is transition_twin.py.
+
+t:T1 a rh:StructureCheck ; rdfs:label "T1. Employer outside-work and conflict terms reviewed, and they permit this business" ;
+  rh:readsFact "employer_outside_work_terms_reviewed_and_permit_it" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Employer's own terms (not read)" .
+
+t:T2 a rh:StructureCheck ; rdfs:label "T2. No employer time, equipment, data, customers or IP used; business is not a supplier, customer or competitor of the employer" ;
+  rh:readsFact "no_employer_time_data_customers_or_ip_used" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Model rule; employer terms" .
+
+t:T3 a rh:StructureCheck ; rdfs:label "T3. Target is SBA-eligible: not a marijuana business, not passive, actively operated" ;
+  rh:readsFact "business_sba_eligible_not_cannabis_not_passive" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA SOP 50 10 8, ch. 1" .
+
+t:T4 a rh:StructureCheck ; rdfs:label "T4. Every 20%+ owner (and the trustor of any owning trust) is named as guarantor, and the guarantee is counted in personal reserves" ;
+  rh:readsFact "all_20pct_owners_and_trustors_named_as_guarantors" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: Starfield & Smith 2026; MMCG 2026 on SOP 50 10 8.1" .
+
+t:T5 a rh:StructureCheck ; rdfs:label "T5. Foundation holds no interest, gives no guarantee or pledge, lends nothing and does no business with the deal or the founder's loan" ;
+  rh:readsFact "foundation_has_no_role_in_deal" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: IRC 4941(d)(1)(B),(E); Reg 53.4941(d)-2(f)(1)" .
+
+t:T6 a rh:StructureCheck ; rdfs:label "T6. Owner is not a trust with the Foundation as beneficiary, or counsel has cleared excess business holdings" ;
+  rh:readsFact "owner_is_not_a_trust_that_benefits_the_foundation_or_4943_cleared" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: IRC 4943(c)(2), 4943(d)(1); Reg 53.4943-8(b)(1)" .
+
+t:T7 a rh:StructureCheck ; rdfs:label "T7. Every role the founder doesn't do is paid at market before the trigger counts any earnings" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Model rule" .
+
+t:T8 a rh:StructureCheck ; rdfs:label "T8. Founder's wages from the business are for real, logged work, priced at market for the hours worked" ;
+  rh:readsFact "founder_wage_only_for_real_documented_work_at_market" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Rehearsal structure checks S8, S9" .
+
+t:T9 a rh:StructureCheck ; rdfs:label "T9. Seller note counted as equity is on full standby for the life of the SBA loan (no principal or interest paid)" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA SOP 50 10 8.1 as quoted (Searchfunder)" .
+
+t:T10 a rh:StructureCheck ; rdfs:label "T10. No ROBS funded from the current employer's plan while still employed" ;
+  rh:readsFact "no_robs_from_current_employer_plan" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: IRS 401(k) Resource Guide; IRS ROBS compliance project" .
+
+t:T11 a rh:StructureCheck ; rdfs:label "T11. All owners meet SBA's current citizenship and residency rule" ;
+  rh:readsFact "all_owners_meet_sba_citizenship_rule" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA March 2026 citizenship policy" .
+
+t:T12 a rh:StructureCheck ; rdfs:label "T12. Independent business valuation on file for the change of ownership" ;
+  rh:readsFact "independent_valuation_on_file" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA SOP 50 10 8.1 (MMCG; BizBuySell Q3 2026)" .
+
+t:T13 a rh:StructureCheck ; rdfs:label "T13. The cannabis transport company shares no accounts, staff, revenue or customers with the other business, and the lender has been told about it" ;
+  rh:readsFact "cannabis_company_fully_separate_and_disclosed" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Not found in sources; counsel question" .
+
+t:T14 a rh:StructureCheck ; rdfs:label "T14. The W-2 ends only in a month when the full step-down test has passed for the required run of months" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" , "grow" ;
+  rdfs:comment "Source: Model rule" .
+
+t:T16 a rh:StructureCheck ; rdfs:label "T16. The manager is an employee under the owner's direction; no management company (the founder's own included) holds complete operational control" ;
+  rh:readsFact "manager_is_employee_not_controlling_management_company" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA SOP 50 10 8, ch. 1; Whiteford 2025" .
+
+t:T15 a rh:StructureCheck ; rdfs:label "T15. Target's last-year cash flow, after a market manager wage, covers first-year SBA debt service at the lender floor (no projections)" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA SOP 50 10 8.1 (MMCG)" .
+
+t:appliesToArmKind a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> ; rdfs:label "applies to arm kind" ; rdfs:comment "w2_only, buy or grow" .

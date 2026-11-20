@@ -1,0 +1,178 @@
+{
+  "label": "SYNTHETIC placeholders only. Not the founder's numbers. Business sizes use public BizBuySell medians (Chicago 2025 closed sales; US Q3 2026). Every rate below is a placeholder to replace with a lender's term sheet.",
+  "horizon_months": 72,
+  "person": {
+    "salary_gross_annual": 100000,
+    "w2_effective_tax_rate": 0.25,
+    "business_wage_effective_tax_rate": 0.3,
+    "benefits_replacement_annual": 20000,
+    "living_costs_annual": 55000,
+    "starting_savings": 70000
+  },
+  "step_down_trigger": {
+    "consecutive_months": 6,
+    "min_dscr_after_founder_wage": 1.25,
+    "lender_min_dscr_acquisition": 1.25,
+    "personal_reserve_months": 6,
+    "business_reserve_months": 3
+  },
+  "arms": [
+    {
+      "id": "A",
+      "label": "Stay on the W-2 only",
+      "kind": "w2_only"
+    },
+    {
+      "id": "Bm",
+      "label": "Buy a Chicago-median business, keep the W-2",
+      "kind": "buy",
+      "business": {
+        "price": 265590,
+        "sde_annual": 128618,
+        "revenue_annual": 554857,
+        "manager_market_wage_annual": 60000,
+        "working_capital": 20000
+      },
+      "valuation_multiple": 2.49,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "seller_transition_months": 12,
+      "entity_tax_rate": 0.0,
+      "interest_share_of_debt": 0.5,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.05,
+        "ramp_months": 12,
+        "cost_annual": 6000,
+        "start_month": 4
+      },
+      "financing": {
+        "equity_injection_pct": 0.1,
+        "seller_note_pct_of_price": 0.05,
+        "seller_note_max_share_of_equity": 0.5,
+        "seller_note_standby_months": 120,
+        "seller_note_rate": 0.06,
+        "seller_note_term_months": 180,
+        "closing_costs_pct": 0.03,
+        "finance_closing_costs": 1,
+        "finance_working_capital": 1,
+        "sba_rate": 0.105,
+        "sba_term_months": 120,
+        "sba_guarantee_fee_pct": 0.02,
+        "reserve_floor_share_at_close": 0.5
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 60000
+    },
+    {
+      "id": "B",
+      "label": "Buy a business just under the trigger, keep the W-2, add AI",
+      "kind": "buy",
+      "business": {
+        "price": 498000,
+        "sde_annual": 200000,
+        "revenue_annual": 766000,
+        "manager_market_wage_annual": 65000,
+        "working_capital": 30000
+      },
+      "valuation_multiple": 2.49,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "seller_transition_months": 12,
+      "entity_tax_rate": 0.0,
+      "interest_share_of_debt": 0.5,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.05,
+        "ramp_months": 12,
+        "cost_annual": 12000,
+        "start_month": 4
+      },
+      "financing": {
+        "equity_injection_pct": 0.1,
+        "seller_note_pct_of_price": 0.05,
+        "seller_note_max_share_of_equity": 0.5,
+        "seller_note_standby_months": 120,
+        "seller_note_rate": 0.06,
+        "seller_note_term_months": 180,
+        "closing_costs_pct": 0.03,
+        "finance_closing_costs": 1,
+        "finance_working_capital": 1,
+        "sba_rate": 0.105,
+        "sba_term_months": 120,
+        "sba_guarantee_fee_pct": 0.02,
+        "reserve_floor_share_at_close": 0.5
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 60000
+    },
+    {
+      "id": "B0",
+      "label": "Same purchase as B, no AI margin gain",
+      "kind": "buy",
+      "business": {
+        "price": 498000,
+        "sde_annual": 200000,
+        "revenue_annual": 766000,
+        "manager_market_wage_annual": 65000,
+        "working_capital": 30000
+      },
+      "valuation_multiple": 2.49,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "seller_transition_months": 12,
+      "entity_tax_rate": 0.0,
+      "interest_share_of_debt": 0.5,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.0,
+        "ramp_months": 1,
+        "cost_annual": 0,
+        "start_month": 1
+      },
+      "financing": {
+        "equity_injection_pct": 0.1,
+        "seller_note_pct_of_price": 0.05,
+        "seller_note_max_share_of_equity": 0.5,
+        "seller_note_standby_months": 120,
+        "seller_note_rate": 0.06,
+        "seller_note_term_months": 180,
+        "closing_costs_pct": 0.03,
+        "finance_closing_costs": 1,
+        "finance_working_capital": 1,
+        "sba_rate": 0.105,
+        "sba_term_months": 120,
+        "sba_guarantee_fee_pct": 0.02,
+        "reserve_floor_share_at_close": 0.5
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 60000
+    },
+    {
+      "id": "C",
+      "label": "Grow SPT first, self-funded (SBA excludes cannabis)",
+      "kind": "grow",
+      "is_cannabis_business": true,
+      "uses_sba": false,
+      "business": {
+        "manager_market_wage_annual": 40000
+      },
+      "growth": {
+        "start_cash_flow_annual": 15000,
+        "monthly_growth": 0.04,
+        "cap_cash_flow_annual": 220000,
+        "investment_total": 20000,
+        "investment_months": 6
+      },
+      "valuation_multiple": 2.3,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "entity_tax_rate": 0.0,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.0,
+        "ramp_months": 1,
+        "cost_annual": 3000,
+        "start_month": 1
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 80000
+    }
+  ]
+}
