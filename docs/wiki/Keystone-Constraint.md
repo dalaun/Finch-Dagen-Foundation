@@ -93,51 +93,53 @@ In OWL:
 
 ## Examples
 
-### ✅ Example 1: Research Scientist Compensation
+### ✅ Example 1: AI Trainer Pay
 
-**Scenario**: Foundation pays Dr. Smith $12,500/month to conduct clinical trials for cancer research.
-
-**Test 1 - Incidental?**
-- Purpose: Advance health through medical research
-- Enablement: Dr. Smith's salary
-- **Result**: ✅ Salary is incidental to health mission (serves research, not enrichment)
-
-**Test 2 - Inseparable?**
-- Activity: Conducting clinical trials
-- Enablement: Qualified research scientist
-- **Result**: ✅ Clinical trials cannot occur without qualified researcher
-
-**Conclusion**: **PERMISSIBLE** - satisfies both tests
-
-```turtle
-:SalaryEnablement_DrSmith rdf:type :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;
-    :isInseparableFrom :ClinicalTrialsActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint .
-```
-
-### ✅ Example 2: Employee Health Insurance
-
-**Scenario**: Foundation provides health insurance ($850/month) to research staff.
+**Scenario**: The foundation's Opportunity program, AI agent training for South Side residents, pays its AI trainer $4,000/month (illustrative).
 
 **Test 1 - Incidental?**
-- Purpose: Advance health mission
-- Enablement: Health benefits for staff
-- **Result**: ✅ Benefits enable mission execution, not personal enrichment
+- Purpose: Opportunity (residents who can run their own AI agent workflows)
+- Enablement: the trainer's pay
+- **Result**: ✅ Pay is incidental to the Opportunity purpose (serves the program, not enrichment)
 
 **Test 2 - Inseparable?**
-- Activity: Retaining qualified research staff
-- Enablement: Competitive benefits package
-- **Result**: ✅ Cannot sustain workforce capability without benefits
+- Activity: AI agent training
+- Enablement: a qualified trainer
+- **Result**: ✅ The training cannot run without a trainer
 
-**Conclusion**: **PERMISSIBLE** - satisfies both tests
+**Conclusion**: **PERMISSIBLE** - satisfies both tests, and $48,000 a year sits under the $55,000 benchmark (illustrative)
 
 ```turtle
-:BenefitsEnablement_DrSmith rdf:type :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;
-    :isInseparableFrom :ClinicalTrialsActivity ;
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint .
+:Enable_AITrainerPay rdf:type :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Program_AIAgentTraining ;
+    :hasMarketBenchmark :Benchmark_AITrainer .
 ```
+
+### ✅ Example 2: Staff Benefits
+
+**Scenario**: The same program provides the trainer $600/month of benefits (illustrative).
+
+**Test 1 - Incidental?**
+- Purpose: Opportunity
+- Enablement: benefits for program staff
+- **Result**: ✅ Benefits enable the program, not personal enrichment
+
+**Test 2 - Inseparable?**
+- Activity: keeping a qualified trainer on the program
+- Enablement: a fair benefits package
+- **Result**: ✅ The program cannot keep its trainer without benefits
+
+**Conclusion**: **PERMISSIBLE** - satisfies both tests, and $7,200 a year sits under the $9,000 benchmark (illustrative)
+
+```turtle
+:Enable_AITrainerBenefits rdf:type :OperationalBenefitEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;
+    :isInseparableFrom :Program_AIAgentTraining ;
+    :hasMarketBenchmark :Benchmark_StaffBenefits .
+```
+
+The verdict comes from the checks in `trust-domain-keystone-shapes.ttl`, which read these links; run `python3 validate_keystone.py`.
 
 ### ❌ Example 3: Trustee Luxury Vacation
 
