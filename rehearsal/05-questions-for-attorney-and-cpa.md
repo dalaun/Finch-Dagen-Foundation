@@ -48,7 +48,8 @@ Bring: the trust instruments, operating agreements, EIN letters, and any returns
 23. **The home.** If I'm paid wages by the management company, should it adopt an accountable plan that reimburses a home office instead of my deducting it? Later, is a personal residence trust worth it, and what happens if I outlive its term and keep living there, or die during it?
 24. **A foundation museum.** Would an operating foundation running a museum meet the income test and the assets test? Can the museum use space I own rent-free without self-dealing? What happens to a gift of art the museum doesn't display?
 25. **Uniforms.** Do plain clothes with only a company logo count as unsuited to street wear, or only clothing that no one would wear off the job? What price and paperwork make the apparel company's sales to sister companies hold up, and can the Foundation ever buy from it?
+26. **The family brand.** Is the brand in use enough to register and license? If a holding entity owns it and licenses it to the operating companies, what royalty rate can we support, which Illinois add-back paragraph in 35 ILCS 5/203 applies (if any) to a domestic licensor, and does the royalty affect self-employment tax?
 
 ## About the legal plan
 
-26. Ask the plan first: are trust documents, entity work and tax questions covered, or only some of them? Plans like this often cover wills and basic estate documents but limit business and tax matters. Check the plan's own terms before relying on it.
+27. Ask the plan first: are trust documents, entity work and tax questions covered, or only some of them? Plans like this often cover wills and basic estate documents but limit business and tax matters. Check the plan's own terms before relying on it.

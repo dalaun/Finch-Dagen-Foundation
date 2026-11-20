@@ -104,7 +104,7 @@ Every step is logged as a dated event: what changed, the register version, both 
 
 ## First increments to rehearse, in order
 
-1. **Sort the ledger** and run both answer keys. No optimizing until K1 to K27 and SK1 to SK16 all match.
+1. **Sort the ledger** and run both answer keys. No optimizing until K1 to K33 and SK1 to SK16 all match.
 2. **Move business-shaped lines to the operating companies** (D1, D5, business share of D3, D11, D12) with an accountable plan. Expected: the first real gain, no trust needed.
 3. **Fix classification facts** in the model (the business trust as a business entity; the management company's real classification), then rehearse the flat version: an ordinary business entity in place of the business trust, paying the founder market wages. Expected: some routes close, and structure checks S5, S11 and S12 move toward passing; better now than in an audit.
 4. **Price the founder's Foundation role** for one program at a benchmark. Expected: lawful wages, a cost to the Foundation, no tax saving; it tests the one door.
@@ -154,3 +154,9 @@ These are cases where the law gives a clear answer. The twin must reproduce ever
 | K25 | Plain polos with only a company logo, given to staff | Amber: CPA question | Pevsner street-wear test; no source read settles logo-only clothing |
 | K26 | Foundation buys program shirts from the apparel company | Amber: attorney question | IRC 4941(d)(1)(A), (C); 4946: red if the apparel company is a disqualified person |
 | K27 | Entities in the stack lend to each other in a circle at interest, each deducting interest, with no outside purpose | Fail: no substance | IRC 7701(o); Notice 97-24; structure checks S8, S11 |
+| K28 | A crest never used to sell anything is licensed to the operating company for a royalty | Fail: nothing of value licensed | 15 U.S.C. 1127 (no use in commerce); Treas. Reg. 1.482-4; structure check S8 |
+| K29 | A registered brand in commercial use, assigned in writing with its goodwill and recorded, licensed to the operating company at a rate backed by a valuation, with quality control, royalties paid | Pass | IRC 162(a), 482; Treas. Reg. 1.482-4; 15 U.S.C. 1060, 1127 |
+| K30 | Same license, but the founder keeps the mark and assigns only the royalty stream to the Family Trust | Fail: income stays the founder's | Helvering v. Horst, 311 U.S. 112: income taxed to the owner of the property |
+| K31 | The Foundation owns the family brand and licenses it to a family company at market rate | Fail: self-dealing | IRC 4941(d)(1)(A), (E) |
+| K32 | The Foundation owns a brand and licenses it to an unrelated company | Pass | IRC 512(b)(2); 4940(c)(2): excluded from unrelated business income, taxed as investment income |
+| K33 | License with no quality control by the licensor | Amber: attorney question | 15 U.S.C. 1055, 1127: the mark risks abandonment, and the royalty's value with it |

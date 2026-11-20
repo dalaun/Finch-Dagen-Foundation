@@ -64,3 +64,17 @@ k:K26 a rh:TestCase ; rdfs:label "Foundation buys program shirts from the appare
   rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Amber ; rh:expectedReason "IRC 4941(d)(1)(A), (C); 4946: red if the apparel company is a disqualified person" .
 k:K27 a rh:TestCase ; rdfs:label "Entities in the stack lend to each other in a circle at interest, each deducting interest, with no outside purpose" ;
   rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 7701(o); Notice 97-24; structure checks S8, S11" .
+
+# Added 2026-11-20: family brand licensing (register F5).
+k:K28 a rh:TestCase ; rdfs:label "A crest never used to sell anything is licensed to the operating company for a royalty" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "15 U.S.C. 1127 (no use in commerce); Treas. Reg. 1.482-4; structure check S8" .
+k:K29 a rh:TestCase ; rdfs:label "A registered brand in commercial use, assigned in writing with its goodwill and recorded, licensed to the operating company at a rate backed by a valuation, with quality control, royalties paid" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 162(a), 482; Treas. Reg. 1.482-4; 15 U.S.C. 1060, 1127" .
+k:K30 a rh:TestCase ; rdfs:label "Same license, but the founder keeps the mark and assigns only the royalty stream to the Family Trust" ;
+  rh:proposedLayer rh:L3_FamilyTrust ; rh:expectedVerdict rh:Red ; rh:expectedReason "Helvering v. Horst, 311 U.S. 112: income taxed to the owner of the property" .
+k:K31 a rh:TestCase ; rdfs:label "The Foundation owns the family brand and licenses it to a family company at market rate" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(A), (E)" .
+k:K32 a rh:TestCase ; rdfs:label "The Foundation owns a brand and licenses it to an unrelated company" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 512(b)(2); 4940(c)(2): excluded from unrelated business income, taxed as investment income" .
+k:K33 a rh:TestCase ; rdfs:label "License with no quality control by the licensor" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "15 U.S.C. 1055, 1127: the mark risks abandonment, and the royalty's value with it" .
