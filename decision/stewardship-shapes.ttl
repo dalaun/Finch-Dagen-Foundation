@@ -1,0 +1,292 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Stewardship, arm's-length, deduction and exclusion shapes (DRAFT,
+# proposed 2026-11-21). Read facts only. Outcomes, pressures and sources
+# are in stewardship-model.ttl. Not legal or tax advice.
+# =====================================================================
+
+<http://example.org/trust-domain/stewardship-shapes> a owl:Ontology ;
+    rdfs:label "Stewardship shapes"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    sh:declare [ sh:prefix "td" ; sh:namespace "http://example.org/trust-domain#"^^xsd:anyURI ] ,
+               [ sh:prefix "dm" ; sh:namespace "http://example.org/trust-domain/decision#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] .
+
+:DealShape a sh:NodeShape ;
+    rdfs:label "Entity deal checks"@en ;
+    sh:targetClass :EntityDeal ;
+    sh:sparql :DE1_DealEvidence ,
+              :ST1a_PayComparables , :ST1b_PackageOverMarket , :ST1d_BenefitUncoded ,
+              :ST2_DecisionRecord , :ST3_IndependentReviewer ,
+              :AL0_FoundationParty , :AL4_FoundationPassThrough ,
+              :AL1a_NoMarketRange , :AL1b_OutsideMarket , :AL2_WrittenTerms ,
+              :BD0_DeductionFacts , :BD1_OrdinaryNecessary , :BD2_PersonalExpense , :BD3_CapitalExpense ,
+              :BD4_StartupExpense , :BD5_Timing , :BD6_HomeOffice ,
+              :FX0_NoExclusionBasis , :FX1_NotAnEmployee , :FX2_Discriminates , :FX3_OverLimit ,
+              :FX4_Substantiation , :FX5_Lodging119 .
+
+:FoundationPayPackageShape a sh:NodeShape ;
+    rdfs:label "Foundation pay held to its benchmark with benefits counted"@en ;
+    sh:targetClass :SpendProposal ;
+    sh:sparql :ST1c_FoundationPayWithBenefits .
+
+# ---- evidence ----------------------------------------------------------
+:DE1_DealEvidence a sh:SPARQLConstraint ;
+    sh:message "DE1: insufficient - no payer, payee or deal kind" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER ( NOT EXISTS { $this dm:dealPayer ?a } || NOT EXISTS { $this dm:dealPayee ?b }
+                || NOT EXISTS { $this dm:dealKind ?k } )
+        }""" .
+
+# ---- stewardship: own nothing, steward everything -----------------------
+:ST1a_PayComparables a sh:SPARQLConstraint ;
+    sh:message "ST1a: pay to someone in the founder's orbit with no comparability record citing a comparable source" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:dealKind dm:CompensationDeal ; dm:dealPayee ?value .
+          ?value dm:inFounderOrbit true .
+          FILTER ( NOT EXISTS { $this dm:comparabilityRecord true }
+                || NOT EXISTS { $this dm:comparableSource ?s } )
+        }""" .
+
+:ST1b_PackageOverMarket a sh:SPARQLConstraint ;
+    sh:message "ST1b: wage plus every benefit is above the top of the comparable range" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:dealKind dm:CompensationDeal ; dm:wageAnnual ?w ; dm:marketHigh ?h .
+          OPTIONAL { $this dm:providesBenefit ?b . ?b dm:benefitAnnual ?v }
+        }
+        GROUP BY $this ?w ?h
+        HAVING ( ?w + SUM(COALESCE(?v, 0)) > ?h )""" .
+
+:ST1c_FoundationPayWithBenefits a sh:SPARQLConstraint ;
+    sh:message "ST1c: foundation pay plus its benefits exceeds the benchmark (4941(d)(2)(E) 'not excessive')" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:spendKind dm:PersonalServicesPay ; dm:annualAmount ?a ;
+                dm:fringeBenefitAnnual ?f ; dm:benchmarkAnnual ?bm .
+          BIND ( ?a + ?f AS ?value )
+          FILTER ( ?value > ?bm )
+        }""" .
+
+:ST1d_BenefitUncoded a sh:SPARQLConstraint ;
+    sh:message "ST1d: a benefit is not coded taxable or excluded" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value .
+          FILTER NOT EXISTS { ?value dm:claimedExcluded ?c }
+        }""" .
+
+:ST2_DecisionRecord a sh:SPARQLConstraint ;
+    sh:message "ST2: a deal between the founder's roles with no decision record citing the mission, made before money moves" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:dealPayer ?a ; dm:dealPayee ?b .
+          ?a dm:inFounderOrbit true . ?b dm:inFounderOrbit true .
+          FILTER ( NOT EXISTS { $this dm:decisionRecordBeforePayment true }
+                || NOT EXISTS { $this dm:decisionRecordCitesMission true } )
+        }""" .
+
+:ST3_IndependentReviewer a sh:SPARQLConstraint ;
+    sh:message "ST3: no reviewer who can refuse, or the reviewer is the founder or related or subordinate to him (672(c))" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:dealPayer ?a ; dm:dealPayee ?b .
+          ?a dm:inFounderOrbit true . ?b dm:inFounderOrbit true .
+          FILTER NOT EXISTS {
+            $this dm:reviewedBy ?r ; dm:reviewerCanRefuse true .
+            FILTER ( ?r != td:Founder )
+            FILTER NOT EXISTS { ?rel rdfs:subPropertyOf* dm:relatedOrSubordinateTo . ?r ?rel td:Founder }
+          }
+        }""" .
+
+# ---- arm's length ------------------------------------------------------
+:AL0_FoundationParty a sh:SPARQLConstraint ;
+    sh:message "AL0: the foundation is a party and the other side is a disqualified person - arm's length does not cure self-dealing (4941(d)(1))" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          { $this dm:dealPayer ?f ; dm:dealPayee ?value } UNION { $this dm:dealPayee ?f ; dm:dealPayer ?value }
+          ?f dm:isPrivateFoundation true .
+          ?value rdf:type td:DisqualifiedPerson .
+        }""" .
+
+:AL4_FoundationPassThrough a sh:SPARQLConstraint ;
+    sh:message "AL4: the foundation is a party and the other side passes value to a disqualified person (4941(d)(1) 'indirect', 'for the benefit of')" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          { $this dm:dealPayer ?f ; dm:dealPayee ?o } UNION { $this dm:dealPayee ?f ; dm:dealPayer ?o }
+          ?f dm:isPrivateFoundation true .
+          ?o dm:passesBenefitTo+ ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { ?o rdf:type td:DisqualifiedPerson }
+        }""" .
+
+:AL1a_NoMarketRange a sh:SPARQLConstraint ;
+    sh:message "AL1a: a deal between the founder's roles with no market range from a named comparable source" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:dealPayer ?a ; dm:dealPayee ?b .
+          ?a dm:inFounderOrbit true . ?b dm:inFounderOrbit true .
+          FILTER ( NOT EXISTS { $this dm:marketLow ?l } || NOT EXISTS { $this dm:marketHigh ?h }
+                || NOT EXISTS { $this dm:comparableSource ?s } )
+        }""" .
+
+:AL1b_OutsideMarket a sh:SPARQLConstraint ;
+    sh:message "AL1b: the price is outside the comparable range (482)" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:annualAmount ?value ; dm:marketLow ?l ; dm:marketHigh ?h .
+          FILTER ( ?value < ?l || ?value > ?h )
+        }""" .
+
+:AL2_WrittenTerms a sh:SPARQLConstraint ;
+    sh:message "AL2: a deal between the founder's roles with no written terms" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:dealPayer ?a ; dm:dealPayee ?b .
+          ?a dm:inFounderOrbit true . ?b dm:inFounderOrbit true .
+          FILTER NOT EXISTS { $this dm:writtenTerms true }
+        }""" .
+
+# ---- what the business may deduct -------------------------------------
+:BD0_DeductionFacts a sh:SPARQLConstraint ;
+    sh:message "BD0: a deduction claim that does not record whether it is ordinary and necessary, personal, and capital" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:claimedDeduction true .
+          FILTER ( NOT EXISTS { $this dm:ordinaryAndNecessary ?o }
+                || NOT EXISTS { $this dm:personalLivingFamily ?p }
+                || NOT EXISTS { $this dm:capitalExpenditure ?c } )
+        }""" .
+
+:BD1_OrdinaryNecessary a sh:SPARQLConstraint ;
+    sh:message "BD1: not an ordinary and necessary expense of carrying on the business (162(a))" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """SELECT $this WHERE { $this dm:claimedDeduction true ; dm:ordinaryAndNecessary false . }""" .
+
+:BD2_PersonalExpense a sh:SPARQLConstraint ;
+    sh:message "BD2: a personal, living or family expense (262(a)), wherever it is paid from" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """SELECT $this WHERE { $this dm:claimedDeduction true ; dm:personalLivingFamily true . }""" .
+
+:BD3_CapitalExpense a sh:SPARQLConstraint ;
+    sh:message "BD3: a capital expenditure claimed as a current deduction (263(a)) with no section 179 election" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:claimedDeduction true ; dm:capitalExpenditure true .
+          FILTER NOT EXISTS { $this dm:section179Election true }
+        }""" .
+
+:BD4_StartupExpense a sh:SPARQLConstraint ;
+    sh:message "BD4: start-up costs deducted without a 195(b) election, or before the active business begins" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:claimedDeduction true ; dm:startupExpenditure true .
+          FILTER ( NOT EXISTS { $this dm:startupElection true } || NOT EXISTS { $this dm:activeBusinessBegun true } )
+        }""" .
+
+:BD5_Timing a sh:SPARQLConstraint ;
+    sh:message "BD5: deducted in the wrong year - a cash-method payer that has not paid, or an accrual payer owing a related cash-method payee that has not been paid" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:claimedDeduction true ; dm:paidByYearEnd false .
+          { $this dm:payerMethod dm:CashMethod }
+          UNION
+          { $this dm:payerMethod dm:AccrualMethod ; dm:payeeMethod dm:CashMethod ; dm:relatedPayee true }
+        }""" .
+
+:BD6_HomeOffice a sh:SPARQLConstraint ;
+    sh:message "BD6: home office claimed without exclusive, regular use as the principal place of business (Pub 587)" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:homeOfficeClaim true .
+          FILTER NOT EXISTS { $this dm:homeUse dm:ExclusiveRegularPrincipalPlace }
+        }""" .
+
+# ---- what the employee may exclude ------------------------------------
+:FX0_NoExclusionBasis a sh:SPARQLConstraint ;
+    sh:message "FX0: a benefit claimed as excluded that no law excludes - it is wages" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value . ?value dm:claimedExcluded true ; dm:benefitKind ?k .
+          FILTER NOT EXISTS { ?k dm:exclusionBasis ?basis }
+        }""" .
+
+:FX1_NotAnEmployee a sh:SPARQLConstraint ;
+    sh:message "FX1: an employee-only exclusion claimed for a 2% S corporation shareholder, partner or sole proprietor - it goes in wages (see Form 7206 for health premiums)" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:recipientForm ?form ; dm:providesBenefit ?value .
+          ?value dm:claimedExcluded true ; dm:benefitKind ?k . ?k dm:employeeOnly true .
+          FILTER ( ?form IN ( dm:TwoPercentShareholder , dm:PartnerForm , dm:SoleProprietor , dm:IndependentContractor ) )
+        }""" .
+
+:FX2_Discriminates a sh:SPARQLConstraint ;
+    sh:message "FX2: the plan favors key or highly paid employees, so their exclusion is lost" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value . ?value dm:claimedExcluded true ; dm:benefitKind ?k ;
+                 dm:planFavorsKeyOrHighlyPaid true .
+          ?k dm:nondiscriminationRule true .
+        }""" .
+
+:FX3_OverLimit a sh:SPARQLConstraint ;
+    sh:message "FX3: more excluded than the edition's limit for that benefit" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value . ?value dm:claimedExcluded true ; dm:benefitKind ?k .
+          { ?value dm:benefitAnnual ?v . ?k dm:annualLimit ?lim . FILTER ( ?v > ?lim ) }
+          UNION { ?value dm:benefitMonthly ?v . ?k dm:monthlyLimit ?lim . FILTER ( ?v > ?lim ) }
+          UNION { ?value dm:coverageAmount ?v . ?k dm:coverageLimit ?lim . FILTER ( ?v > ?lim ) }
+        }""" .
+
+:FX4_Substantiation a sh:SPARQLConstraint ;
+    sh:message "FX4: a reimbursement claimed as excluded with no records" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value . ?value dm:claimedExcluded true ; dm:benefitKind ?k .
+          ?k dm:needsSubstantiation true .
+          FILTER NOT EXISTS { ?value dm:substantiated true }
+        }""" .
+
+:FX5_Lodging119 a sh:SPARQLConstraint ;
+    sh:message "FX5: lodging claimed as excluded without all three 119 tests: business premises, employer's convenience, condition of employment" ;
+    sh:prefixes <http://example.org/trust-domain/stewardship-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:providesBenefit ?value . ?value dm:claimedExcluded true ; dm:benefitKind dm:Benefit_LodgingOnPremises .
+          FILTER ( NOT EXISTS { ?value dm:onBusinessPremises true }
+                || NOT EXISTS { ?value dm:forEmployerConvenience true }
+                || NOT EXISTS { ?value dm:conditionOfEmployment true } )
+        }""" .

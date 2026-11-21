@@ -31,5 +31,43 @@
 :P23_OperatingCoPurchase t:expectOutcome dm:Block ;        t:expectChecks "R1" .
 :P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "R1 R6" .
 
+# Entity deals (tests/decision/entity-deal-cases.ttl) and P25: stewardship, arm's length,
+# what a business may deduct, what an employee may exclude.
+:P25_FounderPayPlusBenefits           t:expectOutcome dm:Block ;        t:expectChecks "ST1c" .
+:D01_ManagementFeeClean               t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D02_FeeNoContract                    t:expectOutcome dm:Insufficient ; t:expectChecks "AL2" .
+:D03_FeeAboveMarket                   t:expectOutcome dm:NeedsCounsel ; t:expectChecks "AL1b" .
+:D04_SiblingReviewer                  t:expectOutcome dm:NeedsCounsel ; t:expectChecks "ST3" .
+:D05_FeeNoRange                       t:expectOutcome dm:Insufficient ; t:expectChecks "AL1a" .
+:D06_NoDecisionRecord                 t:expectOutcome dm:Insufficient ; t:expectChecks "ST2" .
+:D07_FamilyTrustRentsFromFoundation   t:expectOutcome dm:Block ;        t:expectChecks "AL0" .
+:D08_AccruedFeeToRelated              t:expectOutcome dm:Block ;        t:expectChecks "BD5" .
+:D10_PayWithHealthClean               t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D11_HealthAsTwoPercentShareholder    t:expectOutcome dm:Block ;        t:expectChecks "FX1" .
+:D12_HealthInWagesForTwoPercent       t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D13_PayNoComparables                 t:expectOutcome dm:NeedsCounsel ; t:expectChecks "ST1a" .
+:D14_PackageOverMarket                t:expectOutcome dm:NeedsCounsel ; t:expectChecks "ST1b" .
+:D15_BenefitUncoded                   t:expectOutcome dm:Insufficient ; t:expectChecks "ST1d" .
+:D16_CafeteriaPlanClean               t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D17_CafeteriaFavorsKey               t:expectOutcome dm:Block ;        t:expectChecks "FX2" .
+:D18_CafeteriaTwoPercent              t:expectOutcome dm:Block ;        t:expectChecks "FX1" .
+:D19_DependentCareOverLimit           t:expectOutcome dm:Block ;        t:expectChecks "FX3" .
+:D20_CarAllowanceExcluded             t:expectOutcome dm:Block ;        t:expectChecks "FX0" .
+:D21_MileageWithLog                   t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D22_MileageNoLog                     t:expectOutcome dm:Block ;        t:expectChecks "FX4" .
+:D23_GroupTermLifeAtLine              t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D24_GroupTermLifeOverLine            t:expectOutcome dm:Block ;        t:expectChecks "FX3" .
+:D25_HousingAtMailingAddress          t:expectOutcome dm:Block ;        t:expectChecks "FX5" .
+:D30_FamilyVacation                   t:expectOutcome dm:Block ;        t:expectChecks "BD1 BD2" .
+:D31_HobbyGear                        t:expectOutcome dm:Block ;        t:expectChecks "BD1" .
+:D32_RoofAsRepair                     t:expectOutcome dm:Block ;        t:expectChecks "BD3" .
+:D33_EquipmentSection179              t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D34_StartupWithElection              t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D35_StartupNoElection                t:expectOutcome dm:Block ;        t:expectChecks "BD4" .
+:D36_CashUnpaid                       t:expectOutcome dm:Block ;        t:expectChecks "BD5" .
+:D37_HomeOfficeMailingAddress         t:expectOutcome dm:Block ;        t:expectChecks "BD6" .
+:D38_HomeOfficeAdminRoom              t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D39_DeductionFactsMissing            t:expectOutcome dm:Insufficient ; t:expectChecks "BD0" .
+
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

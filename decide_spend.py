@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Grade proposed foundation spends: allow, block, needs counsel or insufficient.
+Grade proposed foundation spends, and deals between the founder's roles:
+allow, block, needs counsel or insufficient.
 
   python3 decide_spend.py              worked cases under insider branch A (default)
   python3 decide_spend.py --branch B   the same cases under insider branch B
@@ -14,6 +15,12 @@ decision/spend-decision-shapes.ttl, run on the proposal itself. Each failed chec
 maps to an outcome in decision/spend-decision-model.ttl; the proposal gets the most
 severe one (block > insufficient > needs counsel > allow). A scorer's answer can
 only raise an outcome, never lower it.
+
+Entity deals (tests/decision/entity-deal-cases.ttl) are graded the same way by
+decision/stewardship-shapes.ttl: stewardship ("own nothing, steward everything"),
+arm's length between the founder's roles, what a business may deduct and what an
+employee may exclude. decision/irs-instruments.ttl catalogs the IRS publications
+those checks come from, linked to roles and checks.
 
 Insider branches: whether the family trust, the business trust and the operating
 company are disqualified persons waits on counsel. tests/decision/branch-a.ttl
@@ -54,9 +61,11 @@ extra = [a for i, a in enumerate(args)
 
 model_file = HERE / "decision/spend-decision-model.ttl"
 model = Graph().parse(model_file, format="turtle")
+model.parse(HERE / "decision/stewardship-model.ttl", format="turtle")
 shapes = Graph()
 shapes.parse(HERE / "trust-domain-keystone-shapes.ttl", format="turtle")
 shapes.parse(HERE / "decision/spend-decision-shapes.ttl", format="turtle")
+shapes.parse(HERE / "decision/stewardship-shapes.ttl", format="turtle")
 severity = {o: int(model.value(o, DM.severity)) for o in model.subjects(RDF.type, DM.Outcome)}
 by_severity = {v: k for k, v in severity.items()}
 short = lambda u: str(u).split("#")[-1]
@@ -95,7 +104,9 @@ def derive(data):
 def load(b, overrides=None):
     data = Graph()
     for f in [HERE / "trust-domain-ontology.ttl", model_file,
-              HERE / "tests/decision/decision-cases.ttl", HERE / BRANCH_FILES[b], *map(Path, extra)]:
+              HERE / "decision/stewardship-model.ttl", HERE / "decision/irs-instruments.ttl",
+              HERE / "tests/decision/decision-cases.ttl", HERE / "tests/decision/entity-deal-cases.ttl",
+              HERE / BRANCH_FILES[b], *map(Path, extra)]:
         data.parse(f, format="turtle")
     for prop, value in (overrides or {}).items():
         data.set((CASES.FamilyTrust, DM[prop], value))
@@ -116,7 +127,8 @@ def run(b, overrides=None):
         if c is not None:
             check_of[c] = (str(c).split("#")[-1].split("_")[0], data.value(chk, DM.onFail))
     results = {}
-    for p in sorted(set(data.subjects(RDF.type, DM.SpendProposal)), key=str):
+    graded = set(data.subjects(RDF.type, DM.SpendProposal)) | set(data.subjects(RDF.type, DM.EntityDeal))
+    for p in sorted(graded, key=str):
         hits = {}
         for n in [p, *data.objects(p, DM.assesses)]:
             for c in failed.get(n, ()):
@@ -152,6 +164,19 @@ def grade(b):
             bad += 0 if ok else 1
             print(f"  {short(chk):26} {'FAIL P1' if got else 'pass'}"
                   f"{'' if ok else '  <-- expected ' + (' '.join(sorted(exp)) or 'pass')}")
+
+    # every instrument permission must point at checks that exist, and name its evidence
+    q = """SELECT ?perm ?chk WHERE { ?perm a dm:Permission ; dm:becomesCheck ?chk .
+                                    FILTER NOT EXISTS { ?chk a dm:DecisionCheck } }"""
+    for perm, chk in data.query(q, initNs={"dm": DM}):
+        bad += 1
+        print(f"  instrument {short(perm)} points at missing check {short(chk)}")
+    perms = set(data.subjects(RDF.type, DM.Permission))
+    for perm in perms:
+        if data.value(perm, DM.evidence) is None:
+            bad += 1
+            print(f"  instrument {short(perm)} has no evidence grade")
+    print(f"\n{len(set(data.subjects(RDF.type, DM.Instrument)))} IRS instruments, {len(perms)} permissions linked to checks.")
 
     counts = defaultdict(int)
     for outcome, _ in results.values():

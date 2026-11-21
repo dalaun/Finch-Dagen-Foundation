@@ -1,0 +1,352 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Worked entity deals for decide_spend.py: stewardship, arm's length, what a
+# business may deduct, what an employee may exclude. Synthetic: roles only,
+# every amount illustrative. No verdict is stated here; expected.ttl is the
+# answer key. Not legal or tax advice.
+
+# ---------------------------------------------------------------------
+# Roles: who is in the founder's orbit, and their tax form (settings)
+# ---------------------------------------------------------------------
+td:Founder dm:inFounderOrbit true ; dm:playsRole dm:Role_FounderAsTrustee , dm:Role_FounderAsEmployee .
+td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ; dm:playsRole dm:Role_Foundation .
+:FamilyTrust dm:inFounderOrbit true ; dm:playsRole dm:Role_FamilyTrust .
+:BusinessTrust dm:inFounderOrbit true ; dm:playsRole dm:Role_BusinessTrust .
+:OperatingCompany dm:inFounderOrbit true ; dm:playsRole dm:Role_OperatingCompany .
+:ManagementCompany dm:inFounderOrbit true ; dm:playsRole dm:Role_ManagementCompany ;
+    dm:entityTaxForm dm:CCorporation ;
+    rdfs:comment "Setting: taxed as a C corporation, the founder its common-law employee. The S corporation variant is below." .
+:ManagementCompanyAsSCorp a td:DisqualifiedPerson ; dm:inFounderOrbit true ; dm:playsRole dm:Role_ManagementCompany ;
+    dm:entityTaxForm dm:SCorporation ;
+    rdfs:label "The management company, if it were an S corporation in which the founder is a 2% shareholder" .
+
+:IndependentCoTrustee rdfs:label "Independent co-trustee (unrelated to the founder, not his employee)" .
+:Roofer rdfs:label "Unrelated roofing contractor" .
+:EquipmentVendor rdfs:label "Unrelated equipment vendor" .
+:TravelAgency rdfs:label "Unrelated travel agency" .
+:FormationAdvisers rdfs:label "Unrelated advisers paid before the business opened" .
+:HobbyShop rdfs:label "Unrelated hobby shop" .
+:HomeCosts rdfs:label "Utilities and upkeep for the founder's home" .
+
+# ---------------------------------------------------------------------
+# A: arm's length between the founder's roles
+# ---------------------------------------------------------------------
+# D01 Operating company pays the management company its fee: inside a range
+#     taken from externally managed REIT/BDC disclosures, in writing, decided
+#     on the record, reviewed by an independent co-trustee who can refuse.
+:D01_ManagementFeeClean a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D02 The same fee on a handshake.
+:D02_FeeNoContract a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms false ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D03 A fee above the top of the range.
+:D03_FeeAboveMarket a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "180000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D04 Reviewed by the founder's sibling: not family under 4946(d), but a
+#     related party under 672(c), so not an independent check.
+:D04_SiblingReviewer a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :FounderSibling ; dm:reviewerCanRefuse true .
+
+# D05 A fee with no market range at all.
+:D05_FeeNoRange a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D06 Paid first, decided later.
+:D06_NoDecisionRecord a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment false ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D07 The family trust rents foundation space at market, with every paper in
+#     place. Arm's length does not cure self-dealing.
+:D07_FamilyTrustRentsFromFoundation a dm:EntityDeal ;
+    dm:dealPayer :FamilyTrust ; dm:dealPayee td:ExampleFoundationTrust ; dm:dealKind dm:Lease ;
+    dm:annualAmount "24000"^^xsd:decimal ; dm:marketLow "20000"^^xsd:decimal ; dm:marketHigh "28000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_CompSurvey ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D08 An accrual-method operating company deducts the management fee in
+#     December; the cash-method management company is paid in January.
+:D08_AccruedFeeToRelated a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagementCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:payerMethod dm:AccrualMethod ; dm:payeeMethod dm:CashMethod ; dm:relatedPayee true ; dm:paidByYearEnd false .
+
+# ---------------------------------------------------------------------
+# S: the founder's pay as an employee (stewardship plus 15-B)
+# Every pay deal: management company -> founder, decided on the record,
+# reviewed by the independent co-trustee, in writing.
+# ---------------------------------------------------------------------
+# D10 Wage plus health coverage, common-law employee of a C corporation,
+#     comparables from peer foundations' 990-PF Part VII and a survey.
+:D10_PayWithHealthClean a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII , dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D11 The same package from an S corporation in which he is a 2% shareholder.
+:D11_HealthAsTwoPercentShareholder a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompanyAsSCorp ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:TwoPercentShareholder ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D12 The lawful route for D11: premiums put in his wages, so nothing is
+#     claimed as excluded (he then looks to Form 7206, outside this model).
+:D12_HealthInWagesForTwoPercent a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompanyAsSCorp ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:TwoPercentShareholder ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D13 Pay set with no comparables.
+:D13_PayNoComparables a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord false ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D14 A wage inside the range; with benefits the package is above it.
+:D14_PackageOverMarket a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "95000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D15 A benefit nobody coded taxable or excluded.
+:D15_BenefitUncoded a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_GroupTermLife ; dm:coverageAmount "50000"^^xsd:decimal ; dm:benefitAnnual "200"^^xsd:decimal ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# ---------------------------------------------------------------------
+# X: cafeteria plan, allowances, life insurance, housing
+# ---------------------------------------------------------------------
+# D16 Cafeteria plan at the C corporation: health FSA and dependent care
+#     inside the 2026 limits, plan does not favor key employees.
+:D16_CafeteriaPlanClean a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_HealthFSA ; dm:benefitAnnual "3000"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ,
+                       [ dm:benefitKind dm:Benefit_DependentCare ; dm:benefitAnnual "6000"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D17 A cafeteria plan that favors key employees.
+:D17_CafeteriaFavorsKey a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_CafeteriaPlan ; dm:benefitAnnual "6000"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D18 A cafeteria plan at the S corporation, he a 2% shareholder.
+:D18_CafeteriaTwoPercent a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompanyAsSCorp ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:TwoPercentShareholder ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_CafeteriaPlan ; dm:benefitAnnual "6000"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D19 Dependent care excluded above the 2026 limit.
+:D19_DependentCareOverLimit a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_DependentCare ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D20 A flat car allowance, no records, left out of wages.
+:D20_CarAllowanceExcluded a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_ProxyCompTable , dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_CashCarAllowance ; dm:benefitAnnual "6000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D21 The lawful route: business miles reimbursed at the cents-per-mile rate,
+#     with a mileage log.
+:D21_MileageWithLog a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_WorkingCondition ; dm:benefitAnnual "4000"^^xsd:decimal ; dm:claimedExcluded true ; dm:substantiated true ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D22 Mileage reimbursed with no log.
+:D22_MileageNoLog a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_WorkingCondition ; dm:benefitAnnual "4000"^^xsd:decimal ; dm:claimedExcluded true ; dm:substantiated false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D23 Employer-paid group-term life at the statute's coverage line.
+:D23_GroupTermLifeAtLine a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_GroupTermLife ; dm:coverageAmount "50000"^^xsd:decimal ; dm:benefitAnnual "200"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D24 Double the coverage, all of it left out of wages.
+:D24_GroupTermLifeOverLine a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_GroupTermLife ; dm:coverageAmount "100000"^^xsd:decimal ; dm:benefitAnnual "400"^^xsd:decimal ; dm:claimedExcluded true ; dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# D25 The management company pays for the founder's home, in the setting
+#     where that home serves as an entity's mailing address, and leaves it
+#     out of wages under 119.
+:D25_HousingAtMailingAddress a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "120000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_CompSurvey ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_LodgingOnPremises ; dm:benefitAnnual "24000"^^xsd:decimal ; dm:claimedExcluded true ;
+                         dm:onBusinessPremises false ; dm:forEmployerConvenience false ; dm:conditionOfEmployment false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# ---------------------------------------------------------------------
+# D: what a business may deduct (payments to outside parties)
+# ---------------------------------------------------------------------
+# D30 The operating company pays for a family vacation and deducts it.
+:D30_FamilyVacation a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :TravelAgency ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily true ; dm:capitalExpenditure false .
+
+# D31 A hobby purchase with no tie to the business.
+:D31_HobbyGear a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee :HobbyShop ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily false ; dm:capitalExpenditure false .
+
+# D32 A new roof deducted as a repair.
+:D32_RoofAsRepair a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :Roofer ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure true .
+
+# D33 Equipment deducted in year one under a section 179 election.
+:D33_EquipmentSection179 a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :EquipmentVendor ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure true ;
+    dm:section179Election true .
+
+# D34 Start-up costs deducted with the 195(b) election, after opening.
+:D34_StartupWithElection a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee :FormationAdvisers ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:startupExpenditure true ; dm:startupElection true ; dm:activeBusinessBegun true .
+
+# D35 The same costs deducted with no election.
+:D35_StartupNoElection a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee :FormationAdvisers ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:startupExpenditure true ; dm:startupElection false ; dm:activeBusinessBegun true .
+
+# D36 A cash-method company deducts a bill it pays next year.
+:D36_CashUnpaid a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee :EquipmentVendor ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:payerMethod dm:CashMethod ; dm:paidByYearEnd false .
+
+# D37 Self-employed home office where the home is only the mailing address.
+:D37_HomeOfficeMailingAddress a dm:EntityDeal ;
+    dm:dealPayer td:Founder ; dm:dealPayee :HomeCosts ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:homeOfficeClaim true ; dm:homeUse dm:MailingAddressOnly .
+
+# D38 The lawful route: a room used only and regularly for the business's
+#     administrative and management work, with no other fixed location.
+:D38_HomeOfficeAdminRoom a dm:EntityDeal ;
+    dm:dealPayer td:Founder ; dm:dealPayee :HomeCosts ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    dm:homeOfficeClaim true ; dm:homeUse dm:ExclusiveRegularPrincipalPlace .
+
+# D39 A deduction claim with the facts left blank.
+:D39_DeductionFactsMissing a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :EquipmentVendor ; dm:dealKind dm:ExpenseClaim ;
+    dm:claimedDeduction true .
+
+# ---------------------------------------------------------------------
+# P25 (a foundation spend): the founder's program pay, with a comparability
+# record and under its benchmark; with his benefits it is over.
+# ---------------------------------------------------------------------
+:P25_FounderPayPlusBenefits a dm:SpendProposal ; dm:assesses :Pay_Director_Feb2028 ;
+    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:comparabilityRecord true ;
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:fringeBenefitAnnual "18000.00"^^xsd:decimal ;
+    dm:benchmarkAnnual "72000.00"^^xsd:decimal .
