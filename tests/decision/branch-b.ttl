@@ -1,25 +1,19 @@
 @prefix : <http://example.org/trust-domain/decision-cases#> .
 @prefix dm: <http://example.org/trust-domain/decision#> .
-@prefix td: <http://example.org/trust-domain#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Insider branch B: the trusts are not disqualified persons.
-# The only facts that make this consistent: the foundation holds the whole
-# beneficial interest of the family trust, the family holds none, and the
-# business trust's beneficial interest flows through the family trust to the
-# foundation (4946(a)(4), 267(c)). The family trust must also not be a
-# substantial contributor (4946(a)(1)(A)) unless it is itself treated as a
-# 501(c)(3) organization (4947(a)(1)), which 53.4946-1(a)(8) excludes from the
-# disqualified-person list for 4941 only. Not legal advice.
+# Insider branch B: under the line.
+# The founder's 4946(d) family hold 30 percent of the actuarial beneficial
+# interest; siblings hold another 30 percent, which does not count (4946(d),
+# 53.4946-1(h)); the trust has not yet become a substantial contributor.
+# Synthetic settings, not the real trust's terms. Not legal advice.
 
-dm:BranchNotInsiders dm:selectedBy "tests/decision/branch-b.ttl" .
+dm:BranchUnderLine dm:selectedBy "tests/decision/branch-b.ttl" .
 
-# No disqualified-person facts for the trusts or the operating company here.
-# The stress-case trust still passes value to a family member (decision-cases.ttl),
-# which the hack test catches (H2).
-
-# P14: 4943(d)(1) now treats the business trust's 30 percent as the foundation's
-# own, through the trust chain: 15 bought + 30 attributed = 45. The 4947(a)(2)
-# remainder exception does not apply to a trust that is not split-interest.
-:P14_OperatingCoShares dm:foundationVotingPercentAfter "45"^^xsd:decimal ;
-    dm:disqualifiedVotingPercent "0"^^xsd:decimal .
+:FamilyTrust dm:dqFamilySharePercent "30"^^xsd:decimal ;
+    dm:otherRelativeSharePercent "30"^^xsd:decimal ;
+    dm:foundationSharePercent "40"^^xsd:decimal ;
+    dm:foundationInterestKind dm:IncomeAndRemainder ;
+    dm:substantialContributor false ;
+    dm:charitableDeductionAllowed false ;
+    dm:trusteePaid false .

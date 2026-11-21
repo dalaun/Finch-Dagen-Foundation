@@ -117,7 +117,7 @@ All synthetic, all amounts illustrative. Run `python3 decide_spend.py` to grade 
 | P11 The same grant with expenditure responsibility | allow | none | Same money, different paperwork, different answer |
 | P12 Low-interest loan to a resident-owned co-op | allow | none | Program-related investment |
 | P13 Endowment into an index fund | needs counsel | R7 | Prudence is a judgment |
-| P14 Buy 15 percent of the operating company while insiders hold 30 percent | needs counsel | R7 R8 | Limit is 20 − 30, so any holding is over; exceptions to check. Bought from the business trust itself, it would also be R1 |
+| P14 Buy 15 percent of the operating company while the business trust holds 30 percent | needs counsel | R7 R8 | Insiders hold 30, so the limit is 20 − 30 and any holding is over. The foundation's own total is 27: 15 bought plus 12 attributed through the trust chain (4943(d)(1)). Exceptions to check. Bought from the business trust itself, it would also be R1 |
 | P15 Lobbying contract | block | C1 R4 | |
 | P16 Program van the founder drives on weekends | block | R3 | Passes the asset-to-program check; fails "use by" |
 | P17 Training cohort only for the management company's clients | needs counsel | H3 | Mission label, private class |
@@ -128,14 +128,13 @@ All synthetic, all amounts illustrative. Run `python3 decide_spend.py` to grade 
 | P22 Rent to the family trust for program space, at market | block | R1 | Leasing with a disqualified person is self-dealing at any price |
 | P23 Program T-shirts bought from the operating company | block | R1 | A sale of goods with a disqualified person, at any price |
 | P24 Grant to the family trust, no expenditure responsibility | block | R1 R6 | Insider, and a non-charity grantee with no expenditure responsibility |
-| P25 Rent to a family trust that still pays a family beneficiary | block | R1 | Stress case for the insider branches |
 
-These are the default answers (insider branch A). [Insider branches](../../rehearsal/09-insider-branches.md) runs the same cases with the trusts as non-insiders, and four results change.
+These are the default answers (insider branch A: the family trust is over the line). [Insider branches](../../rehearsal/09-insider-branches.md) runs the same cases with the family trust under the line and sweeps its settings one at a time.
 
 ## What this draft found that changes the plan
 
 1. **For anything that touches a disqualified person, the letter is already the strict part.** Since 1969 the IRS applies the self-dealing rules "without regard to whether the foundation has suffered a detriment"; "it is immaterial whether the transaction results in a benefit or a detriment to the private foundation." So a fair-priced deal with an insider is a block, not a counsel question. The only door is reasonable pay for personal services. The hack test matters where the law still uses judgment, and at the edges of the 4946 definition.
-2. **The stack's own entities need a disqualified-person answer.** The management company is disqualified if insiders own more than 35 percent (4946(a)(1)(E)). The family trust and the business trust turn on whether they fund the foundation (substantial contributor) and who holds more than 35 percent of their beneficial interest (4946(a)(1)(G)). The chain ends at the foundation as a beneficiary, which makes this non-obvious. Until counsel answers, the model treats both trusts as disqualified (fail closed). [Insider branches](../../rehearsal/09-insider-branches.md) runs both answers and checks whether "not disqualified" is possible at all.
+2. **The stack's own entities need a disqualified-person answer.** The management company is disqualified if insiders own more than 35 percent (4946(a)(1)(E)). The family trust and the business trust turn on whether they fund the foundation (substantial contributor) and who holds more than 35 percent of their beneficial interest (4946(a)(1)(G)). The chain ends at the foundation as a beneficiary, which makes this non-obvious. Until counsel answers, the model treats both trusts as disqualified (fail closed). [Insider branches](../../rehearsal/09-insider-branches.md) sets the family trust's facts (family share, substantial contributor, trustee pay, charitable deduction) and derives the answer from them.
 3. **The existing asset-to-program check (A1) is stricter than the law.** It would block an ordinary endowment investment, which 4942's "minimum investment return" assumes a foundation has. Investments skip stage 1 and go to R7 and R8 instead. **Decided (Nov 20, 2026, the founder's call):** keep investments on their own test. A1 stays the rule for spending, and investments are judged by R7 and R8.
 
 ## Not verified in this draft

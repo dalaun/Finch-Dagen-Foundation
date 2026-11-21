@@ -1,83 +1,93 @@
-# Insider branches: the two trusts, run both ways
+# Insider branches: when the family trust counts as an insider
 
-**Status:** rehearsal, 2026-11-20. Synthetic cases, roles only. Nothing here moves money or changes a trust.
+**Status:** rehearsal, 2026-11-20. Synthetic settings, roles only. Nothing here moves money or changes a trust.
 
-**This is design and education, not legal or tax advice.** Counsel decides which branch matches the real trust documents.
+**This is design and education, not legal or tax advice.** Counsel reads the real trust documents and decides which settings are true.
 
-## The question
+## The facts this page starts from
 
-The [spend decision model](../docs/wiki/Spend-Decision-Model.md) treats the family trust, the business trust and the operating company the business trust owns as disqualified persons ("insiders") until counsel says otherwise. This page runs every worked spend both ways:
+- The founder is the family trust's **trustee**. He is not a beneficiary.
+- The family trust's beneficiaries are **the foundation and family members**.
+- The family trust holds the beneficial interest of the business trust, which owns the operating company. The operating company pays the founder's management company a fee.
 
-- **Branch A (default, fail closed):** the trusts are insiders.
-- **Branch B:** they are not.
+The founder is an insider to the foundation in every case, as its manager. The open question is whether the **trust** is one too.
 
-## The perspective shift: the answer is written on the deed
+## The perspective shift: a steward's keys are not an owner's share
 
-Whether a trust is an insider isn't a fact waiting to be discovered. The trust documents set it, the same way the names on a deed decide who owns a house. Under 4946(a)(1)(G), a trust is an insider when insiders "hold more than 35 percent of the beneficial interest". 4946(a)(4) counts that interest "in accordance with the rules for constructive ownership of stock provided in section 267(c)", so an interest held through another trust counts toward the people behind that trust.
+A trustee holds the keys to the building. The beneficiaries own the rent. The law looks at the rent. 4946(a)(1)(G) makes a trust an insider when insiders "hold more than 35 percent of the beneficial interest", and 53.4946-1(a)(4) measures that share "in proportion to the actuarial interest of such person in the trust." The founder's stewardship role puts nothing on that scale.
 
-So the real choice isn't A or B. It's who sits on each trust's deed.
+What does count is the founder's **family** as the tax code defines it: "spouse, ancestors, children, grandchildren, great grandchildren, and the spouses of children, grandchildren, and great grandchildren" (4946(d)). The regulation adds that "a brother or sister of an individual is not a member of his family" (53.4946-1(h)).
 
-## Is branch B even possible?
+## The answer, in three lines
 
-**Only in one shape, and that shape gives the family's interest away.** Branch B holds only if the foundation holds the whole beneficial interest of the family trust, and through it the business trust's interest, while the founder and family hold none. Once the family keeps more than 35 percent, (G) makes the trust an insider, and branch A is simply what the law says, not extra caution.
+1. **The 35 percent line is real.** If the founder's 4946(d) family hold 35 percent or less of the trust's actuarial value, the 35 percent rule doesn't make it an insider. At 36 percent it is one. Siblings, nieces and nephews never count toward the line.
+2. **The bigger trap is funding the foundation.** A trust is a "person" ("an individual, a trust, estate", 7701(a)(1)). One that gives the foundation "more than $5,000" and "more than 2 percent of the total contributions" becomes a substantial contributor (507(d)(2)(A)), which makes it an insider under 4946(a)(1)(A) **whatever the family's share is**. That status is close to permanent: a substantial contributor "shall remain a substantial contributor for all subsequent periods" (507(d)(2)(B)(iv)), unless a 10-year rule in 507(d)(2)(C) ends it. A trust whose job includes funding the foundation is likely to cross this line.
+3. **Under the line is not the same as clean.** Even when the trust isn't an insider, money the foundation pays it can reach the family through distributions. That is the "for the benefit of" test in 4941(d)(1)(E), so those deals go to counsel instead of passing. Only with no family share at all does a market-rate lease simply pass.
 
-That one shape brings three more problems:
+## What the sweep shows
 
-1. **The trust becomes a substantial contributor.** 7701(a)(1) defines a person to "include an individual, a trust, estate". So a trust that funds the foundation can become a substantial contributor, and therefore an insider under 4946(a)(1)(A). The likely way out is 4947(a)(1). A trust whose unexpired interests are all charitable, "for which a deduction was allowed", is "treated as an organization described in section 501(c)(3)". Treasury Regulation 53.4946-1(a)(8) then says the insider list for self-dealing "shall not include any organization which is described in section 501(c)(3)". The regulation doesn't name 4947 trusts, which is a question for counsel.
-2. **The trust stops being the family's.** A wholly charitable trust holds charity's assets, not the family's personal assets. It also takes on its own private-foundation duties. That second point is not verified: see below.
-3. **The foundation becomes the business's owner.** 4943(d)(1) says stock "owned, directly or indirectly, by or for a ... trust shall be considered as being owned proportionately by or for its ... beneficiaries." With the foundation as the only beneficiary at the end of the chain, the operating company's stock counts as the foundation's own, so the 20 percent excess-business-holdings limit applies to it. The statute's exception covers only "an income or remainder interest of a private foundation" in a split-interest trust (4947(a)(2)), and the trusts in this shape aren't split-interest.
+`python3 decide_spend.py --sweep` starts from branch B and changes one setting per row. The last column is the 4943 test on P14: the foundation's own share of the operating company, then the insiders' share.
 
-## What flips
+| Family trust settings | Insider? | P22 rent to the trust | P23 buy from the operating company | P24 grant to the trust | P14 4943 % |
+|---|---|---|---|---|---|
+| Family 0%, siblings 30% | no | allow | needs counsel (H2) | block (R6) | 27 / 0 |
+| **Family 30%, siblings 30% (branch B)** | no | needs counsel (H2) | needs counsel (H2) | block (H2, R6) | 27 / 9 |
+| Family 35% | no | needs counsel (H2) | needs counsel (H2) | block (H2, R6) | 27 / 10.5 |
+| Family 36% | **yes** | block (R1) | block (R1) | block (R1, R6) | 27 / 30 |
+| **Family 60% (branch A, the default)** | yes | block (R1) | block (R1) | block (R1, R6) | 27 / 30 |
+| Family 30%, trust is a substantial contributor | **yes** | block (R1) | block (R1) | block (R1, R6) | 27 / 30 |
+| Family 30%, trustee paid | no | needs counsel (H2) | needs counsel (H2) | block (H2, R6) | 27 / 9 |
+| Family 30%, deduction allowed, foundation holds remainder only | no | needs counsel (H2) | needs counsel (H2) | block (H2, R6) | 15 / 9 |
 
-`python3 decide_spend.py --compare` (26 synthetic proposals, three of them new on this page):
+How to read it:
 
-| Proposal | Branch A | Branch B | Why |
-|---|---|---|---|
-| P22 Rent to the family trust for program space, at market | block (R1) | allow | Leasing from an insider is self-dealing at any price. Without the insider status, it's an ordinary lease. |
-| P23 Program T-shirts bought from the operating company, at its outside price | block (R1) | needs counsel (H2) | The insider rule drops, but the operating company pays the founder's management company a fee, so value still reaches an insider. The hack test catches it. |
-| P24 Grant to the family trust to run a program, no expenditure responsibility | block (R1, R6) | block (R6) | It stays blocked: a grant to a non-charity needs expenditure responsibility in either branch. |
-| P25 Rent to a family trust that still pays a family beneficiary | block (R1) | needs counsel (H2) | The stress case: assume B while a family member benefits, and the hack test flags it. In real life, (G) would put it back in branch A. |
-| P14 Buy 15 percent of the operating company from an unrelated seller | needs counsel (R7, R8) | needs counsel (R7, R8) | It doesn't flip. In A the business trust's 30 percent counts against the limit; in B it counts as the foundation's own (15 + 30 = 45 percent). |
+- **P23 never passes.** Even when no trust is an insider, the operating company pays the founder's management company, so the hack test (H2) sends it to counsel.
+- **P24 never passes.** A grant to a trust that isn't a public charity needs expenditure responsibility in every row (4945(d)(4), (h)).
+- **P14 never passes.** Under 4943(d)(1), stock held through the trusts counts "as being owned proportionately by or for its ... beneficiaries". The foundation's attributed 12 percent plus the 15 percent it buys puts it at 27, over the 20 percent limit, before any insider is counted. The excess-business-holdings question about the operating company exists whatever the insider answer is.
 
-The other 21 proposals grade the same in both branches.
+## Trustee pay
 
-## What each branch costs and unlocks
+Paying the founder to be trustee doesn't make the trust an insider, because a fee isn't a beneficial interest. It is another path for foundation money to reach an insider, so the hack test flags any foundation payment to the trust. If the trust is split-interest (below), the trust itself is held to the self-dealing rules "as if such trust were a private foundation" (4947(a)(2)). Its trustee's pay would then need to meet the reasonable-pay exception: services "reasonable and necessary to carrying out the exempt purpose", where the pay "is not excessive" (4941(d)(2)(E)). Whether a split-interest trust's trustee is its "foundation manager" under 4946(b) is an inference, not verified.
 
-- **Branch A keeps** the family's interest in both trusts and the business. **It costs** every deal between the foundation and the stack (leases, purchases, grants to the trusts), which stays blocked at any price. The one open door stays open in both branches: reasonable pay for necessary personal services, with a comparability record (P05).
-- **Branch B unlocks** ordinary market deals between the foundation and the trusts (P22). **It costs** the family's beneficial interest in both trusts, probably a private foundation's duties for the family trust itself, and an excess-business-holdings problem for the operating company that doesn't depend on any insider answer.
+## Split-interest: when the trust gets its own rules
 
-## Not considered until now: a third branch
+4947(a)(2) applies to a trust with charitable and family interests only if it "has amounts in trust for which a deduction was allowed under section 170, 545(b)(2), 642(c), 2055, 2106(a)(2), or 2522". The 642(c) item is a trust's own deduction for amounts set aside for charity, so a trust can trigger this simply by taking its charitable deduction. That is an inference to confirm.
 
-A split-interest shape sits in between: the family keeps an income interest and the foundation holds the remainder. 4947(a)(2) then applies the self-dealing and taxable-expenditure rules to the trust itself "as if such trust were a private foundation". In exchange, 4943(d)(1) stops counting the trust's business stock as the foundation's while the foundation "holds only an income interest or only a remainder interest". Whether the family's income interest crosses the 35 percent line depends on how the two interests are valued, which this page has not checked. It's the branch most likely to keep both the family's interest and a clean foundation, and it can run the same way as A and B, as a third facts file.
+When it applies, the self-dealing, excess-business-holdings, jeopardizing-investment and taxable-expenditure rules apply to the trust itself. Payments to family under the trust's terms are carved out ("any amounts payable under the terms of such trust to income beneficiaries"). In exchange, if the foundation "holds only an income interest or only a remainder interest", 4943(d)(1) stops counting the trust's business stock as the foundation's. The last sweep row shows the effect: 27 drops to 15, but the family's insider share still squeezes the limit.
 
-## The counsel question, now one line
+4947(a)(1), which treats a trust as a 501(c)(3) organization, needs "all of the unexpired interests" to be charitable. With family beneficiaries, it doesn't apply.
 
-"Who holds the beneficial interest in each trust, counted through 267(c), and was a charitable deduction ever allowed for amounts in either? Branch A blocks every deal with the stack; branch B allows market deals but gives up the family's interest and makes the operating company an excess business holding."
+## The counsel questions, now short
 
-## Not verified
+1. What is the actuarial share held by the founder's 4946(d) family? It has to be 35 percent or less to keep the trust off the insider list under (G).
+2. Do the trust's payments to the foundation count as "contributions" under 507(d)(2)? If they do, the trust becomes an insider once it gives enough, and stays one. **This is the question that decides the branch.**
+3. Has a charitable deduction been allowed for amounts in the trust, including its own 642(c) deduction? If so, it is a split-interest trust with its own rules.
+4. What should the plan be for the operating company under 4943? The attributed holdings are over the limit in every branch.
 
-- The text of 267(c)(1) itself. It was read only through the IRS attribution page's paraphrase: "considered owned proportionately by or for its shareholders, partners, or beneficiaries".
-- The substantial-contributor thresholds in 507(d)(2), and whether a trust's distribution to its charitable beneficiary counts as a contribution.
-- How a 4947(a)(1) trust is classified under 509, which is why "private foundation duties" above is marked "probably".
-- How income and remainder interests are valued against the 35 percent line, and how grantor-trust status affects it.
-- The 4943 disposition periods and exceptions (for example, for business holdings acquired by gift or bequest).
+## How it's built
 
-## How to run it
+- Each branch is a facts file. `tests/decision/branch-a.ttl` (over the line, the default) and `branch-b.ttl` (under the line) set the family trust's settings: the family share, the share held by other relatives, the foundation's share and kind of interest, whether it is a substantial contributor, whether a deduction was allowed, and whether the trustee is paid.
+- Nobody types in "insider: yes". The insider rules IR1 to IR9 in `decision/spend-decision-model.ttl` derive it from the settings, each with its source, before the checks run. That's the "red flags into checks" rule applied to the trusts.
 
 ```
 pip install rdflib pyshacl
 python3 decide_spend.py              # branch A, graded against tests/decision/expected.ttl
 python3 decide_spend.py --branch B   # branch B, graded against expected.ttl plus expected-branch-b.ttl
-python3 decide_spend.py --compare    # what flips
+python3 decide_spend.py --compare    # what flips between A and B
+python3 decide_spend.py --sweep      # one setting at a time
 ```
 
-Each branch is a facts file, `tests/decision/branch-a.ttl` or `branch-b.ttl`, that states the insider answer as data. A third branch is one more file.
+## Not verified
+
+- The text of 267(c)(1). It was read only through the IRS attribution page: stock "is considered owned proportionately by or for its shareholders, partners, or beneficiaries".
+- Whether a trust's distributions to its charitable beneficiary are "contributions" for 507(d)(2) (counsel question 2).
+- Whether a split-interest trust's trustee is its foundation manager under 4946(b), and whether the indirect self-dealing control test (53.4941(d)-1(b)(5)) reaches a trust the founder controls as trustee rather than as a foundation manager. The regulation counts control by "the foundation or one or more of its foundation managers (acting only in such capacity)".
+- How grantor-trust status, if any, changes the beneficial-interest count.
+- The 4943 exceptions and disposition periods, and the actuarial tables used to value income and remainder interests.
 
 ## Sources
 
-- [26 USC 4946](https://uscode.house.gov/us/usc/119-118/t26/s4946/) (current through PL 119-120)
-- [26 USC 4947](https://uscode.house.gov/us/usc/119-118/t26/s4947/)
-- [26 USC 4943](https://uscode.house.gov/us/usc/119-118/t26/s4943/)
+- [26 USC 4946](https://uscode.house.gov/us/usc/119-118/t26/s4946/), [4947](https://uscode.house.gov/us/usc/119-118/t26/s4947/), [4943](https://uscode.house.gov/us/usc/119-118/t26/s4943/), [4941](https://uscode.house.gov/us/usc/119-118/t26/s4941/), [507](https://uscode.house.gov/us/usc/119-118/t26/s507/) (current through PL 119-120)
 - [26 USC 7701 (2011 edition)](https://www.govinfo.gov/content/pkg/USCODE-2011-title26/html/USCODE-2011-title26-subtitleF-chap79-sec7701.htm)
-- [Treas. Reg. 53.4946-1](https://ecfr.io/Title-26/Section-53.4946-1) and [53.4943-8](https://ecfr.io/Title-26/Section-53.4943-8)
-- [IRS: attribution of ownership rules](https://www.irs.gov/charities-non-profits/private-foundations/attribution-of-ownership-rules-definition-of-disqualified-persons) and [IRS: split-interest trusts](https://www.irs.gov/charities-non-profits/private-foundations/split-interest-trusts)
+- [Treas. Reg. 53.4946-1](https://ecfr.io/Title-26/Section-53.4946-1), [53.4943-8](https://ecfr.io/Title-26/Section-53.4943-8), [53.4941(d)-1](https://www.law.cornell.edu/cfr/text/26/53.4941(d)-1)
+- IRS: [attribution of ownership rules](https://www.irs.gov/charities-non-profits/private-foundations/attribution-of-ownership-rules-definition-of-disqualified-persons), [split-interest trusts](https://www.irs.gov/charities-non-profits/private-foundations/split-interest-trusts), [indirect self-dealing: control](https://www.irs.gov/charities-non-profits/private-foundations/indirect-self-dealing-control-of-organization-by-private-foundation)

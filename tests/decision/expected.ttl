@@ -30,7 +30,6 @@
 :P22_RentFromFamilyTrust t:expectOutcome dm:Block ;        t:expectChecks "R1" .
 :P23_OperatingCoPurchase t:expectOutcome dm:Block ;        t:expectChecks "R1" .
 :P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "R1 R6" .
-:P25_RentToFamilyBeneficiaryTrust t:expectOutcome dm:Block ; t:expectChecks "R1" .
 
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

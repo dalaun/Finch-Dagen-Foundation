@@ -23,20 +23,18 @@
 :ManagementCompany a td:DisqualifiedPerson ;
     rdfs:label "Founder's management company" ;
     rdfs:comment "A corporation in which disqualified persons own more than 35 percent of the voting power: 4946(a)(1)(E)." .
-:FamilyTrust rdfs:label "Family trust (insider status pending counsel)" ;
+:FamilyTrust rdfs:label "Family trust: the foundation and family members are beneficiaries; the founder is trustee" ;
     dm:insiderStatusPending true ;
-    rdfs:comment "Disqualified if disqualified persons hold more than 35 percent of its beneficial interest (4946(a)(1)(G), counted through 267(c) per 4946(a)(4)) or if it is a substantial contributor (4946(a)(1)(A); 7701(a)(1) counts a trust as a person). Asserted one way in each tests/decision/branch-*.ttl file." .
-:BusinessTrust rdfs:label "Business trust that owns the operating company (insider status pending counsel)" ;
+    rdfs:comment "Its insider status is derived from the facts in tests/decision/branch-*.ttl: the 4946(d) family's actuarial share (over 35 percent makes it an insider, 4946(a)(1)(G)) and whether it has become a substantial contributor (4946(a)(1)(A)). Being trustee is control, not beneficial interest." .
+td:Founder dm:trusteeOf :FamilyTrust .
+:BusinessTrust rdfs:label "Business trust that owns the operating company; the family trust holds its beneficial interest" ;
     dm:insiderStatusPending true ;
-    rdfs:comment "Its beneficiary is the family trust, so its status follows the family trust's beneficial owners through 4946(a)(4)." .
-:OperatingCompany rdfs:label "Operating company owned by the business trust (insider status pending counsel)" ;
+    dm:beneficialInterestHeldBy :FamilyTrust .
+:OperatingCompany rdfs:label "Operating company owned by the business trust" ;
     dm:insiderStatusPending true ;
+    dm:votingControlHeldBy :BusinessTrust ;
     dm:passesBenefitTo :ManagementCompany ;
-    rdfs:comment "Disqualified under 4946(a)(1)(E) when disqualified persons own more than 35 percent of its voting power, counting indirect holdings through 267(c) per 4946(a)(3). Pays the founder's management company a management fee." .
-:FamilyBeneficiaryTrust rdfs:label "A family trust that still pays a family beneficiary" ;
-    dm:insiderStatusPending true ;
-    dm:passesBenefitTo :FounderChild ;
-    rdfs:comment "Stress case: assumes counsel said not an insider while a family member still benefits. If the family holds more than 35 percent of its beneficial interest, (G) makes it an insider anyway." .
+    rdfs:comment "Pays the founder's management company a management fee." .
 :AITrainer rdfs:label "AI trainer (unrelated)" .
 :Contractor rdfs:label "Contractor who works two programs (unrelated)" .
 :FriendsNonprofit a td:PublicCharity ;
@@ -184,8 +182,10 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
 #     trust itself, it would also be R1 in branch A.
 :P14_OperatingCoShares a dm:SpendProposal ;
     dm:payee :ThirdPartySeller ; dm:dqScreened true ; dm:spendKind dm:Investment ;
-    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
-#     Voting percentages depend on the insider branch: see tests/decision/branch-*.ttl.
+    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
+    dm:boughtVotingPercent "15"^^xsd:decimal ; dm:chainHeldVotingPercent "30"^^xsd:decimal ;
+    dm:chainTrust :FamilyTrust ; dm:chainHolder :BusinessTrust .
+#     The foundation's total and the insiders' total are derived by rule IR9 (4943(d)(1)).
 
 # P15 Lobbying contract for a curriculum bill.
 :P15_Lobbying a dm:SpendProposal ; dm:assesses :Spend_Lobbying ;
@@ -239,10 +239,6 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
 :P24_GrantToFamilyTrust a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
     dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
     rdfs:comment "Assesses an existing grant node only to carry stage 1." .
-
-# P25 Rent paid to a family trust that passes value on to a family beneficiary.
-:P25_RentToFamilyBeneficiaryTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
-    dm:payee :FamilyBeneficiaryTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase .
 
 # ---------------------------------------------------------------------
 # P1 probe: a check enforced only by conscience

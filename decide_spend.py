@@ -5,6 +5,7 @@ Grade proposed foundation spends: allow, block, needs counsel or insufficient.
   python3 decide_spend.py              worked cases under insider branch A (default)
   python3 decide_spend.py --branch B   the same cases under insider branch B
   python3 decide_spend.py --compare    both branches side by side: what flips
+  python3 decide_spend.py --sweep      move the family trust's settings one at a time
   python3 decide_spend.py FILE.ttl     also grade your own proposals
 
 Stage 1 is the existing keystone and cascade check (trust-domain-keystone-shapes.ttl),
@@ -16,8 +17,9 @@ only raise an outcome, never lower it.
 
 Insider branches: whether the family trust, the business trust and the operating
 company are disqualified persons waits on counsel. tests/decision/branch-a.ttl
-(insiders, fail closed, the default) and branch-b.ttl (not insiders) each assert
-one answer as facts. tests/decision/expected.ttl is the branch A answer key;
+(over the line, fail closed, the default) and branch-b.ttl (under the line) set
+the family trust's facts; the insider rules in decision/spend-decision-model.ttl
+derive each role's status from them before the checks run. tests/decision/expected.ttl is the branch A answer key;
 expected-branch-b.ttl lists only what branch B changes. Any proposal whose outcome
 or failed checks differ from its key, or that has no expectation, makes the run
 fail (exit 1).
@@ -26,7 +28,8 @@ Not legal or tax advice. Needs: pip install rdflib pyshacl
 import sys
 from collections import defaultdict
 from pathlib import Path
-from rdflib import Graph, Namespace, URIRef, RDF
+from rdflib import Graph, Namespace, URIRef, RDF, Literal
+from rdflib.namespace import XSD
 from pyshacl import validate
 
 HERE = Path(__file__).resolve().parent
@@ -40,6 +43,7 @@ BRANCH_KEYS = {"A": ["tests/decision/expected.ttl"],
 
 args = sys.argv[1:]
 compare = "--compare" in args
+sweep = "--sweep" in args
 branch = "A"
 if "--branch" in args:
     branch = args[args.index("--branch") + 1].upper()
@@ -68,12 +72,39 @@ def answer_key(b):
     return key
 
 
-def run(b):
-    """Grade every proposal under branch b. Returns (results, data, failed)."""
+TD = Namespace("http://example.org/trust-domain#")
+CASES = Namespace("http://example.org/trust-domain/decision-cases#")
+RULES = sorted(model.subjects(RDF.type, DM.InsiderRule), key=str)
+
+
+def derive(data):
+    """Insider rules: stage 1 to a fixed point, then stage 2 once."""
+    ns = {"dm": DM, "td": TD, "rdf": RDF}
+    for stage in (1, 2):
+        rules = [r for r in RULES if int(model.value(r, DM.ruleStage)) == stage]
+        while True:
+            before = len(data)
+            for r in rules:
+                for t in data.query(str(model.value(r, DM.construct)), initNs=ns):
+                    data.add(t)
+            if stage == 2 or len(data) == before:
+                break
+    return data
+
+
+def load(b, overrides=None):
     data = Graph()
     for f in [HERE / "trust-domain-ontology.ttl", model_file,
               HERE / "tests/decision/decision-cases.ttl", HERE / BRANCH_FILES[b], *map(Path, extra)]:
         data.parse(f, format="turtle")
+    for prop, value in (overrides or {}).items():
+        data.set((CASES.FamilyTrust, DM[prop], value))
+    return derive(data)
+
+
+def run(b, overrides=None):
+    """Grade every proposal under branch b. Returns (results, data, failed)."""
+    data = load(b, overrides)
     _, report, _ = validate(data, shacl_graph=shapes, inference="rdfs",
                             advanced=True, allow_warnings=True)
     failed = defaultdict(set)      # focus node -> constraints it failed
@@ -129,6 +160,32 @@ def grade(b):
           + ". Grading: " + ("all match the answer key." if not bad else f"{bad} mismatch(es)."))
     return bad
 
+
+if sweep:
+    pct = lambda v: Literal(str(v), datatype=XSD.decimal)
+    yes = lambda v: Literal(v)
+    watch = [CASES.P22_RentFromFamilyTrust, CASES.P23_OperatingCoPurchase,
+             CASES.P24_GrantToFamilyTrust, CASES.P14_OperatingCoShares]
+    rows = [("family 0%, siblings 30%", {"dqFamilySharePercent": pct(0)}),
+            ("family 30%, siblings 30%", {}),
+            ("family 35%", {"dqFamilySharePercent": pct(35)}),
+            ("family 36%", {"dqFamilySharePercent": pct(36)}),
+            ("family 60%", {"dqFamilySharePercent": pct(60), "otherRelativeSharePercent": pct(0)}),
+            ("family 30%, trust is a substantial contributor", {"substantialContributor": yes(True)}),
+            ("family 30%, trustee paid", {"trusteePaid": yes(True)}),
+            ("family 30%, deduction allowed, foundation remainder only",
+             {"charitableDeductionAllowed": yes(True), "foundationInterestKind": DM.RemainderOnly})]
+    print("Sweep from branch B; one setting changes per row.\n")
+    print(f"{'family trust settings':58} {'insider':8} " + "  ".join(f"{short(p).split('_')[0]:22}" for p in watch)
+          + "  4943 % (foundation / insiders)")
+    for name, ov in rows:
+        res, data, _ = run("B", ov)
+        insider = "yes" if (CASES.FamilyTrust, RDF.type, TD.DisqualifiedPerson) in data else "no"
+        cells = [f"{label(res[p][0])} {' '.join(sorted(res[p][1])) or ''}".strip() for p in watch]
+        p14 = CASES.P14_OperatingCoShares
+        held = f"{float(data.value(p14, DM.foundationVotingPercentAfter)):g} / {float(data.value(p14, DM.disqualifiedVotingPercent)):g}"
+        print(f"{name:58} {insider:8} " + "  ".join(f"{c:22}" for c in cells) + "  " + held)
+    sys.exit(0)
 
 if compare:
     a, _, _ = run("A")

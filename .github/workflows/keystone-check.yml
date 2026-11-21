@@ -31,3 +31,5 @@ jobs:
         run: python3 decide_spend.py --branch B
       - name: Show what flips between the insider branches
         run: python3 decide_spend.py --compare
+      - name: Sweep the family trust's settings one at a time
+        run: python3 decide_spend.py --sweep

@@ -46,7 +46,7 @@ A third likely finding: some business-shaped spending (software and AI tools, ho
 | [answer-key-cases.ttl](answer-key-cases.ttl) | The cases the twin must get right before its optimizer is trusted |
 | [07-structure-integrity-checks.md](07-structure-integrity-checks.md) and [structure-check-cases.ttl](structure-check-cases.ttl) | Checks S1 to S17 every structure version must pass, from the IRS's abusive-trust guidance; today's stack scored in roles; eval cases SK1 to SK16 |
 | [08-w2-to-owner-transition.md](08-w2-to-owner-transition.md), [transition_twin.py](transition_twin.py), [transition-inputs-synthetic.json](transition-inputs-synthetic.json) and [transition-checks.ttl](transition-checks.ttl) | The move from W-2 income to business owner, rehearsed month by month with and without the founder's building, plus a business he lives in and a home-equity down payment; step-down test; checks T1 to T26 |
-| [09-insider-branches.md](09-insider-branches.md) | The two trusts run both ways in the spend decision model: insiders or not, what flips, what each answer costs, and whether "not insiders" is possible at all |
+| [09-insider-branches.md](09-insider-branches.md) | When the family trust counts as an insider to the foundation: the 35 percent family line, the substantial-contributor trap, trustee pay, and what each setting does to the worked spends |
 | [05-questions-for-attorney-and-cpa.md](05-questions-for-attorney-and-cpa.md) | What to ask, in plain words |
 | [06-handoff-transaction-export.md](06-handoff-transaction-export.md) | The one thing only the founder can supply |
 
