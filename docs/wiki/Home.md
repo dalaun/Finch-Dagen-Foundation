@@ -143,6 +143,7 @@ Use **vocabulary alone** for data modeling, **compliance** for enforcement, or *
 3. **[Authority Cascade](Authority-Cascade.md)** - How every dollar traces back to mission
    - **[Spend Decision Model](Spend-Decision-Model.md)** - Draft: allow, block, needs counsel or insufficient for every proposed spend
    - **[Stewardship](Stewardship.md)** - Draft: "own nothing, steward everything", arm's length between the founder's roles, deduct and exclude tests
+   - **[Planned Giving](Planned-Giving.md)** - Draft: lead trusts, remainder unitrusts, business interests, the estate exception, a residence trust and bargain sales as instruments, with checks
 4. **[Examples](Examples.md)** - See concrete instances of permissible vs improper enablement
 5. **[Usage Guide](Usage-Guide.md)** - Query the ontology and validate compliance
 6. **[Estate Planning Extension](Estate-Planning-Extension.md)** - Traditional trust vocabulary (optional)

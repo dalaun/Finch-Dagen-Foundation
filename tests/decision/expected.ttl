@@ -69,5 +69,35 @@
 :D38_HomeOfficeAdminRoom              t:expectOutcome dm:Allow ;        t:expectChecks "" .
 :D39_DeductionFactsMissing            t:expectOutcome dm:Insufficient ; t:expectChecks "BD0" .
 
+# Planned gifts (tests/decision/planned-giving-cases.ttl)
+:G01_LeadAnnuityClean            t:expectOutcome dm:Allow .
+:G02_LeadNetIncome               t:expectOutcome dm:Block ;        t:expectChecks "PG1" .
+:G03_LeadHoldsBusinessNoPlan     t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG3b" .
+:G04_LeadHoldsBusinessPastPeriod t:expectOutcome dm:Block ;        t:expectChecks "PG3a" .
+:G05_LeadAtSixtyHoldsBusiness    t:expectOutcome dm:Allow .
+:G06_FounderTrusteeOfLead        t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG9" .
+:G07_LeadSellsToInsider          t:expectOutcome dm:Block ;        t:expectChecks "PG2" .
+:G08_RedemptionSameTerms         t:expectOutcome dm:Allow .
+:G09_RedemptionFavorsFamily      t:expectOutcome dm:Block ;        t:expectChecks "PG2" .
+:G10_UnitrustPaysFounder         t:expectOutcome dm:Allow .
+:G11_UnitrustPayoutTooHigh       t:expectOutcome dm:Block ;        t:expectChecks "PG4" .
+:G12_UnitrustRemainderTooSmall   t:expectOutcome dm:Block ;        t:expectChecks "PG4" .
+:G13_UnitrustHoldsOperatingLLC   t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG4b" .
+:G14_SStockIntoUnitrust          t:expectOutcome dm:Block ;        t:expectChecks "PG5" .
+:G15_SStockToFoundation          t:expectOutcome dm:Allow .
+:G16_BequestWithPlan             t:expectOutcome dm:Allow .
+:G17_PassiveHoldingCompany       t:expectOutcome dm:Allow .
+:G18_PayoutMet                   t:expectOutcome dm:Allow .
+:G19_PayoutShort                 t:expectOutcome dm:Block ;        t:expectChecks "PG8" .
+:G20_EstateSaleApproved          t:expectOutcome dm:Allow .
+:G21_EstateSaleNoCourt           t:expectOutcome dm:Block ;        t:expectChecks "PG2" .
+:G22_ResidenceTrustWithOffice    t:expectOutcome dm:Allow .
+:G23_ResidenceTrustLodging       t:expectOutcome dm:Block ;        t:expectChecks "PG6" .
+:G24_ResidenceTrustSaleBack      t:expectOutcome dm:Block ;        t:expectChecks "PG6" .
+:G25_BargainSaleToFoundation     t:expectOutcome dm:Block ;        t:expectChecks "PG7a" .
+:G26_BargainSaleToPublicCharity  t:expectOutcome dm:Allow .
+:G27_BargainSaleNoBasisSplit     t:expectOutcome dm:Insufficient ; t:expectChecks "PG7b" .
+:G28_NoVehicle                   t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
+
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

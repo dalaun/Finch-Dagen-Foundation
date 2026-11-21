@@ -157,6 +157,7 @@ These are the default answers (insider branch A: the family trust is over the li
 - `decision/spend-decision-shapes.ttl`: the SHACL checks for stages 0, 2 and 3, and P1.
 - `tests/decision/decision-cases.ttl` and `expected.ttl`: the worked cases and the answer key.
 - [Stewardship](Stewardship.md): deals between the founder's roles (stewardship, arm's length, what a business may deduct, what an employee may exclude), in `decision/stewardship-model.ttl`, `decision/stewardship-shapes.ttl` and `tests/decision/entity-deal-cases.ttl`.
+- [Planned Giving](Planned-Giving.md): planned-giving vehicles and the foundation's own holdings and payout, in `decision/planned-giving-model.ttl`, `decision/planned-giving-shapes.ttl` and `tests/decision/planned-giving-cases.ttl`.
 - `decision/irs-instruments.ttl`: the IRS publications as instruments, linked to roles and checks.
 - `decide_spend.py`: runs stage 1 (the keystone shapes) and stages 0, 2 and 3 together and grades the result.
 

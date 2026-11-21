@@ -22,6 +22,12 @@ arm's length between the founder's roles, what a business may deduct and what an
 employee may exclude. decision/irs-instruments.ttl catalogs the IRS publications
 those checks come from, linked to roles and checks.
 
+Planned gifts (tests/decision/planned-giving-cases.ttl) are graded by
+decision/planned-giving-shapes.ttl: lead trusts, remainder unitrusts, business
+interests, the estate exception, a residence trust, bargain sales and the
+foundation's own payout. decision/planned-giving-model.ttl records the Code and
+regulations behind each check, with the GiftLaw Pro sections as secondary sources.
+
 Insider branches: whether the family trust, the business trust and the operating
 company are disqualified persons waits on counsel. tests/decision/branch-a.ttl
 (over the line, fail closed, the default) and branch-b.ttl (under the line) set
@@ -62,10 +68,12 @@ extra = [a for i, a in enumerate(args)
 model_file = HERE / "decision/spend-decision-model.ttl"
 model = Graph().parse(model_file, format="turtle")
 model.parse(HERE / "decision/stewardship-model.ttl", format="turtle")
+model.parse(HERE / "decision/planned-giving-model.ttl", format="turtle")
 shapes = Graph()
 shapes.parse(HERE / "trust-domain-keystone-shapes.ttl", format="turtle")
 shapes.parse(HERE / "decision/spend-decision-shapes.ttl", format="turtle")
 shapes.parse(HERE / "decision/stewardship-shapes.ttl", format="turtle")
+shapes.parse(HERE / "decision/planned-giving-shapes.ttl", format="turtle")
 severity = {o: int(model.value(o, DM.severity)) for o in model.subjects(RDF.type, DM.Outcome)}
 by_severity = {v: k for k, v in severity.items()}
 short = lambda u: str(u).split("#")[-1]
@@ -105,6 +113,7 @@ def load(b, overrides=None):
     data = Graph()
     for f in [HERE / "trust-domain-ontology.ttl", model_file,
               HERE / "decision/stewardship-model.ttl", HERE / "decision/irs-instruments.ttl",
+              HERE / "decision/planned-giving-model.ttl", HERE / "tests/decision/planned-giving-cases.ttl",
               HERE / "tests/decision/decision-cases.ttl", HERE / "tests/decision/entity-deal-cases.ttl",
               HERE / BRANCH_FILES[b], *map(Path, extra)]:
         data.parse(f, format="turtle")
@@ -127,7 +136,8 @@ def run(b, overrides=None):
         if c is not None:
             check_of[c] = (str(c).split("#")[-1].split("_")[0], data.value(chk, DM.onFail))
     results = {}
-    graded = set(data.subjects(RDF.type, DM.SpendProposal)) | set(data.subjects(RDF.type, DM.EntityDeal))
+    graded = (set(data.subjects(RDF.type, DM.SpendProposal)) | set(data.subjects(RDF.type, DM.EntityDeal))
+              | set(data.subjects(RDF.type, DM.PlannedGift)))
     for p in sorted(graded, key=str):
         hits = {}
         for n in [p, *data.objects(p, DM.assesses)]:
@@ -176,7 +186,7 @@ def grade(b):
         if data.value(perm, DM.evidence) is None:
             bad += 1
             print(f"  instrument {short(perm)} has no evidence grade")
-    print(f"\n{len(set(data.subjects(RDF.type, DM.Instrument)))} IRS instruments, {len(perms)} permissions linked to checks.")
+    print(f"\n{len(set(data.subjects(RDF.type, DM.Instrument)))} instruments, {len(perms)} permissions linked to checks.")
 
     counts = defaultdict(int)
     for outcome, _ in results.values():
