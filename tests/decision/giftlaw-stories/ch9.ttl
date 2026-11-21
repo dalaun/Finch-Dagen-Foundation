@@ -34,7 +34,8 @@
     dm:citesAuthority "Rev. Rul. 82-128" ;
     dm:pageOutcome dm:Block ;
     dm:storyScope dm:OutsideModel ; dm:outsideCategory dm:OtherOutside ;
-    dm:outsideReason "estate tax apportionment to a remainder trust not checked" .
+    dm:outsideReason "estate tax apportionment to a remainder trust not checked" ;
+    dm:authorityStatus "read, status not verified: Rev. Rul. 82-128 (1982-2 C.B. 71), read 2026-11-21 on Tax Notes, holds that a unitrust from which death taxes can be paid fails 664; it modifies Rev. Rul. 72-395. No later revocation or modification was found, but none was ruled out." .
 
 # S9-4 TAXATION
 :S9_4 a dm:StoryCase ;
@@ -43,7 +44,8 @@
     dm:citesAuthority "Rev. Rul. 72-243" ;
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:OutsideModel ; dm:outsideCategory dm:VehicleNotYetModeled ;
-    dm:outsideReason "sale of a life estate" .
+    dm:outsideReason "sale of a life estate" ;
+    dm:authorityStatus "read, status not verified: Rev. Rul. 72-243 (1972-1 C.B. 233), read 2026-11-21 on Tax Notes, holds that a life tenant's sale of the life interest is the sale of a capital asset with zero basis after Oct. 9, 1969. It matches the page. No later revocation or modification was found, but none was ruled out." .
 
 # S9-5 Gifts of Annuity Trust Assets
 :S9_5 a dm:StoryCase ;

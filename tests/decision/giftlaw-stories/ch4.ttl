@@ -243,7 +243,10 @@
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_19_gift ;
     dm:gapNote "No check tests prearranged sales, and the grade rests on siblings not being disqualified persons, so a company the donor owns a third of is not one either." ;
-    dm:pageAccuracyNote "The notes say the page ignores prearrangement risk and never analyzes self-dealing in the redemption." .
+    dm:pageAccuracyNote "The notes say the page ignores prearrangement risk and never analyzes self-dealing in the redemption." ;
+    dm:authorityOutcome dm:Allow ;
+    dm:authorityBasis "26 USC 4946(a)(1)(E) and (d), read 2026-11-21: brothers and sisters are not family, and a company is disqualified only when disqualified persons own more than 35 percent of its vote. The donor's third does not reach that, so the redemption is not self-dealing. The prearranged-sale question is separate (PG12)." ;
+    dm:authorityRead true .
 :S4_19_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -274,7 +277,9 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OutrightGiftToPublicCharity ;
     dm:outsideReason "prearranged sale and qualified appraisal" ;
-    dm:pageAccuracyNote "The notes say the court actually ruled against the donor: the gain had ripened before the gift and the appraisal was not qualified." .
+    dm:pageAccuracyNote "The notes say the court actually ruled against the donor: the gain had ripened before the gift and the appraisal was not qualified." ;
+    dm:citedForOpposite "Estate of Hoensheid, T.C. Memo. 2023-34, read in part 2026-11-21: the government won on assignment of income, because the donors' right to the sale proceeds was fixed by the day of the gift, so the gain was theirs. The appraisal holding (deduction denied for an unqualified appraisal) was read only in a secondary summary." ;
+    dm:citedAuthorityRead true .
 
 :S4_22 a dm:StoryCase ;
     dm:storyId "S4-22" ;
@@ -303,7 +308,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_23_gift ;
-    dm:pageAccuracyNote "The notes say the gain is deferred rather than avoided, the 10 percent limit and 1 percent floor apply, and the page's personal holding company description is garbled." .
+    dm:pageAccuracyNote "The notes say the gain is deferred rather than avoided, the 10 percent limit and 1 percent floor apply, and the page's personal holding company description is garbled." ;
+    dm:authorityUnread "26 USC 541 and 545 not read. The flag is about the company's personal holding company tax, not the trust's validity, so the grade stands until 541 is read." .
 :S4_23_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ;
@@ -630,7 +636,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_48_gift ;
-    dm:pageAccuracyNote "The notes say the policy's inside build-up becomes tier-1 ordinary income in the trust, and the page omits the 170(f)(10) personal benefit contract warning." .
+    dm:pageAccuracyNote "The notes say the policy's inside build-up becomes tier-1 ordinary income in the trust, and the page omits the 170(f)(10) personal benefit contract warning." ;
+    dm:authorityUnread "26 USC 170(f)(10) (personal benefit contracts) not read. The story surrenders the policy, so the warning bites only if the trust keeps paying premiums." .
 :S4_48_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ;
@@ -734,14 +741,18 @@
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_56_gift ;
     dm:gapNote "No check models the dealer-versus-investor limit on the deduction." ;
-    dm:pageAccuracyNote "The notes add that a trust that keeps marketing lots risks unrelated business income and the 100 percent excise tax." .
+    dm:pageAccuracyNote "The notes add that a trust that keeps marketing lots risks unrelated business income and the 100 percent excise tax." ;
+    dm:authorityOutcome dm:NeedsCounsel ;
+    dm:authorityBasis "26 USC 512(b)(5), read 2026-11-21: gains from selling property are excluded except for inventory and property held primarily for sale to customers in a trade or business. A trust that keeps selling a subdivider's lots earns business income, taxed in full under 664(c)(2)(A), read." ;
+    dm:authorityRead true .
 :S4_56_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ;
     # assumed: remainder share worked out from the page's deduction and funding figures
     dm:remainderValuePercent "35"^^xsd:decimal ;
-    # assumed: the trust sells the lots without developing or marketing them
-    dm:producesUBTI false .
+    # regraded on primary law: the trust keeps selling the subdivider's lots, which are property
+    # held for sale to customers, so the gain is not excluded (512(b)(5))
+    dm:producesUBTI true .
 
 :S4_57 a dm:StoryCase ;
     dm:storyId "S4-57" ;
@@ -830,7 +841,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_64_gift ;
-    dm:pageAccuracyNote "The notes say spousal consent is overstated for ordinary IRAs and the trust's income definition is not addressed." .
+    dm:pageAccuracyNote "The notes say spousal consent is overstated for ordinary IRAs and the trust's income definition is not addressed." ;
+    dm:authorityUnread "The spousal-consent rules (26 USC 417, ERISA 205) not read. The flag is about who must consent, not the trust's validity." .
 :S4_64_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -863,13 +875,18 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_66_gift ;
-    dm:pageAccuracyNote "The notes warn the design may fail the 10 percent remainder test for a younger spouse." .
+    dm:pageAccuracyNote "The notes warn the design may fail the 10 percent remainder test for a younger spouse." ;
+    dm:authorityOutcome dm:Block ;
+    dm:authorityBasis "26 CFR 1.664-3(a)(5)(i), read 2026-11-21: a unitrust may not pay 'to A for his life and then to B for a term of years'; it may pay A for life, then B for life or a term of up to 20 years, whichever is shorter. The page's design does not qualify, so there is no remainder deduction." ;
+    dm:authorityRead true .
 :S4_66_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
     dm:unitrustPercent "5"^^xsd:decimal ;
     # assumed: remainder at least 10 percent; the page treats the trust as qualifying
-    dm:remainderValuePercent "10"^^xsd:decimal .
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # regraded on primary law: the spouse for life, then the children for a term of years
+    dm:unitrustPeriodForm dm:LifeThenTerm .
 
 :S4_67 a dm:StoryCase ;
     dm:storyId "S4-67" ;
@@ -1068,7 +1085,10 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_81_gift ;
-    dm:pageAccuracyNote "The notes say part of the gain is unrecaptured 1250 gain." .
+    dm:pageAccuracyNote "The notes say part of the gain is unrecaptured 1250 gain." ;
+    dm:authorityOutcome dm:Allow ;
+    dm:authorityBasis "26 USC 1(h)(1)(E), read 2026-11-21: unrecaptured 1250 gain is taxed at up to 25 percent. The flag changes how much tax the donor owes on the kept share, not whether the trust works; the checks do not grade amounts." ;
+    dm:authorityRead true .
 :S4_81_gift a dm:PlannedGift ;
     dm:giftVehicle dm:BargainSaleVehicle ; dm:seller td:Founder ;
     # assumed: the charity is a public charity unrelated to the donor
@@ -1288,7 +1308,12 @@
     dm:pageOutcome dm:NeedsCounsel ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_97_gift ;
-    dm:pageAccuracyNote "The notes say the case applied the pre-2007 rule that cost the trust its exemption, so it does not support the excise tax enacted in 2006." .
+    dm:pageAccuracyNote "The notes say the case applied the pre-2007 rule that cost the trust its exemption, so it does not support the excise tax enacted in 2006." ;
+    dm:citedForOpposite "Newhall Unitrust (9th Cir. 1997), read 2026-11-21 on the appeals opinion (the Tax Court opinion, 104 T.C. 236, not read): under 664(c) as it then stood, any unrelated business taxable income cost the trust its exemption for the year. It predates the 100 percent excise tax and does not support it." ;
+    dm:citedAuthorityRead true ;
+    dm:authorityOutcome dm:NeedsCounsel ;
+    dm:authorityBasis "26 USC 664(c)(2)(A), read 2026-11-21: the excise tax equal to the unrelated business taxable income, for tax years after 2006. The page's outcome stands on the statute, not on the case." ;
+    dm:authorityRead true .
 :S4_97_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -1307,7 +1332,10 @@
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_98_gift ;
     dm:gapNote "Covered since this pass by PG10 and PG11; the debt is cleared first." ;
-    dm:pageAccuracyNote "The notes say the page contradicts itself on whether the LLC is a disqualified person." .
+    dm:pageAccuracyNote "The notes say the page contradicts itself on whether the LLC is a disqualified person." ;
+    dm:authorityOutcome dm:Allow ;
+    dm:authorityBasis "26 USC 4947(a)(2)(A), read: payments the trust's terms require to an income beneficiary are not self-dealing. Whichever way the page's contradiction on the LLC's status is resolved, the grade is the same." ;
+    dm:authorityRead true .
 :S4_98_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ;
@@ -1472,17 +1500,23 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_112_gift ;
-    dm:gapNote "The checks take the UBTI flag as given; no check tests whether rent tied to equipment or goodwill, or rent set by profits, falls outside the 512(b)(3) rent exclusion. Nor does any check test the prearranged sale to a waiting buyer." ;
-    dm:pageAccuracyNote "The page wrongly says the excess business holdings and jeopardy rules apply to remainder trusts; under 4947(b)(3)(B) they generally do not, and two of its citations are wrong." .
+    dm:gapNote "Covered since the audit pass by PG13 (personal-property rent) and PG12 (a sale fixed before the gift)." ;
+    dm:pageAccuracyNote "The page wrongly says the excess business holdings and jeopardy rules apply to remainder trusts; under 4947(b)(3)(B) they generally do not, and two of its citations are wrong." ;
+    dm:authorityOutcome dm:NeedsCounsel ;
+    dm:authorityBasis "26 USC 512(b)(3) and 26 CFR 1.512(b)-1(c)(2), read 2026-11-21: rent for equipment and goodwill is excluded only if incidental (generally 10 percent or less) to a real property lease; otherwise it is unrelated business taxable income, which 664(c)(2)(A), read, takes in full as excise tax. The lined-up buyer adds a prearranged-sale question (PG12; Ferguson read, Hoensheid read in part)." ;
+    dm:authorityRead true .
 :S4_112_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
     dm:unitrustPercent "5"^^xsd:decimal ;
     # assumed: remainder at least 10 percent; the page treats the trust as qualifying
     dm:remainderValuePercent "30"^^xsd:decimal ;
-    # assumed: the page treats the fixed rent as passive
-    dm:producesUBTI false ;
-    dm:counterparty :KeyEmployee ; dm:vehicleAct dm:LeaseAct .
+    # regraded on primary law: the lease covers plant, equipment and goodwill; the page gives no
+    # split of the rent between the land and building and the rest, so PG13 fails closed
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :KeyEmployee ; dm:counterparty :KeyEmployee ;
+    dm:rentDependsOnProfits false ;
+    # from the page as the audit reads it (F169): the buyer was lined up before the deed
+    dm:saleArrangedBeforeGift true .
 
 :S4_113 a dm:StoryCase ;
     dm:storyId "S4-113" ;
@@ -1550,7 +1584,10 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_116_gift ;
-    dm:pageAccuracyNote "The notes say the deduction saves only part of the tax and the plant gain includes unrecaptured 1250 gain." .
+    dm:pageAccuracyNote "The notes say the deduction saves only part of the tax and the plant gain includes unrecaptured 1250 gain." ;
+    dm:authorityOutcome dm:Allow ;
+    dm:authorityBasis "26 USC 1(h)(1)(E), read 2026-11-21: unrecaptured 1250 gain is taxed at up to 25 percent. The flag changes how much tax the donor owes on the kept share, not whether the trust works; the checks do not grade amounts." ;
+    dm:authorityRead true .
 :S4_116_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -1642,7 +1679,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_123_gift ;
-    dm:pageAccuracyNote "The notes say the page's 691(c) remark conflicts with the ruling in S4-67." .
+    dm:pageAccuracyNote "The notes say the page's 691(c) remark conflicts with the ruling in S4-67." ;
+    dm:authorityUnread "26 USC 691(c) not read. The flag is whether the estate-tax deduction for income in respect of a decedent passes through the trust, which changes the son's tax, not the trust's validity." .
 :S4_123_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -1699,7 +1737,9 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OutrightGiftToPublicCharity ;
     dm:outsideReason "gift before a sale" ;
-    dm:pageAccuracyNote "The notes say the page wrongly cites a case the donor lost in support." .
+    dm:pageAccuracyNote "The notes say the page wrongly cites a case the donor lost in support." ;
+    dm:citedForOpposite "Ferguson v. Commissioner, 174 F.3d 997 (9th Cir. 1999), read 2026-11-21: the government won. Once more than half the shares were tendered the stock had ripened into a right to cash, and the gifts came after that, so the donors were taxed on the gain. The Tax Court opinion was not read separately." ;
+    dm:citedAuthorityRead true .
 
 :S4_128 a dm:StoryCase ;
     dm:storyId "S4-128" ;
@@ -1721,7 +1761,10 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_129_gift ;
-    dm:pageAccuracyNote "The notes say the page omits that the family corporation is a disqualified person, so the redemption is self-dealing unless 4941(d)(2)(F) is met." .
+    dm:pageAccuracyNote "The notes say the page omits that the family corporation is a disqualified person, so the redemption is self-dealing unless 4941(d)(2)(F) is met." ;
+    dm:authorityOutcome dm:Block ;
+    dm:authorityBasis "26 USC 4941(d)(2)(F) and 4947(a)(2), read: a redemption by a family corporation that is a disqualified person is self-dealing for a remainder trust unless every holder of the class gets the same offer and the trust gets at least fair market value. The page states neither." ;
+    dm:authorityRead true .
 :S4_129_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ;
@@ -1729,10 +1772,9 @@
     dm:remainderValuePercent "41"^^xsd:decimal ;
     dm:giftTrustee :IndependentTrustee ;
     dm:counterparty :DonorCompany ; dm:vehicleAct dm:RedemptionAct ;
-    # assumed: the redemption was on the same terms for every holder of the class
-    dm:sameTermsAllHolders true ;
-    # assumed: the trust received at least fair market value
-    dm:atLeastFairMarketValue true .
+    # regraded on primary law: the page states neither a same-terms offer to every holder of the
+    # class nor fair market value, so the 4941(d)(2)(F) exception is not shown
+    dm:sameTermsAllHolders false .
 
 :S4_130 a dm:StoryCase ;
     dm:storyId "S4-130" ;
@@ -1778,7 +1820,9 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OutrightGiftToPublicCharity ;
     dm:outsideReason "gift of stock options" ;
-    dm:pageAccuracyNote "The notes say the page's own linked rulings (S4-135, S4-136) contradict this conclusion." .
+    dm:pageAccuracyNote "The notes say the page's own linked rulings (S4-135, S4-136) contradict this conclusion." ;
+    dm:citedForOpposite "PLRs 200141018 and 200202034, read 2026-11-21 on irs.gov: both are about a corporation pledging an option on its own stock to a private foundation. A pledge alone gives no deduction; the deduction comes when the charity exercises, roughly the share value less the exercise price. Neither is about an employee's options, so the page is wrong to say no deduction ever arises, and the rulings do not settle the employee case. Private letter rulings are not precedent (6110(k)(3), read)." ;
+    dm:citedAuthorityRead true .
 
 :S4_134 a dm:StoryCase ;
     dm:storyId "S4-134" ;
@@ -1805,7 +1849,9 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OutrightGiftToPublicCharity ;
-    dm:outsideReason "gift of stock options" .
+    dm:outsideReason "gift of stock options" ;
+    dm:citedForOpposite "This is PLR 200141018, read 2026-11-21: a corporation's pledge of an option to a private foundation gives no deduction until stock is transferred on exercise. The page's conclusion in S4-133 runs against it." ;
+    dm:citedAuthorityRead true .
 
 :S4_136 a dm:StoryCase ;
     dm:storyId "S4-136" ;
@@ -1816,7 +1862,9 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OutrightGiftToPublicCharity ;
-    dm:outsideReason "gift of stock options" .
+    dm:outsideReason "gift of stock options" ;
+    dm:citedForOpposite "This is PLR 200202034, read 2026-11-21: the deduction arises in the year the charity exercises the option, in the amount of the share value less the exercise price. The page's conclusion in S4-133 runs against it." ;
+    dm:citedAuthorityRead true .
 
 :S4_137 a dm:StoryCase ;
     dm:storyId "S4-137" ;
@@ -1839,7 +1887,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_138_gift ;
-    dm:pageAccuracyNote "The notes say the trust's net value is half what the page implies unless it had other cash." .
+    dm:pageAccuracyNote "The notes say the trust's net value is half what the page implies unless it had other cash." ;
+    dm:authorityUnread "No authority settles this: the flag is arithmetic on the trust's net value, which the checks do not grade." .
 :S4_138_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -1908,7 +1957,8 @@
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_143_gift ;
     dm:gapNote "No check models an option as a partial interest whose deduction waits for exercise." ;
-    dm:pageAccuracyNote "The notes say no deduction arises until exercise and the exercising charity then holds S stock with full UBI, so it is not a recommendation." .
+    dm:pageAccuracyNote "The notes say no deduction arises until exercise and the exercising charity then holds S stock with full UBI, so it is not a recommendation." ;
+    dm:authorityUnread "26 CFR 1.170A-5(a)(3) and Rev. Rul. 82-197 not read. The audit says the deduction waits for exercise and the exercising charity holds S stock with full unrelated business income." .
 :S4_143_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
@@ -1966,17 +2016,21 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:GradedByModel ;
     dm:storyGift :S4_146_gift ;
-    dm:gapNote "The checks take the UBTI flag as given; no check tests whether rent tied to equipment or goodwill, or rent set by profits, falls outside the 512(b)(3) rent exclusion." ;
-    dm:pageAccuracyNote "The notes say equipment rent is not excluded and the page's warning that UBTI disqualifies the trust is the pre-2007 rule." .
+    dm:gapNote "Covered since the audit pass by PG13 (personal-property rent)." ;
+    dm:pageAccuracyNote "The notes say equipment rent is not excluded and the page's warning that UBTI disqualifies the trust is the pre-2007 rule." ;
+    dm:authorityOutcome dm:NeedsCounsel ;
+    dm:authorityBasis "26 USC 512(b)(3), 26 CFR 1.512(b)-1(c)(2) and 664(c)(2)(A), read 2026-11-21: equipment rent is not excluded rent unless incidental to a lease of real property, so the trust owes a 100 percent excise on it. The page's warning that the income disqualifies the trust is the rule before 2007." ;
+    dm:authorityRead true .
 :S4_146_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a 5 percent payout; the page does not give the rate
     dm:unitrustPercent "5"^^xsd:decimal ;
     # assumed: about 36 percent, the remainder of a 20-year 5 percent term
     dm:remainderValuePercent "36"^^xsd:decimal ;
-    # assumed: the fixed rent is excluded rent
-    dm:producesUBTI false ;
-    dm:counterparty :S4_146_lessee ; dm:vehicleAct dm:LeaseAct .
+    # regraded on primary law: the S corporation leases its equipment; the page gives no share
+    # of the rent for real property, so PG13 fails closed
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :S4_146_lessee ; dm:counterparty :S4_146_lessee ;
+    dm:rentDependsOnProfits false .
 
 :S4_147 a dm:StoryCase ;
     dm:storyId "S4-147" ;

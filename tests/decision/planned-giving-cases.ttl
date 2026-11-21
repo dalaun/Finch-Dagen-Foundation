@@ -236,3 +236,50 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
     dm:transferor td:Founder ; dm:saleArrangedBeforeGift true .
+
+# ---------------------------------------------------------------------
+# Renting out equipment and vehicles (added from the audit of the GiftLaw pages)
+# ---------------------------------------------------------------------
+# G33 The unitrust owns a warehouse and its forklifts and leases both to an unrelated firm;
+#     equipment is 8 percent of the rent, fixed rent.
+:G33_UnitrustLeaseIncidentalEquipment a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :UnrelatedLessee ;
+    dm:personalPropertyRentPercent "8"^^xsd:decimal ; dm:rentDependsOnProfits false .
+
+# G34 The unitrust leases a fleet of delivery vans (all personal property) to an unrelated firm.
+:G34_UnitrustLeasesVans a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :UnrelatedLessee ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false .
+
+# G35 The same vans leased to the founder's management company.
+:G35_UnitrustLeasesVansToInsider a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ; dm:counterparty :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false .
+
+# G36 The foundation itself leases equipment to the founder's management company at market rent.
+:G36_FoundationLeasesToInsider a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ; dm:counterparty :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false .
+
+:UnrelatedLessee rdfs:label "A business unrelated to the founder that rents property" .
+
+# ---------------------------------------------------------------------
+# The unitrust payment period (added from regrading GiftLaw story S4-66)
+# ---------------------------------------------------------------------
+# G37 Spouse for life, then the children for 20 years.
+:G37_UnitrustLifeThenTerm a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "15"^^xsd:decimal ;
+    dm:unitrustPeriodForm dm:LifeThenTerm .
+# G38 Spouse for life, then the children for their lives or 20 years, whichever is shorter.
+:G38_UnitrustLifeThenShorter a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "15"^^xsd:decimal ;
+    dm:unitrustPeriodForm dm:LifeThenShorterOfLifeOrTerm .

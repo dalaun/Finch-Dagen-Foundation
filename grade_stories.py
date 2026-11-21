@@ -26,13 +26,13 @@ STORIES = HERE / "tests/decision/giftlaw-stories"
 args = sys.argv[1:]
 show_all = "--list" in args
 files = [Path(a) for a in args if not a.startswith("--")] or sorted(
-    p for p in STORIES.glob("*.ttl") if p.name != "roles.ttl")
+    p for p in STORIES.glob("*.ttl") if p.name not in ("roles.ttl", "audit-flags.ttl", "page-figures.ttl"))
 
 data = Graph()
 for f in [HERE / "trust-domain-ontology.ttl", HERE / "decision/spend-decision-model.ttl",
           HERE / "decision/stewardship-model.ttl", HERE / "decision/irs-instruments.ttl",
           HERE / "decision/planned-giving-model.ttl", HERE / "decision/giftlaw-stories-model.ttl",
-          HERE / "tests/decision/branch-a.ttl", STORIES / "roles.ttl", *files]:
+          HERE / "tests/decision/branch-a.ttl", STORIES / "roles.ttl", STORIES / "audit-flags.ttl", *files]:
     data.parse(f, format="turtle")
 shapes = Graph()
 shapes.parse(HERE / "decision/planned-giving-shapes.ttl", format="turtle")
@@ -51,7 +51,25 @@ for chk in data.subjects(RDF.type, DM.DecisionCheck):
     if c is not None:
         check_of[c] = (short(c).split("_")[0], data.value(chk, DM.onFail))
 
+def trust_of(s):
+    t = data.value(s, DM.pageTrust)
+    if t is not None:
+        return t
+    sec = str(data.value(s, DM.storySection) or "")
+    flags = [str(f) for f in data.objects(s, DM.auditFlag)]
+    if sec.startswith("9"):
+        return DM.PageLeadOnly
+    if sec.startswith("4") or any("(H," in f for f in flags):
+        return DM.PageClaimToTest
+    return DM.PageMap
+
+
+def flag_types(s):
+    return [str(f) for f in data.objects(s, DM.auditFlag)]
+
+
 bad, rows, ids = [], [], Counter()
+trust_n, overturned, law_n, opposite, leads, unread = Counter(), [], Counter(), [], Counter(), []
 scope_n, outside_n, verdict_n = Counter(), Counter(), Counter()
 for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.value(x, DM.storyId))):
     sid = str(data.value(s, DM.storyId) or short(s))
@@ -63,6 +81,27 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
     if page is not None and page not in severity and page != DM.PageGivesNoGrade:
         bad.append(f"{sid}: pageOutcome {short(page)} is not an outcome")
     scope_n[short(scope)] += 1
+    trust = trust_of(s)
+    trust_n[short(trust)] += 1
+    flags = flag_types(s)
+    law = data.value(s, DM.authorityOutcome)
+    if law is not None:
+        if law not in severity:
+            bad.append(f"{sid}: authorityOutcome {short(law)} is not an outcome")
+        if data.value(s, DM.authorityBasis) is None:
+            bad.append(f"{sid}: authorityOutcome needs an authorityBasis")
+        if page is not None and law != page:
+            overturned.append((sid, short(page), short(law), str(data.value(s, DM.authorityBasis) or "")))
+    if any("cited-for-opposite" in f for f in flags):
+        if data.value(s, DM.citedForOpposite) is None:
+            bad.append(f"{sid}: the audit says the page cites an authority for the opposite; record citedForOpposite")
+        else:
+            opposite.append((sid, bool(data.value(s, DM.citedAuthorityRead)), str(data.value(s, DM.citedForOpposite))))
+    if trust == DM.PageLeadOnly:
+        st = data.value(s, DM.authorityStatus)
+        leads[str(st).split(":")[0] if st is not None else "status not checked"] += 1
+    if data.value(s, DM.authorityUnread) is not None:
+        unread.append((sid, str(data.value(s, DM.authorityUnread))))
     if scope == DM.OutsideModel:
         cat = data.value(s, DM.outsideCategory)
         if cat is None or data.value(s, DM.outsideReason) is None:
@@ -75,6 +114,12 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
         continue
     hits = {check_of[c][0]: check_of[c][1] for c in failed.get(gift, ()) if c in check_of}
     ours = by_severity[max([0, *(severity[o] for o in hits.values())])]
+    if trust == DM.PageClaimToTest and law is None and data.value(s, DM.authorityUnread) is None and any(
+            "outright-error" in f or "(H," in f for f in flags):
+        bad.append(f"{sid}: flagged claim not regraded on primary authority (set authorityOutcome or authorityUnread)")
+    if law is not None:
+        law_n["ours matches the law" if law == ours else f"ours {short(ours)}, law {short(law)}"] += 1
+        page = law
     if page == DM.PageGivesNoGrade:
         verdict = "page gives no result"
     elif page == ours:
@@ -99,6 +144,22 @@ print(f"\n{sum(ids.values())} stories: {scope_n['GradedByModel']} graded by the 
       f"{scope_n['OutsideModel']} outside the model.")
 print("graded: " + ", ".join(f"{v} {k}" for k, v in verdict_n.most_common()))
 print("outside: " + ", ".join(f"{v} {k}" for k, v in outside_n.most_common()))
+print("page trust: " + ", ".join(f"{v} {k}" for k, v in trust_n.most_common()))
+print(f"regraded on primary authority: {sum(law_n.values())} graded stories; "
+      + ", ".join(f"{v} {k}" for k, v in law_n.most_common()))
+print(f"flagged claims left for an authority not yet read: {len(unread)}")
+if show_all:
+    for sid, note in unread:
+        print(f"  {sid}: {note}")
+print(f"page overturned by primary authority: {len(overturned)}")
+for sid, page, law, basis in overturned:
+    print(f"  {sid}: page {page}, law {law}. {basis}")
+print(f"cited for the opposite of its holding: {len(opposite)} stories, "
+      f"{sum(1 for _, r, _ in opposite if r)} with the case or ruling read")
+for sid, read, note in opposite:
+    print(f"  {sid} ({'read' if read else 'unread'}): {note}")
+print("Chapter 9 leads (check a ruling has not been superseded before citing it): "
+      + ", ".join(f"{v} {k}" for k, v in leads.most_common()))
 for b in bad:
     print("MALFORMED", b)
 sys.exit(1 if bad else 0)

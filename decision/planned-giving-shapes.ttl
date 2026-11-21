@@ -27,7 +27,8 @@
               :PG4_UnitrustLimits , :PG4b_UnitrustUBTI , :PG5_SStockInRemainderTrust ,
               :PG6_ResidenceTrust , :PG7a_BargainSaleToFoundation , :PG7b_BasisNotAllocated ,
               :PG8_PayoutShortfall , :PG9_FounderBothSides ,
-              :PG10_EncumberedTransfer , :PG11_DonorLiableOnTrustDebt , :PG12_SaleFixedBeforeGift .
+              :PG10_EncumberedTransfer , :PG11_DonorLiableOnTrustDebt , :PG12_SaleFixedBeforeGift ,
+              :PG13_PersonalPropertyRent , :PG14_UnitrustPeriod .
 
 :PG0_GiftEvidence a sh:SPARQLConstraint ;
     sh:message "PG0: insufficient - no vehicle named" ;
@@ -55,6 +56,8 @@
           { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
           UNION
           { $this dm:giftVehicle dm:EstateAdministration ; dm:foundationHasExpectancy true }
+          UNION
+          { $this dm:giftVehicle dm:FoundationHolding }
           FILTER NOT EXISTS { $this dm:vehicleAct dm:RedemptionAct ; dm:sameTermsAllHolders true ; dm:atLeastFairMarketValue true }
           FILTER NOT EXISTS { $this dm:giftVehicle dm:EstateAdministration ; dm:fiduciaryPowerOfSale true ;
                               dm:probateCourtApproved true ; dm:beforeEstateTerminates true ;
@@ -204,3 +207,22 @@
     sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
     sh:select """
         SELECT $this WHERE { $this dm:saleArrangedBeforeGift true }""" .
+
+:PG13_PersonalPropertyRent a sh:SPARQLConstraint ;
+    sh:message "PG13: rent from personal property that 512(b)(3) does not exclude: unrelated business income (all of it to excise tax in a remainder trust)" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:vehicleAct dm:LeaseAct .
+          { $this dm:giftVehicle dm:CharitableRemainderUnitrust } UNION { $this dm:giftVehicle dm:FoundationHolding }
+          UNION { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
+          OPTIONAL { $this dm:personalPropertyRentPercent ?p }
+          OPTIONAL { $this dm:rentDependsOnProfits ?r }
+          FILTER ( !BOUND(?p) || ?p > 10 || COALESCE(?r, false) )
+        }""" .
+
+:PG14_UnitrustPeriod a sh:SPARQLConstraint ;
+    sh:message "PG14: a unitrust paying one person for life and then another for a term of years does not qualify (1.664-3(a)(5)(i))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:unitrustPeriodForm dm:LifeThenTerm }""" .

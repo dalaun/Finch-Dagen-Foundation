@@ -1,0 +1,183 @@
+@prefix dm: <http://example.org/trust-domain/decision#> .
+
+# The audit on the shelf, attached to the stories it names directly (audit-index section 2).
+# Section-level flags ("sec:") are not attached: they are about the page, not the story.
+# Generated; each value is the flag id, severity and type, then the audit's point in our words.
+
+<http://example.org/trust-domain/giftlaw-stories#S1_13> dm:auditFlag "F1 (L, arithmetic): After $60k of cash the remaining base is $40k, not $50k; the page's 50%-vs-100% comparison does not fit its own numbers. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S1_23> dm:auditFlag "I3 (L, arithmetic): Easement example uses a split that conflicts with the $50k/$30k split in Ex. 1.1.3B; Ex. 1.1.5C (S1-24) is the correct one. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S1_13> dm:auditFlag "I3 (L, arithmetic): Easement example uses a split that conflicts with the $50k/$30k split in Ex. 1.1.3B; Ex. 1.1.5C (S1-24) is the correct one. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S1_25> dm:auditFlag "F4 (L, other): Gives the Nebraska planned-gift credit cap as both $10,000 and $5,000. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S1_38> dm:auditFlag "F5 (L, arithmetic): Half of $1.4M is $700k, so each taxable gift should be $643k; page reads as if the gift were $1.5M. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S1_42> dm:auditFlag "F6 (L, arithmetic): Narrative gift of $5.331M plus $1M to charity totals $6.331M, not the worksheet's $6M. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S2_7> dm:auditFlag "F21 (L, outright-error): Says straight-line depreciation means no recapture; unrecaptured 1250 gain is taxed up to 25%. Current: unrecaptured 1250 gain up to 25% (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S2_9> dm:auditFlag "F22 (L, other): Example never shows whether the stated 60% tax-cut goal was met. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S2_9> dm:auditFlag "X9 (L, dated-figure): Taxes a $240k gain at 15%. Current: 20% plus 3.8% NIIT often applies (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S2_12> dm:auditFlag "F23 (M, dated-figure): Treats long-term gain as taxed at 15%. Current: 20% bracket plus 3.8% NIIT (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S2_12> dm:auditFlag "F24 (L, arithmetic): Example never shows whether the 60% goal was met; typo \"fall tax due\". Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S2_14> dm:auditFlag "F26 (L, outright-error): Says the lapse problem arises above $5,000; the safe harbor is the greater of $5,000 or 5%; typo. Current: greater of $5,000 or 5% (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S2_15> dm:auditFlag "F27 (M, later-law-change): Says lesser-of valuation applies to income, gift and estate tax; 2007 corrections removed gift and estate. Current: income tax only (since 2007)" .
+<http://example.org/trust-domain/giftlaw-stories#S3_54> dm:auditFlag "F28 (L, arithmetic): Life expectancy for the same annuitant given as 9.4, 9.5 and 10.2 years. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S3_77> dm:auditFlag "F30 (L, arithmetic): Figures do not reconcile ($100k less $32,313; 5.4% of $100k). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S3_85> dm:auditFlag "F31 (M, later-law-change): Partly right: NIMCRUT/NICRUT income interests now valued at the stated payout rate, but only for early-termination valuation. Current: stated payout rate under 664(e) (since PATH Act 2015)" .
+<http://example.org/trust-domain/giftlaw-stories#S3_121> dm:auditFlag "F33 (L, arithmetic): Children's \"640,000\" against about $14M looks garbled, a figure missing. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S3_146> dm:auditFlag "F34 (L, arithmetic): Says the current-month AFR deduction also equals 10%, contradicting the example where cash fails at 6.0%. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S3_185> dm:auditFlag "F37 (L, arithmetic): Trust term called 20 years in one place and 15 in another. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S3_189> dm:auditFlag "F38 (L, other): Calls a trust paying one person a \"two-life\" unitrust. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_5> dm:auditFlag "F40 (M, later-law-change): Says lesser-of valuation covers income, gift and estate tax, then contradicts itself. Current: income tax only (since 2007)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_5> dm:auditFlag "F41 (L, other): Winokur dated 1998; it is 1988. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_9> dm:auditFlag "F42 (L, other): Partly right: the full-deed, kept-at-home painting example sits awkwardly with the 2006 possession idea. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_14> dm:auditFlag "F46 (M, other): Says the artist \"saves $200,000\"; the tax is only deferred because payouts are tier-1 ordinary income. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_14> dm:auditFlag "F47 (L, other): Artist paragraph cites 170(e)(3), the C-corp inventory rule. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_17> dm:auditFlag "F51 (M, later-law-change): Accumulated earnings tax given as 15%. Current: 20% (since 2013)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_19> dm:auditFlag "F55 (L, other): Says shareholder gain is recognized at the corporate level; means shareholder level. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_19> dm:auditFlag "F56 (M, other): Ignores prearrangement risk and the self-dealing review of the redemption (siblings are not family under 4946, so it may be fine). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_20> dm:auditFlag "F57 (L, other): Describes Ferguson as a shareholder vote; it turned on tendered shares; the \"51% rule\" is the page's own gloss. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_21> dm:auditFlag "F58 (H, cited-for-opposite): Cites Estate of Hoensheid in support of the advisor-as-trustee approach though the donor lost. Current: Hoensheid (T.C. Memo. 2023-34): gain taxed to donor, deduction denied for unqualified appraisal" .
+<http://example.org/trust-domain/giftlaw-stories#S4_23> dm:auditFlag "F60 (M, outright-error): Misstates the personal holding company tax; 545(b)(2) description garbled. Current: separate 20% tax on undistributed PHC income (541)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_23> dm:auditFlag "F61 (M, other): Gain is deferred, not avoided: the CRT payouts bring tier-2 gain back to the corporation. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_23> dm:auditFlag "F62 (M, later-law-change): Corporate deduction still faces the 10% limit and, from 2026, the 1% floor. Current: 10% limit plus 1% floor (from 2026)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_25> dm:auditFlag "F64 (L, arithmetic): About $500k a year for five years is about $2.5M, not the $3.5M stated. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_25> dm:auditFlag "F65 (M, other): Partly right: 30-40%+ FLP discounts are aggressive and draw IRS challenge. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_27> dm:auditFlag "F66 (L, arithmetic): Corporation valued at $3M in the summary and $8M in the example. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_27> dm:auditFlag "F67 (M, other): Omits the bargain-sale gain (including unrecaptured 1250 gain) and step-transaction risk in the resale to the children's company. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_27> dm:auditFlag "F68 (M, dated-figure): $140k on $2M (7%) for donors in their early 70s exceeds current two-life ACGA rates. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_33> dm:auditFlag "F69 (H, outright-error): Treats bullion coins as cash; they are collectible capital assets valued as property. Current: bullion is property; qualified appraisal if claimed deduction over $5,000 (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_30> dm:auditFlag "F70 (L, arithmetic): \"January to August\" is 8 months, not 7. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_30> dm:auditFlag "F71 (M, later-law-change): Repeats the old reasonable-anticipation remark and omits the 2006 fractional rules for tangible property. Current: 2006 fractional-gift rules (170(o))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_35> dm:auditFlag "F74 (M, other): Partly right: immediate sale by the donor's own advisor-trustee is near the prearrangement line. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_39> dm:auditFlag "F77 (M, later-law-change): Fractional-gift discussion omits the 2006 completion, valuation and recapture rules. Current: 2006 fractional-gift rules (170(o))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_38> dm:auditFlag "F78 (L, arithmetic): \"More than 400%\" understates it; $510k vs $10k is 5,100%. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_48> dm:auditFlag "F88 (L, other): Garbled tier wording: surrender build-up is tier-1 ordinary income in the trust. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_48> dm:auditFlag "F89 (H, other): No warning about the personal-benefit-contract rule if the CRT keeps paying premiums on the donor's life. Current: deduction denied and excise tax under 170(f)(10) (no year)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_53> dm:auditFlag "F94 (M, other): Says inventory value escapes income; it is deferred through tier-1 payouts. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_54> dm:auditFlag "F94 (M, other): Says inventory value escapes income; it is deferred through tier-1 payouts. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_56> dm:auditFlag "F95 (H, other): No UBTI warning for a CRT that keeps selling subdivided lots (dealer activity). Current: UBTI in a CRT draws a 100% excise tax (664(c)(2))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_55> dm:auditFlag "F96 (L, other): Partly right: roses reasoning leans on holding period; home-grown plants are ordinary-income property anyway. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_58> dm:auditFlag "F101 (L, arithmetic): Same person aged 74 then 75 in one example. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_58> dm:auditFlag "F97 (M, dated-figure): Uses 2006 life-expectancy factors (22.9 at 75; single-life 13.4). Current: 24.6 Uniform factor at 75; single-life about 14.8 (since 2022)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_59> dm:auditFlag "F104 (L, other): Typo \"can divided\". Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_65> dm:auditFlag "F109 (M, later-law-change): Bypass-trust comparison assumes life-expectancy payouts; since 2020 most trusts face the 10-year rule. Current: 10-year rule (SECURE 2020)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_66> dm:auditFlag "F110 (H, other): Partly right: a life-plus-20-years CRUT for a younger spouse may fail the 10% remainder test. Current: remainder at least 10% at funding (664(d)(2)(D))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_64> dm:auditFlag "F111 (L, outright-error): Overstates spousal consent: needed only for ERISA plans or community property. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_66> dm:auditFlag "X10 (M, other): Life-then-children-for-20-years design is a pattern the regulations bar; trust would not qualify as described. Current: successor term must be life or term, whichever is shorter (Reg. 1.664-3(a)(5)(i))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_67> dm:auditFlag "F115 (L, other): The 691(c) caveat rests on a private ruling, not settled law. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_70> dm:auditFlag "F116 (M, other): Partly right: four-life design may fail the 10% test with young children; no numbers shown. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_73> dm:auditFlag "F120 (L, other): Does not explain why gifts escape 1042 recapture (1042(e)(3)). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_73> dm:auditFlag "F121 (L, arithmetic): Partly right: two-life 6% deduction (about 41%) differs from the 4.6.6 example (about 34%); ages missing. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_76> dm:auditFlag "F123 (L, arithmetic): RMD of \"5%\" on a $200k IRA is rough; at 73 the factor 26.5 gives about 3.8%. Current: factor 26.5 at 73, about 3.8%" .
+<http://example.org/trust-domain/giftlaw-stories#S4_77> dm:auditFlag "F125 (M, dated-figure): Capital gains rate given as 15%. Current: 20% top rate plus 3.8% NIIT" .
+<http://example.org/trust-domain/giftlaw-stories#S4_79> dm:auditFlag "F128 (H, later-law-change): Omits the 2.5x-investment cap on syndicated partnership easements and listed-transaction status. Current: deduction over 2.5x investment disallowed (170(h)(7), SECURE 2.0)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_81> dm:auditFlag "F129 (L, outright-error): Calls all gain long-term capital gain; part is unrecaptured 1250 gain at 25%. Current: 25% on unrecaptured 1250 gain" .
+<http://example.org/trust-domain/giftlaw-stories#S4_81> dm:auditFlag "F130 (L, arithmetic): \"Purchased several years ago\" vs 5+ years of ownership. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_94> dm:auditFlag "F142 (H, outright-error): Presents a carved-out term royalty as deductible and untaxed; it is a partial interest and income may stay taxable to the donor. Current: partial-interest gifts generally not deductible (170(f)(3)); assignment-of-income risk" .
+<http://example.org/trust-domain/giftlaw-stories#S4_96> dm:auditFlag "F143 (L, other): Plan calls for a 5% FLIP, then says a standard unitrust is preferred. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_97> dm:auditFlag "F146 (M, cited-for-opposite): Cites Newhall for the 100% excise tax, but the case applied the old lose-exemption rule. Current: since 2007 a CRT with UBTI keeps exemption, pays 100% excise tax (664(c)(2))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_98> dm:auditFlag "F153 (M, outright-error): Summary says the LLC is generally \"qualified\" while the body says disqualified. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_98> dm:auditFlag "F154 (L, other): Family definition differs from 4.8.2/4.8.3. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_97> dm:auditFlag "F155 (M, cited-for-opposite): Cites Newhall again for the post-2006 rule it predates. Current: 100% excise tax since 2007" .
+<http://example.org/trust-domain/giftlaw-stories#S4_101> dm:auditFlag "F156 (L, other): Inventor's name changes mid-page. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_102> dm:auditFlag "F159 (M, outright-error): Relies on a termination-right theory; the clearer reason is that a self-created copyright is ordinary-income property, so basis-limited. Current: basis limit under 170(e)(1)(A); 1221(a)(3)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_103> dm:auditFlag "F159 (M, outright-error): Relies on a termination-right theory; the clearer reason is that a self-created copyright is ordinary-income property, so basis-limited. Current: basis limit under 170(e)(1)(A); 1221(a)(3)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_109> dm:auditFlag "F163 (M, later-law-change): Partly right: full-FMV claim for stand-alone royalties rests on a 1981 ruling; the 2004 IP basis limit may reach it. Current: 170(e)(1)(B)(iii) basis limit (AJCA 2004)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_112> dm:auditFlag "F166 (M, outright-error): Says CRTs are exempt under 501(a)/508(e) and that excess-business-holdings and jeopardy rules apply; CRTs are exempt under 664(c) and those rules generally do not apply. Current: 664(c) exemption; self-dealing applies (4947(a)(2)); EBH/jeopardy generally not (4947(b)(3))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_112> dm:auditFlag "F167 (H, outright-error): Lease of plant, equipment and goodwill treated as excluded rent; equipment and goodwill rent is not real-property rent and likely UBTI. Current: 512(b)(3); 100% excise tax on CRT UBTI" .
+<http://example.org/trust-domain/giftlaw-stories#S4_112> dm:auditFlag "F168 (M, other): Setting \"fixed\" rent from profit projections invites challenge. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_112> dm:auditFlag "F169 (H, other): Partly right: buyer lined up before the gift raises prearranged-sale risk. Current: gain taxed to donor if sale bound or practically certain (facts-dependent)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_112> dm:auditFlag "F170 (L, other): Wrong cite (512(c)) for the partner point. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_117> dm:auditFlag "F173 (M, arithmetic): Machinery deduction of $188,826 matches full $500k FMV, not the $200k basis; on basis it would be about $75k. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_117> dm:auditFlag "F174 (M, other): Says tax on $300k of recapture is avoided; it is deferred in tier 1. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_116> dm:auditFlag "F175 (M, other): Treats a $102,582 deduction as over $100,000 of tax saved. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_116> dm:auditFlag "F176 (L, outright-error): \"Whole $560,000\" called long-term gain; it includes unrecaptured 1250 gain. Current: 25% on unrecaptured 1250 gain" .
+<http://example.org/trust-domain/giftlaw-stories#S4_118> dm:auditFlag "F178 (H, other): Partly right: planned resale to the children not addressed; if the charity is bound to sell, gain is the donors'. Current: facts-dependent prearranged-sale rule" .
+<http://example.org/trust-domain/giftlaw-stories#S4_118> dm:auditFlag "F179 (M, other): Omits gift tax on the business transfer and unrecaptured 1250 gain. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_119> dm:auditFlag "F188 (M, other): Both examples assume itemizing; high standard deduction, non-itemizer deduction and 0.5% floor (2026) may change the result. Current: OBBBA non-itemizer deduction and 0.5% floor from 2026" .
+<http://example.org/trust-domain/giftlaw-stories#S4_120> dm:auditFlag "F188 (M, other): Both examples assume itemizing; high standard deduction, non-itemizer deduction and 0.5% floor (2026) may change the result. Current: OBBBA non-itemizer deduction and 0.5% floor from 2026" .
+<http://example.org/trust-domain/giftlaw-stories#S4_123> dm:auditFlag "F189 (M, outright-error): Says the CRT beneficiary may be taxed on only part of the interest via 691(c); conflicts with 4.6.5 (no pass-through). Current: 691(c) deduction does not pass through a CRT (PLR 199901023)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_127> dm:auditFlag "F198 (H, cited-for-opposite): Cites Ferguson as support for give-then-sell; the donors lost. Current: Ferguson (9th Cir. 1999): gain had ripened, taxed to donors" .
+<http://example.org/trust-domain/giftlaw-stories#S4_129> dm:auditFlag "F199 (H, other): CRUT redemption by a family corporation not flagged as self-dealing. Current: 35%-family-owned corp is disqualified; barred unless 4941(d)(2)(F) same-terms exception fits" .
+<http://example.org/trust-domain/giftlaw-stories#S4_129> dm:auditFlag "F200 (M, other): Assumes capital gain; family attribution can make redemption proceeds dividends unless 302(b) is met. Current: 318 attribution / 302(b)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_131> dm:auditFlag "F209 (H, other): No warning that giving ISO stock before the holding period ends is a disqualifying disposition. Current: 2 years from grant, 1 year from exercise (422(a)(1)); ordinary income (421(b))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_133> dm:auditFlag "F212 (H, cited-for-opposite): Partly right: says no deduction for donated options, while its own linked rulings say a deduction arises (at exercise). Current: deduction at exercise roughly equal to option value (PLRs 200141018, 200202034)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_135> dm:auditFlag "F212 (H, cited-for-opposite): Partly right: says no deduction for donated options, while its own linked rulings say a deduction arises (at exercise). Current: deduction at exercise roughly equal to option value (PLRs 200141018, 200202034)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_136> dm:auditFlag "F212 (H, cited-for-opposite): Partly right: says no deduction for donated options, while its own linked rulings say a deduction arises (at exercise). Current: deduction at exercise roughly equal to option value (PLRs 200141018, 200202034)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_134> dm:auditFlag "F213 (L, arithmetic): Partly right: $68k is 34% of $200k vs \"approximately 25%\"; age missing. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_137> dm:auditFlag "F214 (M, outright-error): Partly right: lumps ISOs with NSOs as classic IRD; ISOs keep ISO treatment at death. Current: NSOs are IRD; ISOs not (422(c)(3)/421(c))" .
+<http://example.org/trust-domain/giftlaw-stories#S4_137> dm:auditFlag "F215 (M, arithmetic): Options on $100k of stock with a $40k strike are worth about $60k, not $100k. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_138> dm:auditFlag "F216 (M, outright-error): Partly right: repeats the ISO-as-IRD framing. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_138> dm:auditFlag "F217 (M, arithmetic): CRT said to own $100k of stock after paying $50k to exercise; net about $50k. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_140> dm:auditFlag "F220 (M, outright-error): Treats S distributions as the charity's UBI; UBI is its share of S income (K-1). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_140> dm:auditFlag "F221 (L, other): Says inside basis where it means outside basis. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_143> dm:auditFlag "F225 (L, outright-error): Partly right: option gift deduction arises only on exercise (audit later notes the rule is Rev. Rul. 82-197, not fetched). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_143> dm:auditFlag "F226 (M, other): Exercising charity ends up with S stock and full UBI; strategy moves the problem. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_145> dm:auditFlag "F230 (M, other): Omits the 5-year wait before re-electing S after revocation. Current: 1362(g)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_145> dm:auditFlag "F231 (L, later-law-change): 1% floor on corporate gifts (2026) not mentioned here. Current: 1% floor from 2026" .
+<http://example.org/trust-domain/giftlaw-stories#S4_145> dm:auditFlag "F232 (M, other): Partly right: converting right before a planned sale and gift adds step-transaction risk. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S4_146> dm:auditFlag "F233 (M, later-law-change): Says UBI would disqualify the CRT; since 2007 it triggers the 100% excise tax instead. Current: 100% excise tax, no disqualification (since 2007)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_146> dm:auditFlag "F234 (H, outright-error): Same equipment-rent gap: rent on equipment is not excluded rent. Current: 512(b)(3)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_148> dm:auditFlag "F235 (M, later-law-change): Says an ESBT cannot deduct charitable payments; since 2018 the S portion can under individual rules. Current: 641(c)(2)(E) (TCJA, 2018)" .
+<http://example.org/trust-domain/giftlaw-stories#S4_149> dm:auditFlag "F237 (M, outright-error): Grantor lead trust deduction described as stock FMV; it is the PV of charity's income interest. Current: PV of income interest" .
+<http://example.org/trust-domain/giftlaw-stories#S4_151> dm:auditFlag "F241 (L, other): Usable amount also depends on AGI, unstated. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_3> dm:auditFlag "F243 (M, arithmetic): Partly right: $6,350.40 tax-free per payment cannot come from $25k of prorated basis alone. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_3> dm:auditFlag "F244 (L, other): Unfinished sentence. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_3> dm:auditFlag "I18 (L, dated-figure): Computes tax on gain at 15%. Current: 20% plus 3.8% NIIT for large gains" .
+<http://example.org/trust-domain/giftlaw-stories#S5_14> dm:auditFlag "F247 (L, arithmetic): 5 x $120,064 is $600,320, not $600,200. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_20> dm:auditFlag "F249 (L, other): Dickinson summary line copies the Rauenhorst text. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_20> dm:auditFlag "F250 (L, other): Dickinson spelled two ways. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_18> dm:auditFlag "F252 (L, other): No reporter cites for Ferguson or Rauenhorst. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_19> dm:auditFlag "F252 (L, other): No reporter cites for Ferguson or Rauenhorst. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_23> dm:auditFlag "F253 (M, outright-error): Says a gift without a prearranged sale creates an assignment of income; it avoids one. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_23> dm:auditFlag "F254 (M, outright-error): Again says CRTs are generally subject to the excess-business-holdings rule. Current: generally exempt (4947(b)(3)(B))" .
+<http://example.org/trust-domain/giftlaw-stories#S5_18> dm:auditFlag "F256 (L, other): Calls Ferguson a shareholder vote; shares were tendered. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_19> dm:auditFlag "F257 (L, other): Rauenhorst gift date differs from 5.5.1 (Nov 9 vs Nov 8). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S5_18> dm:auditFlag "F258 (L, other): Calls Ferguson a redemption; it was a tender offer and merger. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_3> dm:auditFlag "F260 (M, later-law-change): Treats 2000CM as the current valuation table. Current: Table 2010CM (from June 1 2023)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_4> dm:auditFlag "F264 (M, later-law-change): Says the deduction must use Table 90CM. Current: 2010CM (2023); 2000CM in 2009" .
+<http://example.org/trust-domain/giftlaw-stories#S6_7> dm:auditFlag "F268 (L, arithmetic): Table K excerpt shows 1.0197 quarterly but the worksheet uses 1.0097. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_9> dm:auditFlag "F269 (L, arithmetic): Narrative subtracts $77,924; worksheet has $77,964. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_13> dm:auditFlag "F270 (L, arithmetic): Step (P) points to itself; should be Line (M). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_13> dm:auditFlag "F271 (L, other): A 9.4-year multiple from mid-2017 runs into 2026, not 2025. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_13> dm:auditFlag "F272 (L, other): Calls the two-life gift annuity an \"annuity trust\". Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_14> dm:auditFlag "F273 (L, dated-figure): Gift annuity rates predate newer ACGA tables. Current: newer ACGA tables (2020 onward)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_14> dm:auditFlag "F274 (L, arithmetic): Uses the undeferred 6.2% rate right after explaining deferral raises it. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_14> dm:auditFlag "F275 (L, arithmetic): Ages mislabeled in step (C). Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_14> dm:auditFlag "F276 (L, arithmetic): Multiplies by $6,600 instead of $6,200 though the result is right. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_15> dm:auditFlag "F277 (L, arithmetic): Option box amount and 2008 date contradict the computed $12,544.32 and the 2018/2023 dates. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_15> dm:auditFlag "F278 (L, arithmetic): Tax table runs 2013-2017 though payments start 2023. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_15> dm:auditFlag "F279 (L, arithmetic): Narrative mentions annuity value \"in 2013\". Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_17> dm:auditFlag "F281 (L, other): Copied text says first payment due within three months, contradicting a 5-year deferral. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_28> dm:auditFlag "F285 (L, arithmetic): Summary dates the example 2005; body uses 2017. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_28> dm:auditFlag "I22 (M, other): Omits that the 675(4) swap power must be held non-fiduciary. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_31> dm:auditFlag "F286 (M, arithmetic): Narrative says 6% per layer; worksheets use about 8.57-8.6%. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_30> dm:auditFlag "F291 (M, other): Omits lead-annuity-trust GST timing (inclusion ratio fixed at end of term) and scrutiny of FLP discounts. Current: 2642(e)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_31> dm:auditFlag "F291 (M, other): Omits lead-annuity-trust GST timing (inclusion ratio fixed at end of term) and scrutiny of FLP discounts. Current: 2642(e)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_33> dm:auditFlag "F292 (L, other): Cites 2055(a) for the gift-tax deduction. Current: 2522(a)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_33> dm:auditFlag "F293 (M, later-law-change): Still refers to Table 90CM. Current: 2010CM" .
+<http://example.org/trust-domain/giftlaw-stories#S6_34> dm:auditFlag "F294 (L, arithmetic): Needless interpolation back to a table rate. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_34> dm:auditFlag "F295 (L, arithmetic): Mislabels the remainder and calls a tax saving a deduction. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_34> dm:auditFlag "F296 (L, arithmetic): Gift date June 1 vs Jan 1 2018. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_35> dm:auditFlag "F297 (L, other): Ruling summary cite typo. Current: 170(b)(1)(A)(iii)" .
+<http://example.org/trust-domain/giftlaw-stories#S6_36> dm:auditFlag "F298 (L, arithmetic): Stale 5.2% AFR label vs 2.6% used. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_38> dm:auditFlag "F299 (L, arithmetic): Stale 5.2% AFR label vs elected 2.6%. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_38> dm:auditFlag "F300 (L, arithmetic): Decimal written 0.001540 for 0.0154. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_38> dm:auditFlag "F301 (M, other): Omits that the son's 20-year income interest is a taxable gift at funding. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_39> dm:auditFlag "F302 (L, arithmetic): Narrative names extra beneficiaries the one-life worksheet lacks. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_39> dm:auditFlag "F303 (L, arithmetic): Line (E) mislabels charity's remainder as the income stream. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_40> dm:auditFlag "F304 (L, arithmetic): Trust dated 2006 in narrative, 2018 in worksheet and Form 709. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_40> dm:auditFlag "F305 (L, arithmetic): Says education trusts run 4-5 years; example runs 20. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_40> dm:auditFlag "F306 (L, arithmetic): Narrative subtracts 0.003003; worksheet uses 0.009317. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_40> dm:auditFlag "F307 (L, other): Decimal written 0.001540 for 0.0154. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_40> dm:auditFlag "F308 (L, other): Calls the gift-tax charitable deduction an income-tax deduction. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S6_41> dm:auditFlag "F309 (M, outright-error): Assumes estate tax on a $3M estate in 2017, under that year's $5.49M exemption; savings implausible. Current: not given (2017 exemption was $5.49M)" .
+<http://example.org/trust-domain/giftlaw-stories#S7_6> dm:auditFlag "F313 (L, arithmetic): Manager-penalty range does not match the percentages given. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S7_19> dm:auditFlag "I32 (L, other): Says the company must sell; it is the foundation that must dispose of excess holdings. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S7_23> dm:auditFlag "F318 (M, outright-error): Example says the income test needs 65% after stating 85%. Current: 85% income test" .
+<http://example.org/trust-domain/giftlaw-stories#S8_1> dm:auditFlag "F323 (L, arithmetic): \"Simplified\" method credits earnings on the opening $10,000, not the month-end balance it describes. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S8_2> dm:auditFlag "F325 (L, promotion): Much of the page advertises a paid state-filing service with fees and a phone number. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S8_2> dm:auditFlag "F326 (L, arithmetic): State counts do not line up (\"about half\" vs \"approximately 15\"); counts and fees dated. Current: check current ACGA state data (no figure)" .
+<http://example.org/trust-domain/giftlaw-stories#S8_3> dm:auditFlag "F330 (M, arithmetic): $5,000 over 10.2 years is about $490 a year, so two years is about $980 recovered and the deduction about $4,020. Current: not given" .
+<http://example.org/trust-domain/giftlaw-stories#S8_3> dm:auditFlag "F331 (L, other): Partly right: Schedule A line 27 reference dated (now line 16); page does not explain why the deduction survived the 2017 suspension. Current: Schedule A line 16; 67(b)(10)" .
+<http://example.org/trust-domain/giftlaw-stories#S8_8> dm:auditFlag "F337 (H, later-law-change): Says a CRT with business income becomes fully taxable and files a 1041. Current: keeps exemption, 100% excise tax on UBTI, Form 4720 (since 2007)" .
+<http://example.org/trust-domain/giftlaw-stories#S8_8> dm:auditFlag "F338 (M, later-law-change): First-tier self-dealing tax given as 5%. Current: 10% (since 2006)" .
+<http://example.org/trust-domain/giftlaw-stories#S8_10> dm:auditFlag "F341 (L, other): Does not say jeopardizing-investment limits generally do not apply to CRTs. Current: 4947(b)(3)(B)" .
+<http://example.org/trust-domain/giftlaw-stories#S8_11> dm:auditFlag "F342 (L, other): Rev. Rul. 84-179 looks like an insurance estate-tax ruling, not a CRT-investment ruling; worth checking. Current: not given" .

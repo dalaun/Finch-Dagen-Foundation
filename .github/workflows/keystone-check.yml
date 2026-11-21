@@ -2,9 +2,9 @@ name: Keystone check
 
 on:
   push:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'tests/**']
   pull_request:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'tests/**']
   workflow_dispatch:
 
 permissions:
@@ -35,3 +35,7 @@ jobs:
         run: python3 decide_spend.py --sweep
       - name: Grade the GiftLaw example stories and show where the page and the checks disagree
         run: python3 grade_stories.py
+      - name: Check every figure is dated, current and matches the check that uses it
+        run: python3 validate_figures.py
+      - name: Show the figures check catches an undated, a stale and a drifted figure
+        run: python3 validate_figures.py --selftest

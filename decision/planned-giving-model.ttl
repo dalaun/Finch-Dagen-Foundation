@@ -138,6 +138,21 @@
 :saleArrangedBeforeGift a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
     rdfs:comment "When the property was given, a buyer was already bound to buy it, or the sale was practically certain."@en .
 
+# Rent from personal property (added from the audit of the GiftLaw pages)
+:personalPropertyRentPercent a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:decimal ;
+    rdfs:comment "Share of the lease's total rent that is for personal property: equipment, vehicles, furniture, goodwill."@en .
+:rentDependsOnProfits a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The rent depends in whole or in part on anyone's income or profits from the property (a fixed percentage of receipts or sales does not count)."@en .
+:lessee a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:comment "Who rents the property."@en .
+
+:unitrustPeriodForm a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :UnitrustPeriodForm ;
+    rdfs:comment "How long the unitrust pays its noncharitable recipients."@en .
+:UnitrustPeriodForm a owl:Class ; owl:oneOf ( :LivesOnly :TermOnly :LifeThenShorterOfLifeOrTerm :LifeThenTerm ) .
+:LivesOnly a :UnitrustPeriodForm ; rdfs:label "for the life or lives of named individuals"@en .
+:TermOnly a :UnitrustPeriodForm ; rdfs:label "for a term of years not over 20"@en .
+:LifeThenShorterOfLifeOrTerm a :UnitrustPeriodForm ; rdfs:label "A for life, then B for life or a term of up to 20 years, whichever is shorter"@en .
+:LifeThenTerm a :UnitrustPeriodForm ; rdfs:label "A for life, then B for a term of years"@en .
+
 # Secondary sources
 :SecondarySource a owl:Class ; rdfs:label "Secondary source (a summary of the law, not the law)"@en .
 :secondarySource a owl:ObjectProperty ; rdfs:range :SecondarySource .
@@ -159,7 +174,7 @@
 
 :Check_PG2 a :DecisionCheck ; :checkConstraint :PG2_VehicleSelfDealing ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
     :enforcedBy :InstitutionalPressure , :SecurityPressure ;
-    :guardsAgainst "treating a split-interest trust or an estate as outside the self-dealing rules because it is not the foundation" ;
+    :guardsAgainst "treating a split-interest trust or an estate as outside the self-dealing rules because it is not the foundation, or the foundation itself selling to, leasing to or lending to an insider" ;
     :authority "26 USC 4947(a)(2), read: for a trust 'not exempt from tax under section 501(a)' with a deduction allowed, section 4941 'shall apply as if such trust were a private foundation', except (A) 'any amounts payable under the terms of such trust to income beneficiaries'. Exceptions kept open: 4941(d)(2)(F), read, a redemption or similar where 'all of the securities of the same class as that held by the foundation are subject to the same terms' and the foundation receives 'no less than fair market value'; and 53.4941(d)-1(b)(3), read, for an estate or revocable trust: a power of sale, 'approved by the probate court', before the estate terminates, at least 'the fair market value of the foundation's interest or expectancy', and 'at least as liquid as the one it gave up'." .
 
 :Check_PG3a a :DecisionCheck ; :checkConstraint :PG3a_ExcessHoldingsPastPeriod ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
@@ -218,12 +233,22 @@
 :Check_PG11 a :DecisionCheck ; :checkConstraint :PG11_DonorLiableOnTrustDebt ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
     :enforcedBy :InstitutionalPressure ;
     :guardsAgainst "a remainder trust whose payments discharge the donor's own debt, which the IRS treats as a grantor trust that cannot qualify" ;
-    :authority "Not read. PLR 9015049, as GiftLaw 5.1.2 and 4.7.5 summarize it (secondary): debt the donor stays liable on makes the trust a grantor trust under 677, and a grantor trust cannot be a remainder trust (1.664-1(a)(4)); 1.677(a)-1(d) and 1.664-1(a)(4) were not read. The pages say commentators doubt it but nobody has tested it, so the check fails closed." .
+    :authority "Not read. PLR 9015049, as GiftLaw 5.1.2 and 4.7.5 summarize it (secondary): debt the donor stays liable on makes the trust a grantor trust under 677, and a grantor trust cannot be a remainder trust (1.664-1(a)(4)); 1.677(a)-1(d) and 1.664-1(a)(4) were not read. The pages say commentators doubt it but nobody has tested it, so the check fails closed. A private letter ruling may not be cited as precedent (6110(k)(3), read 2026-11-21)." .
 
 :Check_PG12 a :DecisionCheck ; :checkConstraint :PG12_SaleFixedBeforeGift ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
     :enforcedBy :InstitutionalPressure , :SecurityPressure ;
     :guardsAgainst "giving company stock to a trust or charity after the sale is already set, so the gain is taxed to the donor anyway" ;
-    :authority "Not read. The assignment-of-income and prearranged-sale cases the GiftLaw pages summarize (secondary): Hoensheid (Tax Court, 2023) and Ferguson (gain taxed to the donor when the sale had ripened), Palmer and Rev. Rul. 78-197 (no prearrangement unless the charity was legally bound to sell). None of these was read, so a sale fixed before the gift goes to counsel." .
+    :authority "Read in part on 2026-11-21. Ferguson v. Commissioner, 174 F.3d 997 (9th Cir. 1999), read: stock that had ripened into a right to cash before the gift was completed left the gain with the donors. Estate of Hoensheid, T.C. Memo. 2023-34, read in part: the donors' right to the sale proceeds was fixed by the day of the gift, so the gain was theirs. Rev. Rul. 78-197, read on Tax Notes: redemption proceeds are the donor's only if the charity was legally bound or could be compelled to give up the shares; no revocation found, status not verified, and a 2020 Tax Court memorandum (read only in summary) uses the ripening test instead. Palmer not read. Where the line falls turns on facts, so a sale fixed before the gift goes to counsel." .
+
+:Check_PG13 a :DecisionCheck ; :checkConstraint :PG13_PersonalPropertyRent ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a remainder trust or the foundation renting out equipment or vehicles and treating the rent as passive" ;
+    :authority "26 USC 512(b)(3), read 2026-11-21 (unchanged since Pub. L. 91-172, 1969): excluded are 'all rents from real property' and rents from personal property leased with it only 'if the rents attributable to such personal property are an incidental amount of the total rents'; no exclusion 'if more than 50 percent of the total rent' is for personal property, or if the rent 'depends in whole or in part on the income or profits'. 26 CFR 1.512(b)-1(c)(2)(ii), read: generally not incidental 'if such rents exceed 10 percent of the total rents'. Rent that is not excluded is unrelated business taxable income: for a remainder trust, 664(c)(2)(A), read, takes all of it as excise tax (Pub. L. 109-432, 2006, for years after 2006). Leasing to a disqualified person is self-dealing whatever the rent (PG2)." .
+
+:Check_PG14 a :DecisionCheck ; :checkConstraint :PG14_UnitrustPeriod ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a unitrust that pays one person for life and then another for a term of years, which does not qualify" ;
+    :authority "26 CFR 1.664-3(a)(5)(i), read 2026-11-21: the period may not run 'to A for his life and then to B for a term of years'; A for life, then B for life or a term of up to 20 years, whichever is shorter, is allowed when both are alive at creation. Found by regrading GiftLaw story S4-66 against the audit." .
 
 # ---------------------------------------------------------------------
 # Secondary sources: the GiftLaw Pro sections behind each route

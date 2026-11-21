@@ -8,7 +8,7 @@ The IRS publications ([rehearsal/10](../../rehearsal/10-irs-instruments.md)) are
 
 The trade in every vehicle is the same. The law gives a deduction or a tax-free sale in exchange for a real, measurable charitable interest. The red flags are all ways of keeping the deduction while hollowing out the charity's seat: paying it "net income" instead of a fixed amount, leaving it a token remainder, or letting an insider buy the asset out of the trust. Each red flag below became a check.
 
-The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summary of the law, not the law. Only two of its 25 priority pages loaded (3.5.1 family lead trusts and 3.10.1 unitrust recipients); the site turned the rest away. So every check cites the Code or a regulation that was read, and GiftLaw appears only beside it.
+The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summary of the law, not the law. Only two of its 25 priority pages loaded (3.5.1 family lead trusts and 3.10.1 unitrust recipients); the site turned the rest away. So every check cites the Code or a regulation that was read, and GiftLaw appears only beside it. Later the operator's notes on all nine chapters reached the shelf, with an audit of them against current law; every example story in them is now a graded case ([GiftLaw stories](GiftLaw-Stories.md)).
 
 ## The three routes that matter most for this structure
 
@@ -22,7 +22,7 @@ The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summar
 |---|---|---|---|
 | **PG0** | Is a vehicle named? | insufficient | |
 | **PG1** | Does a lead trust that claims a deduction pay a guaranteed annuity or a unitrust amount, at least yearly? | block | 1.170A-6(c)(1), (c)(2). Gift tax counterpart 2522(c)(2)(B) not read |
-| **PG2** | Does a split-interest trust with a deduction, or an estate the foundation expects from, sell, lease, lend or redeem with a disqualified person, outside the same-terms and estate exceptions? Payments the trust's terms require to an income beneficiary are excepted. | block | 4947(a)(2), 4941(d)(2)(F), 53.4941(d)-1(b)(3) |
+| **PG2** | Does a split-interest trust with a deduction, an estate the foundation expects from, or the foundation itself sell, lease, lend or redeem with a disqualified person, outside the same-terms and estate exceptions? Payments the trust's terms require to an income beneficiary are excepted. | block | 4941(d)(1), 4947(a)(2), 4941(d)(2)(F), 53.4941(d)-1(b)(3) |
 | **PG3a** | Do the foundation's holdings (or a lead trust's, when its lead is worth over 60 percent) plus insiders' holdings exceed 20 percent of an operating company, after the five-year gift period (or ten with an extension)? | block | 4943(c)(2)(A), (c)(2)(C), (c)(6), (c)(7), (d)(3)(B); 4947(b)(3) |
 | **PG3b** | The same holdings inside the gift period, with no written plan to dispose of the excess | needs counsel | 4943(c)(6); the plan requirement is ours |
 | **PG4** | Is a unitrust's payout between 5 and 50 percent, and its remainder worth at least 10 percent? | block | 664(d)(2)(A), (D); 1.664-1(a)(1)(i) |
@@ -33,6 +33,11 @@ The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summar
 | **PG7b** | Is the seller's basis split in the 1011(b) ratio? | insufficient | 1011(b), 1.1011-2(b) |
 | **PG8** | Do qualifying distributions reach 5 percent of noncharitable-use assets, less acquisition debt and the year's taxes, before the second following year? | block | 4942(a), (d), (e)(1) |
 | **PG9** | Is the founder trustee of a lead trust whose lead beneficiary is a foundation he manages? | needs counsel | Inferred. The rulings GiftLaw 3.5.1 summarizes use independent trustees; 2036 and 2038 not read |
+| **PG10** | Does an insider transfer property under a lien to a deductible split-interest trust or to the foundation, where the trust assumes the lien or it was placed within 10 years (or its age is unknown)? | block | 4941(d)(2)(A), 53.4941(d)-2(a)(2); reaches trusts through 4947(a)(2) |
+| **PG11** | Does the donor stay personally liable on debt against property in a unitrust? | block | Not read. PLR 9015049 as GiftLaw summarizes it |
+| **PG12** | Was a sale of the gift already arranged before the gift? | needs counsel | Not read. Hoensheid, Ferguson, Palmer, Rev. Rul. 78-197 |
+| **PG13** | Does a remainder trust, a deductible split-interest trust or the foundation rent out personal property (equipment, vehicles, goodwill) where the rent is over 10 percent of a real property lease, not tied to real property, tied to profits, or of unknown share? | needs counsel | 512(b)(3), 1.512(b)-1(c)(2), 664(c)(2)(A) |
+| **PG14** | Does a unitrust pay one person for life and then another for a term of years? | block | 1.664-3(a)(5)(i) |
 
 ## Worked cases
 
@@ -68,6 +73,29 @@ All in `tests/decision/planned-giving-cases.ttl`; answers in `tests/decision/exp
 | G26 the same to an unrelated public charity, basis split | allow | |
 | G27 the same with no basis split | insufficient PG7b | |
 | G28 no vehicle named | insufficient PG0 | |
+| G29 unitrust gets land under a 6-year-old mortgage | block PG10 | Placed within 10 years |
+| G30 the same with a 12-year-old lien, not assumed | allow | Outside the 10-year window |
+| G31 the 12-year lien with the donor still liable | block PG11 | |
+| G32 sale signed before the gift | needs counsel PG12 | |
+| G33 unitrust leases a warehouse with forklifts, 8 percent of the rent for equipment | allow | Incidental personal-property rent |
+| G34 unitrust leases delivery vans to an unrelated firm | needs counsel PG13 | All of the rent is personal-property rent |
+| G35 the same vans leased to the founder's management company | block PG13, PG2 | Self-dealing whatever the rent |
+| G36 the foundation leases equipment to the founder's management company at market | block PG13, PG2 | 4941(d)(1): market rent does not cure it |
+| G37 unitrust for the spouse's life, then the children for 20 years | block PG14 | |
+| G38 the spouse for life, then the children for life or 20 years, whichever is shorter | allow | The form the regulation allows |
+
+## Equipment and vehicle leases
+
+A trust or the foundation that owns equipment or vehicles and rents them to an operating company is a live pattern. Two rules decide it, and both were read on 2026-11-21:
+
+1. **Who rents.** If the lessee is a disqualified person (the founder, family, or a company they own over 35 percent of), the lease is self-dealing for the foundation (4941(d)(1)) and for a deductible split-interest trust (4947(a)(2)), at any rent. Cases G35 and G36.
+2. **What is rented.** Rent from real property is excluded from unrelated business income. Rent from personal property is excluded only when it is leased with real property and is incidental, which the regulation puts at 10 percent or less of the total rent. It is never excluded when over 50 percent of the rent is for personal property or the rent depends on profits (512(b)(3); 1.512(b)-1(c)(2)). A remainder trust pays all of the unrelated income as excise tax (664(c)(2)(A)). Cases G33 and G34.
+
+So a fleet or equipment lease belongs in an ordinary entity that pays market rent, not in the trust or the foundation. *Statute and regulation read; the structuring advice is ours.*
+
+## Figures
+
+Every number a check uses lives in `decision/figures.ttl` with the day it was read, its source and the section it comes from. `validate_figures.py` fails a figure with no as-of date, one read before a later law change to its section (PPA 2006, the 2017 tax law, the 2025 law and the latest amendment to each section the checks use), and a threshold that no longer matches the check that uses it. `--selftest` shows it catches all three.
 
 ## Not verified
 
@@ -83,9 +111,13 @@ All in `tests/decision/planned-giving-cases.ttl`; answers in `tests/decision/exp
 - `decision/planned-giving-model.ttl`: the vocabulary, every check with its outcome, pressure and authority, the instruments (Code and regulations) with their permissions, and the GiftLaw sections as secondary sources with what each fetch returned.
 - `decision/planned-giving-shapes.ttl`: the SHACL checks.
 - `tests/decision/planned-giving-cases.ttl`: the worked cases.
+- `decision/figures.ttl` and `validate_figures.py`: the figures registry and its check.
+- [GiftLaw stories](GiftLaw-Stories.md): every example story on the nine pages, graded.
 
 ```
 pip install rdflib pyshacl
 python3 decide_spend.py              # spends, entity deals and planned gifts, branch A
 python3 decide_spend.py --branch B
+python3 validate_figures.py
+python3 grade_stories.py
 ```

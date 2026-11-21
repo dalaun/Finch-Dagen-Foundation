@@ -251,7 +251,10 @@
     dm:citesAuthority "Reg. 1.170A-7(a)(2)(i); Reg. 25.2522(c)-3(c); 170(f)(11)(E)(ii); Notice 2006-96; 664(e); 4943(c)(6), (c)(7)" ;
     dm:pageOutcome dm:Allow ; dm:storyScope dm:GradedByModel ; dm:storyGift :S5_23_gift ;
     dm:gapNote "No check models the step-transaction or prearranged-sale timing, trustee independence, or the later gift of the income interest." ;
-    dm:pageAccuracyNote "The notes say the page words the assignment-of-income point backwards and wrongly says remainder trusts are generally subject to 4943; 4947(b)(3)(B) generally exempts them." .
+    dm:pageAccuracyNote "The notes say the page words the assignment-of-income point backwards and wrongly says remainder trusts are generally subject to 4943; 4947(b)(3)(B) generally exempts them." ;
+    dm:authorityOutcome dm:Allow ;
+    dm:authorityBasis "26 USC 4947(b)(3)(B), read 2026-11-21: 4943 and 4944 do not apply to a trust whose deductions were allowed only for remainder interests, the usual remainder trust. The page's rule is wrong but its outcome holds." ;
+    dm:authorityRead true .
 :S5_23_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: payout and remainder inside the 664(d)(2) limits; the page treats the trust as qualified
@@ -907,7 +910,10 @@
     dm:pageSays "The page says a remainder trust running a gas station has unrelated business income, becomes fully taxable, and files Form 1041." ;
     dm:citesAuthority "664(c)(2) (per the notes' correction); 4941-4945 (Form 4720)" ;
     dm:pageOutcome dm:Block ; dm:storyScope dm:GradedByModel ; dm:storyGift :S8_8_gift ;
-    dm:pageAccuracyNote "Out of date: since 2007 the trust keeps its exemption and owes a 100 percent excise tax on the unrelated business taxable income (Form 4720); the notes also correct the first-tier self-dealing rate to 10 percent." .
+    dm:pageAccuracyNote "Out of date: since 2007 the trust keeps its exemption and owes a 100 percent excise tax on the unrelated business taxable income (Form 4720); the notes also correct the first-tier self-dealing rate to 10 percent." ;
+    dm:authorityOutcome dm:NeedsCounsel ;
+    dm:authorityBasis "26 USC 664(c)(1) and (c)(2)(A), read 2026-11-21: since tax years after 2006 (Pub. L. 109-432) a remainder trust with unrelated business taxable income stays exempt and pays an excise tax equal to that income, on Form 4720. The trust does not become fully taxable." ;
+    dm:authorityRead true .
 :S8_8_gift a dm:PlannedGift ;
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     # assumed: a unitrust (type not stated) with payout and remainder inside the 664(d)(2) limits

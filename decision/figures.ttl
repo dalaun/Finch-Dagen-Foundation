@@ -1,0 +1,195 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Figures registry (DRAFT, proposed 2026-11-21)
+#
+# Every number a check or a case leans on, with the date it was last read
+# against primary law, where it was read, and which section governs it.
+# validate_figures.py fails a figure with no as-of date, a figure read before
+# a later law change to its section, and a threshold that no longer matches the
+# check that uses it. The figures GiftLaw's pages print are recorded separately
+# as :PageFigure, each pointing to today's figure where it was read.
+# Read on 2026-11-21 from uscode.house.gov (current through Pub. L. 119-120,
+# Oct. 7, 2026), law.cornell.edu and irs.gov. Not legal or tax advice.
+# =====================================================================
+
+<http://example.org/trust-domain/figures> a owl:Ontology ;
+    rdfs:label "Figures registry"@en ;
+    owl:versionInfo "0.1.0-proposed" .
+
+:Figure a owl:Class ; rdfs:label "Figure"@en ;
+    rdfs:comment "A rate, limit, threshold or amount set by law, as read on a stated date."@en .
+:PageFigure a owl:Class ; rdfs:label "Page figure"@en ;
+    rdfs:comment "A figure a GiftLaw page prints that the audit on the shelf calls dated."@en .
+:LawChange a owl:Class ; rdfs:label "Law change"@en ;
+    rdfs:comment "A public law that changed one or more sections a figure depends on."@en .
+:ReadStatus a owl:Class ; owl:oneOf ( :ReadPrimary :ReadSecondary :NotVerified ) .
+:ReadPrimary a :ReadStatus ; rdfs:label "Primary text read"@en .
+:ReadSecondary a :ReadStatus ; rdfs:label "Only an IRS publication or summary read"@en .
+:NotVerified a :ReadStatus ; rdfs:label "Not verified"@en .
+
+:figureValue a owl:DatatypeProperty ; rdfs:domain :Figure ; rdfs:comment "The figure as the law states it."@en .
+:asOf a owl:DatatypeProperty ; rdfs:range xsd:date ; rdfs:comment "The day the figure was last read against its source."@en .
+:figureSource a owl:DatatypeProperty ; rdfs:comment "Where it was read."@en .
+:governingSection a owl:DatatypeProperty ; rdfs:comment "The Code section the figure lives in, as a bare number (512, 664, 4941)."@en .
+:sectionLastAmended a owl:DatatypeProperty ; rdfs:range xsd:date ; rdfs:comment "Enactment date of the latest public law that amended the governing section or unit, per the amendment notes read."@en .
+:sectionLastAmendedBy a owl:DatatypeProperty .
+:readStatus a owl:ObjectProperty ; rdfs:range :ReadStatus .
+:usedByCheck a owl:ObjectProperty ; rdfs:comment "A check whose shape uses this threshold."@en .
+:shapeLiteral a owl:DatatypeProperty ; rdfs:comment "Text that must appear in the shape of the check that uses the figure, so the shape and the registry cannot drift apart."@en .
+:enacted a owl:DatatypeProperty ; rdfs:range xsd:date .
+:changedSection a owl:DatatypeProperty .
+:pageSection a owl:DatatypeProperty ; rdfs:domain :PageFigure .
+:pagePrints a owl:DatatypeProperty ; rdfs:domain :PageFigure .
+:auditSays a owl:DatatypeProperty ; rdfs:domain :PageFigure .
+:auditLawChange a owl:DatatypeProperty ; rdfs:domain :PageFigure .
+:auditStories a owl:DatatypeProperty ; rdfs:domain :PageFigure .
+:currentFigure a owl:ObjectProperty ; rdfs:domain :PageFigure ; rdfs:range :Figure .
+:matchNote a owl:DatatypeProperty .
+:verifyNote a owl:DatatypeProperty .
+
+# ---------------------------------------------------------------------
+# The law changes the audit names, and the latest amendment to each
+# section the checks use. A figure read before one of these, for a section
+# it changed, fails.
+# ---------------------------------------------------------------------
+:Law_TRA1969 a :LawChange ; rdfs:label "Pub. L. 91-172 (Dec. 30, 1969)" ; :enacted "1969-12-30"^^xsd:date ; :changedSection "512(b)(3)" .
+:Law_PPA2006 a :LawChange ; rdfs:label "Pension Protection Act of 2006, Pub. L. 109-280" ; :enacted "2006-08-17"^^xsd:date ;
+    :changedSection "4941" , "4942" , "4943" , "4944" , "4958" .
+:Law_TRHCA2006 a :LawChange ; rdfs:label "Tax Relief and Health Care Act of 2006, Pub. L. 109-432" ; :enacted "2006-12-20"^^xsd:date ; :changedSection "664" .
+:Law_2010 a :LawChange ; rdfs:label "Pub. L. 111-312 (Dec. 17, 2010)" ; :enacted "2010-12-17"^^xsd:date ; :changedSection "4947" .
+:Law_2014 a :LawChange ; rdfs:label "Pub. L. 113-295 (Dec. 19, 2014)" ; :enacted "2014-12-19"^^xsd:date ; :changedSection "4942" , "4945" .
+:Law_TCJA2017 a :LawChange ; rdfs:label "Pub. L. 115-97 (Dec. 22, 2017), the 2017 tax law" ; :enacted "2017-12-22"^^xsd:date ; :changedSection "170" .
+:Law_2018a a :LawChange ; rdfs:label "Pub. L. 115-123 (Feb. 9, 2018)" ; :enacted "2018-02-09"^^xsd:date ; :changedSection "4943" .
+:Law_2018b a :LawChange ; rdfs:label "Pub. L. 115-141 (Mar. 23, 2018)" ; :enacted "2018-03-23"^^xsd:date ; :changedSection "664" , "4958" .
+:Law_2019 a :LawChange ; rdfs:label "Pub. L. 116-94 (Dec. 20, 2019)" ; :enacted "2019-12-20"^^xsd:date ; :changedSection "4940" .
+:Law_2025 a :LawChange ; rdfs:label "Pub. L. 119-21 (July 4, 2025), the 2025 law" ; :enacted "2025-07-04"^^xsd:date ; :changedSection "170" , "2010" .
+
+# ---------------------------------------------------------------------
+# Thresholds the planned-giving checks use
+# ---------------------------------------------------------------------
+:Fig_LienLookback a :Figure ; rdfs:label "Lien placed within 10 years makes a gift a sale" ;
+    :figureValue "10 years" ; :governingSection "4941" ; :figureSource "26 USC 4941(d)(2)(A), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG10 ; :shapeLiteral "?y <= 10" .
+:Fig_UnitrustPayoutMin a :Figure ; rdfs:label "Unitrust payout at least 5 percent" ;
+    :figureValue "5 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(A), law.cornell.edu" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u < 5" .
+:Fig_UnitrustPayoutMax a :Figure ; rdfs:label "Unitrust payout at most 50 percent" ;
+    :figureValue "50 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(A), law.cornell.edu" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u > 50" .
+:Fig_RemainderMin a :Figure ; rdfs:label "Remainder worth at least 10 percent" ;
+    :figureValue "10 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(D), law.cornell.edu" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?r < 10" .
+:Fig_LeadSixty a :Figure ; rdfs:label "Lead interest worth not more than 60 percent escapes 4943" ;
+    :figureValue "60 percent" ; :governingSection "4947" ; :figureSource "26 USC 4947(b)(3)(A)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?cv <= 60" .
+:Fig_HoldingsTwenty a :Figure ; rdfs:label "Permitted holdings 20 percent with insiders" ;
+    :figureValue "20 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(2)(A), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?h + ?dq > 20" .
+:Fig_DeMinimisTwo a :Figure ; rdfs:label "Two percent de minimis holding" ;
+    :figureValue "2 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(2)(C), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?hv <= 2" .
+:Fig_PassiveNinetyFive a :Figure ; rdfs:label "At least 95 percent passive income is not a business enterprise" ;
+    :figureValue "95 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(d)(3)(B), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?p >= 95" .
+:Fig_GiftPeriodFive a :Figure ; rdfs:label "Five-year period to dispose of holdings received by gift" ;
+    :figureValue "5 years" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(6), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 5" .
+:Fig_GiftPeriodExtension a :Figure ; rdfs:label "Extension to ten years" ;
+    :figureValue "5 more years" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(7), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 10" .
+:Fig_PayoutFive a :Figure ; rdfs:label "Minimum investment return 5 percent" ;
+    :figureValue "5 percent" ; :governingSection "4942" ; :figureSource "26 USC 4942(e)(1), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG8 ; :shapeLiteral "0.05 *" .
+:Fig_IncidentalRent a :Figure ; rdfs:label "Personal-property rent over 10 percent is generally not incidental" ;
+    :figureValue "10 percent" ; :governingSection "512(b)(3)" ; :figureSource "26 CFR 1.512(b)-1(c)(2)(ii), law.cornell.edu" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG13 ; :shapeLiteral "?p > 10" .
+:Fig_PersonalRentFifty a :Figure ; rdfs:label "No exclusion when over 50 percent of rent is for personal property" ;
+    :figureValue "50 percent" ; :governingSection "512(b)(3)" ; :figureSource "26 USC 512(b)(3)(B)(i), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ;
+    :verifyNote "PG13 already fires above 10 percent, so the 50 percent line needs no literal in the shape." .
+
+# ---------------------------------------------------------------------
+# Rates and amounts the authorities and the story cases mention
+# ---------------------------------------------------------------------
+:Fig_RemainderTrustUBTI a :Figure ; rdfs:label "Remainder trust excise on unrelated business income" ;
+    :figureValue "100 percent of the UBTI (tax years after 2006)" ; :governingSection "664" ;
+    :figureSource "26 USC 664(c)(2)(A); Pub. L. 109-432 section 424(b)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4941SelfDealer a :Figure ; rdfs:label "Self-dealing first-tier tax on the self-dealer" ;
+    :figureValue "10 percent of the amount involved" ; :governingSection "4941" ; :figureSource "26 USC 4941(a)(1)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4941Manager a :Figure ; rdfs:label "Self-dealing first-tier tax on a manager" ;
+    :figureValue "5 percent, capped at $20,000" ; :governingSection "4941" ; :figureSource "26 USC 4941(a)(2), (c)(2)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4940Rate a :Figure ; rdfs:label "Excise tax on net investment income" ;
+    :figureValue "1.39 percent" ; :governingSection "4940" ; :figureSource "26 USC 4940(a); Pub. L. 116-94 section 206(a)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4942Rate a :Figure ; rdfs:label "Tax on undistributed income" ;
+    :figureValue "30 percent" ; :governingSection "4942" ; :figureSource "26 USC 4942(a)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4943Rate a :Figure ; rdfs:label "Tax on excess business holdings" ;
+    :figureValue "10 percent of the excess holdings" ; :governingSection "4943" ; :figureSource "26 USC 4943(a)(1)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4944Rate a :Figure ; rdfs:label "Tax on jeopardizing investments" ;
+    :figureValue "10 percent on the foundation, 10 percent on a manager capped at $10,000" ; :governingSection "4944" ;
+    :figureSource "26 USC 4944(a), (d)(2)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_4958Rate a :Figure ; rdfs:label "Excess benefit tax" ;
+    :figureValue "25 percent on the disqualified person, 10 percent on a manager capped at $20,000" ; :governingSection "4958" ;
+    :figureSource "26 USC 4958(a), (d)(2)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_CashLimit a :Figure ; rdfs:label "Cash gifts to public charities" ;
+    :figureValue "60 percent of the contribution base, no end date in the Code as read" ; :governingSection "170" ;
+    :figureSource "26 USC 170(b)(1)(G)(i)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ;
+    :verifyNote "The 2025 law section that struck the end date was not identified; the Code text read has none." .
+:Fig_IndividualFloor a :Figure ; rdfs:label "Floor on an itemizer's gifts" ;
+    :figureValue "0.5 percent of the contribution base, from 2026" ; :governingSection "170" ;
+    :figureSource "26 USC 170(b)(1)(I); IRS Pub. 505 (2026) for the start year" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_CorporateFloor a :Figure ; rdfs:label "Floor on a corporation's gifts" ;
+    :figureValue "1 percent of taxable income" ; :governingSection "170" ; :figureSource "26 USC 170(b)(2)(A)(i)" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ;
+    :verifyNote "The year it starts was not found in the primary text read; the audit says 2026." .
+:Fig_NonItemizer a :Figure ; rdfs:label "Deduction for people who do not itemize" ;
+    :figureValue "$1,000, or $2,000 on a joint return, of cash gifts, from 2026" ; :governingSection "170" ;
+    :figureSource "26 USC 170(p); IRS IR-2026-135" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_BasicExclusion a :Figure ; rdfs:label "Estate and gift basic exclusion" ;
+    :figureValue "$15,000,000, indexed after 2026" ; :governingSection "2010" ;
+    :figureSource "26 USC 2010(c)(3); Rev. Proc. 2025-32" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_AnnualExclusion a :Figure ; rdfs:label "Annual gift exclusion, 2026" ;
+    :figureValue "$19,000 a donee" ; :governingSection "2503" ; :figureSource "Rev. Proc. 2025-32 section 4.42" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_7520Rate a :Figure ; rdfs:label "Section 7520 rate, November 2026" ;
+    :figureValue "6.2 percent (Rev. Rul. 2026-21)" ; :governingSection "7520" ;
+    :figureSource "irs.gov section 7520 interest rates table" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadSecondary ;
+    :verifyNote "Set monthly; the revenue ruling itself was not opened." .
+
+# ---------------------------------------------------------------------
+# Second pass, read 2026-11-21: the figures GiftLaw pages print most often
+# ---------------------------------------------------------------------
+:Law_2010HCERA a :LawChange ; rdfs:label "Pub. L. 111-152 (Mar. 30, 2010)" ; :enacted "2010-03-30"^^xsd:date ; :changedSection "1411" .
+:Law_ATRA2012 a :LawChange ; rdfs:label "American Taxpayer Relief Act of 2012, Pub. L. 112-240 (Jan. 2, 2013)" ; :enacted "2013-01-02"^^xsd:date ;
+    :changedSection "1(h)" , "531" .
+:Law_PPA2006b a :LawChange ; rdfs:label "Pension Protection Act of 2006, Pub. L. 109-280, misstatement thresholds" ; :enacted "2006-08-17"^^xsd:date ; :changedSection "6662" .
+:Law_2015 a :LawChange ; rdfs:label "Pub. L. 114-113 (Dec. 18, 2015)" ; :enacted "2015-12-18"^^xsd:date ; :changedSection "170(e)(3)(C)" .
+:Law_TD9974 a :LawChange ; rdfs:label "T.D. 9974, mortality table 2010CM (June 7, 2023, effective June 1, 2023)" ; :enacted "2023-06-01"^^xsd:date ; :changedSection "7520" .
+
+:Fig_TopCapitalGainRate a :Figure ; rdfs:label "Top long-term capital gain rate for individuals" ;
+    :figureValue "20 percent (25 percent on unrecaptured 1250 gain, 28 percent on collectibles)" ; :governingSection "1(h)" ;
+    :figureSource "26 USC 1(h)(1)(D)-(F), uscode.house.gov" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_NIIT a :Figure ; rdfs:label "Net investment income tax" ;
+    :figureValue "3.8 percent" ; :governingSection "1411" ; :figureSource "26 USC 1411(a)(1)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_AccumulatedEarnings a :Figure ; rdfs:label "Accumulated earnings tax" ;
+    :figureValue "20 percent" ; :governingSection "531" ; :figureSource "26 USC 531" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_QCDLimit a :Figure ; rdfs:label "Qualified charitable distribution limit, 2026" ;
+    :figureValue "$111,000; $55,000 once to a split-interest entity" ; :governingSection "408(d)(8)" ;
+    :figureSource "Notice 2025-67" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_FoodInventoryCap a :Figure ; rdfs:label "Food inventory deduction cap" ;
+    :figureValue "15 percent of aggregate net income (taxable income for a C corporation)" ; :governingSection "170(e)(3)(C)" ;
+    :figureSource "26 USC 170(e)(3)(C)(ii)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ;
+    :verifyNote "Figure read; the amendment note tying the 15 percent figure to Pub. L. 114-113 was not read." .
+:Fig_MortalityTable a :Figure ; rdfs:label "Mortality table for 7520 valuations" ;
+    :figureValue "Table 2010CM, valuation dates on or after June 1, 2023" ; :governingSection "7520" ;
+    :figureSource "26 CFR 1.7520-1(b)(2); 20.2031-7(d)(2)(ii)(B)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
+:Fig_MisstatementThresholds a :Figure ; rdfs:label "Valuation misstatement thresholds" ;
+    :figureValue "150 percent substantial, 200 percent gross (40 percent penalty)" ; :governingSection "6662" ;
+    :figureSource "26 USC 6662(e)(1)(A), (h)(2)(A)(i)" ; :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary .
