@@ -55,7 +55,7 @@
 
 # ---------------------------------------------------------------------
 # Schneier's societal pressures (Liars and Outliers, 2012)
-# Dalaun's pressure table adds "none": not a pressure / not enough signal.
+# The founder's pressure table adds "none": not a pressure / not enough signal.
 # ---------------------------------------------------------------------
 :SocietalPressure a owl:Class ; rdfs:label "Societal pressure"@en .
 :MoralPressure a :SocietalPressure ; rdfs:label "moral"@en ;
