@@ -141,6 +141,7 @@ Use **vocabulary alone** for data modeling, **compliance** for enforcement, or *
 1. **[Architecture Overview](Architecture.md)** - Understand the control-plane framework
 2. **[Keystone Constraint](Keystone-Constraint.md)** - The fundamental rule governing private enablement
 3. **[Authority Cascade](Authority-Cascade.md)** - How every dollar traces back to mission
+   - **[Spend Decision Model](Spend-Decision-Model.md)** - Draft: allow, block, needs counsel or insufficient for every proposed spend
 4. **[Examples](Examples.md)** - See concrete instances of permissible vs improper enablement
 5. **[Usage Guide](Usage-Guide.md)** - Query the ontology and validate compliance
 6. **[Estate Planning Extension](Estate-Planning-Extension.md)** - Traditional trust vocabulary (optional)

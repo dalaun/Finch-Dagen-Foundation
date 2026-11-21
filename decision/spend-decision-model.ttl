@@ -1,0 +1,219 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+# =====================================================================
+# Foundation spend decision model (DRAFT, proposed 2026-11-21)
+#
+# Every proposed foundation spend gets exactly one of four outcomes:
+#   allow | block | needs counsel | insufficient
+# in four stages:
+#   1 Mission trace  - the existing keystone and cascade checks (K1-K5,
+#                      C1-C4, A1, S1 in trust-domain-keystone-shapes.ttl)
+#   2 Rule check     - the letter of IRC Chapter 42 (4941-4945, with 4946
+#                      for who is disqualified)
+#   3 Hack test      - passes the letter but bends the intent (Schneier,
+#                      A Hacker's Mind: "Hacks follow the rules of a system
+#                      but subvert its goals or intent.")
+#   4 Outcome        - the most severe outcome any check produced, in the
+#                      order block > insufficient > counsel > allow
+#
+# Every check also names the societal pressure that enforces it
+# (Schneier, Liars and Outliers: moral, reputational, institutional,
+# security). A check that only moral pressure enforces is an honor
+# system and fails P1: it is where a hack would live.
+#
+# This is design and education, not legal or tax advice. Counsel reviews.
+# Shapes: decision/spend-decision-shapes.ttl. Run: python3 decide_spend.py
+# =====================================================================
+
+<http://example.org/trust-domain/decision> a owl:Ontology ;
+    rdfs:label "Foundation spend decision model"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    owl:imports <http://example.org/trust-domain> ;
+    rdfs:comment "Not legal or tax advice. Statute text read 2026-11-21 at uscode.house.gov (current through Public Law 119-120, October 7, 2026) and irs.gov."@en .
+
+# ---------------------------------------------------------------------
+# The closed decision space (what the scorer may answer)
+# ---------------------------------------------------------------------
+:Outcome a owl:Class ; rdfs:label "Decision outcome"@en ;
+    owl:oneOf ( :Allow :Block :NeedsCounsel :Insufficient ) .
+:Allow a :Outcome ; rdfs:label "allow"@en ; :severity 0 ;
+    rdfs:comment "Every check that targets it passes."@en .
+:NeedsCounsel a :Outcome ; rdfs:label "needs counsel"@en ; :severity 1 ;
+    rdfs:comment "The facts are known and pass the letter, but the intent question is a judgment the law leaves to the IRS and the courts. Counsel decides; the spend waits."@en .
+:Insufficient a :Outcome ; rdfs:label "insufficient"@en ; :severity 2 ;
+    rdfs:comment "A fact a check needs is missing. Never treated as allow. Ranked above counsel so no one pays counsel to judge an incomplete record."@en .
+:Block a :Outcome ; rdfs:label "block"@en ; :severity 3 ;
+    rdfs:comment "The letter of the law, or the mission trace, fails. No judgment cures it."@en .
+:severity a owl:DatatypeProperty ; rdfs:domain :Outcome ; rdfs:range xsd:integer .
+
+# ---------------------------------------------------------------------
+# Schneier's societal pressures (Liars and Outliers, 2012)
+# Dalaun's pressure table adds "none": not a pressure / not enough signal.
+# ---------------------------------------------------------------------
+:SocietalPressure a owl:Class ; rdfs:label "Societal pressure"@en .
+:MoralPressure a :SocietalPressure ; rdfs:label "moral"@en ;
+    rdfs:comment "Guilt, duty, 'I shouldn't'. Works best in small groups. In a one-founder foundation the founder is both the conscience and the possible defector, so moral pressure alone never counts as a control."@en .
+:ReputationalPressure a :SocietalPressure ; rdfs:label "reputational"@en ;
+    rdfs:comment "What others will think, say or score. For a private foundation: its annual return is public and grantees, residents and press can read it (public inspection rule not verified here; see the wiki page)."@en .
+:InstitutionalPressure a :SocietalPressure ; rdfs:label "institutional"@en ;
+    rdfs:comment "Rule, contract, policy, who can decide. Here: the Chapter 42 excise taxes, IRS examination, counsel review."@en .
+:SecurityPressure a :SocietalPressure ; rdfs:label "security"@en ;
+    rdfs:comment "Lock, access, log, technical constraint. Here: these SHACL gates run before money moves, the repo's merge lock, trustee-only signers."@en .
+:NoPressure a :SocietalPressure ; rdfs:label "none"@en ;
+    rdfs:comment "Not a pressure, or not enough signal. A check tagged only with this or with moral pressure fails P1."@en .
+
+# ---------------------------------------------------------------------
+# Checks: stage, outcome on failure, pressures, source
+# ---------------------------------------------------------------------
+:DecisionCheck a owl:Class ; rdfs:label "Decision check"@en .
+:Stage a owl:Class .
+:Stage1_Mission a :Stage ; rdfs:label "1 mission trace"@en .
+:Stage2_Rule a :Stage ; rdfs:label "2 rule check (letter)"@en .
+:Stage3_Hack a :Stage ; rdfs:label "3 hack test (intent)"@en .
+:Stage0_Evidence a :Stage ; rdfs:label "0 evidence present"@en .
+
+:checkConstraint a owl:ObjectProperty ; rdfs:domain :DecisionCheck ;
+    rdfs:comment "The SHACL constraint whose failure this check reads."@en .
+:inStage a owl:ObjectProperty ; rdfs:domain :DecisionCheck ; rdfs:range :Stage .
+:onFail a owl:ObjectProperty ; rdfs:domain :DecisionCheck ; rdfs:range :Outcome .
+:enforcedBy a owl:ObjectProperty ; rdfs:domain :DecisionCheck ; rdfs:range :SocietalPressure .
+:authority a owl:DatatypeProperty ; rdfs:domain :DecisionCheck ;
+    rdfs:comment "Primary source the check rests on, with what was verified."@en .
+
+# Stage 1: the existing keystone and cascade checks, reused, not duplicated
+:Check_K1 a :DecisionCheck ; :checkConstraint td:K1_IncidentalClaim ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Keystone constraint (docs/wiki/Keystone-Constraint.md)" .
+:Check_K2 a :DecisionCheck ; :checkConstraint td:K2_IncidentalBacking ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Keystone constraint" .
+:Check_K3 a :DecisionCheck ; :checkConstraint td:K3_Inseparable ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Keystone constraint" .
+:Check_K4 a :DecisionCheck ; :checkConstraint td:K4_AmountEvidence ; :inStage :Stage1_Mission ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ; :authority "Keystone constraint: no amount or benchmark means the excess test cannot run" .
+:Check_K5 a :DecisionCheck ; :checkConstraint td:K5_WithinMarketRate ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure , :InstitutionalPressure ;
+    :authority "Keystone constraint; for pay to a disqualified person, 26 USC 4941(d)(2)(E) excuses only compensation that 'is not excessive'" .
+:Check_C1 a :DecisionCheck ; :checkConstraint td:C1_SpendTrace ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Authority cascade" .
+:Check_C2 a :DecisionCheck ; :checkConstraint td:C2_ActivityAuthorized ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Authority cascade" .
+:Check_C4 a :DecisionCheck ; :checkConstraint td:C4_BuildsCapability ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Mission's second half (proposals/mission-statement.md)" .
+:Check_A1 a :DecisionCheck ; :checkConstraint td:A1_AssetToProgram ; :inStage :Stage1_Mission ; :onFail :Block ;
+    :enforcedBy :SecurityPressure ; :authority "Asset-to-program pipeline" .
+:Check_S1 a :DecisionCheck ; :checkConstraint td:S1_NoSelfDealing ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4941(d)(1)(E): 'transfer to, or use by or for the benefit of, a disqualified person' of the foundation's income or assets" .
+
+# Stage 0: evidence present
+:Check_E1 a :DecisionCheck ; :checkConstraint :E1_Evidence ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Design rule: a check never passes on a missing fact (same rule as the keystone checks)" .
+
+# Stage 2: the letter of Chapter 42
+:Check_R1 a :DecisionCheck ; :checkConstraint :R1_PaidToDisqualified ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4941(d)(1): self-dealing is 'any direct or indirect' sale, exchange or lease, loan, 'furnishing of goods, services, or facilities', payment of compensation, or transfer between the foundation and a disqualified person; 4941(d)(2)(E) excepts only reasonable compensation for personal services. 26 USC 4946(a)(1) defines disqualified persons." .
+:Check_R3 a :DecisionCheck ; :checkConstraint :R3_AssetUsedByDisqualified ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4941(d)(1)(E): 'use by or for the benefit of, a disqualified person' of the foundation's assets" .
+:Check_R4 a :DecisionCheck ; :checkConstraint :R4_PoliticalPurpose ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4945(d)(1) 'to influence legislation'; 4945(d)(2) 'to influence the outcome of any specific public election'. Exceptions in 4945(e) and (f) (nonpartisan analysis, certain voter drives) are not modeled: claim one and the spend goes to counsel by hand." .
+:Check_R5 a :DecisionCheck ; :checkConstraint :R5_IndividualGrant ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4945(d)(3) and (g): a grant to an individual for travel, study or similar purposes is taxable unless 'awarded on an objective and nondiscriminatory basis' 'pursuant to a procedure approved in advance by the Secretary'" .
+:Check_R6 a :DecisionCheck ; :checkConstraint :R6_ExpenditureResponsibility ; :inStage :Stage2_Rule ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4945(d)(4) and (h): a grant to an organization other than a listed public charity is taxable unless the foundation exercises expenditure responsibility (see the grant is spent 'solely for the purpose for which made', gets full reports, reports to the IRS)" .
+:Check_R7 a :DecisionCheck ; :checkConstraint :R7_JeopardyInvestment ; :inStage :Stage2_Rule ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure ;
+    :authority "26 USC 4944(a)(1) and (c): an investment that would 'jeopardize the carrying out of any of its exempt purposes' is taxed; a program-related investment ('primary purpose' charitable, 'no significant purpose' of income or appreciation) is excepted. The jeopardy standard itself is in the regulations, not read here, so a non-PRI investment goes to counsel." .
+:Check_R8 a :DecisionCheck ; :checkConstraint :R8_ExcessBusinessHoldings ; :inStage :Stage2_Rule ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure ;
+    :authority "26 USC 4943(c)(2)(A): permitted holdings are 20 percent of voting stock 'reduced by' the percentage disqualified persons own. Exceptions (de minimis, third-party control, disposal periods for gifts) are not modeled here, so a holding over the limit goes to counsel." .
+
+# Stage 3: the hack test (passes the letter, bends the intent)
+:Check_H1 a :DecisionCheck ; :checkConstraint :H1_NearMissRelation ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :ReputationalPressure ;
+    :authority "26 USC 4946(d): 'members of family' include only spouse, ancestors, children, grandchildren, great grandchildren, and spouses of those descendants. A sibling, friend or business partner is outside the letter; whether the benefit reaches a disqualified person is the intent question." .
+:Check_H2 a :DecisionCheck ; :checkConstraint :H2_BenefitPassThrough ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4941(d)(1) reaches 'indirect' self-dealing, and (d)(1)(E) reaches transfers 'for the benefit of' a disqualified person. IRS EO CPE 1985 (eotopicq85): the indirect rules exist 'to prevent transactions from taking place indirectly' that could not be done directly." .
+:Check_H3 a :DecisionCheck ; :checkConstraint :H3_InsiderDrawnClass ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :ReputationalPressure ;
+    :authority "26 USC 4945(d)(5): any purpose other than one in 170(c)(2)(B) is a taxable expenditure; 4945(g) requires an 'objective and nondiscriminatory basis'. A program whose eligible class is drawn around insiders or their business passes the mission label and bends its intent." .
+:Check_H4 a :DecisionCheck ; :checkConstraint :H4_SplitPayee ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :SecurityPressure ;
+    :authority "A hack of this model, patched: K5 tests one payment against one benchmark, so splitting one person's pay across programs passes K5 every time. H4 sums it per payee per year." .
+:Check_H5 a :DecisionCheck ; :checkConstraint :H5_InsiderPayNoComparability ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 4941(d)(2)(E): pay to a disqualified person is excepted only if for personal services, reasonable and necessary, and 'not excessive'. The founder setting his own pay is the textbook place that judgment is disputed, so it needs a written comparability record or counsel." .
+:Check_J1 a :DecisionCheck ; :checkConstraint :J1_ScorerVerdict ; :inStage :Stage3_Hack ; :onFail :NeedsCounsel ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Bounded judgment (Jev pattern): a local model answers one closed question; its answer can only escalate an outcome, never lower one. 'yes' sends the spend to counsel." .
+:Check_J2 a :DecisionCheck ; :checkConstraint :J2_ScorerCannotTell ; :inStage :Stage3_Hack ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Bounded judgment: 'cannot tell' is its own answer, never folded into 'no' (the OTHER/INSUFFICIENT split)." .
+
+# ---------------------------------------------------------------------
+# Proposal vocabulary (facts the checks read; labels are never read)
+# ---------------------------------------------------------------------
+:SpendProposal a owl:Class ; rdfs:label "Spend proposal"@en ;
+    rdfs:comment "A spend, grant, purchase or investment the foundation is about to make. Graded before money moves."@en .
+:assesses a owl:ObjectProperty ; rdfs:domain :SpendProposal ;
+    rdfs:comment "The cascade node (td:ActualSpend, td:Grant or td:Asset) whose stage-1 checks apply."@en .
+:payee a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:comment "Who receives the money or property."@en .
+:dqScreened a owl:DatatypeProperty ; rdfs:domain :SpendProposal ; rdfs:range xsd:boolean ;
+    rdfs:comment "The payee was screened against 26 USC 4946 and its relations recorded. False or missing makes the proposal insufficient."@en .
+:spendKind a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:range :SpendKind .
+:SpendKind a owl:Class .
+:PersonalServicesPay a :SpendKind ; rdfs:label "pay for personal services"@en .
+:Purchase a :SpendKind ; rdfs:label "purchase of goods or property"@en .
+:GrantToOrganization a :SpendKind ; rdfs:label "grant to an organization"@en .
+:GrantToIndividual a :SpendKind ; rdfs:label "grant to an individual for travel, study or similar"@en .
+:Investment a :SpendKind ; rdfs:label "investment"@en .
+:purposeKind a owl:ObjectProperty ; rdfs:domain :SpendProposal .
+:CharitablePurpose a owl:NamedIndividual ; rdfs:label "a 170(c)(2)(B) purpose"@en .
+:InfluenceLegislation a owl:NamedIndividual ; rdfs:label "influence legislation"@en .
+:InfluenceElection a owl:NamedIndividual ; rdfs:label "influence an election"@en .
+:approvedGrantProcedure a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:expenditureResponsibility a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:primaryPurposeCharitable a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:significantIncomePurpose a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:foundationVotingPercentAfter a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:disqualifiedVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:assetAlsoUsedBy a owl:ObjectProperty ; rdfs:comment "Anyone besides program participants who uses the asset."@en .
+:annualAmount a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:benchmarkAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:fiscalYear a owl:ObjectProperty .
+:comparabilityRecord a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "A written record of what comparable organizations pay for comparable services, kept before the pay is set."@en .
+:beneficiarySelection a owl:ObjectProperty .
+:OpenSelection a owl:NamedIndividual ; rdfs:label "open, objective selection from a charitable class"@en .
+:InsiderDrawnSelection a owl:NamedIndividual ; rdfs:label "eligible class drawn around insiders or their business"@en .
+
+# Relations that sit just outside 4946 (H1) and benefit flow (H2)
+:closeTo a owl:ObjectProperty ; rdfs:comment "A relationship the 4946 definition does not cover."@en .
+:siblingOf a owl:ObjectProperty ; rdfs:subPropertyOf :closeTo .
+:friendOf a owl:ObjectProperty ; rdfs:subPropertyOf :closeTo .
+:businessPartnerOf a owl:ObjectProperty ; rdfs:subPropertyOf :closeTo .
+:minorityOwnedBy a owl:ObjectProperty ; rdfs:subPropertyOf :closeTo ;
+    rdfs:comment "Owned 35 percent or less by the object: under the 4946(a)(1)(E)-(G) line."@en .
+:passesBenefitTo a owl:ObjectProperty ;
+    rdfs:comment "The payee hands value on (hires, pays, grants to, buys from)."@en .
+
+# Bounded judgment slot
+:scorerVerdict a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:range :ScorerAnswer ;
+    rdfs:comment "Closed question to the local model: 'In substance, does this spend's benefit reach a disqualified person, or serve something other than the charitable class?'"@en .
+:ScorerAnswer a owl:Class ; owl:oneOf ( :IntentClean :IntentBent :IntentCannotTell ) .
+:IntentClean a :ScorerAnswer ; rdfs:label "no"@en ; :escalatesTo :Allow .
+:IntentBent a :ScorerAnswer ; rdfs:label "yes"@en ; :escalatesTo :NeedsCounsel .
+:IntentCannotTell a :ScorerAnswer ; rdfs:label "cannot tell"@en ; :escalatesTo :Insufficient .
+:escalatesTo a owl:ObjectProperty ; rdfs:range :Outcome .
