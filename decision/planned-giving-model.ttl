@@ -124,6 +124,20 @@
 :qualifyingDistributionsByDeadline a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
     rdfs:comment "Qualifying distributions charged to the year and made before the first day of the second following year."@en .
 
+# Debt on contributed property, and a sale fixed before the gift (added from the GiftLaw stories)
+:transferor a owl:ObjectProperty ; rdfs:domain :PlannedGift ;
+    rdfs:comment "Who puts the property into the trust or the foundation."@en .
+:transferredSubjectToLien a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The property carries a mortgage or similar lien when it is transferred."@en .
+:trustAssumesLien a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The trust or foundation assumes the debt rather than only taking the property subject to it."@en .
+:lienPlacedYearsBefore a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:decimal ;
+    rdfs:comment "How many years before the transfer a disqualified person placed the lien."@en .
+:donorLiableOnDebt a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The donor stays personally liable on debt on the trust's property (recourse debt, or a guarantee)."@en .
+:saleArrangedBeforeGift a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "When the property was given, a buyer was already bound to buy it, or the sale was practically certain."@en .
+
 # Secondary sources
 :SecondarySource a owl:Class ; rdfs:label "Secondary source (a summary of the law, not the law)"@en .
 :secondarySource a owl:ObjectProperty ; rdfs:range :SecondarySource .
@@ -195,6 +209,21 @@
     :enforcedBy :InstitutionalPressure , :SecurityPressure ;
     :guardsAgainst "the founder steering a lead trust's payments into a foundation he also runs, which can pull the trust back into his estate" ;
     :authority "Inferred. The rulings GiftLaw 3.5.1 summarizes (secondary) have independent trustees: 200030014 (the donor and spouse are not trustees, no salaries), 200108032 (the donor may not be trustee), 200537020 (an unrelated trustee). The estate-inclusion sections (2036, 2038) were not read. ST3's independent reviewer is the same idea." .
+
+:Check_PG10 a :DecisionCheck ; :checkConstraint :PG10_EncumberedTransfer ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a mortgaged property given to a remainder trust or the foundation, which the law counts as a sale by an insider" ;
+    :authority "26 USC 4941(d)(2)(A), read 2026-11-21 at law.cornell.edu: 'the transfer of real or personal property by a disqualified person to a private foundation shall be treated as a sale or exchange' 'if the property is subject to a mortgage or similar lien which the foundation assumes' or 'a mortgage or similar lien which a disqualified person placed on the property' 'within the 10-year period ending on the date of the transfer'. 26 CFR 53.4941(d)-2(a)(2), read: 'similar lien' 'shall include, but is not limited to, deeds of trust and vendors' liens'. It reaches a remainder or lead trust with a deduction through 4947(a)(2), read. A lien whose age is unknown fails closed. That the donor placed the lien is assumed when the donor transfers it." .
+
+:Check_PG11 a :DecisionCheck ; :checkConstraint :PG11_DonorLiableOnTrustDebt ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a remainder trust whose payments discharge the donor's own debt, which the IRS treats as a grantor trust that cannot qualify" ;
+    :authority "Not read. PLR 9015049, as GiftLaw 5.1.2 and 4.7.5 summarize it (secondary): debt the donor stays liable on makes the trust a grantor trust under 677, and a grantor trust cannot be a remainder trust (1.664-1(a)(4)); 1.677(a)-1(d) and 1.664-1(a)(4) were not read. The pages say commentators doubt it but nobody has tested it, so the check fails closed." .
+
+:Check_PG12 a :DecisionCheck ; :checkConstraint :PG12_SaleFixedBeforeGift ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "giving company stock to a trust or charity after the sale is already set, so the gain is taxed to the donor anyway" ;
+    :authority "Not read. The assignment-of-income and prearranged-sale cases the GiftLaw pages summarize (secondary): Hoensheid (Tax Court, 2023) and Ferguson (gain taxed to the donor when the sale had ripened), Palmer and Rev. Rul. 78-197 (no prearrangement unless the charity was legally bound to sell). None of these was read, so a sale fixed before the gift goes to counsel." .
 
 # ---------------------------------------------------------------------
 # Secondary sources: the GiftLaw Pro sections behind each route

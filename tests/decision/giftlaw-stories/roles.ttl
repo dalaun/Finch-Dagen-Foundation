@@ -1,0 +1,24 @@
+@prefix : <http://example.org/trust-domain/giftlaw-stories#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Roles shared by every GiftLaw story case. The donor in a story is td:Founder,
+# a disqualified person (a substantial contributor) to any trust or foundation it
+# funds. Family members and family companies are disqualified persons under 4946;
+# a sibling is not (4946(d) counts spouse, ancestors, children, grandchildren,
+# great-grandchildren and their spouses). Not legal or tax advice.
+
+td:Founder dm:managesFoundation :DonorFoundation .
+:DonorFoundation dm:isPrivateFoundation true ; rdfs:label "A private foundation the donor created and manages" .
+:DonorSpouse a td:DisqualifiedPerson ; rdfs:label "The donor's spouse" .
+:DonorChild a td:DisqualifiedPerson ; rdfs:label "The donor's child" .
+:DonorGrandchild a td:DisqualifiedPerson ; rdfs:label "The donor's grandchild" .
+:DonorParent a td:DisqualifiedPerson ; rdfs:label "The donor's parent" .
+:DonorCompany a td:DisqualifiedPerson ; rdfs:label "A company the donor and family own more than 35 percent of" .
+:DonorPartnership a td:DisqualifiedPerson ; rdfs:label "A partnership or LLC the donor and family own more than 35 percent of" .
+:DonorSibling rdfs:label "The donor's brother or sister (not a disqualified person under 4946(d))" .
+:KeyEmployee rdfs:label "An employee of the donor's company who is not an owner, a family member or a foundation manager" .
+:IndependentTrustee rdfs:label "A trustee unrelated to the donor and not subordinate to the donor" .
+:UnrelatedBuyer rdfs:label "A buyer unrelated to the donor" .
+:PublicCharity dm:isPublicCharity true ; rdfs:label "A public charity unrelated to the donor" .

@@ -99,5 +99,10 @@
 :G27_BargainSaleNoBasisSplit     t:expectOutcome dm:Insufficient ; t:expectChecks "PG7b" .
 :G28_NoVehicle                   t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
 
+:G29_UnitrustMortgagedLand t:expectOutcome dm:Block ; t:expectChecks "PG10" .
+:G30_UnitrustOldLien t:expectOutcome dm:Allow .
+:G31_UnitrustRecourseDebt t:expectOutcome dm:Block ; t:expectChecks "PG11" .
+:G32_UnitrustSaleAlreadySigned t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG12" .
+
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

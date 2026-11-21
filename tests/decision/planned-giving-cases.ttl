@@ -208,3 +208,31 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
 
 # G28 A planned gift with no vehicle named.
 :G28_NoVehicle a dm:PlannedGift .
+
+# ---------------------------------------------------------------------
+# Debt and a sale fixed before the gift (added from the GiftLaw stories)
+# ---------------------------------------------------------------------
+# G29 The founder funds the unitrust with land under a 6-year-old loan; the trust takes it subject to the loan.
+:G29_UnitrustMortgagedLand a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "6"^^xsd:decimal .
+
+# G30 The same land with a loan placed 12 years ago, not assumed.
+:G30_UnitrustOldLien a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal .
+
+# G31 The 12-year-old loan, but the founder stays personally liable on it.
+:G31_UnitrustRecourseDebt a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    dm:donorLiableOnDebt true .
+
+# G32 Company stock into the unitrust after a buyer has signed to buy the company.
+:G32_UnitrustSaleAlreadySigned a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:saleArrangedBeforeGift true .

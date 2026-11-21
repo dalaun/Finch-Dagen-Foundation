@@ -1,0 +1,2811 @@
+@prefix : <http://example.org/trust-domain/giftlaw-stories#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# GiftLaw Pro chapter 3 (deferred gifts): 190 stories, S3-1 to S3-190, from the
+# shelf extract of the operator's notes on the pages. Each story is a dm:StoryCase;
+# a story whose vehicle the planned-giving checks model (remainder unitrusts,
+# family lead trusts, residence trusts) carries a dm:PlannedGift. Annuity remainder
+# trusts, grantor lead trusts, life estates, gift annuities and pooled funds are
+# outside for now. The page's outcome is what the page says, not the law. Roles
+# only; percentages only; no dollar figures. Not legal or tax advice.
+
+:S3_1 a dm:StoryCase ;
+    dm:storyId "S3-1" ;
+    dm:storySection "3.1.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A remainder annuity trust may pay a special-needs trust for one disabled beneficiary for life, in one of three approved formats." ;
+    dm:citesAuthority "PLR 199903001; Rev. Rul. 2002-20; Sec. 6511(b)(2)(A)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_2 a dm:StoryCase ;
+    dm:storyId "S3-2" ;
+    dm:storySection "3.1.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An annuity remainder trust may make current payments to charity and name the donors’ private foundation as remainder beneficiary." ;
+    dm:citesAuthority "PLR 200010035" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_3 a dm:StoryCase ;
+    dm:storyId "S3-3" ;
+    dm:storySection "3.1.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An annuity remainder trust may end when the recipient remarries, as a qualified contingency, though that does not raise the deduction." ;
+    dm:citesAuthority "PLR 200430012; Sec. 664(f)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_4 a dm:StoryCase ;
+    dm:storyId "S3-4" ;
+    dm:storySection "3.1.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A term remainder trust may pay another trust freely; a one-life trust may do so only for a single incompetent beneficiary." ;
+    dm:citesAuthority "PLR 9718030; PLR 9839024" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_5 a dm:StoryCase ;
+    dm:storyId "S3-5" ;
+    dm:storySection "3.1.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "The Tax Court rejected the annuity-trust and commercial-annuity scheme: carryover basis, recapture as ordinary income, every payout taxable, and a penalty for one couple." ;
+    dm:citesAuthority "Gerhardt v. Commissioner, 160 T.C. No. 9; Secs. 1015, 72, 664(b), 1245, 6662" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_6 a dm:StoryCase ;
+    dm:storyId "S3-6" ;
+    dm:storySection "3.1.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "The district court upheld an estate’s charitable deduction for a bequest to a testamentary trust." ;
+    dm:citesAuthority "Palumbo (D.C., 2011)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction for a testamentary trust" .
+
+:S3_7 a dm:StoryCase ;
+    dm:storyId "S3-7" ;
+    dm:storySection "3.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An annuity trust funded with undervalued stock stays valid if the deduction is figured on twenty times the stated annuity amount." ;
+    dm:citesAuthority "Reg. 1.664-2(a)(2)(iii); Sec. 664(d)(1)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_8 a dm:StoryCase ;
+    dm:storyId "S3-8" ;
+    dm:storySection "3.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "The author argues the 10 percent test may use the best of three allowed rates for same-day land and cash, with reformation as the fallback." ;
+    dm:citesAuthority "Sec. 7520; Sec. 664(d)(1); Sec. 2055(e)" ;
+    dm:pageOutcome dm:NeedsCounsel ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_9 a dm:StoryCase ;
+    dm:storyId "S3-9" ;
+    dm:storySection "3.1.5" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "The estate deduction was denied because the annuity trust never paid its annuity and was used to pay estate tax; the appeals court affirmed." ;
+    dm:citesAuthority "Atkinson, 115 T.C. No. 3 (2000), aff'd 11th Cir.; Rev. Rul. 82-128; S. Rept. 91-552; Reg. 1.664-3(a); Reg. 1.664-3(a)(1)(i)(g); Reg. 1.664-3(a)(2)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_10 a dm:StoryCase ;
+    dm:storyId "S3-10" ;
+    dm:storySection "3.1.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Giving 20 percent of an annuity-trust income interest to the remainder charity is deductible, but as a capital-gain gift under the 30 percent limit." ;
+    dm:citesAuthority "PLR 9550026; Reg. 1.170A-7(a)(2)(i); Sec. 170(f)(3)(A)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_11 a dm:StoryCase ;
+    dm:storyId "S3-11" ;
+    dm:storySection "3.1.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An annuity trust may pay part of its principal to charity each year if amounts and timing are set well after creation." ;
+    dm:citesAuthority "PLR 199929033" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_12 a dm:StoryCase ;
+    dm:storyId "S3-12" ;
+    dm:storySection "3.1.7" ;
+    dm:storyKind "revenue ruling" ;
+    dm:pageSays "A remainder trust may not be invaded to pay estate or gift tax; with a retained revocation power the child’s interest is taxed in the estate." ;
+    dm:citesAuthority "Rev. Rul. 82-128" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_13 a dm:StoryCase ;
+    dm:storyId "S3-13" ;
+    dm:storySection "3.1.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A misdrafted annuity trust was saved because the mistake was shown to be the drafter’s." ;
+    dm:citesAuthority "PLR 200422005; PLR 200425027" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_14 a dm:StoryCase ;
+    dm:storyId "S3-14" ;
+    dm:storySection "3.1.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An independent trustee may choose the remainder charities while the grantor keeps the power to replace the trustee, without breaking the unitrust." ;
+    dm:citesAuthority "PLR 9202033; Rev. Rul. 77-285" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_14_gift ;
+    dm:gapNote "No check tests trustee independence or a grantor’s retained power to replace the trustee." .
+:S3_14_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee :IndependentTrustee .
+
+:S3_15 a dm:StoryCase ;
+    dm:storyId "S3-15" ;
+    dm:storySection "3.1.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Retained powers to change the charity, to send early distributions to charity, and to negotiate trustee fees do not disqualify the unitrust." ;
+    dm:citesAuthority "PLR 9712031" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_15_gift ;
+    dm:gapNote "No check models which powers a grantor may keep over a remainder trust." .
+:S3_15_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_16 a dm:StoryCase ;
+    dm:storyId "S3-16" ;
+    dm:storySection "3.1.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A handwritten will’s noncompliant charitable trust was saved by a timely estate tax reformation." ;
+    dm:citesAuthority "PLR 200020034; Sec. 2055(e)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction saved by reformation" .
+
+:S3_17 a dm:StoryCase ;
+    dm:storyId "S3-17" ;
+    dm:storySection "3.1.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A noncompliant charitable trust was approved for reformation into three annuity remainder trusts." ;
+    dm:citesAuthority "PLR 200027014" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_18 a dm:StoryCase ;
+    dm:storyId "S3-18" ;
+    dm:storySection "3.1.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A testamentary unitrust paying 4 percent, below the 5 percent minimum, was reformed so it qualifies." ;
+    dm:citesAuthority "PLR 200622005" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_18_gift ;
+    dm:gapNote "No check models a qualified reformation curing a payout below the 5 percent floor; PG4 reads the trust as drafted." .
+:S3_18_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "4"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_19 a dm:StoryCase ;
+    dm:storyId "S3-19" ;
+    dm:storySection "3.1.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A remainder trust was divided into successor trusts without tax." ;
+    dm:citesAuthority "PLR 200624003; PLR 201648007" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "remainder trust form not stated; division" .
+
+:S3_20 a dm:StoryCase ;
+    dm:storyId "S3-20" ;
+    dm:storySection "3.1.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Noncharitable grantor retained annuity trusts with drafting errors were reformed." ;
+    dm:citesAuthority "PLR 201442046" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "noncharitable retained annuity trust" .
+
+:S3_21 a dm:StoryCase ;
+    dm:storyId "S3-21" ;
+    dm:storySection "3.1.9" ;
+    dm:storyKind "example" ;
+    dm:pageSays "In a short-term education trust the first students’ vested interests get annual exclusions; the rest uses exemption, and the kiddie tax limits income shifting." ;
+    dm:citesAuthority "PLR 8637084; Reg. 25.2503-3(b); Reg. 25.2503-3(c) Ex. 3; Sec. 1(g)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust for education" .
+
+:S3_22 a dm:StoryCase ;
+    dm:storyId "S3-22" ;
+    dm:storySection "3.1.9" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A retained power to revoke students’ interests makes each year’s payment a completed gift under that year’s exclusion; death during the term brings estate inclusion." ;
+    dm:citesAuthority "PLR 8949061; Reg. 25.2511-2(f); Reg. 1.664-3(a)(5); Sec. 2036(a)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust for education" .
+
+:S3_23 a dm:StoryCase ;
+    dm:storyId "S3-23" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "With a retained but unused revocation power, the daughter’s annuity interest is taxed in the donor’s estate and the remainder is deducted." ;
+    dm:citesAuthority "Sec. 2038(a); Reg. 1.664-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_24 a dm:StoryCase ;
+    dm:storyId "S3-24" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Exercising the testamentary revocation power by will sends the whole trust to charity with a full estate deduction." ;
+    dm:citesAuthority "Reg. 1.664-2(a)(4); Sec. 2055" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_25 a dm:StoryCase ;
+    dm:storyId "S3-25" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Keeping a testamentary revocation power avoids a current gift, but the daughter’s interest is included in the donor’s estate." ;
+    dm:citesAuthority "Sec. 2038(a); Reg. 1.664-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_26 a dm:StoryCase ;
+    dm:storyId "S3-26" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An annuity trust for the donor’s son alone makes a taxable gift of the son’s interest, less one annual exclusion if vested." ;
+    dm:citesAuthority "Reg. 25.2503-3(b)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_27 a dm:StoryCase ;
+    dm:storyId "S3-27" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A donor-then-son annuity trust makes a future-interest gift equal to the joint-life value less the donor’s life value, with no annual exclusion." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_28 a dm:StoryCase ;
+    dm:storyId "S3-28" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A joint-and-survivor annuity trust shared equally with a non-spouse makes two gifts computed on each half, with one annual exclusion." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_29 a dm:StoryCase ;
+    dm:storyId "S3-29" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An extension was granted to allocate generation-skipping exemption to an annuity trust paying skip persons." ;
+    dm:citesAuthority "PLR 200431005; Secs. 2632, 2613" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust" .
+
+:S3_30 a dm:StoryCase ;
+    dm:storyId "S3-30" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A unitrust may hold life insurance, with premiums deductible, when the donor keeps only the right to change charities." ;
+    dm:citesAuthority "PLR 7928014; PLR 8745013; Rev. Rul. 84-179" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_30_gift ;
+    dm:gapNote "No check models life insurance held by a remainder trust." ;
+    dm:pageAccuracyNote "Insofar as the page treats the jeopardy rule (4944) as bearing on a remainder trust, it is wrong on that point: 4947(b)(3)(B) generally makes 4944 inapplicable there." .
+:S3_30_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_31 a dm:StoryCase ;
+    dm:storyId "S3-31" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Municipal bonds held by a remainder trust do not escape the four-tier character rules for payouts." ;
+    dm:citesAuthority "PLR 8405005" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "remainder trust form not stated; four-tier rules" .
+
+:S3_32 a dm:StoryCase ;
+    dm:storyId "S3-32" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Debt-encumbered property does not belong in a remainder trust, and the ruling did not allow it." ;
+    dm:citesAuthority "PLR 9015049" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_32_gift ;
+    dm:gapNote "Covered since this pass by PG10; the grantor-trust rule is PG11, which needs the donor's liability, not given here." .
+:S3_32_gift a dm:PlannedGift ;
+    # assumed: the notes say only remainder trust; unitrust form is filled
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the debt makes the property debt-financed, producing unrelated business income (the notes tag UBTI)
+    dm:producesUBTI true ;
+    # assumed: the donor placed the lien; its age is not given ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true .
+
+:S3_33 a dm:StoryCase ;
+    dm:storyId "S3-33" ;
+    dm:storySection "3.1.10" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "The court included the charitable annuity arrangement in the estate because the decedent kept an interest." ;
+    dm:citesAuthority "Trombetta, T.C. Memo 2013-234" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder arrangement; estate inclusion" .
+
+:S3_34 a dm:StoryCase ;
+    dm:storyId "S3-34" ;
+    dm:storySection "3.1.11" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A family’s ten remainder trusts may pool their investments through a new LLC." ;
+    dm:citesAuthority "PLR 200423029" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_34_gift ;
+    dm:gapNote "No check models remainder trusts investing together through a shared entity." .
+:S3_34_gift a dm:PlannedGift ;
+    # assumed: the notes say only remainder trust; unitrust form is filled
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_35 a dm:StoryCase ;
+    dm:storyId "S3-35" ;
+    dm:storySection "3.1.11" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A religious objection to paying tax was rejected as a defense." ;
+    dm:citesAuthority "Indianapolis Baptist Temple" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "tax protest defense" .
+
+:S3_36 a dm:StoryCase ;
+    dm:storyId "S3-36" ;
+    dm:storySection "3.2.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Without an alternate gift a specific bequest lapses if the asset is gone; with one, the beneficiary takes the cash instead." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:StateLaw ;
+    dm:outsideReason "bequest lapse and drafting" .
+
+:S3_37 a dm:StoryCase ;
+    dm:storyId "S3-37" ;
+    dm:storySection "3.2.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Estates that satisfied charity’s residuary share with an IRA and a commercial annuity were not taxed on that income." ;
+    dm:citesAuthority "PLR 200617020; PLR 200618023" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_38 a dm:StoryCase ;
+    dm:storyId "S3-38" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A charity’s share subject to an unlimited invasion power was contingent, so no estate deduction, and reformation did not cure it." ;
+    dm:citesAuthority "Harbison v. U.S.; Sec. 2055(e)(3)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction for a contingent gift" .
+
+:S3_39 a dm:StoryCase ;
+    dm:storyId "S3-39" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A vague bequest to missionaries survived only because the testator’s long-shown intent identified the recipient; draft precisely." ;
+    dm:citesAuthority "Starkey" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:StateLaw ;
+    dm:outsideReason "will construction of a vague bequest" .
+
+:S3_40 a dm:StoryCase ;
+    dm:storyId "S3-40" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "In a 40 percent estate bracket a charitable bequest saves 40 percent in estate tax, so its net cost is 60 percent." ;
+    dm:citesAuthority "Sec. 2055" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "net cost of a bequest" .
+
+:S3_41 a dm:StoryCase ;
+    dm:storyId "S3-41" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A bequest of a large art collection to a museum was deductible." ;
+    dm:citesAuthority "PLR 200202032" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "bequest of art to a museum" .
+
+:S3_42 a dm:StoryCase ;
+    dm:storyId "S3-42" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A residuary bequest to a charitable trust was deductible." ;
+    dm:citesAuthority "PLR 200322013" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction for a residuary bequest" .
+
+:S3_43 a dm:StoryCase ;
+    dm:storyId "S3-43" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A will’s charitable no-contest arrangement was approved." ;
+    dm:citesAuthority "PLR 200505008" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction under a no-contest plan" .
+
+:S3_44 a dm:StoryCase ;
+    dm:storyId "S3-44" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A payment to charity under the parties’ settlement agreement was deductible for the estate." ;
+    dm:citesAuthority "PLR 200825014" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction under a settlement" .
+
+:S3_45 a dm:StoryCase ;
+    dm:storyId "S3-45" ;
+    dm:storySection "3.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Bequests to a foreign city and museum were deductible for estate tax, since their use was limited to charitable purposes." ;
+    dm:citesAuthority "PLR 200905015; Reg. 20.2055-1(a)(4); Rev. Rul. 74-523" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "bequests to foreign charities" .
+
+:S3_46 a dm:StoryCase ;
+    dm:storyId "S3-46" ;
+    dm:storySection "3.2.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Naming the estate as IRA beneficiary produces income in respect of a decedent to the estate." ;
+    dm:citesAuthority "PLR 200221011" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_47 a dm:StoryCase ;
+    dm:storyId "S3-47" ;
+    dm:storySection "3.2.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "IRD assets passing to charity through an estate were included in the estate but not taxed as income." ;
+    dm:citesAuthority "PLR 200537019" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_48 a dm:StoryCase ;
+    dm:storyId "S3-48" ;
+    dm:storySection "3.2.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A commercial annuity passing to charity at death was tax-free to the charity." ;
+    dm:citesAuthority "PLR 200803002" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_49 a dm:StoryCase ;
+    dm:storyId "S3-49" ;
+    dm:storySection "3.2.3" ;
+    dm:storyKind "other (IRS legal memorandum)" ;
+    dm:pageSays "An estate or trust that distributed an IRA to charity got no 642(c) income tax charitable deduction." ;
+    dm:citesAuthority "ILM 200848020" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_50 a dm:StoryCase ;
+    dm:storyId "S3-50" ;
+    dm:storySection "3.2.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A surviving spouse who disclaims into a unitrust paying that spouse keeps lifetime payouts, and the estate keeps the marital deduction." ;
+    dm:citesAuthority "Sec. 2518(b)(4)(A); Sec. 2056(b)(8)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_50_gift ;
+    dm:gapNote "No check models qualified disclaimers or the spousal exception that keeps the marital deduction." .
+:S3_50_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_51 a dm:StoryCase ;
+    dm:storyId "S3-51" ;
+    dm:storySection "3.2.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Primary beneficiaries’ disclaimers sending IRAs to the contingent charity were approved." ;
+    dm:citesAuthority "PLR 200052006" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "qualified disclaimer to charity" .
+
+:S3_52 a dm:StoryCase ;
+    dm:storyId "S3-52" ;
+    dm:storySection "3.2.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Heirs’ disclaimers created or preserved estate charitable deductions." ;
+    dm:citesAuthority "PLR 200420007; PLR 200744005; PLR 200802010" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "qualified disclaimer to charity" .
+
+:S3_53 a dm:StoryCase ;
+    dm:storyId "S3-53" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A cash gift annuity’s deduction depends on the chosen rate; the lowest rate gives more tax-free income and a smaller deduction." ;
+    dm:citesAuthority "Reg. 1.1011-2(c); Pub. 1457 Table S; Sec. 514(c)(5)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_54 a dm:StoryCase ;
+    dm:storyId "S3-54" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "The exclusion ratio makes about 80 percent of each payment tax-free until life expectancy, then all ordinary income." ;
+    dm:citesAuthority "Reg. 1.72-9 Tables V/VI" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_55 a dm:StoryCase ;
+    dm:storyId "S3-55" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Funding a gift annuity with appreciated stock bypasses gain on the gift part and spreads the annuity part’s gain over life expectancy." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_56 a dm:StoryCase ;
+    dm:storyId "S3-56" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A parent-then-child annuity splits each payment into ordinary income and capital gain during the parent’s life; the child later recovers basis tax-free." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" ;
+    dm:pageAccuracyNote "The notes flag that the page gives a different expected return for this example in 3.4.1 than in 3.3.2." .
+
+:S3_57 a dm:StoryCase ;
+    dm:storyId "S3-57" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An annuity for the child alone, funded with appreciated property, makes the parent report gain at once, a net tax cost." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_58 a dm:StoryCase ;
+    dm:storyId "S3-58" ;
+    dm:storySection "3.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Inventory funding a gift annuity yields only a small deduction, and its gain is taxed as ordinary income in each payment." ;
+    dm:citesAuthority "Sec. 170(e); Reg. 1.1011-2(a)(4)(ii)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_59 a dm:StoryCase ;
+    dm:storyId "S3-59" ;
+    dm:storySection "3.3.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A ten-year deferred cash annuity gives a deduction for the gift part and an exclusion ratio once payments start." ;
+    dm:citesAuthority "Pub. 1457 Table H; Reg. 1.72-4(b)(1)(ii)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "deferred gift annuity" .
+
+:S3_60 a dm:StoryCase ;
+    dm:storyId "S3-60" ;
+    dm:storySection "3.3.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "The same deferred annuity funded with appreciated stock gives the same deduction and spreads capital gain over the payments." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(4)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "deferred gift annuity" .
+
+:S3_61 a dm:StoryCase ;
+    dm:storyId "S3-61" ;
+    dm:storySection "3.3.5" ;
+    dm:storyKind "other (specimen letter)" ;
+    dm:pageSays "A specimen letter shows the material terms a gift annuity disclosure needs and advises saying fixed payments, not guaranteed interest." ;
+    dm:citesAuthority "Philanthropy Protection Act of 1995; Charitable Gift Annuity Antitrust Relief Act of 1995" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity disclosure" .
+
+:S3_62 a dm:StoryCase ;
+    dm:storyId "S3-62" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Assigning a cash annuity back to the charity is deductible at the lesser of contract value and unrecovered basis." ;
+    dm:citesAuthority "Sec. 170(e)(1)(A); Sec. 72(a)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_63 a dm:StoryCase ;
+    dm:storyId "S3-63" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "When contract value has fallen below basis, the assignment is deductible only at contract value." ;
+    dm:citesAuthority "Sec. 170(e)(1)(A)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_64 a dm:StoryCase ;
+    dm:storyId "S3-64" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Assigning a stock-funded annuity is deductible at basis plus unreported gain, under the 30 percent limit, with no gain recognized." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(4); Reg. 1.170A-1(c)(1)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_65 a dm:StoryCase ;
+    dm:storyId "S3-65" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple assigning both interests in a two-life annuity deducts the lesser of two-life value and basis plus gain." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_66 a dm:StoryCase ;
+    dm:storyId "S3-66" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A surviving annuitant assigning alone deducts the one-life value, since it is less than basis plus gain." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_67 a dm:StoryCase ;
+    dm:storyId "S3-67" ;
+    dm:storySection "3.3.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A parent who gives up only the first annuity interest gets no deduction, since the charity’s benefit depends on the child’s life." ;
+    dm:citesAuthority "Reg. 1.170A-1(e)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift of an annuity contract" .
+
+:S3_68 a dm:StoryCase ;
+    dm:storyId "S3-68" ;
+    dm:storySection "3.3.8" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An annuitant who outlives life expectancy has no basis left, so no deduction at death and all later payments are ordinary." ;
+    dm:citesAuthority "Sec. 72(b)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unrecovered annuity basis" .
+
+:S3_69 a dm:StoryCase ;
+    dm:storyId "S3-69" ;
+    dm:storySection "3.3.8" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An annuitant who dies within a year may deduct unrecovered basis on the final return; the 2017 act did not repeal it." ;
+    dm:citesAuthority "Sec. 72(b)(3)(A); Sec. 72(b)(4); Sec. 67(b)(10)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unrecovered annuity basis" .
+
+:S3_70 a dm:StoryCase ;
+    dm:storyId "S3-70" ;
+    dm:storySection "3.3.8" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Unrecovered annuity basis at death counts as a business loss for net operating loss purposes, sheltering an elderly owner’s income." ;
+    dm:citesAuthority "Sec. 72(b)(3)(C); Sec. 172" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unrecovered annuity basis" .
+
+:S3_71 a dm:StoryCase ;
+    dm:storyId "S3-71" ;
+    dm:storySection "3.3.8" ;
+    dm:storyKind "revenue ruling" ;
+    dm:pageSays "When the gift agreement requires the charity to reinsure, the deduction falls to the uninsured part; reinsurance the charity chooses alone has no effect." ;
+    dm:citesAuthority "Rev. Rul. 62-137" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "reinsured gift annuity" .
+
+:S3_72 a dm:StoryCase ;
+    dm:storyId "S3-72" ;
+    dm:storySection "3.3.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Gift annuities the charities reinsured were allowed." ;
+    dm:citesAuthority "PLR 200847014; PLR 200852037" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "reinsured gift annuity" .
+
+:S3_73 a dm:StoryCase ;
+    dm:storyId "S3-73" ;
+    dm:storySection "3.3.9" ;
+    dm:storyKind "example" ;
+    dm:pageSays "At the donor’s death the niece’s survivor annuity is in the donor’s estate, and the niece keeps reporting the remaining gain." ;
+    dm:citesAuthority "Sec. 2039(a)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity" .
+
+:S3_74 a dm:StoryCase ;
+    dm:storyId "S3-74" ;
+    dm:storySection "3.4.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A deferred gift annuity with a flexible start date is allowed, with the deduction based on the target date." ;
+    dm:citesAuthority "PLR 9743054; PLR 200449033" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "flexible deferred gift annuity" .
+
+:S3_75 a dm:StoryCase ;
+    dm:storyId "S3-75" ;
+    dm:storySection "3.4.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A flexible deferred cash annuity gives a deduction at the target age, with smaller payments if started earlier and larger if later." ;
+    dm:citesAuthority "PLR 9743054" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "flexible deferred gift annuity" .
+
+:S3_76 a dm:StoryCase ;
+    dm:storyId "S3-76" ;
+    dm:storySection "3.4.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A spouse’s written election at least one payment period before the chosen start validly fixes a flexible annuity’s start date." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "flexible deferred gift annuity" .
+
+:S3_77 a dm:StoryCase ;
+    dm:storyId "S3-77" ;
+    dm:storySection "3.4.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A will-funded immediate annuity for a daughter gives a partial estate deduction and a tax-free share of each payment." ;
+    dm:citesAuthority "Sec. 2055(e)(2)(A)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "testamentary gift annuity" ;
+    dm:pageAccuracyNote "The notes flag that the page’s figures for this example do not reconcile." .
+
+:S3_78 a dm:StoryCase ;
+    dm:storyId "S3-78" ;
+    dm:storySection "3.4.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A will-funded deferred annuity for a daughter gives a partial estate deduction and partly tax-free payments from age 65." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "testamentary gift annuity" .
+
+:S3_79 a dm:StoryCase ;
+    dm:storyId "S3-79" ;
+    dm:storySection "3.4.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Funding one deferred annuity a year until retirement builds fixed retirement income, with each year’s deduction figured at actual rates." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "deferred gift annuity" .
+
+:S3_80 a dm:StoryCase ;
+    dm:storyId "S3-80" ;
+    dm:storySection "3.4.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Converting a deferred life annuity to a five-year term works, but term payments before age 59 and a half carry the 10 percent early-withdrawal penalty." ;
+    dm:citesAuthority "Sec. 514(c)(5); Sec. 72(q)" ;
+    dm:pageOutcome dm:NeedsCounsel ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "deferred gift annuity" .
+
+:S3_81 a dm:StoryCase ;
+    dm:storyId "S3-81" ;
+    dm:storySection "3.4.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Deeding a home remainder while keeping a life estate, for a gift annuity, gives a deduction and, with the home-sale exclusion, no recognized gain." ;
+    dm:citesAuthority "Sec. 170(f)(3)(B)(i); Sec. 121(d)(8)(A); Rev. Rul. 78-303; Rev. Rul. 87-37" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "retained life estate with a gift annuity" .
+
+:S3_82 a dm:StoryCase ;
+    dm:storyId "S3-82" ;
+    dm:storySection "3.4.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An IRA payable to a charity to fund a testamentary gift annuity got five favorable findings, including no IRD until payments arrive." ;
+    dm:citesAuthority "PLR 200230018; Secs. 2031, 2033, 2055(e)(2)(A), 72, 1011, 7520, 501(m)(1), 514(c)(5)(A)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "testamentary gift annuity funded by an IRA" .
+
+:S3_83 a dm:StoryCase ;
+    dm:storyId "S3-83" ;
+    dm:storySection "3.4.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Exchanging a unitrust income interest for a gift annuity gives income and gift tax deductions without accelerated gain, but no basis offset." ;
+    dm:citesAuthority "PLR 200152018; Sec. 170(f)(3)(A); Reg. 1.1011-2(a)(1); Reg. 1.170A-7(a)(2)(i); Secs. 2522(a), 2522(c)(2); Rev. Rul. 86-60; Rev. Rul. 72-243; Reg. 1.1011-2(c) Ex. 8; Sec. 1001(e)(1), (e)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unitrust income interest exchanged for a gift annuity" .
+
+:S3_84 a dm:StoryCase ;
+    dm:storyId "S3-84" ;
+    dm:storySection "3.4.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Using a unitrust income interest to buy a gift annuity gives a capital-gain-type deduction for the excess, with an appraisal required." ;
+    dm:citesAuthority "Pub. 1458; Reg. 1.170A-7(a)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unitrust income interest exchanged for a gift annuity" .
+
+:S3_85 a dm:StoryCase ;
+    dm:storyId "S3-85" ;
+    dm:storySection "3.4.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Swapping a low-yield net-income unitrust’s income interest for a gift annuity gives the donor a deduction and the charity a current gift." ;
+    dm:citesAuthority "Sec. 664(e) (PATH Act of 2015); Sec. 514(c)(5)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unitrust income interest exchanged for a gift annuity" .
+
+:S3_86 a dm:StoryCase ;
+    dm:storyId "S3-86" ;
+    dm:storySection "3.4.7" ;
+    dm:storyKind "other (specimen letter)" ;
+    dm:pageSays "A specimen letter shows how an income recipient can irrevocably assign a share to charity and exchange it for a gift annuity." ;
+    dm:citesAuthority "Sec. 514(c)(5)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "unitrust income interest exchanged for a gift annuity" .
+
+:S3_87 a dm:StoryCase ;
+    dm:storyId "S3-87" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A large family lead trust can pass well beyond the exemption to family; funding when rates are low and using the lowest allowed rate helps." ;
+    dm:citesAuthority "Reg. 25.2522(c)-3(c)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_87_gift .
+:S3_87_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_88 a dm:StoryCase ;
+    dm:storyId "S3-88" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 15-year family lead annuity trust’s taxable gift rises with the federal rate, so lower rates leave a smaller taxable gift." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_88_gift .
+:S3_88_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # derived from the page: the charitable share of the trust at the 3 percent rate
+    dm:charitableIncomeValuePercent "83.6"^^xsd:decimal ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_89 a dm:StoryCase ;
+    dm:storyId "S3-89" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "other (regulation)" ;
+    dm:pageSays "Lead trusts measured on an unrelated, terminally ill person’s life are barred for trusts created on or after April 4, 2000." ;
+    dm:citesAuthority "Regs. under Secs. 170/2055 (effective April 4, 2000)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_89_gift ;
+    dm:gapNote "No check limits a lead trust’s measuring lives to the donor, the donor’s spouse and lineal ancestors of the remaindermen." .
+:S3_89_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_90 a dm:StoryCase ;
+    dm:storyId "S3-90" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A testamentary lead trust was allowed to be reformed so it qualifies." ;
+    dm:citesAuthority "PLR 199915058" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_90_gift ;
+    dm:gapNote "No check models reformation of a lead trust." .
+:S3_90_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_91 a dm:StoryCase ;
+    dm:storyId "S3-91" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Commuting a lead trust’s remaining charitable payments was allowed in one ruling and refused in another." ;
+    dm:citesAuthority "PLR 199952093; PLR 9734057" ;
+    dm:pageOutcome dm:NeedsCounsel ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_91_gift ;
+    dm:gapNote "No check models commutation (early payment of the present value) of a lead trust’s charitable interest." .
+:S3_91_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_92 a dm:StoryCase ;
+    dm:storyId "S3-92" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead unitrust may be funded with limited partnership units." ;
+    dm:citesAuthority "PLR 200018062" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_92_gift .
+:S3_92_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:UnitrustInterest ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_93 a dm:StoryCase ;
+    dm:storyId "S3-93" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead trust may let the grantor’s children or the trustees pick the charities each year; the grantor should not hold that power." ;
+    dm:citesAuthority "PLR 200029033; PLR 200021020; PLR 9604015; PLR 200516005; Sec. 2036(a)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_93_gift ;
+    dm:gapNote "No check flags a grantor’s retained power to choose the lead charities, which risks estate inclusion." .
+:S3_93_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_94 a dm:StoryCase ;
+    dm:storyId "S3-94" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead trust may name the family’s private foundation as its charitable recipient, including one with grandchildren as remaindermen." ;
+    dm:citesAuthority "PLR 200030014; PLR 200537020" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_94_gift .
+:S3_94_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    dm:leadBeneficiary :DonorFoundation .
+
+:S3_95 a dm:StoryCase ;
+    dm:storyId "S3-95" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead trust may run for two lives or 20 years, whichever is longer." ;
+    dm:citesAuthority "PLR 200108032" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_95_gift .
+:S3_95_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_96 a dm:StoryCase ;
+    dm:storyId "S3-96" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "The IRS found no self-dealing in the family lead trusts’ reviewed transactions, including one involving an LLC purchase." ;
+    dm:citesAuthority "PLR 200124029; PLR 200207028; PLR 200225045" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_96_gift .
+# not encoded: the notes give titles only, so the parties to the transactions are unknown
+:S3_96_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_97 a dm:StoryCase ;
+    dm:storyId "S3-97" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead trustee’s power to choose charitable recipients does not make the trust a grantor trust." ;
+    dm:citesAuthority "PLR 200536013" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_97_gift .
+:S3_97_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_98 a dm:StoryCase ;
+    dm:storyId "S3-98" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Funding a lead trust was a completed gift and created no excess business holdings." ;
+    dm:citesAuthority "PLR 200747001" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_98_gift .
+# not encoded: the notes give the title only, so the business holding percentages are unknown
+:S3_98_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_99 a dm:StoryCase ;
+    dm:storyId "S3-99" ;
+    dm:storySection "3.5.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A recapitalization that produced the interests funding a lead trust was approved." ;
+    dm:citesAuthority "PLR 9819031" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_99_gift .
+:S3_99_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_100 a dm:StoryCase ;
+    dm:storyId "S3-100" ;
+    dm:storySection "3.5.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A non-grantor lead annuity trust was allowed to convert to a grantor trust." ;
+    dm:citesAuthority "PLR 201730012" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_101 a dm:StoryCase ;
+    dm:storyId "S3-101" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A grantor lead trust whose swap power sits with the donor’s sibling gives an income deduction without estate inclusion, at a modest yearly tax cost." ;
+    dm:citesAuthority "Sec. 675(4); Sec. 170(f)(2); Sec. 2036(a); Sec. 4946(d); PLR 200010036" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_102 a dm:StoryCase ;
+    dm:storyId "S3-102" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Giving the asset-substitution power to the grantor’s sibling, not a disqualified person, avoids the self-dealing risk of the grantor holding it." ;
+    dm:citesAuthority "PLR 200010036; Sec. 4946(d); Sec. 4941" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_103 a dm:StoryCase ;
+    dm:storyId "S3-103" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lead annuity trust drafted as a defective grantor trust was approved." ;
+    dm:citesAuthority "PLR 200011012" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_104 a dm:StoryCase ;
+    dm:storyId "S3-104" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Grantor lead trusts funded with S corporation stock were listed as permitted." ;
+    dm:citesAuthority "PLR 199908002; PLR 199936031" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_105 a dm:StoryCase ;
+    dm:storyId "S3-105" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A grantor lead unitrust structured for an income tax deduction got that deduction." ;
+    dm:citesAuthority "PLR 199922007" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_106 a dm:StoryCase ;
+    dm:storyId "S3-106" ;
+    dm:storySection "3.5.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A super grantor lead trust invested in municipal bonds to keep the grantor’s yearly tax low was approved." ;
+    dm:citesAuthority "PLR 9224029" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_107 a dm:StoryCase ;
+    dm:storyId "S3-107" ;
+    dm:storySection "3.5.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 12-year lead annuity trust can be sized for a set taxable gift; lower rates need a larger trust but give a bigger deduction." ;
+    dm:citesAuthority "Pub. 1457; Rev. Proc. 2007-45; Rev. Proc. 2007-46" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_107_gift .
+:S3_107_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # derived from the page: the charitable share of the trust at the 2 percent rate
+    dm:charitableIncomeValuePercent "63.5"^^xsd:decimal ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_108 a dm:StoryCase ;
+    dm:storyId "S3-108" ;
+    dm:storySection "3.5.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Payments in a lead annuity trust involving a disqualified S corporation were ruled not self-dealing." ;
+    dm:citesAuthority "PLR 200241048" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_108_gift ;
+    dm:gapNote "No check models which payments between a lead trust and a disqualified company are not self-dealing." .
+# not encoded: the notes give the title only, so the payment’s form and direction are unknown
+:S3_108_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_109 a dm:StoryCase ;
+    dm:storyId "S3-109" ;
+    dm:storySection "3.5.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A testamentary lead annuity trust whose payments were set by formula earned an estate tax deduction." ;
+    dm:citesAuthority "PLR 201933007" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_109_gift .
+:S3_109_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_110 a dm:StoryCase ;
+    dm:storyId "S3-110" ;
+    dm:storySection "3.5.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A lead unitrust protects family principal when earnings trail the payout, while a lead annuity trust wins when earnings beat it by about two points." ;
+    dm:citesAuthority "Reg. 20.2055-2(e)(2); Reg. 25.2522(c)-3(c)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_110_gift .
+# the annuity form is encoded; the unitrust version grades the same
+:S3_110_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_111 a dm:StoryCase ;
+    dm:storyId "S3-111" ;
+    dm:storySection "3.5.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Lifetime lead unitrusts got a gift deduction with no estate inclusion." ;
+    dm:citesAuthority "PLR 200240027" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_111_gift .
+:S3_111_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:UnitrustInterest ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_112 a dm:StoryCase ;
+    dm:storyId "S3-112" ;
+    dm:storySection "3.5.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A donor who kept the power to change the lead unitrust’s charities got no deduction." ;
+    dm:citesAuthority "PLR 200328030" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_112_gift ;
+    dm:gapNote "No check denies the deduction when the grantor keeps the power to change a lead trust’s charities." .
+:S3_112_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed false ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:UnitrustInterest ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_113 a dm:StoryCase ;
+    dm:storyId "S3-113" ;
+    dm:storySection "3.5.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lifetime lead annuity trust was not included in the donor’s estate." ;
+    dm:citesAuthority "PLR 200138018" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_113_gift .
+:S3_113_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_114 a dm:StoryCase ;
+    dm:storyId "S3-114" ;
+    dm:storySection "3.5.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A testamentary annuity remainder trust with an added lead-type payout to charity earned two estate deductions." ;
+    dm:citesAuthority "PLR 200306008" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "annuity remainder trust with a lead-type payout" .
+
+:S3_115 a dm:StoryCase ;
+    dm:storyId "S3-115" ;
+    dm:storySection "3.6.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An 8-year lead annuity trust funded with discounted partnership units passes large value to family, if the partnership has no debt or active business." ;
+    dm:citesAuthority "Secs. 512, 514, 681, 642(c); Korby; Bigelow (both 2005)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_115_gift ;
+    dm:gapNote "No check models unrelated business income in a lead trust cutting its 642(c) deduction, or challenges to partnership valuation discounts." .
+:S3_115_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity ;
+    dm:holderVotingPercent "65"^^xsd:decimal ;
+    dm:holderValuePercent "65"^^xsd:decimal ;
+    # assumed: the donor keeps the other partnership units
+    dm:disqualifiedVotingPercent "35"^^xsd:decimal ;
+    # assumed: the page’s condition of no active business: the partnership’s income is all passive
+    dm:passiveIncomePercent "100"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true .
+
+:S3_116 a dm:StoryCase ;
+    dm:storyId "S3-116" ;
+    dm:storySection "3.6.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A testamentary lead annuity trust funded with discounted partnership units passes substantial discounted value to family after 15 years." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_116_gift .
+:S3_116_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_117 a dm:StoryCase ;
+    dm:storyId "S3-117" ;
+    dm:storySection "3.6.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A parent’s 12-year lead annuity trust of low-basis blue chips makes a future-interest taxable gift, yet beats holding the stock through estate tax." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_117_gift .
+:S3_117_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # derived from the page: the charity’s present value as a share of the trust
+    dm:charitableIncomeValuePercent "62.0"^^xsd:decimal ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_118 a dm:StoryCase ;
+    dm:storyId "S3-118" ;
+    dm:storySection "3.6.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A lifetime unitrust may pay a trust for an incapacitated beneficiary." ;
+    dm:citesAuthority "PLR 200240012" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_118_gift ;
+    dm:gapNote "No check models which trusts may receive a remainder trust’s payout." .
+:S3_118_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_119 a dm:StoryCase ;
+    dm:storyId "S3-119" ;
+    dm:storySection "3.6.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A lead annuity trust for the lesser of the donor’s life or 12 years gives a slightly smaller deduction than a straight term." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_119_gift .
+:S3_119_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # derived from the page: the deduction as a share of the trust
+    dm:charitableIncomeValuePercent "52.6"^^xsd:decimal ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_120 a dm:StoryCase ;
+    dm:storyId "S3-120" ;
+    dm:storySection "3.6.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Tandem plan: an IRA left to a term unitrust escapes income tax, and partnership units left to a lead annuity trust remove estate tax." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_120_gift .
+# derived from the page: the unitrust’s deduction as a share of the IRA
+# the companion lead annuity trust is not encoded; one gift per story
+:S3_120_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "66.7"^^xsd:decimal .
+
+:S3_121 a dm:StoryCase ;
+    dm:storyId "S3-121" ;
+    dm:storySection "3.6.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Four layered testamentary lead annuity trusts paying the family’s donor-advised fund cut estate tax to zero while the children steer the giving." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_121_gift ;
+    dm:pageAccuracyNote "The notes flag a garbled figure in this example." .
+:S3_121_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: the donor-advised fund sits at a sponsoring public charity
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_122 a dm:StoryCase ;
+    dm:storyId "S3-122" ;
+    dm:storySection "3.6.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Lead trusts of discounted partnership units paying the family foundation pass value to children and grandchildren with no estate tax." ;
+    dm:citesAuthority "Sec. 2642(e)(2) (via 3.5.8)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_122_gift .
+:S3_122_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    dm:leadBeneficiary :DonorFoundation .
+
+:S3_123 a dm:StoryCase ;
+    dm:storyId "S3-123" ;
+    dm:storySection "3.6.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 15-year family lead annuity trust with payments rising in steps passes low-basis stock to the children with small exemption use." ;
+    dm:citesAuthority "Rev. Proc. 2007-45; Sec. 642(c)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_123_gift .
+:S3_123_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_124 a dm:StoryCase ;
+    dm:storyId "S3-124" ;
+    dm:storySection "3.6.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An 8-year municipal-bond grantor lead annuity trust with rising payments and a reversion gives an income deduction and returns principal to the donor." ;
+    dm:citesAuthority "Sec. 673(a); Sec. 170(f)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_125 a dm:StoryCase ;
+    dm:storyId "S3-125" ;
+    dm:storySection "3.6.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A super grantor lead annuity trust with a large final balloon payment gives a large income deduction and a very small taxable gift." ;
+    dm:citesAuthority "Sec. 675(4); Rev. Proc. 2007-45" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "grantor lead trust" .
+
+:S3_126 a dm:StoryCase ;
+    dm:storyId "S3-126" ;
+    dm:storySection "3.6.7" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A testamentary 15-year rising-payment lead annuity trust of discounted partnership units ends estate tax and passes much more to nieces and nephews." ;
+    dm:citesAuthority "Rev. Proc. 2007-45" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_126_gift .
+:S3_126_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # derived from the page: the deduction as a share of the discounted value
+    dm:charitableIncomeValuePercent "76.6"^^xsd:decimal ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_127 a dm:StoryCase ;
+    dm:storyId "S3-127" ;
+    dm:storySection "3.6.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A testamentary lead annuity trust was allowed to switch to an increasing annuity." ;
+    dm:citesAuthority "PLR 201216045; Rev. Proc. 2007-45" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_127_gift .
+:S3_127_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: trustee not stated; an independent trustee is filled as the compliant value
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: lead charity not named; an unrelated public charity is filled
+    dm:leadBeneficiary :PublicCharity .
+
+:S3_128 a dm:StoryCase ;
+    dm:storyId "S3-128" ;
+    dm:storySection "3.7.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An older donor’s gift of a home remainder, keeping a life estate, gives a 30 percent-type deduction, with no 10 percent minimum test." ;
+    dm:citesAuthority "Sec. 170(f)(3)(B)(i); Reg. 1.170A-7(b)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "retained life estate" .
+
+:S3_129 a dm:StoryCase ;
+    dm:storyId "S3-129" ;
+    dm:storySection "3.7.1" ;
+    dm:storyKind "revenue ruling" ;
+    dm:pageSays "A remainder deed requiring the charity to sell and split proceeds with a co-owner lost the deduction; the charity needs unrestricted title." ;
+    dm:citesAuthority "Rev. Rul. 77-305" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "retained life estate" .
+
+:S3_130 a dm:StoryCase ;
+    dm:storyId "S3-130" ;
+    dm:storySection "3.7.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "For a mortgaged home remainder only equity is deductible; later principal payments arguably earn new deductions, with bargain-sale risk a hold-harmless agreement eases." ;
+    dm:citesAuthority "PLR 9329017; Sec. 1011(a)" ;
+    dm:pageOutcome dm:NeedsCounsel ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "retained life estate" .
+
+:S3_131 a dm:StoryCase ;
+    dm:storyId "S3-131" ;
+    dm:storySection "3.7.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A surviving life tenant may sell jointly, give, contribute to a unitrust, or exchange for an annuity, if nothing is prearranged or binding." ;
+    dm:citesAuthority "Sec. 121; Sec. 514(c)(5); Rev. Rul. 87-37" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "retained life estate" .
+
+:S3_132 a dm:StoryCase ;
+    dm:storyId "S3-132" ;
+    dm:storySection "3.7.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple’s home in a residence trust for the lesser of 10 years or their lives passes to the children at a reduced gift value if they survive." ;
+    dm:citesAuthority "Reg. 25.2702-5(c)(5)(ii)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_132_gift .
+:S3_132_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:PersonalResidenceTrust ;
+    # assumed: the page treats the trust as a qualified personal residence trust; the four 25.2702-5 terms are filled as compliant values
+    dm:onlyOneResidence true ;
+    dm:primaryUseAsResidence true ;
+    dm:transientLodgingWithServices false ;
+    dm:barsSaleToGrantor true .
+
+:S3_133 a dm:StoryCase ;
+    dm:storyId "S3-133" ;
+    dm:storySection "3.7.5" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "The court held a residence trust kept a valuable home out of the decedent’s estate." ;
+    dm:citesAuthority "Estate of Riese, T.C. Memo 2011-60" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_133_gift .
+:S3_133_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:PersonalResidenceTrust ;
+    # assumed: the page treats the trust as a qualified personal residence trust; the four 25.2702-5 terms are filled as compliant values
+    dm:onlyOneResidence true ;
+    dm:primaryUseAsResidence true ;
+    dm:transientLodgingWithServices false ;
+    dm:barsSaleToGrantor true .
+
+:S3_134 a dm:StoryCase ;
+    dm:storyId "S3-134" ;
+    dm:storySection "3.8.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A charity was allowed to amend its pooled income fund to add charitable beneficiaries." ;
+    dm:citesAuthority "PLR 200252066" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "pooled income fund" .
+
+:S3_135 a dm:StoryCase ;
+    dm:storyId "S3-135" ;
+    dm:storySection "3.8.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A pooled income fund gift of appreciated stock gives a deduction, variable income at the fund’s rate, and severance of the units at death." ;
+    dm:citesAuthority "Sec. 642(c)(5); Reg. 1.642(c)-5(c)(2); Pub. 1457 PIF table" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "pooled income fund" .
+
+:S3_136 a dm:StoryCase ;
+    dm:storyId "S3-136" ;
+    dm:storySection "3.8.4" ;
+    dm:storyKind "revenue ruling" ;
+    dm:pageSays "A community foundation may run one pooled income fund for local charities if it keeps discretion or the donor names a component fund." ;
+    dm:citesAuthority "Rev. Rul. 96-38; Reg. 1.642(c)-5(b)(5)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "pooled income fund" .
+
+:S3_137 a dm:StoryCase ;
+    dm:storyId "S3-137" ;
+    dm:storySection "3.8.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A couple giving up pooled-fund income interests must give both their current and survivor interests to get the deduction." ;
+    dm:citesAuthority "PLR 9721014; PLR 9550026" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "pooled income fund" .
+
+:S3_138 a dm:StoryCase ;
+    dm:storyId "S3-138" ;
+    dm:storySection "3.8.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A charity’s merger of its two pooled income funds was approved." ;
+    dm:citesAuthority "PLR 200214017" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "pooled income fund" .
+
+:S3_139 a dm:StoryCase ;
+    dm:storyId "S3-139" ;
+    dm:storySection "3.9.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A senior’s revocable trust with a charity as trustee pays income for life and passes to charity at death, eliminating estate tax." ;
+    dm:citesAuthority "Sec. 2055" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "revocable trust passing to charity" .
+
+:S3_140 a dm:StoryCase ;
+    dm:storyId "S3-140" ;
+    dm:storySection "3.9.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A trust’s conversion to a total-return trust did not lose its GST exemption." ;
+    dm:citesAuthority "PLR 200752026" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "GST exemption of a converted trust" .
+
+:S3_141 a dm:StoryCase ;
+    dm:storyId "S3-141" ;
+    dm:storySection "3.10.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple who vest the charities and give their unitrust income interest get a capital-gain-type deduction, and the trust ends by merger." ;
+    dm:citesAuthority "PLR 9550026; PLR 200802024" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_141_gift .
+:S3_141_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_142 a dm:StoryCase ;
+    dm:storyId "S3-142" ;
+    dm:storySection "3.10.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Income beneficiaries who vested the charities and surrendered their unitrust income interest were allowed a deduction." ;
+    dm:citesAuthority "PLR 200802024; PLR 200834013" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_142_gift .
+:S3_142_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_143 a dm:StoryCase ;
+    dm:storyId "S3-143" ;
+    dm:storySection "3.10.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Early cash-out terminations splitting unitrust value between income beneficiaries and charities were allowed." ;
+    dm:citesAuthority "PLR 200252092; PLR 200548023" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_143_gift ;
+    dm:gapNote "No check models early termination or cash-out of a remainder trust at actuarial values, which these rulings found not to be self-dealing; PG2 treats the donor taking assets as an exchange." .
+:S3_143_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the income beneficiary is the donor, taking trust assets for the income interest, the usual early-termination pattern the notes describe
+    dm:counterparty td:Founder ;
+    dm:vehicleAct dm:SaleOrExchangeAct .
+
+:S3_144 a dm:StoryCase ;
+    dm:storyId "S3-144" ;
+    dm:storySection "3.10.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An early termination of a unitrust was ruled not self-dealing." ;
+    dm:citesAuthority "PLR 200616035" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_144_gift ;
+    dm:gapNote "No check models early termination or cash-out of a remainder trust at actuarial values, which these rulings found not to be self-dealing; PG2 treats the donor taking assets as an exchange." .
+:S3_144_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the income beneficiary is the donor, taking trust assets for the income interest, the usual early-termination pattern the notes describe
+    dm:counterparty td:Founder ;
+    dm:vehicleAct dm:SaleOrExchangeAct .
+
+:S3_145 a dm:StoryCase ;
+    dm:storyId "S3-145" ;
+    dm:storySection "3.10.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An 8 percent unitrust leaves a large remainder for an 80-year-old but only about 11 percent for a 45-year-old, so younger donors may need lower payouts." ;
+    dm:citesAuthority "Sec. 664(d)(1), (d)(2)(D)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_145_gift .
+# the 45-year-old donor’s trust is encoded, the closer case
+:S3_145_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "8"^^xsd:decimal ;
+    dm:remainderValuePercent "11"^^xsd:decimal .
+
+:S3_146 a dm:StoryCase ;
+    dm:storyId "S3-146" ;
+    dm:storySection "3.10.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 20-year children’s unitrust qualifies at either rate, and choosing the prior month’s rate brings the high-payout life unitrust to exactly 10 percent." ;
+    dm:citesAuthority "Sec. 7520; Sec. 2055(e)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_146_gift ;
+    dm:pageAccuracyNote "The notes flag an internal inconsistency on whether the current-month rate also reaches 10 percent." .
+# the one-life trust is encoded; the term trust qualifies either way
+:S3_146_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "20.25"^^xsd:decimal ;
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_147 a dm:StoryCase ;
+    dm:storyId "S3-147" ;
+    dm:storySection "3.10.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A donor may serve as trustee of the donor’s own unitrust and also choose the charities." ;
+    dm:citesAuthority "PLR 200034019" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_147_gift ;
+    dm:gapNote "No check models a donor serving as trustee of a remainder trust." .
+:S3_147_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee td:Founder .
+
+:S3_148 a dm:StoryCase ;
+    dm:storyId "S3-148" ;
+    dm:storySection "3.10.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A donor may act as sole trustee of a unitrust." ;
+    dm:citesAuthority "PLR 200245058" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_148_gift ;
+    dm:gapNote "No check models a donor serving as trustee of a remainder trust." .
+:S3_148_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee td:Founder .
+
+:S3_149 a dm:StoryCase ;
+    dm:storyId "S3-149" ;
+    dm:storySection "3.10.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A unitrust may use a special independent trustee to allocate income items." ;
+    dm:citesAuthority "PLR 200813006; PLR 200832017" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_149_gift .
+:S3_149_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee :IndependentTrustee .
+
+:S3_150 a dm:StoryCase ;
+    dm:storyId "S3-150" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple’s gift of 20 percent of their unitrust income interest is a capital-gain-type gift, making the unitrust a low-cost foundation substitute." ;
+    dm:citesAuthority "PLR 9550026; Reg. 1.170A-7(a)(2)(i)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_150_gift .
+:S3_150_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_151 a dm:StoryCase ;
+    dm:storyId "S3-151" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "other (specimen letter)" ;
+    dm:pageSays "A one-life recipient may designate a percentage of income and remainder to charity for distribution by merger, with an appraisal above the threshold." ;
+    dm:citesAuthority "Sec. 170(f)(11)(E)(ii); Notice 2006-96" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_151_gift .
+:S3_151_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_152 a dm:StoryCase ;
+    dm:storyId "S3-152" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Rulings allowed early terminations, cash-outs and partial gifts from unitrusts without self-dealing or termination tax." ;
+    dm:citesAuthority "PLR 200124010; PLR 200140027; PLR 200205008; PLR 200441024; PLR 200548023" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_152_gift ;
+    dm:gapNote "No check models early termination or cash-out of a remainder trust at actuarial values, which these rulings found not to be self-dealing; PG2 treats the donor taking assets as an exchange." .
+:S3_152_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the income beneficiary is the donor, taking trust assets for the income interest, the usual early-termination pattern the notes describe
+    dm:counterparty td:Founder ;
+    dm:vehicleAct dm:SaleOrExchangeAct .
+
+:S3_153 a dm:StoryCase ;
+    dm:storyId "S3-153" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An unhappy unitrust beneficiary was allowed to be paid out the value of the interest." ;
+    dm:citesAuthority "PLR 200208039" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_153_gift ;
+    dm:gapNote "No check models early termination or cash-out of a remainder trust at actuarial values, which these rulings found not to be self-dealing; PG2 treats the donor taking assets as an exchange." .
+:S3_153_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the income beneficiary is the donor, taking trust assets for the income interest, the usual early-termination pattern the notes describe
+    dm:counterparty td:Founder ;
+    dm:vehicleAct dm:SaleOrExchangeAct .
+
+:S3_154 a dm:StoryCase ;
+    dm:storyId "S3-154" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Several unitrusts were allowed to divide into separate trusts." ;
+    dm:citesAuthority "PLR 200744019; PLR 200808018; PLR 200814003; PLR 200824022; PLR 200902012" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_154_gift .
+:S3_154_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_155 a dm:StoryCase ;
+    dm:storyId "S3-155" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A unitrust was allowed to terminate so its assets could fund a supporting organization." ;
+    dm:citesAuthority "PLR 200846037" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_155_gift .
+:S3_155_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_156 a dm:StoryCase ;
+    dm:storyId "S3-156" ;
+    dm:storySection "3.10.6" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A remainder trust income beneficiary who donated a payment to charity got a deduction." ;
+    dm:citesAuthority "PLR 201249002" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "remainder trust beneficiary gives a payout" .
+
+:S3_157 a dm:StoryCase ;
+    dm:storyId "S3-157" ;
+    dm:storySection "3.10.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Having the noncharitable beneficiaries, not the trust, pay the death taxes was approved." ;
+    dm:citesAuthority "PLR 200229046; Rev. Rul. 82-128" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_157_gift .
+:S3_157_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_158 a dm:StoryCase ;
+    dm:storyId "S3-158" ;
+    dm:storySection "3.10.7" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Unitrusts with drafting errors were reformed." ;
+    dm:citesAuthority "PLR 9804036; PLR 9833008" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_158_gift ;
+    dm:gapNote "No check models reformation of a remainder trust." .
+:S3_158_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_159 a dm:StoryCase ;
+    dm:storyId "S3-159" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Scrivener-misdrafted charitable trusts, one converted from annuity to unitrust form, were reformed." ;
+    dm:citesAuthority "PLR 200218008; PLR 200251010; PLR 200425027; PLR 200535007" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_159_gift ;
+    dm:gapNote "No check models reformation of a remainder trust." .
+:S3_159_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_160 a dm:StoryCase ;
+    dm:storyId "S3-160" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Net-income makeup unitrusts were allowed to reform into standard or flip unitrusts." ;
+    dm:citesAuthority "PLR 200002029; PLR 200215042; PLR 200244011" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_160_gift ;
+    dm:gapNote "No check models reformation of a remainder trust." .
+:S3_160_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_161 a dm:StoryCase ;
+    dm:storyId "S3-161" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Unitrusts of divorcing couples and others were allowed to split into separate trusts." ;
+    dm:citesAuthority "PLR 200035014; PLR 200143028; PLR 200502037; PLR 200539008; PLR 200616008" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_161_gift .
+:S3_161_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_162 a dm:StoryCase ;
+    dm:storyId "S3-162" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Court-ordered reformations of unitrusts were ruled not self-dealing." ;
+    dm:citesAuthority "PLR 200811003; PLR 200850046; PLR 201426006" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_162_gift ;
+    dm:gapNote "No check models court-ordered reformation of a remainder trust or why it is not self-dealing." .
+:S3_162_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_163 a dm:StoryCase ;
+    dm:storyId "S3-163" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Partial cash-outs of unitrust beneficiaries’ interests were allowed." ;
+    dm:citesAuthority "PLR 200304025; PLR 200310024" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_163_gift ;
+    dm:gapNote "No check models early termination or cash-out of a remainder trust at actuarial values, which these rulings found not to be self-dealing; PG2 treats the donor taking assets as an exchange." .
+:S3_163_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the income beneficiary is the donor, taking trust assets for the income interest, the usual early-termination pattern the notes describe
+    dm:counterparty td:Founder ;
+    dm:vehicleAct dm:SaleOrExchangeAct .
+
+:S3_164 a dm:StoryCase ;
+    dm:storyId "S3-164" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A unitrust was allowed to reform its payout down from 7 to 5 percent." ;
+    dm:citesAuthority "PLR 200441019" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_164_gift ;
+    dm:gapNote "No check models reformation of a remainder trust." .
+# the payout after the reformation is encoded
+:S3_164_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_165 a dm:StoryCase ;
+    dm:storyId "S3-165" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Attempted remainder trust reformations failed." ;
+    dm:citesAuthority "PLR 200122045; PLR 200818003" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_165_gift ;
+    dm:gapNote "No check models reformation; the agreement comes only from PG4 failing closed on figures the notes do not give." .
+# not stated: the notes give no figures, so PG4 fails closed on the missing payout and remainder
+:S3_165_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest .
+
+:S3_166 a dm:StoryCase ;
+    dm:storyId "S3-166" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "other (technical advice memoranda)" ;
+    dm:pageSays "Estates that tried to reform noncompliant charitable trusts after the deadline were too late and lost the deduction." ;
+    dm:citesAuthority "TAM 199941004; TAM 200840008; Sec. 2055(e)(3)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction lost for late reformation" .
+
+:S3_167 a dm:StoryCase ;
+    dm:storyId "S3-167" ;
+    dm:storySection "3.10.8" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "One court denied an estate’s charitable deduction and another upheld the reformation deadline." ;
+    dm:citesAuthority "Brownstone (2d Cir. 2006); ESB Financial (D. Kan. 2008)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate deduction lost for late reformation" .
+
+:S3_168 a dm:StoryCase ;
+    dm:storyId "S3-168" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A unitrust for the donor’s 35-year-old son makes a taxable gift of most of its value, less one annual exclusion; a gift tax return is due." ;
+    dm:citesAuthority "Reg. 25.2503-3(b)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_168_gift .
+# derived from the page: the remainder as a share of the trust
+:S3_168_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "14.4"^^xsd:decimal .
+
+:S3_169 a dm:StoryCase ;
+    dm:storyId "S3-169" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Successive and joint-and-survivor unitrusts for the donor and son make gifts measured by the son’s share, with one annual exclusion and the rest from exemption." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_169_gift .
+# the remainder is derived from the page: one less the joint-life share
+:S3_169_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "12.8"^^xsd:decimal .
+
+:S3_170 a dm:StoryCase ;
+    dm:storyId "S3-170" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A disclaimer leaving only the surviving spouse as noncharitable beneficiary produced a marital deduction." ;
+    dm:citesAuthority "PLR 200204022" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_170_gift ;
+    dm:gapNote "No check models disclaimers or the marital deduction for a remainder trust." .
+:S3_170_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_171 a dm:StoryCase ;
+    dm:storyId "S3-171" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A qualified domestic trust combined with a unitrust for a non-citizen spouse was approved." ;
+    dm:citesAuthority "PLR 9244013" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_171_gift .
+:S3_171_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_172 a dm:StoryCase ;
+    dm:storyId "S3-172" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Payment to a disqualified person for services to a unitrust fell within the compensation exception to self-dealing." ;
+    dm:citesAuthority "PLR 9425004" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_172_gift ;
+    dm:gapNote "No check has a services act or the 4941(d)(2)(E) compensation exception." .
+:S3_172_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the notes say only a disqualified person; the donor stands in, and no act is encoded since no act class covers services
+    dm:counterparty td:Founder .
+
+:S3_173 a dm:StoryCase ;
+    dm:storyId "S3-173" ;
+    dm:storySection "3.10.9" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A partnership was not allowed to be the grantor of a unitrust." ;
+    dm:citesAuthority "PLR 9547004" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_173_gift ;
+    dm:gapNote "No check limits who may be the grantor of a remainder trust." .
+:S3_173_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_174 a dm:StoryCase ;
+    dm:storyId "S3-174" ;
+    dm:storySection "3.10.10" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Trustee fees cut a unitrust’s net return, least for a private or charity trustee and most for a corporate trustee." ;
+    dm:citesAuthority "Uniform Prudent Investor Act" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_174_gift .
+:S3_174_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_175 a dm:StoryCase ;
+    dm:storyId "S3-175" ;
+    dm:storySection "3.10.10" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Remainder trusts’ units in a charity’s endowment pool produce no unrelated business income, and redeeming them gives capital gain." ;
+    dm:citesAuthority "PLR 200704036; PLR 200806019; PLR 200816034; PLR 200904025; PLR 200913065; PLR 201218015; PLR 201223021; PLR 200826026" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_175_gift .
+:S3_175_gift a dm:PlannedGift ;
+    # assumed: the notes say only remainder trust; unitrust form is filled
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:producesUBTI false .
+
+:S3_176 a dm:StoryCase ;
+    dm:storyId "S3-176" ;
+    dm:storySection "3.11.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A grandparent’s 4-year education unitrust saves tax through the deduction and bypassed gain while using annual exclusions." ;
+    dm:citesAuthority "PLR 8949061; Reg. 25.2511-2(f)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_176_gift .
+:S3_176_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "8"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_177 a dm:StoryCase ;
+    dm:storyId "S3-177" ;
+    dm:storySection "3.11.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Grandparents’ 20-year net-income unitrust for seven grandchildren, sprinkled by an independent trustee, funds college and leaves a large remainder to charity." ;
+    dm:citesAuthority "Sec. 674; PLR 8949061" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_177_gift .
+:S3_177_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee :IndependentTrustee .
+
+:S3_178 a dm:StoryCase ;
+    dm:storyId "S3-178" ;
+    dm:storySection "3.11.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple’s yearly gifts to a growth-invested net-income unitrust build principal for retirement, then pay the rate plus makeup." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_178_gift .
+:S3_178_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_179 a dm:StoryCase ;
+    dm:storyId "S3-179" ;
+    dm:storySection "3.11.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Development land given in two halves to a net-income unitrust fits the couple’s deduction limit and builds large retirement payouts and a charitable remainder." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_179_gift .
+:S3_179_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_180 a dm:StoryCase ;
+    dm:storyId "S3-180" ;
+    dm:storySection "3.11.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Selling a small city lot held in a flip unitrust is a permissible trigger, even when the lot is a tiny fraction of the trust." ;
+    dm:citesAuthority "Reg. 1.664-3(a)(1)(i)(c)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_180_gift .
+:S3_180_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_181 a dm:StoryCase ;
+    dm:storyId "S3-181" ;
+    dm:storySection "3.11.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A flip unitrust triggered by selling inherited land pays the rate plus makeup until year-end, then flips to a standard payout, forfeiting the deficit." ;
+    dm:citesAuthority "Reg. 1.664-3(a)(1)(i)(c)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_181_gift .
+:S3_181_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_182 a dm:StoryCase ;
+    dm:storyId "S3-182" ;
+    dm:storySection "3.11.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Retirees who move out, deed half their home to a unitrust and sell jointly with no prearranged sale bypass most gain; self-dealing bars their using it." ;
+    dm:citesAuthority "Sec. 4941; Sec. 121; PLR 9114025" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_182_gift ;
+    dm:gapNote "No check models a prearranged sale, the donor’s use of trust property, or co-ownership with the donor." .
+:S3_182_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # assumed: the page’s best practice of an independent trustee
+    dm:giftTrustee :IndependentTrustee .
+
+:S3_183 a dm:StoryCase ;
+    dm:storyId "S3-183" ;
+    dm:storySection "3.11.3" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A real-estate gift split between a remainder trust and the donor was approved only after it went into a partnership, with no donor use and an independent trustee." ;
+    dm:citesAuthority "PLR 9114025" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_183_gift ;
+    dm:gapNote "No check models co-ownership between a remainder trust and the donor or the donor’s use of trust property." .
+:S3_183_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    dm:giftTrustee :IndependentTrustee .
+
+:S3_184 a dm:StoryCase ;
+    dm:storyId "S3-184" ;
+    dm:storySection "3.11.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Giving 40 percent of a home to a unitrust before sale bypasses gain on that share and gives a deduction, while the exclusion covers the couple’s share." ;
+    dm:citesAuthority "Sec. 121; PLR 9015049; PLR 9114025" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_184_gift .
+# derived from the page: the deduction as a share of the gifted 40 percent
+:S3_184_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ;
+    dm:remainderValuePercent "12.25"^^xsd:decimal .
+
+:S3_185 a dm:StoryCase ;
+    dm:storyId "S3-185" ;
+    dm:storySection "3.11.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An IRA left to a term unitrust for four children avoids immediate income tax on the IRA and pays them over the term." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_185_gift ;
+    dm:pageAccuracyNote "The notes flag that the page gives the term as both 20 and fifteen years." .
+:S3_185_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_186 a dm:StoryCase ;
+    dm:storyId "S3-186" ;
+    dm:storySection "3.11.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An IRA left to a two-life spousal unitrust avoids income tax at the first death and can pay the spouse yearly, with a makeup account." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_186_gift .
+:S3_186_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_187 a dm:StoryCase ;
+    dm:storyId "S3-187" ;
+    dm:storySection "3.11.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A retirement plan paid to a unitrust after estate tax passes out no 691(c) deduction; it stays trapped in the trust." ;
+    dm:citesAuthority "PLR 199901023; Sec. 691(c)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_187_gift ;
+    dm:gapNote "No check models whether the 691(c) deduction for income in respect of a decedent passes out of a remainder trust." .
+:S3_187_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: payout not stated; the 5 percent minimum is filled as the compliant value
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_188 a dm:StoryCase ;
+    dm:storyId "S3-188" ;
+    dm:storySection "3.11.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Heirs of an IRA that bore estate tax may deduct the estate tax share of distributions under 691(c)." ;
+    dm:citesAuthority "Sec. 691(c); Sec. 401(a)(9)(E)(ii)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "income in respect of a decedent" .
+
+:S3_189 a dm:StoryCase ;
+    dm:storyId "S3-189" ;
+    dm:storySection "3.11.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An IRA left to a lifetime unitrust for a daughter gives income security for decades, with early payouts taxed as ordinary income." ;
+    dm:citesAuthority "PLR 199901023; Reg. 1.664-3(a)(1)(i)(b)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_189_gift ;
+    dm:pageAccuracyNote "The notes flag that the page labels this one-life trust as two-life." .
+:S3_189_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal .
+
+:S3_190 a dm:StoryCase ;
+    dm:storyId "S3-190" ;
+    dm:storySection "3.11.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Tandem plan: an IRA to a term unitrust and partnership units to a lead annuity trust pay charity heavily, remove estate tax and pass large sums to children." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S3_190_gift .
+:S3_190_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: remainder value not stated; the 10 percent minimum is filled as the compliant value
+    dm:remainderValuePercent "10"^^xsd:decimal ;
+    # the companion lead annuity trust is not encoded; one gift per story
+ .

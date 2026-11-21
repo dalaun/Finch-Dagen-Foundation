@@ -1,0 +1,1158 @@
+@prefix : <http://example.org/trust-domain/giftlaw-stories#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# GiftLaw Pro chapters 1 (Taxation and Giving, S1-1 to S1-79) and 2 (Major-Current
+# Gifts, S2-1 to S2-15) as graded story cases. Source: the shelf extracts of the
+# chapter notes. GiftLaw is a secondary source; each pageOutcome is what the page
+# says, not the law. Roles only (roles.ttl); dollar figures left out; rulings and
+# cases are named only in dm:citesAuthority. Not legal or tax advice.
+
+:S1_1 a dm:StoryCase ;
+    dm:storyId "S1-1" ;
+    dm:storySection "1.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A gift conditioned on an event whose failure is so unlikely as to be negligible stays deductible; other contingent gifts are not deductible." ;
+    dm:citesAuthority "Reg. 1.170A-1(e)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "contingent outright gift" .
+
+:S1_2 a dm:StoryCase ;
+    dm:storyId "S1-2" ;
+    dm:storySection "1.1.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Tuition paid for one's own child buys a personal benefit and is not a deductible gift; the IRS has pressed civil and even criminal positions." ;
+    dm:citesAuthority "Sklar (T.C. 2000; CA9 2002 and 2008)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "payment that buys a personal benefit" .
+
+:S1_3 a dm:StoryCase ;
+    dm:storyId "S1-3" ;
+    dm:storySection "1.1.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Fixed fees paid to a church for religious sessions are payments for services, not deductible gifts." ;
+    dm:citesAuthority "Hernandez (Scientology auditing fees)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "quid pro quo payment for services" .
+
+:S1_4 a dm:StoryCase ;
+    dm:storyId "S1-4" ;
+    dm:storySection "1.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A payment above the value of seats received is deductible only for the excess, and a payment over the threshold needs the charity's disclosure." ;
+    dm:citesAuthority "Sec. 6115" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "quid pro quo deduction and disclosure" .
+
+:S1_5 a dm:StoryCase ;
+    dm:storyId "S1-5" ;
+    dm:storySection "1.1.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A donor's own note is deductible only when paid; a third party's note is deductible when given, and giving it accelerates deferred installment gain." ;
+    dm:citesAuthority "Petty; Woodward; Sec. 453B" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "timing of a deduction for a note" .
+
+:S1_6 a dm:StoryCase ;
+    dm:storyId "S1-6" ;
+    dm:storySection "1.1.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Stock options given to charity are deductible when the charity exercises them, for their value less the exercise price." ;
+    dm:citesAuthority "PLR 200141018; PLR 200202034; Rev. Rul. 82-197" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "timing of a deduction for options" .
+
+:S1_7 a dm:StoryCase ;
+    dm:storyId "S1-7" ;
+    dm:storySection "1.1.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Trusts that missed the deadline for a charitable deduction election were granted extensions." ;
+    dm:citesAuthority "PLR 200444003; PLR 201202019" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "late election relief for a trust" .
+
+:S1_8 a dm:StoryCase ;
+    dm:storyId "S1-8" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Under the new floor, the first half percent of AGI given is not deductible, and the floored part carries forward only with an existing carryforward." ;
+    dm:citesAuthority "OBBBA (from 2026)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "itemizer floor" .
+
+:S1_9 a dm:StoryCase ;
+    dm:storyId "S1-9" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "In the top bracket, itemized deductions are cut by two thirty-sevenths of the lesser of the deductions or the income above the threshold." ;
+    dm:citesAuthority "OBBBA" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "top-bracket cap on itemized deductions" .
+
+:S1_10 a dm:StoryCase ;
+    dm:storyId "S1-10" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Cash gifts are deductible up to 60 percent of AGI after the floor; the excess, floored part included, carries forward only when a carryforward exists." ;
+    dm:citesAuthority "Reg. 1.170A-10(b); OBBBA" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "60 percent limit and carryforward" .
+
+:S1_11 a dm:StoryCase ;
+    dm:storyId "S1-11" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Electing to deduct basis lets the donor use the 50 percent limit and deduct the whole basis now, instead of value spread under the 30 percent limit." ;
+    dm:citesAuthority "170(b)(1)(C)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "basis election and percentage limits" .
+
+:S1_12 a dm:StoryCase ;
+    dm:storyId "S1-12" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Books given to an art museum that sells them within three years are an unrelated use, so the deduction is limited to basis." ;
+    dm:citesAuthority "Reg. 1.170A-4(b); 170(e)(1)(B)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "related-use rule for tangible property" .
+
+:S1_13 a dm:StoryCase ;
+    dm:storyId "S1-13" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "The page deducts part of a rancher's easement this year and carries the rest, but its arithmetic overstates the room left after the cash gift." ;
+    dm:citesAuthority "170(b)(1)(E)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "conservation easement limits" ;
+    dm:pageAccuracyNote "The notes say the page's arithmetic is wrong: after the cash gift only 40 percent of the base remains, as the later example (S1-24) gets right." .
+
+:S1_14 a dm:StoryCase ;
+    dm:storyId "S1-14" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Mixed gifts are deducted in a fixed order: cash to public charities, basis gifts, appreciated property, then cash and property to private foundations, then carryforwards." ;
+    dm:citesAuthority "170(b)(1)(D)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "ordering of percentage limits" .
+
+:S1_15 a dm:StoryCase ;
+    dm:storyId "S1-15" ;
+    dm:storySection "1.1.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A C corporation's gift is reduced first by the 1 percent floor and then capped at 10 percent of taxable income, with a five-year carryforward." ;
+    dm:citesAuthority "170(b)(2); OBBBA" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "corporate giving limits" .
+
+:S1_16 a dm:StoryCase ;
+    dm:storyId "S1-16" ;
+    dm:storySection "1.1.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A company's gift of a depreciated airplane used for the museum's exempt purpose is deductible at value less the gain that would be ordinary recapture." ;
+    dm:citesAuthority "170(e)(1)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "ordinary income property reduction" .
+
+:S1_17 a dm:StoryCase ;
+    dm:storyId "S1-17" ;
+    dm:storySection "1.1.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Thinly traded stock quoted daily on an established market was qualified appreciated stock, deductible at fair value when given to a private foundation, up to 10 percent of the company." ;
+    dm:citesAuthority "PLR 200702031; 170(e)(1)(B)(ii); 170(e)(5)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_17_gift ;
+    dm:gapNote "No check has the 170(e)(5) rule that limits a gift of appreciated property to a private foundation to basis unless it is qualified appreciated stock within the 10 percent cap." .
+:S1_17_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:acquiredByGiftOrBequest true .
+
+:S1_18 a dm:StoryCase ;
+    dm:storyId "S1-18" ;
+    dm:storySection "1.1.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A building with accelerated depreciation is deductible at value less potential recapture, outright or, through a remainder trust, multiplied by the remainder factor." ;
+    dm:citesAuthority "1245; 1250" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_18_gift ;
+    dm:gapNote "No check computes the deduction reduction for depreciation recapture (170(e)(1), 1245, 1250) on property that funds a remainder trust." .
+:S1_18_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: the page gives no payout rate; a lawful 5 percent rate is used
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "50"^^xsd:decimal .
+
+:S1_19 a dm:StoryCase ;
+    dm:storyId "S1-19" ;
+    dm:storySection "1.1.4" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "The IRS cut the deduction for a donated film library to zero." ;
+    dm:citesAuthority "TAM 200119005" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "ordinary income property valued at zero" .
+
+:S1_20 a dm:StoryCase ;
+    dm:storyId "S1-20" ;
+    dm:storySection "1.1.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A gifted life insurance policy was deductible up to the premiums paid." ;
+    dm:citesAuthority "PLR 200209020" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:LifeInsurance ;
+    dm:outsideReason "gift of a life insurance policy" .
+
+:S1_21 a dm:StoryCase ;
+    dm:storyId "S1-21" ;
+    dm:storySection "1.1.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Giving a home while keeping its use two summer months a year was deductible for ten-twelfths of its value as an undivided interest." ;
+    dm:citesAuthority "PLR 9303007; Reg. 1.170A-7(b)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "partial interest in a home" .
+
+:S1_22 a dm:StoryCase ;
+    dm:storyId "S1-22" ;
+    dm:storySection "1.1.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An undivided interest in art shared between museum and donor is deductible; the museum should actually take and display the art." ;
+    dm:citesAuthority "Reg. 1.170A-7(d); Winokur" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "fractional interest in art" .
+
+:S1_23 a dm:StoryCase ;
+    dm:storyId "S1-23" ;
+    dm:storySection "1.1.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Cash is deducted up to the limit with the excess carried five years; the whole easement carries fifteen years because the cash used the room." ;
+    dm:citesAuthority "170(b)(1)(E)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "conservation easement limits" .
+
+:S1_24 a dm:StoryCase ;
+    dm:storyId "S1-24" ;
+    dm:storySection "1.1.5" ;
+    dm:storyKind "example" ;
+    dm:pageSays "For a qualified rancher, cash and part of the easement are deducted this year and the rest carried; the notes confirm this arithmetic." ;
+    dm:citesAuthority "170(b)(1)(E)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "conservation easement limits" .
+
+:S1_25 a dm:StoryCase ;
+    dm:storyId "S1-25" ;
+    dm:storySection "1.1.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A state credit capped at a fixed amount is fully available when the gift is large enough to reach the cap." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:StateLaw ;
+    dm:outsideReason "state tax credit" .
+
+:S1_26 a dm:StoryCase ;
+    dm:storyId "S1-26" ;
+    dm:storySection "1.1.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 50 percent state conservation credit wipes out the year's state tax, and the unused credit carries forward up to twenty years." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:StateLaw ;
+    dm:outsideReason "state conservation credit" .
+
+:S1_27 a dm:StoryCase ;
+    dm:storyId "S1-27" ;
+    dm:storySection "1.1.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A 40 percent state credit on a remainder trust's gift portion cuts state tax, and the federal deduction falls by the amount of the credit." ;
+    dm:citesAuthority "REG-112176-18; Reg. 1.170A-1(h)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_27_gift ;
+    dm:gapNote "No check has the rule that a state credit above 15 percent of the gift reduces the federal deduction (1.170A-1(h)(3)); the plan still works." .
+:S1_27_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: the notes give neither the trust type nor its rate; a unitrust at a lawful 5 percent is used, as the extract classifies it
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "20"^^xsd:decimal .
+
+:S1_28 a dm:StoryCase ;
+    dm:storyId "S1-28" ;
+    dm:storySection "1.2.1" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "Bonds placed in a limited partnership before gifts of partnership interests were an indirect gift of the bonds, with no valuation discount." ;
+    dm:citesAuthority "TAM 200212006" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "family partnership valuation discount" .
+
+:S1_29 a dm:StoryCase ;
+    dm:storyId "S1-29" ;
+    dm:storySection "1.2.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A gift to a foreign private foundation was deductible for gift tax." ;
+    dm:citesAuthority "PLR 200226012" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "gift tax deduction for a foreign foundation" .
+
+:S1_30 a dm:StoryCase ;
+    dm:storyId "S1-30" ;
+    dm:storySection "1.2.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A parent's gift to the children of a remainder interest in the parent's home was an incomplete gift." ;
+    dm:citesAuthority "PLR 200308046" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "remainder interest in a home with a retained life estate" .
+
+:S1_31 a dm:StoryCase ;
+    dm:storyId "S1-31" ;
+    dm:storySection "1.2.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Creating the trust and exercising the power of appointment made no taxable gift." ;
+    dm:citesAuthority "PLR 200637025; PLR 200647001" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "incomplete gifts" .
+
+:S1_32 a dm:StoryCase ;
+    dm:storyId "S1-32" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A current income interest in a net-income remainder unitrust, given to another person, qualifies for the gift tax annual exclusion at its present value." ;
+    dm:citesAuthority "PLR 8637084; Reg. 25.2503-3" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_32_gift ;
+    dm:gapNote "No check has the gift tax annual exclusion for a present income interest in a remainder unitrust (25.2503-3)." .
+:S1_32_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: the notes give no payout rate; a lawful 5 percent rate is used
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: the notes give no remainder value; one above the 10 percent floor is used
+    dm:remainderValuePercent "40"^^xsd:decimal .
+
+:S1_33 a dm:StoryCase ;
+    dm:storyId "S1-33" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "Interests in a partnership that distributes all current income were present interests that qualify for the annual exclusion." ;
+    dm:citesAuthority "TAM 199944003" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "annual exclusion for partnership interests" .
+
+:S1_34 a dm:StoryCase ;
+    dm:storyId "S1-34" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Withdrawal powers held by contingent beneficiaries count for the annual exclusion, but a person with no interest at all cannot hold one." ;
+    dm:citesAuthority "Cristofani; Rev. Rul. 80-261" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "annual exclusion and withdrawal powers" .
+
+:S1_35 a dm:StoryCase ;
+    dm:storyId "S1-35" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An elderly couple's gift annuity for a niece is presented as an annual-exclusion gift; the notes give only the title." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "gift annuity for a relative" .
+
+:S1_36 a dm:StoryCase ;
+    dm:storyId "S1-36" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "The state college savings plan qualified under section 529." ;
+    dm:citesAuthority "PLR 200123065" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OtherOutside ;
+    dm:outsideReason "college savings plan" .
+
+:S1_37 a dm:StoryCase ;
+    dm:storyId "S1-37" ;
+    dm:storySection "1.2.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Interests in a family LLC or partnership may not be present interests, so they may get no annual exclusion." ;
+    dm:citesAuthority "Hackl" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "annual exclusion for entity interests" .
+
+:S1_38 a dm:StoryCase ;
+    dm:storyId "S1-38" ;
+    dm:storySection "1.2.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A split stock gift to three children owes no gift tax but uses exemption; the page miscomputes each spouse's taxable gift." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "gift splitting and exemption" ;
+    dm:pageAccuracyNote "The notes say the page halves the gift wrongly: each spouse's share is half the total, so the taxable gift per spouse is lower than the page states." .
+
+:S1_39 a dm:StoryCase ;
+    dm:storyId "S1-39" ;
+    dm:storySection "1.2.3" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Liquid assets put into a family partnership with no business plan, whose distributions went mostly to the decedent, were not a bona fide sale and stayed in the estate." ;
+    dm:citesAuthority "Rector (T.C. 2007); 2036(a)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "2036 inclusion of partnership assets" .
+
+:S1_40 a dm:StoryCase ;
+    dm:storyId "S1-40" ;
+    dm:storySection "1.2.3" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Partnership interests given at a discount were pulled back into the parents' estates because an implied agreement kept their lifetime access." ;
+    dm:citesAuthority "Korby (8th Cir. 2006); 2036(a)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "2036 inclusion of partnership assets" .
+
+:S1_41 a dm:StoryCase ;
+    dm:storyId "S1-41" ;
+    dm:storySection "1.2.3" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Stock contributed to a partnership at or after the gifts of interests was an indirect gift at full value under the step-transaction doctrine." ;
+    dm:citesAuthority "Senda (8th Cir. 2006)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "step transaction and discounts" .
+
+:S1_42 a dm:StoryCase ;
+    dm:storyId "S1-42" ;
+    dm:storySection "1.2.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Cumulative taxable gifts after the charitable deduction give a tentative tax below the credit, so no gift tax is due." ;
+    dm:citesAuthority "1015(d); 6651(a)(2); Reg. 25.2504-2" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "cumulative gift tax" ;
+    dm:pageAccuracyNote "The notes say the narrative's figure for the current gifts does not match the page's own worksheet." .
+
+:S1_43 a dm:StoryCase ;
+    dm:storyId "S1-43" ;
+    dm:storySection "1.2.6" ;
+    dm:storyKind "other (IRS legal memorandum, ILM)" ;
+    dm:pageSays "A gift reported without adequate disclosure never started the limitations period, so the IRS revalued it far higher years later." ;
+    dm:citesAuthority "ILM 200221010; Reg. 25.2504-2" ;
+    dm:pageOutcome dm:Insufficient ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:SubstantiationAndAppraisal ;
+    dm:outsideReason "adequate disclosure on the gift tax return" .
+
+:S1_44 a dm:StoryCase ;
+    dm:storyId "S1-44" ;
+    dm:storySection "1.3.1" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "An estate got no valuation discount for the IRAs it held." ;
+    dm:citesAuthority "TAM 200247001" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate valuation" .
+
+:S1_45 a dm:StoryCase ;
+    dm:storyId "S1-45" ;
+    dm:storySection "1.3.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A retirement plan held by an estate was included at full value." ;
+    dm:citesAuthority "Smith" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate valuation" .
+
+:S1_46 a dm:StoryCase ;
+    dm:storyId "S1-46" ;
+    dm:storySection "1.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "An estate under the exclusion that makes a charitable bequest owes no federal estate tax, though a state inheritance tax may apply." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate tax exclusion" .
+
+:S1_47 a dm:StoryCase ;
+    dm:storyId "S1-47" ;
+    dm:storySection "1.3.3" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "A bequest received by an heir under a vow of poverty got no estate charitable deduction." ;
+    dm:citesAuthority "TAM 200437032" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate charitable deduction" .
+
+:S1_48 a dm:StoryCase ;
+    dm:storyId "S1-48" ;
+    dm:storySection "1.3.3" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "Property an estate sent to a trust got no estate charitable deduction." ;
+    dm:citesAuthority "TAM 200840008" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate charitable deduction" .
+
+:S1_49 a dm:StoryCase ;
+    dm:storyId "S1-49" ;
+    dm:storySection "1.3.4" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A reformed statutory trust for the surviving spouse qualified for the marital deduction." ;
+    dm:citesAuthority "PLR 200541038" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "marital deduction" .
+
+:S1_50 a dm:StoryCase ;
+    dm:storyId "S1-50" ;
+    dm:storySection "1.2.5" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "After the federal marriage definition was struck down, a surviving same-sex spouse can take the estate marital deduction." ;
+    dm:citesAuthority "Windsor (S.D.N.Y. 2012; CA2; Supreme Court 2013)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "marital deduction" .
+
+:S1_51 a dm:StoryCase ;
+    dm:storyId "S1-51" ;
+    dm:storySection "1.2.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "One estate's QTIP election was void, while other estates' late QTIP elections were allowed." ;
+    dm:citesAuthority "PLR 201112001; PLR 201832003; PLR 202244007" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "QTIP elections" .
+
+:S1_52 a dm:StoryCase ;
+    dm:storyId "S1-52" ;
+    dm:storySection "1.3.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Children's disclaimers of their unitrust interests left the surviving spouse as the only noncharitable beneficiary, which made the marital deduction available." ;
+    dm:citesAuthority "PLR 200204022; 2056(b)(8)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_52_gift ;
+    dm:gapNote "No check has qualified disclaimers or the marital deduction for a remainder trust whose only noncharitable beneficiary is the spouse (2056(b)(8))." .
+:S1_52_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: the notes give no payout rate; a lawful 5 percent rate is used
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    # assumed: the notes give no remainder value; one above the 10 percent floor is used
+    dm:remainderValuePercent "40"^^xsd:decimal .
+
+:S1_53 a dm:StoryCase ;
+    dm:storyId "S1-53" ;
+    dm:storySection "1.3.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Heirs' disclaimers that passed property to the contingent charitable beneficiary, in one ruling a private foundation, produced an estate charitable deduction." ;
+    dm:citesAuthority "PLRs 200420007, 200616026, 200649023, 200744005, 200802010; 2518(c)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_53_gift ;
+    dm:gapNote "No check has the qualified disclaimer rules (2518), including the bar on a disclaimant who manages the receiving foundation keeping a say over the disclaimed property." .
+:S1_53_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:EstateAdministration ;
+    dm:foundationHasExpectancy true .
+
+:S1_54 a dm:StoryCase ;
+    dm:storyId "S1-54" ;
+    dm:storySection "1.3.5" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "An heir's disclaimer that moved property down a generation triggered no generation-skipping tax." ;
+    dm:citesAuthority "PLR 201208005" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "GST on a disclaimer" .
+
+:S1_55 a dm:StoryCase ;
+    dm:storyId "S1-55" ;
+    dm:storySection "1.3.5" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "An heir's partial disclaimer passed property to a family foundation; the notes do not state the outcome." ;
+    dm:citesAuthority "Christiansen (T.C. 2008)" ;
+    dm:pageOutcome dm:PageGivesNoGrade ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_55_gift ;
+    dm:gapNote "No check has the qualified disclaimer rules (2518), including the bar on a disclaimant who manages the receiving foundation keeping a say over the disclaimed property." .
+:S1_55_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:EstateAdministration ;
+    dm:foundationHasExpectancy true .
+
+:S1_56 a dm:StoryCase ;
+    dm:storyId "S1-56" ;
+    dm:storySection "1.3.5" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "An heir's attempted disclaimer was ineffective." ;
+    dm:citesAuthority "Tatum" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "ineffective disclaimer" .
+
+:S1_57 a dm:StoryCase ;
+    dm:storyId "S1-57" ;
+    dm:storySection "1.3.6" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A large charitable bequest keeps the taxable estate's tentative tax below the credit, so no estate tax is due." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "estate tax computation" ;
+    dm:pageAccuracyNote "The notes say the page misuses a cite to the late-payment penalty section (6651(a)(2))." .
+
+:S1_58 a dm:StoryCase ;
+    dm:storyId "S1-58" ;
+    dm:storySection "1.4.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Terminations of QTIP trusts were treated as taxable transfers." ;
+    dm:citesAuthority "Kite" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "QTIP terminations" .
+
+:S1_59 a dm:StoryCase ;
+    dm:storyId "S1-59" ;
+    dm:storySection "1.4.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A trust partition, periodic payments to skip persons and a grandfathered trust's modification each avoided GST tax or kept exempt status." ;
+    dm:citesAuthority "PLRs 200509002, 201352002, 202239003" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "generation-skipping tax" .
+
+:S1_60 a dm:StoryCase ;
+    dm:storyId "S1-60" ;
+    dm:storySection "1.4.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Exempt trusts kept GST-exempt status despite conversions and an added trustee, but improper exemption allocations in another ruling were void." ;
+    dm:citesAuthority "PLRs 200507010, 200620011, 200752026, 201836004" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "generation-skipping tax exemption" .
+
+:S1_61 a dm:StoryCase ;
+    dm:storyId "S1-61" ;
+    dm:storySection "1.4.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A testamentary unitrust for a grandchild, with exemption allocated equal to the noncharitable share, has a zero inclusion ratio, so every payment is GST-exempt." ;
+    dm:citesAuthority "2642; 2642(a)(2)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_61_gift ;
+    dm:gapNote "No check computes the generation-skipping inclusion ratio of a charitable trust (2642)." .
+:S1_61_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:RemainderInterest ;
+    # assumed: the notes give no payout rate; a lawful 5 percent rate is used
+    dm:unitrustPercent "5"^^xsd:decimal ;
+    dm:remainderValuePercent "16.7"^^xsd:decimal .
+
+:S1_62 a dm:StoryCase ;
+    dm:storyId "S1-62" ;
+    dm:storySection "1.4.4" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Had it been funded, a long lead annuity trust with a grandchild remainder risked a large GST tax at term's end, since its fraction is fixed only then." ;
+    dm:citesAuthority "2642(e)" ;
+    dm:pageOutcome dm:NeedsCounsel ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_62_gift ;
+    dm:gapNote "No check has the 2642(e) rule that fixes a lead annuity trust's GST fraction only at termination, which can leave a large GST tax on a skip-person remainder." .
+:S1_62_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    # assumed: the trust was never funded; the deduction it would have earned is treated as allowed
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: the notes name no trustee
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: the notes say only that it pays charity
+    dm:leadBeneficiary :PublicCharity .
+
+:S1_63 a dm:StoryCase ;
+    dm:storyId "S1-63" ;
+    dm:storySection "1.5.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A stock gift on a day with no trades is valued by weighting the nearest trading days' mean prices by how far each is from the gift date." ;
+    dm:citesAuthority "Reg. 20.2031-2" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "valuation of listed stock" .
+
+:S1_64 a dm:StoryCase ;
+    dm:storyId "S1-64" ;
+    dm:storySection "1.5.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "An appraiser who regularly worked for one party and did most work for it was not a qualified appraiser." ;
+    dm:citesAuthority "Tarpey (2019); Reg. 1.170A-17(b)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:SubstantiationAndAppraisal ;
+    dm:outsideReason "qualified appraiser" .
+
+:S1_65 a dm:StoryCase ;
+    dm:storyId "S1-65" ;
+    dm:storySection "1.5.3" ;
+    dm:storyKind "other (technical advice memorandum)" ;
+    dm:pageSays "Series E savings bonds got no valuation discount." ;
+    dm:citesAuthority "TAM 200303010" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "valuation discount" .
+
+:S1_66 a dm:StoryCase ;
+    dm:storyId "S1-66" ;
+    dm:storySection "1.6.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Receipts for a gift annuity and a pooled income fund gift show only the charitable portion; remainder trusts need no receipt but still need Form 8283 for property." ;
+    dm:citesAuthority "Reg. 1.170A-15(g)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "receipt wording for annuity and pooled fund gifts" .
+
+:S1_67 a dm:StoryCase ;
+    dm:storyId "S1-67" ;
+    dm:storySection "1.6.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A donor's gift deed counted as the charity's contemporaneous written acknowledgment." ;
+    dm:citesAuthority "Big River; 170(f)(8)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:SubstantiationAndAppraisal ;
+    dm:outsideReason "written acknowledgment" .
+
+:S1_68 a dm:StoryCase ;
+    dm:storyId "S1-68" ;
+    dm:storySection "1.6.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A small logo item received for a modest gift is a token benefit, so the gift is fully deductible." ;
+    dm:citesAuthority "Rev. Procs. 90-12, 92-49; Reg. 1.170A-1(h), 1.170A-13(f)(8)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "token benefit" .
+
+:S1_69 a dm:StoryCase ;
+    dm:storyId "S1-69" ;
+    dm:storySection "1.6.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A plaque worth less than both 2 percent of the gift and the indexed cap is a token benefit, so the deduction is not reduced." ;
+    dm:citesAuthority "Rev. Procs. 90-12, 92-49" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "token benefit" .
+
+:S1_70 a dm:StoryCase ;
+    dm:storyId "S1-70" ;
+    dm:storySection "1.6.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A membership payment is deductible less the value of the concert seat received, and the required disclosure may go on the invitation." ;
+    dm:citesAuthority "6115(a); Reg. 1.6115-1(a)(1)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "quid pro quo deduction" .
+
+:S1_71 a dm:StoryCase ;
+    dm:storyId "S1-71" ;
+    dm:storySection "1.6.3" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Tuition, bookstore purchases and a building-naming gift need no quid pro quo disclosure." ;
+    dm:citesAuthority "6115" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:SubstantiationAndAppraisal ;
+    dm:outsideReason "quid pro quo disclosure" .
+
+:S1_72 a dm:StoryCase ;
+    dm:storyId "S1-72" ;
+    dm:storySection "1.6.4" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Homeowners who gave their house to a fire department to burn in training got no net deduction." ;
+    dm:citesAuthority "Rolfs (T.C. 2010; 7th Cir. 2012)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "value net of benefit received" .
+
+:S1_73 a dm:StoryCase ;
+    dm:storyId "S1-73" ;
+    dm:storySection "1.6.4" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Deductions claimed for donated clothing led to a deficiency and a penalty." ;
+    dm:citesAuthority "Bass (2023)" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:SubstantiationAndAppraisal ;
+    dm:outsideReason "substantiation of clothing gifts" .
+
+:S1_74 a dm:StoryCase ;
+    dm:storyId "S1-74" ;
+    dm:storySection "1.7.23" ;
+    dm:storyKind "other (state Attorney General opinion)" ;
+    dm:pageSays "Gift annuities are not insurance under state law unless issuing them becomes the charity's main purpose, so no state requirements apply." ;
+    dm:citesAuthority "AG Opinion 6538 (MSU Foundation)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "state gift annuity regulation" .
+
+:S1_75 a dm:StoryCase ;
+    dm:storyId "S1-75" ;
+    dm:storySection "1.7.33" ;
+    dm:storyKind "other (state insurance General Counsel opinion, 2005)" ;
+    dm:pageSays "New York bars college or term gift annuities and annuities funded with real estate in which the donor keeps a life estate." ;
+    dm:citesAuthority "2005 General Counsel opinion; Ins. Law 1110" ;
+    dm:pageOutcome dm:Block ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "state gift annuity regulation" .
+
+:S1_76 a dm:StoryCase ;
+    dm:storyId "S1-76" ;
+    dm:storySection "1.7.36" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A college's issuing of gift annuities is not the business of insurance, because charitable activity is not commerce." ;
+    dm:citesAuthority "Trangenstein v. Wheaton College (the page spells it \"Transgenstein\")" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
+    dm:outsideReason "state gift annuity regulation" ;
+    dm:pageAccuracyNote "The notes say the page misspells the case name." .
+
+:S1_77 a dm:StoryCase ;
+    dm:storyId "S1-77" ;
+    dm:storySection "1.9.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Land given to a city on condition it be a park the city already plans is deductible, because the risk the condition fails is negligible." ;
+    dm:citesAuthority "Reg. 1.170A-1(e)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "conditional gift of land" .
+
+:S1_78 a dm:StoryCase ;
+    dm:storyId "S1-78" ;
+    dm:storySection "1.9.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A charity may ask a living donor to modify a gift restriction, and the donor agreed to redirect a building gift to renovations." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:CharityOperations ;
+    dm:outsideReason "modifying a gift restriction" .
+
+:S1_79 a dm:StoryCase ;
+    dm:storyId "S1-79" ;
+    dm:storySection "1.9.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A disqualified person's purchase of LLC interests held by charitable lead trusts was not self-dealing." ;
+    dm:citesAuthority "PLR 200207028" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S1_79_gift ;
+    dm:gapNote "The checks allow a deal between a lead trust and a disqualified person only as a same-terms redemption or under the estate exception; the notes do not say which ground the ruling used." .
+:S1_79_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ;
+    dm:deductionAllowed true ;
+    dm:deductionFor dm:IncomeInterest ;
+    # assumed: the notes do not give the lead trusts' form; a guaranteed annuity is used
+    dm:incomeInterestForm dm:GuaranteedAnnuity ;
+    # assumed: the notes name no trustee
+    dm:giftTrustee :IndependentTrustee ;
+    # assumed: the notes name no lead beneficiary
+    dm:leadBeneficiary :PublicCharity ;
+    # assumed: the notes say only 'a disqualified person'; a family member stands in
+    dm:counterparty :DonorChild ;
+    dm:vehicleAct dm:SaleOrExchangeAct ;
+    # assumed: the notes give no price; fair value is used
+    dm:atLeastFairMarketValue true .
+
+:S2_1 a dm:StoryCase ;
+    dm:storyId "S2-1" ;
+    dm:storySection "2.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Selling stock to a public charity at its basis makes the shortfall below fair value a deductible gift, under the 30 percent limit." ;
+    dm:citesAuthority "Reg. 1.1011-2(c) Ex. 1; 170(b)(1)(C) (30% limit, 5-year carryforward)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_1_gift .
+:S2_1_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    # assumed: the notes do not mention the basis split; the page treats the sale as valid, so the 1011(b) split is taken as made
+    dm:basisAllocated true .
+
+:S2_2 a dm:StoryCase ;
+    dm:storyId "S2-2" ;
+    dm:storySection "2.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "In a bargain sale, basis is split in proportion to the price; the donor reports long-term gain on the sold part and deducts the gift part." ;
+    dm:citesAuthority "Reg. 1.170A-4(c)(1) as the page cites it; the notes add that the core allocation rule is Reg. 1.1011-2(b)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_2_gift ;
+    dm:pageAccuracyNote "The notes say the page cites Reg. 1.170A-4(c)(1), while the core allocation rule is Reg. 1.1011-2(b)." .
+:S2_2_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    dm:basisAllocated true .
+
+:S2_3 a dm:StoryCase ;
+    dm:storyId "S2-3" ;
+    dm:storySection "2.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A below-value land sale to a medical center gives a deduction for the gift part and long-term gain on the sold part; the notes confirm the math." ;
+    dm:citesAuthority "Reg. 1.1011-2 (the section's rules; no other cite)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_3_gift .
+:S2_3_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    dm:basisAllocated true .
+
+:S2_4 a dm:StoryCase ;
+    dm:storyId "S2-4" ;
+    dm:storySection "2.1.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A couple's below-value sale of their home to a public charity gives a deduction and taxable gain after the home-sale exclusion." ;
+    dm:citesAuthority "none" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_4_gift ;
+    dm:pageAccuracyNote "The notes say the page wrongly folds the home-sale exclusion into adjusted basis; the exclusion reduces gain, not basis." .
+:S2_4_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    dm:basisAllocated true .
+
+:S2_5 a dm:StoryCase ;
+    dm:storyId "S2-5" ;
+    dm:storySection "2.1.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "Paying a parish more than fair value for burial niches makes the excess over value deductible." ;
+    dm:citesAuthority "PLR 200213021" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:DeductionArithmetic ;
+    dm:outsideReason "payment above fair value" .
+
+:S2_6 a dm:StoryCase ;
+    dm:storyId "S2-6" ;
+    dm:storySection "2.1.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Giving mortgaged land is a bargain sale: the debt relief counts as the price, so gain arises above the allocated basis, and the equity is deductible." ;
+    dm:citesAuthority "Reg. 1.1011-2(a)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_6_gift .
+:S2_6_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    dm:basisAllocated true .
+
+:S2_7 a dm:StoryCase ;
+    dm:storyId "S2-7" ;
+    dm:storySection "2.1.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A mortgaged duplex given to charity is half gift, half sale; the donor nets a benefit after the gain, and the charity sells it free of UBIT." ;
+    dm:citesAuthority "514(c)(2)(B), 514(b)(1) (acquisition indebtedness); Reg. 1.1011-2(a)(3)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_7_gift ;
+    dm:gapNote "No check has the debt-financed property rules (514(c)(2)(B), the 5-and-5 test) that decide whether the charity owes unrelated business tax on mortgaged property." ;
+    dm:pageAccuracyNote "The notes say the page's flat capital-gains rate ignores unrecaptured 1250 gain taxed up to 25 percent, so its tax figure is slightly low." .
+:S2_7_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    dm:basisAllocated true .
+
+:S2_8 a dm:StoryCase ;
+    dm:storyId "S2-8" ;
+    dm:storySection "2.2.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Deeding property while buyers are only interested is fine, but a prearranged binding sale taxes the gift part's gain to the donor." ;
+    dm:citesAuthority "Ferguson" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "gift of property before a sale" .
+
+:S2_9 a dm:StoryCase ;
+    dm:storyId "S2-9" ;
+    dm:storySection "2.2.1" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Deeding part of a land tract to a public charity before a joint sale gives a deduction for that part and gain on the donor's share." ;
+    dm:citesAuthority "Reg. 1.1011-2(a); 170(e)(1); Rev. Rul. 87-37 (minority discount on undivided interests)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "partial gift before a joint sale" ;
+    dm:pageAccuracyNote "The notes say the page never shows whether the donor's stated tax-cut goal was met." .
+
+:S2_10 a dm:StoryCase ;
+    dm:storyId "S2-10" ;
+    dm:storySection "2.2.1" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A large bequest to a public charity was treated as an unusual grant." ;
+    dm:citesAuthority "PLR 201342011" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:CharityOperations ;
+    dm:outsideReason "public support test" .
+
+:S2_11 a dm:StoryCase ;
+    dm:storyId "S2-11" ;
+    dm:storySection "2.2.1" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "A court upheld the deduction for a bargain sale of property to charity." ;
+    dm:citesAuthority "Musgrave" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:GradedByModel ;
+    dm:storyGift :S2_11_gift .
+:S2_11_gift a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ;
+    dm:seller td:Founder ;
+    dm:buyer :PublicCharity ;
+    # assumed: the notes give no other facts; the court upheld the sale, so the 1011(b) split is taken as made
+    dm:basisAllocated true .
+
+:S2_12 a dm:StoryCase ;
+    dm:storyId "S2-12" ;
+    dm:storySection "2.2.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "Giving a fifth of a stock block to charity and selling the rest cuts the gain and leaves more after tax than a full sale." ;
+    dm:citesAuthority "Reg. 20.2031-2(b)(1) (high/low mean, by analogy); 170(e)(1)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:OutrightGiftToPublicCharity ;
+    dm:outsideReason "partial stock gift with a sale" ;
+    dm:pageAccuracyNote "The notes say the page assumes a 15 percent gain rate, ignoring the 20 percent rate and the 3.8 percent net investment income tax, and never shows whether the goal was met." .
+
+:S2_13 a dm:StoryCase ;
+    dm:storyId "S2-13" ;
+    dm:storySection "2.3.2" ;
+    dm:storyKind "example" ;
+    dm:pageSays "A land gift paired with a life insurance trust that replaces it for heirs gives several tax benefits, if the policy is issued to the trust before the gift." ;
+    dm:citesAuthority "2042(2); 2503(b); 2041(b)(2); Crummey (9th Cir. 1968); Cristofani (97 T.C. 74, 1991)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:LifeInsurance ;
+    dm:outsideReason "wealth replacement insurance trust" ;
+    dm:pageAccuracyNote "The notes say the page promises four tax benefits but names only about three." .
+
+:S2_14 a dm:StoryCase ;
+    dm:storyId "S2-14" ;
+    dm:storySection "2.3.2" ;
+    dm:storyKind "court case" ;
+    dm:pageSays "Withdrawal rights make trust contributions present interests for the annual exclusion, and contingent beneficiaries may hold them too, multiplying the exclusions." ;
+    dm:citesAuthority "Crummey (9th Cir. 1968); Cristofani (97 T.C. 74, 1991); 2503(b)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:TransferTaxArithmetic ;
+    dm:outsideReason "annual exclusion and withdrawal powers" .
+
+:S2_15 a dm:StoryCase ;
+    dm:storyId "S2-15" ;
+    dm:storySection "2.4.2" ;
+    dm:storyKind "private letter ruling" ;
+    dm:pageSays "A gift of a quarter undivided interest in art, held by the museum three months a year, was deductible generally at fair value." ;
+    dm:citesAuthority "PLR 9303007; Reg. 1.170A-5(a)(2); 170(o)" ;
+    dm:pageOutcome dm:Allow ;
+    dm:storyScope dm:OutsideModel ;
+    dm:outsideCategory dm:VehicleNotYetModeled ;
+    dm:outsideReason "fractional interest in art" ;
+    dm:pageAccuracyNote "The notes say the ruling predates the 2006 rules in 170(o): lesser-of valuation, completion within 10 years or at death, and recapture with a 10 percent penalty." .

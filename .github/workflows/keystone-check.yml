@@ -24,7 +24,7 @@ jobs:
       - name: Run keystone and cascade checks against the answer key
         run: python3 validate_keystone.py
       - name: OWL lint on the decision model
-        run: python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl
+        run: python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl tests/decision/giftlaw-stories/*.ttl
       - name: Grade the spend decision cases against their answer key
         run: python3 decide_spend.py
       - name: Grade the same cases under insider branch B
@@ -33,3 +33,5 @@ jobs:
         run: python3 decide_spend.py --compare
       - name: Sweep the family trust's settings one at a time
         run: python3 decide_spend.py --sweep
+      - name: Grade the GiftLaw example stories and show where the page and the checks disagree
+        run: python3 grade_stories.py
