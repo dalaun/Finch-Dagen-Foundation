@@ -2,7 +2,7 @@
 @prefix t: <http://example.org/trust-domain/rehearsal/transition#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-# Transition checks T1-T16 (W-2 to business owner), plus building checks T17-T23. Synthetic design, no real data.
+# Transition checks T1-T16 (W-2 to business owner), plus building checks T17-T23 and financing and real-estate checks T24-T26. Synthetic design, no real data.
 # Same rules as the structure checks: facts only, unknown is amber, renaming changes nothing.
 # Source quotes are in 08-w2-to-owner-transition.md. The executable version is transition_twin.py.
 
@@ -121,5 +121,21 @@ t:T23 a rh:StructureCheck ; rdfs:label "T23. When the owner manages the building
   rh:readsFact "no_self_management_fee_counted" ;
   t:appliesToArmKind "w2_only" , "buy" , "grow" ;
   rdfs:comment "Source: Model rule (a fee paid to yourself is not a cost)" .
+
+# Home-equity down payment and buying the building with the business
+t:T24 a rh:StructureCheck ; rdfs:label "T24. A home-equity loan used for the down payment is repaid from income outside the business being bought" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: Starfield & Smith (May 2025) and Windsor Advantage (July 2025) on SOP 50 10 8 equity injection; SBA text not read" .
+
+t:T25 a rh:StructureCheck ; rdfs:label "T25. The business occupies at least 51% of the building being bought" ;
+  rh:readsFact "business_occupies_at_least_51pct_of_building" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SBA occupancy rule; not verified against the current SOP" .
+
+t:T26 a rh:StructureCheck ; rdfs:label "T26. The business pays the property company a written, market rent; the apartments go to unrelated tenants at market" ;
+  rh:readsFact "business_pays_market_rent_to_property_company" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: Model rule" .
 
 t:appliesToArmKind a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> ; rdfs:label "applies to arm kind" ; rdfs:comment "w2_only, buy or grow" .

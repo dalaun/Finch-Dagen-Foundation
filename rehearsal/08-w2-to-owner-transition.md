@@ -34,6 +34,8 @@ python3 transition_twin.py --selftest            # built-in cases
 | B | Buy a business just under the step-down size, keep the W-2, add AI margin gains. |
 | B0 | The same purchase as B with no AI gain. The gap between B and B0 is what the AI work is worth. |
 | C | Grow the transport company first, self-funded (SBA money is not available to it). The same arm, with the cannabis flag off, stands in for growing the government-contracting company. |
+| D | Buy a business together with its mixed-use building: the business downstairs, apartments upstairs, the founder living in one. A property company he owns holds the building, and the business pays it market rent. Paid from savings. |
+| DH | The same purchase, with the cash to close borrowed against the building he already owns (a home-equity loan) and repaid from outside income. |
 
 ### What the synthetic run shows
 
@@ -101,6 +103,40 @@ Three findings:
 | T23 | When the owner manages the building himself, no management fee is counted as income or expense | A fee paid to yourself is not a cost (model rule) |
 
 **Who should hold the building.** Two facts point away from the Foundation's side of the stack and toward a simple holder. The Foundation can have no dealings with it (T20). And while rental real estate on its own is unlikely to be an excess business holding (the IRS says a "business enterprise" excludes a business with at least 95% of its gross income from passive sources, and lists "rents from real property" as passive), a building held by a trust that benefits the Foundation still draws the Foundation into every later sale, lease or loan decision. Keeping it out of the Foundation's benefit chain, and moving it only after T19 is cleared, is the default until counsel says otherwise.
+
+## A business you live in, and a home-equity down payment
+
+The founder asked about a business he can live in, and about using the equity a legalized extra unit adds to his building. Arms D and DH rehearse both.
+
+How the twin models it:
+
+- **Two companies, one building.** A property company he owns buys the building. The business he buys leases the storefront from it at a written, market rent, and the other apartments are leased to unrelated tenants. The property company's net (business rent plus apartment rent, less costs and its own loan) is rental income to him, and it lowers what the business must pay him, the same way his current building's rent does. If he moves into the new building, his own unit in the current building can be rented, and the twin adds that rent too.
+- **One project, one down payment.** The 10% equity is on the whole project, business and building together, so the cash to close roughly doubles against a business-only purchase of the same business.
+- **A home-equity loan as the down payment.** In DH a loan against the building he already owns pays the cash to close. As lending and legal writers describe SBA's current rules, borrowed money can count as the equity only if it is repaid from income outside the business being bought ("cash from personal loans with outside repayment sources," Starfield & Smith, May 2025; Windsor Advantage, July 2025; SBA's own text not read). Check T24 tests that at close: his W-2 take-home plus today's rent, after living costs, must cover the loan's payment. The loan is also a lien on his building, so check T18 is always decided for DH, never amber.
+
+### What the synthetic run shows
+
+Placeholders: a business earning 150 thousand a year before rent and owner labor, priced at 300 thousand; a building priced at 450 thousand with two apartments for rent and one for him; the building loan at 10% over 25 years; the home-equity loan at 9% over 10 years.
+
+| Arm | Lender coverage at close | Step-down month | Result |
+|---|---|---|---|
+| D | n/a | not met | Can't close: the cash for a business-plus-building down payment is more than placeholder savings allow while keeping the reserve floor. |
+| DH | 1.12x | not met | Closes with the home-equity loan, and the outside-income test passes, but the combined business and building fall under the 1.25x lender floor (T15 fails). |
+| DH with his current building | 1.12x | not met | Personal cash at year six is the highest of any arm, because three sources of rent come in while the W-2 carries living costs. But peak debt is about 805 thousand, every dollar of it backed by him, and the business alone never covers its own loan after paying him. |
+
+Three findings:
+
+1. **The building is what makes it bigger, not what makes it work.** Buying the real estate adds a second loan as large as the business loan. At a placeholder 10% the building's own loan eats most of its rent. At a 7% building loan rate, the same deal meets the 1.25x floor exactly. So the building loan's rate and term decide this path. That points to asking lenders about SBA's 504 program, which is built for owner-occupied real estate, alongside a 7(a) loan for the business. (The 7% is a sensitivity, not a quoted rate.)
+2. **It's a wealth path, not an exit path, on these numbers.** D builds personal cash and real estate while he keeps the W-2. It doesn't let him leave within six years, because the business left after paying rent is too small to pay him and its own loan. A bigger business in the same building would change that. The test is the same size rule as before, applied to what the business earns after its rent.
+3. **The home-equity loan is the unlock, and it puts the home on the line twice.** Without it the deal can't close on placeholder savings. With it, his current building backs the down payment loan and, very likely, the SBA loan's lien as well. That makes checks T18 and T24 the ones to watch.
+
+### Checks for these paths
+
+| Id | Check | Why (source) |
+|---|---|---|
+| T24 | A home-equity loan used for the down payment is repaid from income outside the business being bought: W-2 take-home and today's rent, after living costs, cover its payment at close | Starfield & Smith (May 2025): "For borrowed funds used as equity injection, lenders must show an outside source of repayment." Windsor Advantage (July 2025) says the same of home-equity lines. SBA text not read |
+| T25 | The business occupies at least 51% of the building being bought | SBA's long-standing occupancy rule for financing a building with the business. Not verified against the current SOP |
+| T26 | The business pays the property company a written, market rent; the apartments go to unrelated tenants at market | Keeps the rent real for the lender and for tax; ties to T8 and the structure checks |
 
 ## Buy versus build
 
@@ -219,6 +255,7 @@ Nothing of the employer's was read for this file. These are the documents and qu
 9. **Lender:** would you take a lien on my rental building for an acquisition loan, at what equity level and loan size, and could a home-equity loan on it count toward my equity injection if I repay it from my salary?
 10. **Real estate counsel:** should the building stay in my name, go into a revocable trust or go into an LLC, given the mortgage's due-on-sale clause, the homeowner property-tax exemption on my own unit, and liability for the rented units?
 11. **CPA:** how do I split costs and depreciation between my unit and the rented units, how do the dwelling-unit rules for a home I live in apply to a building where I rent the other units, what will a later sale look like (home-sale exclusion on my unit, depreciation recapture on the rest), and what rent should the twin count?
+12. **Lender:** for a business with its building, would you use a 504 loan for the building and a 7(a) for the business, what rate and term would each carry, and does a home-equity loan on my current building count as my equity if my salary and current rents repay it? Would a cash-out refinance count the same way?
 
 ## What the founder supplies (privately)
 

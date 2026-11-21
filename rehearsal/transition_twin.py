@@ -7,6 +7,11 @@ Runs several arms month by month over the same founder and the same horizon:
   B    buy a business while keeping the W-2, a manager runs it
   B0   the same purchase with no AI margin gain (shows what the AI work is worth)
   C    grow an existing operating company first, self-funded
+  D    buy a business together with its mixed-use building (business downstairs,
+       apartments upstairs, the founder living in one); a property company he owns
+       holds the building and the business pays it market rent
+  DH   the same purchase with the cash to close funded by a home-equity loan on the
+       building he already owns, repaid from outside income
 
 If the inputs hold a "building" block (a rental building the founder owns and
 lives in), every arm runs twice: as written, and again with the building's net
@@ -17,7 +22,8 @@ T17 to T23 (lien exposure, title moves, the Foundation, tax splits).
 Every month it tracks personal cash, business cash, debt service, wages paid to
 the founder, reserves, loan balances and the business's value. Each month it
 applies the step-down test (all parts must pass, for several months running).
-Each arm also runs its red-flag checks (T1 to T16, plus T17 to T23 with a building), which read fact fields only.
+Each arm also runs its red-flag checks (T1 to T16, T17 to T23 with a building, T24 to T26 for a
+home-equity down payment or a bought building), which read fact fields only.
 
 Standard library only. Run:
 
@@ -120,41 +126,72 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict
     has_bldg = bool(building)
     rent12 = []  # trailing net rent, before tax
     months_cash_below_zero = 0
+    counted = (building or {}).get("rent_counted_share", arm.get("real_estate", {}).get("rent_counted_share", 1.0))
+    rent_tax = (building or {}).get("rental_effective_tax_rate", arm.get("real_estate", {}).get("rental_effective_tax_rate", 0.0))
     if has_bldg:
         gross_m = bld["rented_units_gross_rent_annual"] / 12
         vacancy = bld.get("vacancy_rate", 0.0)
         opex_m = bld.get("rental_share_operating_costs_annual", 0.0) / 12
         bdebt_m = bld.get("rental_share_mortgage_payment_annual", 0.0) / 12
-        rent_tax = bld.get("rental_effective_tax_rate", 0.0)
-        counted = bld.get("rent_counted_share", 1.0)
         vu = bld.get("vacant_unit") or {}
         rehab_months = vu.get("rehab_months", 0)
         ready_month = rehab_months + vu.get("lease_up_months", 0) + 1 if vu else None
 
     # --- day 0: purchase (arm B)
+    re = arm.get("real_estate") or {}
+    re_price = re.get("price", 0.0)
+    re_loan = heloc = None
+    heloc_annual = 0.0
+    outside_cash_at_close = None
     if kind == "buy":
-        equity = price * fin["equity_injection_pct"]
+        pct = fin["equity_injection_pct"]
+        equity = (price + re_price) * pct  # the injection is on the whole project, building included
         seller_amt = price * fin["seller_note_pct_of_price"]
-        closing = price * fin["closing_costs_pct"]
+        closing = (price + re_price) * fin["closing_costs_pct"]
         wc = biz.get("working_capital", 0.0)
         cash_needed = equity - min(seller_amt, equity * fin["seller_note_max_share_of_equity"]) + closing + wc
-        sba_amt = price - equity + closing * fin["finance_closing_costs"] + wc * fin["finance_working_capital"]
+        sba_amt = price - price * pct + closing * fin["finance_closing_costs"] + wc * fin["finance_working_capital"]
+        re_amt = re_price - re_price * pct
         cash_needed -= closing * fin["finance_closing_costs"] + wc * fin["finance_working_capital"]
-        guarantee_fee = sba_amt * fin["sba_guarantee_fee_pct"]
+        guarantee_fee = (sba_amt + re_amt) * fin["sba_guarantee_fee_pct"]
         cash_needed += guarantee_fee
+        # Home-equity loan on the building he already owns can fund part of the cash to close,
+        # but only if he repays it from income outside the business he is buying.
+        heloc_amt = cash_needed * fin.get("home_equity_loan_share_of_cash", 0.0)
+        own_cash = cash_needed - heloc_amt
         floor = trigger["personal_reserve_months"] * living_m * fin["reserve_floor_share_at_close"]
-        if savings - cash_needed < floor:
+        if savings - own_cash < floor:
             notes.append("not enough cash to close and keep the reserve floor; purchase skipped")
         else:
-            savings -= cash_needed
+            savings -= own_cash
             sba = Loan(sba_amt, fin["sba_rate"], fin["sba_term_months"])
             seller = Loan(seller_amt, fin["seller_note_rate"], fin["seller_note_term_months"],
                           standby_months=fin["seller_note_standby_months"])
+            if re_amt > 0:
+                re_loan = Loan(re_amt, re.get("loan_rate", fin["sba_rate"]), re.get("loan_term_months", 300))
+            if heloc_amt > 0:
+                heloc = Loan(heloc_amt, fin["home_equity_loan_rate"], fin["home_equity_loan_term_months"])
+                heloc_annual = 12 * payment(heloc_amt, fin["home_equity_loan_rate"], fin["home_equity_loan_term_months"])
             biz_cash = wc
             acquired = True
             first_year_debt = 12 * payment(sba_amt, fin["sba_rate"], fin["sba_term_months"])
-            underwriting_dscr = (sde0 - biz.get("manager_market_wage_annual", 0.0)) / first_year_debt
-            notes.append(f"closed: equity from savings, SBA loan and seller note on {fin['seller_note_standby_months']}-month standby")
+            cash_flow = sde0 - biz.get("manager_market_wage_annual", 0.0)
+            if re_amt > 0:
+                # The lender looks at the business and the property company together
+                first_year_debt += 12 * payment(re_amt, re.get("loan_rate", fin["sba_rate"]), re.get("loan_term_months", 300))
+                cash_flow += re.get("apartments_gross_rent_annual", 0.0) * (1 - re.get("vacancy_rate", 0.0)) - re.get("operating_costs_annual", 0.0)
+            underwriting_dscr = cash_flow / first_year_debt
+            # Outside income at close: W-2 take-home and today's building rent, less living costs
+            outside = person["salary_gross_annual"] * (1 - w2_tax) - person["living_costs_annual"]
+            if building:
+                b = building
+                outside += max(0.0, b["rented_units_gross_rent_annual"] * (1 - b.get("vacancy_rate", 0.0))
+                               - b.get("rental_share_operating_costs_annual", 0.0)
+                               - b.get("rental_share_mortgage_payment_annual", 0.0)) * (1 - b.get("rental_effective_tax_rate", 0.0))
+            outside_cash_at_close = outside
+            how = "home-equity loan and savings" if heloc else "savings"
+            notes.append(f"closed: equity from {how}, SBA loan" + (" (business and building)" if re_loan else "")
+                         + f" and seller note on {fin['seller_note_standby_months']}-month standby")
 
     if kind == "grow":
         acquired = True
@@ -169,13 +206,25 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict
                 g += vu["rent_annual"] / 12  # the finished unit is leased
             if vu and m <= rehab_months:
                 savings -= vu["rehab_cost_total"] / max(rehab_months, 1)  # finishing it is paid from savings
+            if re.get("founder_lives_here") and acquired and m >= 1 + re.get("vacated_unit_lease_up_months", 0):
+                g += re.get("vacated_home_unit_rent_annual", 0.0) / 12  # his old unit is rented once he moves
             net_rent_m = g * (1 - vacancy) - opex_m - bdebt_m
+        if re_loan:
+            # Property company: rent from the business and the other apartments, less costs and its loan
+            propco_m = (re.get("business_rent_annual", 0.0) / 12
+                        + re.get("apartments_gross_rent_annual", 0.0) / 12 * (1 - re.get("vacancy_rate", 0.0))
+                        - re.get("operating_costs_annual", 0.0) / 12 - re_loan.step())
+            net_rent_m += propco_m
+        if has_bldg or re_loan:
             savings += net_rent_m - max(net_rent_m, 0) * rent_tax
+        if heloc:
+            savings -= heloc.step()  # repaid from personal (outside) income
         rent12.append(net_rent_m)
         rent12[:] = rent12[-12:]
         # What the business must pay him to replace salary and benefits: net rent he keeps either
         # way covers part of it (only the counted share, and never below zero).
-        need_annual = max(0.0, replacement_annual - counted * max(0.0, sum(rent12))) if has_bldg else replacement_annual
+        need_annual = (max(0.0, replacement_annual - counted * max(0.0, sum(rent12)))
+                       if (has_bldg or re_loan) else replacement_annual)
 
         # ---------------- business month
         op_before_owner = 0.0
@@ -191,6 +240,8 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict
                     ramp = min(1.0, (m - ai["start_month"] + 1) / max(ai["ramp_months"], 1))
                     sde_m += rev_m * ai["margin_gain_pct_of_revenue"] * ramp
                     sde_m -= ai["cost_annual"] / 12
+                if re_loan:
+                    sde_m -= re.get("business_rent_annual", 0.0) / 12  # market rent to his property company
             else:  # grow
                 g = arm["growth"]
                 sde_annual = g["start_cash_flow_annual"] * (1 + g["monthly_growth"]) ** (m - 1)
@@ -276,7 +327,10 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict
             hi = arm.get("valuation_multiple_above_1m")
             if hi and value > 1_000_000:
                 value = 12 * op_before_owner * hi  # bigger businesses sell at higher multiples
-        loans = (sba.balance if sba else 0) + (seller.balance if seller else 0)
+        if re_loan:
+            value += re_price  # building held at its purchase price (no appreciation assumed)
+        loans = ((sba.balance if sba else 0) + (seller.balance if seller else 0)
+                 + (re_loan.balance if re_loan else 0) + (heloc.balance if heloc else 0))
         rows.append({
             "month": m,
             "on_w2": on_w2,
@@ -313,6 +367,9 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict
         "has_building": has_bldg,
         "end_trailing_net_rent": round(sum(rent12)) if has_bldg else None,
         "months_personal_cash_below_zero": months_cash_below_zero,
+        "home_equity_loan_payment_annual": round(heloc_annual),
+        "outside_cash_at_close_annual": None if outside_cash_at_close is None else round(outside_cash_at_close),
+        "bought_building": bool(re_loan),
         "rows": rows,
     }
 
@@ -376,10 +433,24 @@ BUILDING_CHECKS = [
 
 
 
+FINANCE_CHECKS = [
+    ("T24", {"buy"}, "MODEL:home_equity_outside_repayment",
+     "A home-equity loan used for the down payment is repaid from income outside the business being bought: W-2 take-home and today's rent, after living costs, cover its payment at close"),
+]
+REAL_ESTATE_CHECKS = [
+    ("T25", {"buy"}, "business_occupies_at_least_51pct_of_building",
+     "The business occupies at least 51% of the building being bought (SBA's occupancy rule for financing a building with the business; confirm against the current SOP)"),
+    ("T26", {"buy"}, "business_pays_market_rent_to_property_company",
+     "The business pays the founder's property company a written, market rent; the apartments are leased at market to unrelated tenants"),
+]
+
+
 def run_checks(arm: dict, result: dict, trigger: dict, building: dict | None = None) -> list:
     facts = arm.get("facts", {})
     out = []
-    checks = CHECKS + (BUILDING_CHECKS if result.get("has_building") else [])
+    checks = (CHECKS + (BUILDING_CHECKS if result.get("has_building") else [])
+              + (FINANCE_CHECKS if arm.get("financing", {}).get("home_equity_loan_share_of_cash") else [])
+              + (REAL_ESTATE_CHECKS if arm.get("real_estate") else []))
     bld_facts = (building or {}).get("facts", {})
     for cid, kinds, key, label in checks:
         if arm["kind"] not in kinds:
@@ -399,8 +470,16 @@ def run_checks(arm: dict, result: dict, trigger: dict, building: dict | None = N
             v = "pass"  # enforced by the simulation loop itself
         elif key == "MODEL:building_carries_itself":
             v = "pass" if (result.get("end_trailing_net_rent") or 0) >= 0 else "fail"
+        elif key == "MODEL:home_equity_outside_repayment":
+            if not result.get("acquired"):
+                v = "pass"
+            else:
+                oc = result.get("outside_cash_at_close_annual") or 0
+                v = "pass" if oc >= result.get("home_equity_loan_payment_annual", 0) else "fail"
         elif key == "MODEL:lien_exposure":
             lien = (building or {}).get("lien_for_business_loan")
+            if arm.get("financing", {}).get("home_equity_loan_share_of_cash"):
+                lien = True  # a home-equity loan is itself a lien on the building
             if not result.get("acquired"):
                 v = "pass"
             elif lien is None:
@@ -411,6 +490,8 @@ def run_checks(arm: dict, result: dict, trigger: dict, building: dict | None = N
                 v = "pass" if result["months_personal_cash_below_zero"] == 0 else "fail"
         else:
             val = bld_facts.get(key) if cid in {"T19", "T20", "T21", "T22", "T23"} else facts.get(key)
+            if cid in {"T25", "T26"}:
+                val = arm.get("real_estate", {}).get("facts", {}).get(key, val)
             v = "pass" if val is True else ("fail" if val is False else "amber")
         out.append({"id": cid, "verdict": v, "label": label})
     # cannabis special case: a marijuana business can't be the SBA borrower
@@ -466,7 +547,7 @@ def summarize(inputs: dict, results: list) -> str:
         lines.append(f"Building: trailing twelve months of net rent at the end of the run is {rent:,}. The step-down test counts "
                      f"{counted:.0%} of it, so a business must pay the founder about {max(0, R - counted * rent):,.0f} a year instead of {R:,}.")
     for a in inputs["arms"]:
-        if a["kind"] == "buy":
+        if a["kind"] == "buy" and not a.get("real_estate"):
             f = a["financing"]
             need = required_cash_flow(R, a["valuation_multiple"], 1 - f["equity_injection_pct"],
                                       f["sba_rate"], f["sba_term_months"], t["min_dscr_after_founder_wage"])
@@ -543,6 +624,21 @@ def selftest() -> int:
         expect("a building that doesn't carry itself fails T17",
                [c for c in r["A+bldg"]["checks"] if c["id"] == "T17"][0]["verdict"] == "fail")
         expect("no building, no building checks", not any(c["id"] == "T17" for c in res["B"]["checks"]))
+    # Mixed-use and home-equity arms
+    if "D" in res and "DH" in res:
+        expect("D without a home-equity loan can't close on these savings", not res["D"]["acquired"])
+        expect("DH closes with the home-equity loan", res["DH"]["acquired"])
+        t24 = [c for c in res["DH"]["checks"] if c["id"] == "T24"][0]["verdict"]
+        expect("DH's home-equity payment is covered by outside income at close", t24 == "pass")
+        poor = json.loads(json.dumps(base))
+        for a in poor["arms"]:
+            if a["id"] == "DH":
+                a["financing"]["home_equity_loan_term_months"] = 6  # a payment outside income can't cover
+        r = {x["arm"]: x for x in run(poor)}
+        expect("a home-equity payment outside income can't cover fails T24",
+               [c for c in r["DH"]["checks"] if c["id"] == "T24"][0]["verdict"] == "fail")
+        t18 = [c for c in res["DH+bldg"]["checks"] if c["id"] == "T18"][0]["verdict"]
+        expect("a home-equity loan makes the building a lien, so T18 is decided, not amber", t18 in {"pass", "fail"})
     # Closed form agrees with direction: target sized to requirement can step down
     print(f"\n{bad} failure(s)")
     return 1 if bad else 0
