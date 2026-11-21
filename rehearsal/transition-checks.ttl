@@ -2,7 +2,7 @@
 @prefix t: <http://example.org/trust-domain/rehearsal/transition#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-# Transition checks T1-T16 (W-2 to business owner). Synthetic design, no real data.
+# Transition checks T1-T16 (W-2 to business owner), plus building checks T17-T23. Synthetic design, no real data.
 # Same rules as the structure checks: facts only, unknown is amber, renaming changes nothing.
 # Source quotes are in 08-w2-to-owner-transition.md. The executable version is transition_twin.py.
 
@@ -85,5 +85,41 @@ t:T15 a rh:StructureCheck ; rdfs:label "T15. Target's last-year cash flow, after
   rh:readsFact "model rule" ;
   t:appliesToArmKind "buy" ;
   rdfs:comment "Source: SBA SOP 50 10 8.1 (MMCG)" .
+
+# Building checks: apply to every arm the twin runs with the founder's rental building
+t:T17 a rh:StructureCheck ; rdfs:label "T17. The rented units' trailing twelve months of rent cover their share of the mortgage and operating costs" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: Model rule" .
+
+t:T18 a rh:StructureCheck ; rdfs:label "T18. If the building secures the business loan, personal cash never goes below zero in the run" ;
+  rh:readsFact "model rule" ;
+  t:appliesToArmKind "buy" ;
+  rdfs:comment "Source: SOP 50 10 8 collateral rules as reported by Starfield & Smith (Aug 2025) and MMCG (Aug 2026): lien on available equity in owners' personal real estate when the loan is not fully secured" .
+
+t:T19 a rh:StructureCheck ; rdfs:label "T19. Any move of the building into a trust or company is checked first against the mortgage's due-on-sale clause and the local homeowner property-tax exemption" ;
+  rh:readsFact "title_move_checked_for_due_on_sale_and_homeowner_exemption" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: 12 U.S.C. 1701j-3(d)(8) (fewer than five dwelling units); exemption rule not verified" .
+
+t:T20 a rh:StructureCheck ; rdfs:label "T20. The Foundation never uses, rents, buys, lends on or takes a pledge of the building, and pays nothing toward it" ;
+  rh:readsFact "foundation_never_uses_rents_buys_or_lends_on_building" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: IRC 4941(d)(1)(A)-(E)" .
+
+t:T21 a rh:StructureCheck ; rdfs:label "T21. Rehab costs are kept with receipts and added to basis; the founder's own labor is never added to basis or deducted" ;
+  rh:readsFact "rehab_costs_documented_own_labor_excluded" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: IRS Pub. 551 (12/2025), Constructing assets" .
+
+t:T22 a rh:StructureCheck ; rdfs:label "T22. Costs are split between the founder's own unit and the rented units on a written, consistent basis; only the rented share is a rental expense or depreciated" ;
+  rh:readsFact "own_unit_and_rented_units_split_in_writing" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: IRS Pub. 527 (2025), chapters 1 and 2" .
+
+t:T23 a rh:StructureCheck ; rdfs:label "T23. When the owner manages the building himself, no management fee is counted as income or as an expense" ;
+  rh:readsFact "no_self_management_fee_counted" ;
+  t:appliesToArmKind "w2_only" , "buy" , "grow" ;
+  rdfs:comment "Source: Model rule (a fee paid to yourself is not a cost)" .
 
 t:appliesToArmKind a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> ; rdfs:label "applies to arm kind" ; rdfs:comment "w2_only, buy or grow" .

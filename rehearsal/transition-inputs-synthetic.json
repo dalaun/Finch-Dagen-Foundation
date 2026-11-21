@@ -16,6 +16,23 @@
     "personal_reserve_months": 6,
     "business_reserve_months": 3
   },
+  "building": {
+    "label": "SYNTHETIC placeholder building: a small multi-unit rental the founder owns and lives in. Not his numbers. Rents, costs and the mortgage share are placeholders to replace privately.",
+    "rented_units_gross_rent_annual": 24000,
+    "vacancy_rate": 0.05,
+    "rental_share_operating_costs_annual": 6000,
+    "rental_share_mortgage_payment_annual": 8000,
+    "rental_effective_tax_rate": 0.15,
+    "rent_counted_share": 0.75,
+    "vacant_unit": {
+      "rent_annual": 14400,
+      "rehab_cost_total": 15000,
+      "rehab_months": 4,
+      "lease_up_months": 2
+    },
+    "lien_for_business_loan": null,
+    "facts": {}
+  },
   "arms": [
     {
       "id": "A",

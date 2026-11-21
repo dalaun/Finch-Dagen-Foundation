@@ -8,10 +8,16 @@ Runs several arms month by month over the same founder and the same horizon:
   B0   the same purchase with no AI margin gain (shows what the AI work is worth)
   C    grow an existing operating company first, self-funded
 
+If the inputs hold a "building" block (a rental building the founder owns and
+lives in), every arm runs twice: as written, and again with the building's net
+rent (id ending "+bldg"). Net rent from the rented units lowers what a business
+must pay the founder before he can step down, and the building adds checks
+T17 to T23 (lien exposure, title moves, the Foundation, tax splits).
+
 Every month it tracks personal cash, business cash, debt service, wages paid to
 the founder, reserves, loan balances and the business's value. Each month it
 applies the step-down test (all parts must pass, for several months running).
-Each arm also runs its red-flag checks (T1 to T16), which read fact fields only.
+Each arm also runs its red-flag checks (T1 to T16, plus T17 to T23 with a building), which read fact fields only.
 
 Standard library only. Run:
 
@@ -78,7 +84,7 @@ class Loan:
 
 # ---------------------------------------------------------------- one arm
 
-def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
+def run_arm(person: dict, arm: dict, horizon: int, trigger: dict, building: dict | None = None) -> dict:
     kind = arm["kind"]  # "w2_only", "buy", "grow"
     rows = []
 
@@ -108,6 +114,22 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
     underwriting_dscr = None
     price = biz.get("price", 0.0)
     notes = []
+
+    # --- the building (optional): rented units earn net rent; the founder's own unit is personal
+    bld = building or {}
+    has_bldg = bool(building)
+    rent12 = []  # trailing net rent, before tax
+    months_cash_below_zero = 0
+    if has_bldg:
+        gross_m = bld["rented_units_gross_rent_annual"] / 12
+        vacancy = bld.get("vacancy_rate", 0.0)
+        opex_m = bld.get("rental_share_operating_costs_annual", 0.0) / 12
+        bdebt_m = bld.get("rental_share_mortgage_payment_annual", 0.0) / 12
+        rent_tax = bld.get("rental_effective_tax_rate", 0.0)
+        counted = bld.get("rent_counted_share", 1.0)
+        vu = bld.get("vacant_unit") or {}
+        rehab_months = vu.get("rehab_months", 0)
+        ready_month = rehab_months + vu.get("lease_up_months", 0) + 1 if vu else None
 
     # --- day 0: purchase (arm B)
     if kind == "buy":
@@ -139,6 +161,22 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
         biz_cash = 0.0
 
     for m in range(1, horizon + 1):
+        # ---------------- building month (before the business, so this month's rent counts)
+        net_rent_m = 0.0
+        if has_bldg:
+            g = gross_m
+            if vu and m >= ready_month:
+                g += vu["rent_annual"] / 12  # the finished unit is leased
+            if vu and m <= rehab_months:
+                savings -= vu["rehab_cost_total"] / max(rehab_months, 1)  # finishing it is paid from savings
+            net_rent_m = g * (1 - vacancy) - opex_m - bdebt_m
+            savings += net_rent_m - max(net_rent_m, 0) * rent_tax
+        rent12.append(net_rent_m)
+        rent12[:] = rent12[-12:]
+        # What the business must pay him to replace salary and benefits: net rent he keeps either
+        # way covers part of it (only the counted share, and never below zero).
+        need_annual = max(0.0, replacement_annual - counted * max(0.0, sum(rent12))) if has_bldg else replacement_annual
+
         # ---------------- business month
         op_before_owner = 0.0
         debt = 0.0
@@ -175,7 +213,7 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
                 owner_wage = arm.get("owner_parttime_wage_annual", 0.0) / 12
             else:
                 manager_paid = 0.0  # the founder is now the manager
-                owner_wage = replacement_annual / 12
+                owner_wage = need_annual / 12
             profit = op_before_owner - manager_paid - owner_wage - (debt * arm.get("interest_share_of_debt", 0.5))
             biz_tax = max(profit, 0) * arm.get("entity_tax_rate", 0.0)
             biz_cash += op_before_owner - manager_paid - owner_wage - debt - biz_tax
@@ -207,16 +245,17 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
                 # A seller note counts once its standby has ended (on full standby it pays nothing)
                 fwd_debt12 += 12 * (seller.pmt or 0)
             fwd_debt12 = max(fwd_debt12, debt12)
-            cover = cap12 - replacement_annual
+            cover = cap12 - need_annual
             dscr = (cover / fwd_debt12) if fwd_debt12 > 0 else (math.inf if cover >= 0 else -math.inf)
             test["full_year_of_history"] = m >= 12
-            test["replacement_wage_affordable"] = cap12 >= replacement_annual
+            test["replacement_wage_affordable"] = cap12 >= need_annual
             test["dscr_after_founder_wage"] = dscr >= trigger["min_dscr_after_founder_wage"]
             test["personal_reserve"] = savings >= trigger["personal_reserve_months"] * (living_m + benefits_m)
             test["business_reserve"] = biz_cash >= trigger["business_reserve_months"] * (fwd_debt12 / 12 + manager_m)
             test["seller_transition_done"] = (kind != "buy") or m >= arm.get("seller_transition_months", 0)
             # Does leaving pay? His full-time work must be worth at least what the family gives up:
             # the manager wage saved plus what he adds, against the salary and benefits that stop.
+            # Rent doesn't enter here: he keeps it whether or not he leaves.
             test["step_down_pays"] = (manager_m * 12 + arm.get("founder_fulltime_uplift_annual", 0.0)) >= replacement_annual
             numbers = all(test.values())
             streak = streak + 1 if numbers else 0
@@ -227,6 +266,9 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
                 stepped_down_month = m
         else:
             dscr = None
+
+        if savings < 0:
+            months_cash_below_zero += 1
 
         value = 0.0
         if acquired:
@@ -248,6 +290,8 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
             "business_value": round(value),
             "equity_value": round(value - loans + biz_cash),
             "dscr_after_founder_wage": None if dscr is None else (round(dscr, 2) if math.isfinite(dscr) else str(dscr)),
+            "building_net_rent": round(net_rent_m),
+            "needed_from_business_annual": round(need_annual),
             "test_parts_passing": sum(test.values()) if test else None,
             "test_parts_total": len(test) if test else None,
         })
@@ -266,6 +310,9 @@ def run_arm(person: dict, arm: dict, horizon: int, trigger: dict) -> dict:
         "end_personal_cash": last["personal_cash"],
         "end_equity_value": last["equity_value"],
         "end_net_worth_proxy": last["personal_cash"] + last["equity_value"],
+        "has_building": has_bldg,
+        "end_trailing_net_rent": round(sum(rent12)) if has_bldg else None,
+        "months_personal_cash_below_zero": months_cash_below_zero,
         "rows": rows,
     }
 
@@ -308,11 +355,33 @@ CHECKS = [
      "Target's last-year cash flow, after a market manager wage, covers first-year SBA debt service at the lender floor (no projections)"),
 ]
 
+# Building checks: apply to every arm that runs with the building
+ALL_KINDS = {"w2_only", "buy", "grow"}
+BUILDING_CHECKS = [
+    ("T17", ALL_KINDS, "MODEL:building_carries_itself",
+     "The rented units' trailing twelve months of rent cover their share of the mortgage and operating costs"),
+    ("T18", {"buy"}, "MODEL:lien_exposure",
+     "If the building secures the business loan, personal cash never goes below zero in the run (a shortfall the founder can't cover puts the building at risk)"),
+    ("T19", ALL_KINDS, "title_move_checked_for_due_on_sale_and_homeowner_exemption",
+     "Any move of the building into a trust or company is checked first against the mortgage's due-on-sale clause and the local homeowner property-tax exemption"),
+    ("T20", ALL_KINDS, "foundation_never_uses_rents_buys_or_lends_on_building",
+     "The Foundation never uses, rents, buys, lends on or takes a pledge of the building, and pays nothing toward it"),
+    ("T21", ALL_KINDS, "rehab_costs_documented_own_labor_excluded",
+     "Rehab costs are kept with receipts and added to basis; the founder's own labor is never added to basis or deducted"),
+    ("T22", ALL_KINDS, "own_unit_and_rented_units_split_in_writing",
+     "Costs are split between the founder's own unit and the rented units on a written, consistent basis; only the rented share is a rental expense or depreciated"),
+    ("T23", ALL_KINDS, "no_self_management_fee_counted",
+     "When the owner manages the building himself, no management fee is counted as income or as an expense"),
+]
 
-def run_checks(arm: dict, result: dict, trigger: dict) -> list:
+
+
+def run_checks(arm: dict, result: dict, trigger: dict, building: dict | None = None) -> list:
     facts = arm.get("facts", {})
     out = []
-    for cid, kinds, key, label in CHECKS:
+    checks = CHECKS + (BUILDING_CHECKS if result.get("has_building") else [])
+    bld_facts = (building or {}).get("facts", {})
+    for cid, kinds, key, label in checks:
         if arm["kind"] not in kinds:
             continue
         if key == "MODEL:manager_priced":
@@ -328,8 +397,20 @@ def run_checks(arm: dict, result: dict, trigger: dict) -> list:
             v = "amber" if u is None else ("pass" if u >= trigger["lender_min_dscr_acquisition"] else "fail")
         elif key == "MODEL:step_down_only_on_trigger":
             v = "pass"  # enforced by the simulation loop itself
+        elif key == "MODEL:building_carries_itself":
+            v = "pass" if (result.get("end_trailing_net_rent") or 0) >= 0 else "fail"
+        elif key == "MODEL:lien_exposure":
+            lien = (building or {}).get("lien_for_business_loan")
+            if not result.get("acquired"):
+                v = "pass"
+            elif lien is None:
+                v = "amber"  # the lender's lien terms aren't known yet
+            elif lien is False:
+                v = "pass"
+            else:
+                v = "pass" if result["months_personal_cash_below_zero"] == 0 else "fail"
         else:
-            val = facts.get(key)
+            val = bld_facts.get(key) if cid in {"T19", "T20", "T21", "T22", "T23"} else facts.get(key)
             v = "pass" if val is True else ("fail" if val is False else "amber")
         out.append({"id": cid, "verdict": v, "label": label})
     # cannabis special case: a marijuana business can't be the SBA borrower
@@ -369,13 +450,21 @@ def summarize(inputs: dict, results: list) -> str:
         cp = sum(1 for x in c if x["verdict"] == "pass")
         ca = sum(1 for x in c if x["verdict"] == "amber")
         cf = sum(1 for x in c if x["verdict"] == "fail")
-        sd = r["step_down_month"] if r["step_down_month"] else ("n/a" if r["arm"] == "A" else "not met")
-        fp = r["first_month_numbers_pass"] or ("n/a" if r["arm"] == "A" else "never")
+        is_a = r["arm"].split("+")[0] == "A"
+        sd = r["step_down_month"] if r["step_down_month"] else ("n/a" if is_a else "not met")
+        fp = r["first_month_numbers_pass"] or ("n/a" if is_a else "never")
         uw = f"{r['underwriting_dscr']}x" if r['underwriting_dscr'] is not None else "n/a"
         lines.append(f"| {r['arm']} {r['label']} | {uw} | {sd} | {fp} | {r['lowest_personal_cash']:,} | {r['peak_guaranteed_debt']:,} | {r['end_personal_cash']:,} | {r['end_equity_value']:,} | {cp} / {ca} / {cf} |")
         for n in r["notes"]:
             lines.append(f"|  ↳ {n} | | | | | | | | |")
     lines.append("")
+    bld = inputs.get("building")
+    if bld:
+        rows = [r for r in results if r["has_building"]]
+        rent = rows[0]["end_trailing_net_rent"] if rows else 0
+        counted = bld.get("rent_counted_share", 1.0)
+        lines.append(f"Building: trailing twelve months of net rent at the end of the run is {rent:,}. The step-down test counts "
+                     f"{counted:.0%} of it, so a business must pay the founder about {max(0, R - counted * rent):,.0f} a year instead of {R:,}.")
     for a in inputs["arms"]:
         if a["kind"] == "buy":
             f = a["financing"]
@@ -389,10 +478,15 @@ def summarize(inputs: dict, results: list) -> str:
 
 def run(inputs: dict) -> list:
     results = []
+    building = inputs.get("building")
     for arm in inputs["arms"]:
-        r = run_arm(inputs["person"], arm, inputs["horizon_months"], inputs["step_down_trigger"])
-        r["checks"] = run_checks(arm, r, inputs["step_down_trigger"])
-        results.append(r)
+        for b in ([None, building] if building else [None]):
+            r = run_arm(inputs["person"], arm, inputs["horizon_months"], inputs["step_down_trigger"], b)
+            if b:
+                r["arm"] += "+bldg"
+                r["label"] += ", with the building's net rent"
+            r["checks"] = run_checks(arm, r, inputs["step_down_trigger"], b)
+            results.append(r)
     return results
 
 
@@ -432,6 +526,23 @@ def selftest() -> int:
         a["business"] = a.get("business", {})
     res2 = {r["arm"]: r for r in run(renamed)}
     expect("rename invariance: same step-down months", all(res[k]["step_down_month"] == res2[k]["step_down_month"] for k in res))
+    # Building: net rent never makes a step-down later, and the B0 purchase steps down with it
+    if base.get("building"):
+        for k in [x for x in res if not x.endswith("+bldg") and x != "A"]:
+            w, wo = res[k + "+bldg"]["step_down_month"], res[k]["step_down_month"]
+            expect(f"{k}: the building never delays the step-down", (w or 10**9) <= (wo or 10**9))
+        expect("B with the building steps down earlier than B alone",
+               (res["B+bldg"]["step_down_month"] or 10**9) < (res["B"]["step_down_month"] or 10**9))
+        expect("net rent lowers what the business must pay the founder",
+               res["B+bldg"]["rows"][-1]["needed_from_business_annual"] < base["person"]["salary_gross_annual"] + base["person"]["benefits_replacement_annual"])
+        t18 = [c for c in res["B+bldg"]["checks"] if c["id"] == "T18"][0]["verdict"]
+        expect("unknown lien terms are amber", t18 == "amber")
+        neg = json.loads(json.dumps(base))
+        neg["building"]["rental_share_mortgage_payment_annual"] = 10**6
+        r = {x["arm"]: x for x in run(neg)}
+        expect("a building that doesn't carry itself fails T17",
+               [c for c in r["A+bldg"]["checks"] if c["id"] == "T17"][0]["verdict"] == "fail")
+        expect("no building, no building checks", not any(c["id"] == "T17" for c in res["B"]["checks"]))
     # Closed form agrees with direction: target sized to requirement can step down
     print(f"\n{bad} failure(s)")
     return 1 if bad else 0
