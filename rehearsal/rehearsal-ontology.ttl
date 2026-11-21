@@ -1,0 +1,229 @@
+@prefix rh: <http://example.org/trust-domain/rehearsal#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Trustee rehearsal: ontology sketch (proposed 2026-11-20, not merged, not live).
+# Reuses the trust-domain core wherever a term already exists (td:ExpenseDomain,
+# td:Instrument, td:IRCSection, td:Evidence, td:DisqualifiedPerson). New terms
+# are subclasses of gist 14.x classes. Northstar mapping (Actor, Event, Asset) is
+# proposed in comments only: northstar-core.ttl lives in another repository and
+# was not read for this sketch, so the mapping is unverified.
+
+<http://example.org/trust-domain/rehearsal> a owl:Ontology ;
+    rdfs:label "Trustee Rehearsal (A/B digital twin)"@en ;
+    dcterms:created "2026-11-20"^^xsd:date ;
+    rdfs:comment "Sketch. Design and education, not legal or tax advice."@en .
+
+########## Things that happen (gist:Event; Northstar: Event) ##########
+
+rh:LedgerLine a owl:Class ;
+    rdfs:subClassOf gist:Event ;
+    rdfs:label "ledger line"@en ;
+    rdfs:comment "One transaction from the founder's export. Amount is a gist:Magnitude. Never carries card or account numbers."@en .
+
+rh:RehearsalRun a owl:Class ;
+    rdfs:subClassOf gist:Event ;
+    rdfs:label "rehearsal run"@en ;
+    rdfs:comment "One pass of both arms over one ledger, pinned to one register version."@en .
+
+rh:OptimizationStep a owl:Class ;
+    rdfs:subClassOf gist:Event ;
+    rdfs:label "optimization step"@en ;
+    rdfs:comment "One change to one setting, followed by a rerun. Kept, rolled back, or stopped for a professional."@en .
+
+rh:GateResult a owl:Class ;
+    rdfs:subClassOf gist:Event ;
+    rdfs:label "gate result"@en ;
+    rdfs:comment "The outcome of one gate on one route in one run."@en .
+
+rh:ProfessionalDecision a owl:Class ;
+    rdfs:subClassOf gist:Event ;
+    rdfs:label "professional decision"@en ;
+    rdfs:comment "An attorney's or CPA's answer to an open question. The only thing that can turn an amber gate green for a real-world step."@en .
+
+########## Who (gist:Person / gist:Organization; Northstar: Actor) ##########
+
+rh:Entity a owl:Class ;
+    rdfs:subClassOf gist:Organization ;
+    rdfs:label "stack entity"@en ;
+    rdfs:comment "the management company, the operating company, the transport company, the business trust, Family Trust, Finch-Dagen Foundation. Its tax classification is a fact to record, not assume (see Reg. 301.7701-4(b))."@en .
+
+rh:hasTaxClassification a owl:ObjectProperty ;
+    rdfs:domain rh:Entity ;
+    rdfs:range rh:TaxClassification .
+
+rh:TaxClassification a owl:Class ;
+    rdfs:subClassOf gist:Category ;
+    rdfs:label "tax classification"@en .
+
+rh:DisregardedEntity a rh:TaxClassification ; rdfs:label "disregarded entity"@en .
+rh:Partnership a rh:TaxClassification ; rdfs:label "partnership"@en .
+rh:SCorporation a rh:TaxClassification ; rdfs:label "S corporation"@en .
+rh:CCorporation a rh:TaxClassification ; rdfs:label "C corporation"@en .
+rh:GrantorTrust a rh:TaxClassification ; rdfs:label "grantor trust"@en .
+rh:NonGrantorTrust a rh:TaxClassification ; rdfs:label "non-grantor trust"@en .
+rh:PrivateFoundation a rh:TaxClassification ; rdfs:label "private foundation"@en .
+rh:Unknown a rh:TaxClassification ; rdfs:label "unknown, needs documents"@en .
+
+########## What (Northstar: Asset) ##########
+
+rh:HeldAsset a owl:Class ;
+    rdfs:subClassOf td:Asset ;
+    rdfs:label "held asset"@en ;
+    rdfs:comment "An asset with a recorded owner entity. The asset-to-program pipeline starts here: no held asset, nothing for the stack to protect or pay out."@en .
+
+rh:heldBy a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain rh:HeldAsset ;
+    rdfs:range rh:Entity .
+
+########## Sorting and routing ##########
+
+rh:Layer a owl:Class ;
+    rdfs:subClassOf gist:Category ;
+    rdfs:label "layer"@en .
+
+rh:L0_Personal a rh:Layer ; rdfs:label "personal"@en .
+rh:L1_OperatingCompanies a rh:Layer ; rdfs:label "operating companies"@en .
+rh:L2_RentalProperty a rh:Layer ; rdfs:label "rental property"@en .
+rh:L3_FamilyTrust a rh:Layer ; rdfs:label "family trust"@en .
+rh:L4_Foundation a rh:Layer ; rdfs:label "foundation"@en .
+rh:L5_EstateAndLegacy a rh:Layer ; rdfs:label "estate and legacy"@en .
+
+rh:Arm a owl:Class ;
+    rdfs:subClassOf gist:Category ;
+    rdfs:label "arm"@en .
+rh:ArmA a rh:Arm ; rdfs:label "Arm A: personal, as now"@en .
+rh:ArmB a rh:Arm ; rdfs:label "Arm B: routed through the stack"@en .
+
+rh:inDomain a owl:ObjectProperty ;
+    rdfs:domain rh:LedgerLine ;
+    rdfs:range td:ExpenseDomain .
+
+rh:Route a owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "route"@en ;
+    rdfs:comment "A candidate way to carry one line: layer + paying entity + instrument + required evidence. A route is a claim to test, not a fact."@en .
+
+rh:forLine a owl:ObjectProperty ; rdfs:domain rh:Route ; rdfs:range rh:LedgerLine .
+rh:throughLayer a owl:ObjectProperty ; rdfs:domain rh:Route ; rdfs:range rh:Layer .
+rh:paidBy a owl:ObjectProperty ; rdfs:domain rh:Route ; rdfs:range rh:Entity .
+rh:usesInstrument a owl:ObjectProperty ; rdfs:domain rh:Route ; rdfs:range td:Instrument .
+rh:requiresEvidenceItem a owl:ObjectProperty ; rdfs:domain rh:Route ; rdfs:range rh:EvidenceRequirement .
+
+rh:EvidenceRequirement a owl:Class ;
+    rdfs:subClassOf gist:Specification ;
+    rdfs:label "evidence requirement"@en ;
+    rdfs:comment "What an instrument's text says must exist (for example a trip log naming amount, time and place, business purpose and relationship under 274(d))."@en .
+
+rh:satisfiedBy a owl:ObjectProperty ;
+    rdfs:domain rh:EvidenceRequirement ;
+    rdfs:range td:Evidence .
+
+rh:Gate a owl:Class ;
+    rdfs:subClassOf gist:Specification ;
+    rdfs:label "gate"@en ;
+    rdfs:comment "A yes/no test from the register (G1 personal ... G10 classification). Each gate cites its source."@en .
+
+rh:onRoute a owl:ObjectProperty ; rdfs:domain rh:GateResult ; rdfs:range rh:Route .
+rh:ofGate a owl:ObjectProperty ; rdfs:domain rh:GateResult ; rdfs:range rh:Gate .
+rh:verdict a owl:ObjectProperty ; rdfs:domain rh:GateResult ; rdfs:range rh:Verdict .
+
+rh:Verdict a owl:Class ; rdfs:subClassOf gist:Category ; rdfs:label "verdict"@en .
+rh:Green a rh:Verdict ; rdfs:label "pass"@en .
+rh:Amber a rh:Verdict ; rdfs:label "undecided: blocks the route, becomes a professional question"@en .
+rh:Red a rh:Verdict ; rdfs:label "fail"@en .
+rh:NoRouteYet a rh:Verdict ;
+    rdfs:label "no route yet"@en ;
+    rdfs:comment "No route passed. Always paired with rh:wouldNeed."@en .
+
+rh:wouldNeed a owl:DatatypeProperty ;
+    rdfs:domain rh:LedgerLine ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Plain sentence: what would have to be true for a lawful route to exist."@en .
+
+rh:selectedRoute a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:comment "Per run: the best route that passed every gate, or none."@en .
+
+########## Scoring and history ##########
+
+rh:inRun a owl:ObjectProperty ; rdfs:range rh:RehearsalRun .
+rh:registerVersion a owl:DatatypeProperty ; rdfs:domain rh:RehearsalRun ; rdfs:range xsd:string .
+rh:armTotal a owl:ObjectProperty ; rdfs:domain rh:RehearsalRun ; rdfs:range gist:Magnitude .
+rh:programOutput a owl:ObjectProperty ; rdfs:domain rh:RehearsalRun ; rdfs:range gist:Magnitude .
+rh:score a owl:ObjectProperty ; rdfs:domain rh:RehearsalRun ; rdfs:range gist:Magnitude .
+
+rh:changes a owl:DatatypeProperty ;
+    rdfs:domain rh:OptimizationStep ; rdfs:range xsd:string ;
+    rdfs:comment "The one setting this step changed."@en .
+rh:stepOutcome a owl:ObjectProperty ;
+    rdfs:domain rh:OptimizationStep ; rdfs:range rh:StepOutcome .
+rh:StepOutcome a owl:Class ; rdfs:subClassOf gist:Category .
+rh:Kept a rh:StepOutcome ; rdfs:label "kept"@en .
+rh:RolledBack a rh:StepOutcome ; rdfs:label "rolled back"@en .
+rh:StoppedForProfessional a rh:StepOutcome ;
+    rdfs:label "stopped: needs an attorney or CPA"@en ;
+    rdfs:comment "Any step that would sign, fund, retitle, file, elect, change a trustee or beneficiary, or pay."@en .
+
+########## Answer key ##########
+
+rh:EvalCase a owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "eval case"@en ;
+    rdfs:comment "Any synthetic case whose right verdict the law settles: a ledger-line case or a structure case."@en .
+
+rh:TestCase a owl:Class ;
+    rdfs:subClassOf rh:LedgerLine , rh:EvalCase ;
+    rdfs:label "answer-key case"@en ;
+    rdfs:comment "A synthetic line whose right verdict the law settles. The twin must match every case before its optimizer is trusted."@en .
+
+rh:expectedVerdict a owl:ObjectProperty ;
+    rdfs:domain rh:EvalCase ; rdfs:range rh:Verdict .
+rh:expectedReason a owl:DatatypeProperty ;
+    rdfs:domain rh:EvalCase ; rdfs:range xsd:string ;
+    rdfs:comment "Citation as text (e.g. 'IRC 4941(d)(1)(E)'). Kept as a string so section classes are not used as values."@en .
+rh:proposedLayer a owl:ObjectProperty ;
+    rdfs:domain rh:TestCase ; rdfs:range rh:Layer .
+
+########## Structure integrity checks (see 07-structure-integrity-checks.md) ##########
+
+rh:StructureVersion a owl:Class ;
+    rdfs:subClassOf gist:Content ;
+    rdfs:label "structure version"@en ;
+    rdfs:comment "One configuration of the stack the twin rehearses: which entities exist, who controls and owns what, and how money flows between them. Must pass every structure check before its routes are scored."@en .
+
+rh:StructureCheck a owl:Class ;
+    rdfs:subClassOf rh:Gate ;
+    rdfs:label "structure check"@en ;
+    rdfs:comment "A yes/no test on a whole structure version, drawn from the IRS's descriptions of abusive trust arrangements (S1 ... S17). Reads fact fields only; entity names and type labels are never inputs."@en .
+
+rh:readsFact a owl:DatatypeProperty ;
+    rdfs:domain rh:StructureCheck ; rdfs:range xsd:string ;
+    rdfs:comment "A fact field the check reads (for example 'signers on each trust account'). Never a name or label."@en .
+
+rh:sourceQuote a owl:DatatypeProperty ;
+    rdfs:domain rh:Gate ; rdfs:range xsd:string ;
+    rdfs:comment "Verbatim words from the primary source the gate rests on."@en .
+
+rh:StructureCase a owl:Class ;
+    rdfs:subClassOf rh:StructureVersion , rh:EvalCase ;
+    rdfs:label "structure case"@en ;
+    rdfs:comment "A synthetic structure version whose verdict the law settles."@en .
+
+rh:failsCheck a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCheck .
+rh:passesCheck a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCheck .
+
+rh:sameVerdictsAs a owl:ObjectProperty ;
+    rdfs:domain rh:StructureCase ; rdfs:range rh:StructureCase ;
+    rdfs:comment "Rename invariance: this case differs from the other only in names and labels, so every check must give the same verdict."@en .
+
+rh:candidateChange a owl:DatatypeProperty ;
+    rdfs:domain rh:GateResult ; rdfs:range xsd:string ;
+    rdfs:comment "For a red or amber result: a change to the structure's facts that would make the check pass. A candidate to rehearse, never a conclusion. A change that only renames is not a candidate."@en .

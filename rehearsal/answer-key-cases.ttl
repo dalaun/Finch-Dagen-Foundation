@@ -1,0 +1,80 @@
+@prefix rh: <http://example.org/trust-domain/rehearsal#> .
+@prefix k: <http://example.org/trust-domain/rehearsal/cases#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Answer key for the trustee rehearsal (synthetic lines, no real data).
+# The twin must reproduce every expectedVerdict before its optimizer runs.
+
+k:K1 a rh:TestCase ; rdfs:label "Household groceries paid by the foundation" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(E)" .
+k:K2 a rh:TestCase ; rdfs:label "Household groceries paid by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 262(a)" .
+k:K3 a rh:TestCase ; rdfs:label "Household groceries paid by the Family Trust as a support distribution" ;
+  rh:proposedLayer rh:L3_FamilyTrust ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 643(a), 652(a)/662(a): lawful, taxable to the beneficiary, no deduction" .
+k:K4 a rh:TestCase ; rdfs:label "AI tool used for client work, invoiced to and paid by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 162(a)" .
+k:K5 a rh:TestCase ; rdfs:label "Same tool, no use record, reimbursed by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "Treas. Reg. 1.62-2(e)" .
+k:K6 a rh:TestCase ; rdfs:label "Foundation pays founder curriculum salary at a documented benchmark, approved without his vote" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 4941(d)(2)(E); Treas. Reg. 53.4941(d)-3(c)(1)" .
+k:K7 a rh:TestCase ; rdfs:label "Same salary at twice the benchmark" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(2)(E): excessive" .
+k:K8 a rh:TestCase ; rdfs:label "Foundation leases space in the founder's building at market rent" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(A): leasing is self-dealing whatever the price" .
+k:K9 a rh:TestCase ; rdfs:label "Founder rents his home to the management company for meetings under 15 days a year" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "IRC 280A(g); 162(a); 482: needs the management company to be a separate taxpayer and market rent" .
+k:K10 a rh:TestCase ; rdfs:label "Business trust running the operating company treated as a trust" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "Treas. Reg. 301.7701-4(b)" .
+k:K11 a rh:TestCase ; rdfs:label "Daily commute rides paid by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 262(a)" .
+k:K12 a rh:TestCase ; rdfs:label "Tuition paid directly to a school for a family member" ;
+  rh:proposedLayer rh:L5_EstateAndLegacy ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 2503(e)" .
+k:K13 a rh:TestCase ; rdfs:label "Rent on the founder's own residence paid by the foundation" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:NoRouteYet ;
+  rh:expectedReason "IRC 4941(d)(1)(E)" ;
+  rh:wouldNeed "No lawful foundation route. The only way foundation money reaches his living costs is wages for real, necessary services under 4941(d)(2)(E), which he then spends as income." .
+
+# Added 2026-11-20: the founder's four ideas (register section F).
+k:K14 a rh:TestCase ; rdfs:label "Founder borrows against appreciated assets he holds, under a real loan; proceeds spent personally" ;
+  rh:proposedLayer rh:L5_EstateAndLegacy ; rh:expectedVerdict rh:Green ; rh:expectedReason "Woodsam Associates, 198 F.2d 357: borrowing is not a disposition; interest is personal under 163(h)(1)" .
+k:K15 a rh:TestCase ; rdfs:label "Foundation lends to the founder at a market rate" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(B): lending is self-dealing whatever the rate" .
+k:K16 a rh:TestCase ; rdfs:label "Founder lends to the Foundation interest-free; proceeds used only for programs" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 4941(d)(2)(B)" .
+k:K17 a rh:TestCase ; rdfs:label "Founder gives an appreciated asset to a relative who dies within a year and leaves it back to him; basis reset claimed" ;
+  rh:proposedLayer rh:L5_EstateAndLegacy ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 1014(e)" .
+k:K18 a rh:TestCase ; rdfs:label "Founder, paid wages by the management company, deducts a home office on his own return" ;
+  rh:proposedLayer rh:L0_Personal ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 67(h); 280A(c)(1): route is reimbursement under the company's accountable plan" .
+k:K19 a rh:TestCase ; rdfs:label "Home office that doubles as a guest room" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 280A(c)(1): exclusive use" .
+k:K20 a rh:TestCase ; rdfs:label "Foundation-owned art hung in the founder's home; public visits by appointment he controls" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(E); Rev. Rul. 74-600" .
+k:K21 a rh:TestCase ; rdfs:label "Operating foundation museum at its own site, open to the public, spending 90% of adjusted net income running it, most assets in the collection" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 4942(j)(3)(A), (B)(i); Treas. Reg. 53.4942(b)-1" .
+k:K22 a rh:TestCase ; rdfs:label "Business suits for client meetings bought by the management company" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "Pevsner, 628 F.2d 467: adaptable to street wear" .
+k:K23 a rh:TestCase ; rdfs:label "Required crew uniforms, not street wear, bought by the operating company from the apparel company at its outside-customer price" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 162(a); 132(a)(3); 482; Pevsner" .
+k:K24 a rh:TestCase ; rdfs:label "Same uniforms sold to a sister company at twice the outside price" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 482; structure check S8" .
+k:K25 a rh:TestCase ; rdfs:label "Plain polos with only a company logo, given to staff" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "Pevsner street-wear test; no source read settles logo-only clothing" .
+k:K26 a rh:TestCase ; rdfs:label "Foundation buys program shirts from the apparel company" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Amber ; rh:expectedReason "IRC 4941(d)(1)(A), (C); 4946: red if the apparel company is a disqualified person" .
+k:K27 a rh:TestCase ; rdfs:label "Entities in the stack lend to each other in a circle at interest, each deducting interest, with no outside purpose" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 7701(o); Notice 97-24; structure checks S8, S11" .
+
+# Added 2026-11-20: family brand licensing (register F5).
+k:K28 a rh:TestCase ; rdfs:label "A crest never used to sell anything is licensed to the operating company for a royalty" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Red ; rh:expectedReason "15 U.S.C. 1127 (no use in commerce); Treas. Reg. 1.482-4; structure check S8" .
+k:K29 a rh:TestCase ; rdfs:label "A registered brand in commercial use, assigned in writing with its goodwill and recorded, licensed to the operating company at a rate backed by a valuation, with quality control, royalties paid" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 162(a), 482; Treas. Reg. 1.482-4; 15 U.S.C. 1060, 1127" .
+k:K30 a rh:TestCase ; rdfs:label "Same license, but the founder keeps the mark and assigns only the royalty stream to the Family Trust" ;
+  rh:proposedLayer rh:L3_FamilyTrust ; rh:expectedVerdict rh:Red ; rh:expectedReason "Helvering v. Horst, 311 U.S. 112: income taxed to the owner of the property" .
+k:K31 a rh:TestCase ; rdfs:label "The Foundation owns the family brand and licenses it to a family company at market rate" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Red ; rh:expectedReason "IRC 4941(d)(1)(A), (E)" .
+k:K32 a rh:TestCase ; rdfs:label "The Foundation owns a brand and licenses it to an unrelated company" ;
+  rh:proposedLayer rh:L4_Foundation ; rh:expectedVerdict rh:Green ; rh:expectedReason "IRC 512(b)(2); 4940(c)(2): excluded from unrelated business income, taxed as investment income" .
+k:K33 a rh:TestCase ; rdfs:label "License with no quality control by the licensor" ;
+  rh:proposedLayer rh:L1_OperatingCompanies ; rh:expectedVerdict rh:Amber ; rh:expectedReason "15 U.S.C. 1055, 1127: the mark risks abandonment, and the royalty's value with it" .
