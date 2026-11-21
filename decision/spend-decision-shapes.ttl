@@ -1,0 +1,194 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Spend decision checks (DRAFT, proposed 2026-11-21)
+# Stage 2 (letter) and stage 3 (intent) checks on each dm:SpendProposal,
+# plus P1 on the checks themselves. Stage 1 is the existing keystone file,
+# run alongside these. The outcome each failure produces, the pressure
+# that enforces it and its source are in spend-decision-model.ttl.
+# Every check reads facts only; no label or type name decides a verdict.
+# Not legal or tax advice.
+# =====================================================================
+
+<http://example.org/trust-domain/decision-shapes> a owl:Ontology ;
+    rdfs:label "Spend decision shapes"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    sh:declare [ sh:prefix "td" ; sh:namespace "http://example.org/trust-domain#"^^xsd:anyURI ] ,
+               [ sh:prefix "dm" ; sh:namespace "http://example.org/trust-domain/decision#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ] .
+
+:ProposalShape a sh:NodeShape ;
+    rdfs:label "Spend proposal decision checks"@en ;
+    sh:targetClass :SpendProposal ;
+    sh:sparql :E1_Evidence ,
+              :R1_PaidToDisqualified , :R3_AssetUsedByDisqualified , :R4_PoliticalPurpose ,
+              :R5_IndividualGrant , :R6_ExpenditureResponsibility , :R7_JeopardyInvestment ,
+              :R8_ExcessBusinessHoldings ,
+              :H1_NearMissRelation , :H2_BenefitPassThrough , :H3_InsiderDrawnClass ,
+              :H4_SplitPayee , :H5_InsiderPayNoComparability ,
+              :J1_ScorerVerdict , :J2_ScorerCannotTell .
+
+# ---- Stage 0: evidence ------------------------------------------------
+:E1_Evidence a sh:SPARQLConstraint ;
+    sh:message "E1: insufficient - no payee, no spend kind, no screen of the payee against 4946, or (unless an investment) no cascade node to trace" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER ( NOT EXISTS { $this dm:payee ?p }
+                || NOT EXISTS { $this dm:spendKind ?k }
+                || NOT EXISTS { $this dm:dqScreened true }
+                || ( NOT EXISTS { $this dm:assesses ?n } && NOT EXISTS { $this dm:spendKind dm:Investment } ) )
+        }""" .
+
+# ---- Stage 2: the letter ---------------------------------------------
+:R1_PaidToDisqualified a sh:SPARQLConstraint ;
+    sh:message "R1: self-dealing (4941(d)(1)) - the payee is a disqualified person and this is not pay for personal services" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:payee ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { $this dm:spendKind dm:PersonalServicesPay }
+        }""" .
+
+:R3_AssetUsedByDisqualified a sh:SPARQLConstraint ;
+    sh:message "R3: self-dealing (4941(d)(1)(E)) - a disqualified person also uses the foundation asset" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:assetAlsoUsedBy ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+        }""" .
+
+:R4_PoliticalPurpose a sh:SPARQLConstraint ;
+    sh:message "R4: taxable expenditure (4945(d)(1)-(2)) - paid to influence legislation or an election" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:purposeKind ?value .
+          FILTER ( ?value IN ( dm:InfluenceLegislation , dm:InfluenceElection ) )
+        }""" .
+
+:R5_IndividualGrant a sh:SPARQLConstraint ;
+    sh:message "R5: taxable expenditure (4945(d)(3), (g)) - grant to an individual with no procedure approved in advance by the IRS" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:spendKind dm:GrantToIndividual .
+          FILTER NOT EXISTS { $this dm:approvedGrantProcedure true }
+        }""" .
+
+:R6_ExpenditureResponsibility a sh:SPARQLConstraint ;
+    sh:message "R6: taxable expenditure (4945(d)(4), (h)) - grant to an organization that is not a public charity, with no expenditure responsibility" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:spendKind dm:GrantToOrganization ; dm:payee ?value .
+          FILTER NOT EXISTS { ?value rdf:type td:PublicCharity }
+          FILTER NOT EXISTS { $this dm:expenditureResponsibility true }
+        }""" .
+
+:R7_JeopardyInvestment a sh:SPARQLConstraint ;
+    sh:message "R7: jeopardy question (4944) - an investment that does not meet the program-related investment test; prudence is a counsel judgment" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:spendKind dm:Investment .
+          FILTER NOT EXISTS { $this dm:primaryPurposeCharitable true ; dm:significantIncomePurpose false }
+        }""" .
+
+:R8_ExcessBusinessHoldings a sh:SPARQLConstraint ;
+    sh:message "R8: excess business holdings (4943(c)(2)(A)) - foundation voting share after the purchase exceeds 20 percent less what disqualified persons own" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:foundationVotingPercentAfter ?value .
+          OPTIONAL { $this dm:disqualifiedVotingPercent ?dq }
+          BIND ( 20 - COALESCE(?dq, 0) AS ?limit )
+          FILTER ( ?value > 0 && ?value > ?limit )
+        }""" .
+
+# ---- Stage 3: the hack test ------------------------------------------
+:H1_NearMissRelation a sh:SPARQLConstraint ;
+    sh:message "H1: passes the letter, bends the intent - the payee is not a disqualified person but sits next to one (sibling, friend, partner, minority-owned company)" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:payee ?payee .
+          ?payee dm:closeTo ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { ?payee rdf:type td:DisqualifiedPerson }
+        }""" .
+
+:H2_BenefitPassThrough a sh:SPARQLConstraint ;
+    sh:message "H2: likely indirect self-dealing (4941(d)(1), 'for the benefit of') - the payee passes value on to a disqualified person" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:payee ?payee .
+          ?payee dm:passesBenefitTo+ ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { ?payee rdf:type td:DisqualifiedPerson }
+        }""" .
+
+:H3_InsiderDrawnClass a sh:SPARQLConstraint ;
+    sh:message "H3: mission label, private class (4945(d)(5), (g)) - who can benefit is drawn around insiders or their business" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:beneficiarySelection dm:InsiderDrawnSelection . }""" .
+
+:H4_SplitPayee a sh:SPARQLConstraint ;
+    sh:message "H4: split pay - this payee's proposals in the same year, summed, exceed the highest benchmark among them" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this (SUM(?amt) AS ?value) WHERE {
+          $this dm:payee ?payee ; dm:fiscalYear ?fy .
+          ?p a dm:SpendProposal ; dm:payee ?payee ; dm:fiscalYear ?fy ;
+             dm:annualAmount ?amt ; dm:benchmarkAnnual ?bm .
+        }
+        GROUP BY $this
+        HAVING ( COUNT(?p) > 1 && SUM(?amt) > MAX(?bm) )""" .
+
+:H5_InsiderPayNoComparability a sh:SPARQLConstraint ;
+    sh:message "H5: insider pay (4941(d)(2)(E)) - pay to a disqualified person with no written comparability record; reasonableness goes to counsel" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:spendKind dm:PersonalServicesPay ; dm:payee ?value .
+          ?value rdf:type td:DisqualifiedPerson .
+          FILTER NOT EXISTS { $this dm:comparabilityRecord true }
+        }""" .
+
+:J1_ScorerVerdict a sh:SPARQLConstraint ;
+    sh:message "J1: the bounded scorer answered 'yes, the benefit reaches an insider or a private class'" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """SELECT $this WHERE { $this dm:scorerVerdict dm:IntentBent . }""" .
+
+:J2_ScorerCannotTell a sh:SPARQLConstraint ;
+    sh:message "J2: the bounded scorer answered 'cannot tell'" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """SELECT $this WHERE { $this dm:scorerVerdict dm:IntentCannotTell . }""" .
+
+# ---- P1: every check is enforced by more than conscience ---------------
+:CheckPressureShape a sh:NodeShape ;
+    rdfs:label "Every decision check has an institutional or security enforcer"@en ;
+    sh:targetClass :DecisionCheck ;
+    sh:sparql :P1_EnforcedBeyondConscience .
+
+:P1_EnforcedBeyondConscience a sh:SPARQLConstraint ;
+    sh:message "P1: honor system - this check is enforced only by moral pressure (or none); in a foundation one person controls, that is where a hack lives" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER NOT EXISTS {
+            $this dm:enforcedBy ?p .
+            FILTER ( ?p IN ( dm:InstitutionalPressure , dm:SecurityPressure ) )
+          }
+        }""" .

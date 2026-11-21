@@ -1,0 +1,228 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix gist: <https://w3id.org/semanticarts/ns/ontology/gist/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# Worked spend proposals for decide_spend.py. Synthetic: roles, never real
+# names; every amount is illustrative. No verdict is stated here: the
+# shapes grade each proposal and expected.ttl is the answer key.
+
+# ---------------------------------------------------------------------
+# Who is who (roles). td:Founder is in trust-domain-ontology.ttl.
+# ---------------------------------------------------------------------
+:FounderChild a td:DisqualifiedPerson ;
+    rdfs:label "Founder's child" ;
+    rdfs:comment "Member of the family under 26 USC 4946(d), so disqualified under 4946(a)(1)(D)." .
+:FounderSibling rdfs:label "Founder's sibling" ;
+    dm:siblingOf td:Founder ;
+    rdfs:comment "Not a member of the family: 4946(d) covers only spouse, ancestors, descendants to great-grandchildren and their spouses." .
+:ManagementCompany a td:DisqualifiedPerson ;
+    rdfs:label "Founder's management company" ;
+    rdfs:comment "A corporation in which disqualified persons own more than 35 percent of the voting power: 4946(a)(1)(E)." .
+:FamilyTrust a td:DisqualifiedPerson ;
+    rdfs:label "Family trust (presumed disqualified)" ;
+    rdfs:comment "Fail closed: treated as disqualified until counsel confirms otherwise. Its status turns on 4946(a)(1)(A) (substantial contributor, if it funds the foundation) and (G) (more than 35 percent beneficial interest held by disqualified persons)." .
+:AITrainer rdfs:label "AI trainer (unrelated)" .
+:Contractor rdfs:label "Contractor who works two programs (unrelated)" .
+:FriendsNonprofit a td:PublicCharity ;
+    rdfs:label "Public charity run by the founder's friend" ;
+    dm:friendOf td:Founder ;
+    dm:passesBenefitTo :FounderChild ;
+    rdfs:comment "Plans to hire the founder's child with the grant." .
+:SocialEnterpriseLLC a td:NonExemptGrantee ; rdfs:label "Resident-run social enterprise (LLC, not a charity)" .
+:ResidentCoop rdfs:label "Resident-owned cooperative business (not a charity)" .
+:StudentApplicant rdfs:label "Individual student applicant" .
+:AdvocacyFirm rdfs:label "Advocacy firm" .
+:IndexFund rdfs:label "Broad market index fund" .
+:ThirdPartySeller rdfs:label "Unrelated seller of operating-company shares" .
+:VanDealer rdfs:label "Vehicle dealer" .
+:EventCharity a td:PublicCharity ; rdfs:label "Public charity that hosts events" .
+:FY2027 rdfs:label "Fiscal year 2027" .
+:FY2028 rdfs:label "Fiscal year 2028" .
+
+# ---------------------------------------------------------------------
+# Cascade nodes the proposals assess (stage 1)
+# ---------------------------------------------------------------------
+# Founder as program director of AI agent training, paid for services
+:Role_ProgramDirector a td:OperatorInRole ;
+    td:servesActivity td:Program_AIAgentTraining ;
+    td:necessitates :CompDomain_ProgramDirector ;
+    rdfs:label "Program director, AI agent training" .
+td:Program_AIAgentTraining td:requires :Role_ProgramDirector .
+:CompDomain_ProgramDirector a td:CompensationDomain ;
+    td:sustains :Role_ProgramDirector ;
+    td:manifestsAs :Pay_Director_Feb2027 , :Pay_Director_Feb2028 ;
+    td:enablesPrivately :Enable_DirectorPay .
+:Pay_Director_Feb2027 a td:ActualSpend ;
+    td:tracesBackTo td:FoundationOpportunityMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "5000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; td:hasPaymentPeriod td:PerMonth ] ;
+    rdfs:label "Program director pay, Feb 2027" .
+:Pay_Director_Feb2028 a td:ActualSpend ;
+    td:tracesBackTo td:FoundationOpportunityMission ;
+    gist:hasMagnitude [ a gist:Magnitude ; gist:numericValue "5000.00"^^xsd:decimal ;
+        gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ; td:hasPaymentPeriod td:PerMonth ] ;
+    rdfs:label "Program director pay, Feb 2028" .
+:Enable_DirectorPay a td:EmployeeCompensationEnablement ;
+    td:isIncidentalTo td:FoundationOpportunityMission ;
+    td:isInseparableFrom td:Program_AIAgentTraining ;
+    td:hasMarketBenchmark :Benchmark_ProgramDirector .
+:Benchmark_ProgramDirector a gist:Magnitude ;
+    gist:numericValue "72000.00"^^xsd:decimal ;
+    gist:hasUnitOfMeasure <http://qudt.org/vocab/currency/USD> ;
+    td:hasPaymentPeriod td:PerYear ;
+    dcterms:source "Illustrative value, not a market survey" .
+
+# Founder's personal travel, claimed under Opportunity
+:Spend_FounderTravel a td:ActualSpend ;
+    td:tracesBackTo td:FoundationOpportunityMission ;
+    td:benefitsPerson td:Founder ;
+    rdfs:label "Founder's personal travel" .
+
+# Lobbying contract
+:Spend_Lobbying a td:ActualSpend ;
+    td:tracesBackTo td:FoundationEducationMission ;
+    rdfs:label "Contract to lobby the state legislature for a curriculum bill" .
+
+# Grants under the existing grantmaking program
+:Grant_FriendsNonprofit a td:Grant ; td:grantedUnder td:Program_HempCurriculumGrants ;
+    td:tracesBackTo td:FoundationEducationMission ; td:grantAmount "15000.00"^^xsd:decimal .
+:Grant_Scholarships a td:Grant ; td:grantedUnder td:Program_HempCurriculumGrants ;
+    td:tracesBackTo td:FoundationEducationMission ; td:grantAmount "3000.00"^^xsd:decimal .
+:Grant_SocialEnterprise a td:Grant ; td:grantedUnder td:Program_HempCurriculumGrants ;
+    td:tracesBackTo td:FoundationEducationMission ; td:grantAmount "10000.00"^^xsd:decimal .
+:Grant_ResortSeries a td:Grant ; td:grantedUnder td:Program_HempCurriculumGrants ;
+    td:tracesBackTo td:FoundationEducationMission ; td:grantAmount "20000.00"^^xsd:decimal .
+
+# Program van
+:Asset_ProgramVan a td:TangibleAsset ;
+    td:deployedIn td:Program_AIAgentTraining ;
+    rdfs:label "Van that takes trainers to neighborhood sessions" .
+td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
+
+# ---------------------------------------------------------------------
+# Proposals
+# ---------------------------------------------------------------------
+# P01 Unrelated trainer at market for a real program.
+:P01_TrainerPay a dm:SpendProposal ; dm:assesses td:Pay_AITrainer_Feb2027 ;
+    dm:payee :AITrainer ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:purposeKind dm:CharitablePurpose ; dm:beneficiarySelection dm:OpenSelection ;
+    dm:scorerVerdict dm:IntentClean .
+
+# P02 Curriculum grant to a public charity.
+:P02_CollegeGrant a dm:SpendProposal ; dm:assesses td:Grant_HempCurriculum ;
+    dm:payee td:Grantee_CommunityCollege ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    dm:purposeKind dm:CharitablePurpose .
+
+# P03 Founder's personal travel, reimbursed to him.
+:P03_FounderTravel a dm:SpendProposal ; dm:assesses :Spend_FounderTravel ;
+    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:Purchase .
+
+# P04 Founder pays himself to direct a program, at market, no comparability record.
+:P04_FounderPayNoRecord a dm:SpendProposal ; dm:assesses :Pay_Director_Feb2027 ;
+    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+
+# P05 Same role and pay the next year, with a written comparability record.
+:P05_FounderPayWithRecord a dm:SpendProposal ; dm:assesses :Pay_Director_Feb2028 ;
+    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:comparabilityRecord true ;
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2028 .
+
+# P06 The founder's management company paid a market fee to steward the ontology.
+:P06_ManagementFee a dm:SpendProposal ; dm:assesses td:Pay_OntologySteward_Jan2027 ;
+    dm:payee :ManagementCompany ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay .
+
+# P07 The founder's sibling hired as the street-grid workshop instructor, at market.
+:P07_SiblingInstructor a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :FounderSibling ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay .
+
+# P08 Grant to a friend's public charity that will hire the founder's child.
+:P08_FriendGrant a dm:SpendProposal ; dm:assesses :Grant_FriendsNonprofit ;
+    dm:payee :FriendsNonprofit ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization .
+
+# P09 Scholarships picked by the founder, no IRS-approved procedure.
+:P09_Scholarships a dm:SpendProposal ; dm:assesses :Grant_Scholarships ;
+    dm:payee :StudentApplicant ; dm:dqScreened true ; dm:spendKind dm:GrantToIndividual .
+
+# P10 Grant to a resident social enterprise LLC, no expenditure responsibility.
+:P10_LLCGrantNoER a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
+    dm:payee :SocialEnterpriseLLC ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization .
+
+# P11 The same grant with expenditure responsibility in place.
+:P11_LLCGrantWithER a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
+    dm:payee :SocialEnterpriseLLC ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    dm:expenditureResponsibility true .
+
+# P12 Low-interest loan to a resident-owned cooperative (program-related investment).
+:P12_CoopLoan a dm:SpendProposal ;
+    dm:payee :ResidentCoop ; dm:dqScreened true ; dm:spendKind dm:Investment ;
+    dm:primaryPurposeCharitable true ; dm:significantIncomePurpose false .
+
+# P13 Endowment money into a broad index fund.
+:P13_IndexFund a dm:SpendProposal ;
+    dm:payee :IndexFund ; dm:dqScreened true ; dm:spendKind dm:Investment ;
+    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
+
+# P14 Buy 15 percent of the operating company's voting stock from an unrelated
+#     seller; disqualified persons (through the business trust) hold 30 percent.
+#     Bought from the business trust itself, it would also be R1.
+:P14_OperatingCoShares a dm:SpendProposal ;
+    dm:payee :ThirdPartySeller ; dm:dqScreened true ; dm:spendKind dm:Investment ;
+    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
+    dm:foundationVotingPercentAfter "15"^^xsd:decimal ; dm:disqualifiedVotingPercent "30"^^xsd:decimal .
+
+# P15 Lobbying contract for a curriculum bill.
+:P15_Lobbying a dm:SpendProposal ; dm:assesses :Spend_Lobbying ;
+    dm:payee :AdvocacyFirm ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    dm:purposeKind dm:InfluenceLegislation .
+
+# P16 Program van the founder also drives on weekends.
+:P16_VanPersonalUse a dm:SpendProposal ; dm:assesses :Asset_ProgramVan ;
+    dm:payee :VanDealer ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    dm:assetAlsoUsedBy td:Founder .
+
+# P17 Training cohort open only to the management company's consulting clients.
+:P17_ClientCohort a dm:SpendProposal ; dm:assesses td:Pay_AITrainer_Feb2027 ;
+    dm:payee :AITrainer ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:beneficiarySelection dm:InsiderDrawnSelection .
+
+# P18 One contractor paid by two programs; each under its benchmark, the sum over.
+:P18a_ContractorWorkshops a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :Contractor ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "20000.00"^^xsd:decimal ; dm:benchmarkAnnual "24000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+:P18b_ContractorSteward a dm:SpendProposal ; dm:assesses td:Pay_OntologySteward_Jan2027 ;
+    dm:payee :Contractor ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "78000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+
+# P19 Payee never screened against 4946.
+:P19_Unscreened a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :Contractor ; dm:dqScreened false ; dm:spendKind dm:PersonalServicesPay .
+
+# P20 Grant to a public charity for a workshop series at a resort the founder
+#     favors; every letter check passes, the scorer answers "yes".
+:P20_ResortSeries a dm:SpendProposal ; dm:assesses :Grant_ResortSeries ;
+    dm:payee :EventCharity ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    dm:scorerVerdict dm:IntentBent .
+
+# P21 The same grant; the scorer answers "cannot tell".
+:P21_ResortSeriesUnclear a dm:SpendProposal ; dm:assesses :Grant_ResortSeries ;
+    dm:payee :EventCharity ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    dm:scorerVerdict dm:IntentCannotTell .
+
+# P22 Rent paid to the family trust for program space, at market.
+:P22_RentFromFamilyTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    rdfs:comment "Leasing between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+
+# ---------------------------------------------------------------------
+# P1 probe: a check enforced only by conscience
+# ---------------------------------------------------------------------
+:Probe_HonorCheck a dm:DecisionCheck ;
+    dm:inStage dm:Stage3_Hack ; dm:onFail dm:NeedsCounsel ;
+    dm:enforcedBy dm:MoralPressure ;
+    dm:authority "The founder attests the spend serves the mission." .

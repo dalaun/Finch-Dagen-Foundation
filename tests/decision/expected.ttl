@@ -1,0 +1,33 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix t: <http://example.org/trust-domain/tests#> .
+
+# Answer key for decide_spend.py: the outcome and the exact set of checks
+# each proposal is expected to fail. The shapes never read this file.
+
+:P01_TrainerPay          t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P02_CollegeGrant        t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P03_FounderTravel       t:expectOutcome dm:Block ;        t:expectChecks "C1 R1 S1" .
+:P04_FounderPayNoRecord  t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H5" .
+:P05_FounderPayWithRecord t:expectOutcome dm:Allow ;       t:expectChecks "" .
+:P06_ManagementFee       t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H5" .
+:P07_SiblingInstructor   t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H1" .
+:P08_FriendGrant         t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H1 H2" .
+:P09_Scholarships        t:expectOutcome dm:Block ;        t:expectChecks "R5" .
+:P10_LLCGrantNoER        t:expectOutcome dm:Block ;        t:expectChecks "R6" .
+:P11_LLCGrantWithER      t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P12_CoopLoan            t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P13_IndexFund           t:expectOutcome dm:NeedsCounsel ; t:expectChecks "R7" .
+:P14_OperatingCoShares   t:expectOutcome dm:NeedsCounsel ; t:expectChecks "R7 R8" .
+:P15_Lobbying            t:expectOutcome dm:Block ;        t:expectChecks "C1 R4" .
+:P16_VanPersonalUse      t:expectOutcome dm:Block ;        t:expectChecks "R3" .
+:P17_ClientCohort        t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H3" .
+:P18a_ContractorWorkshops t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H4" .
+:P18b_ContractorSteward  t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H4" .
+:P19_Unscreened          t:expectOutcome dm:Insufficient ; t:expectChecks "E1" .
+:P20_ResortSeries        t:expectOutcome dm:NeedsCounsel ; t:expectChecks "J1" .
+:P21_ResortSeriesUnclear t:expectOutcome dm:Insufficient ; t:expectChecks "J2" .
+:P22_RentFromFamilyTrust t:expectOutcome dm:Block ;        t:expectChecks "R1" .
+
+# Checks on the checks
+:Probe_HonorCheck        t:expectChecks "P1" .
