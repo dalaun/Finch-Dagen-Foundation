@@ -1,0 +1,19 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Insider branch A (default, fail closed): over the line.
+# The founder's 4946(d) family hold 60 percent of the family trust's actuarial
+# beneficial interest, and the trust has already given the foundation enough to
+# be a substantial contributor. Either fact alone makes it an insider.
+# Synthetic settings, not the real trust's terms. Not legal advice.
+
+dm:BranchOverLine dm:selectedBy "tests/decision/branch-a.ttl" .
+
+:FamilyTrust dm:dqFamilySharePercent "60"^^xsd:decimal ;
+    dm:otherRelativeSharePercent "0"^^xsd:decimal ;
+    dm:foundationSharePercent "40"^^xsd:decimal ;
+    dm:foundationInterestKind dm:IncomeAndRemainder ;
+    dm:substantialContributor true ;
+    dm:charitableDeductionAllowed false ;
+    dm:trusteePaid false .

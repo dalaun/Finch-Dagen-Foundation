@@ -1,0 +1,325 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# "Own nothing, steward everything" (the founder's words)
+# Stewardship, arm's-length, business-deduction and employee-exclusion
+# checks for deals between the founder's roles (DRAFT, proposed 2026-11-21)
+#
+# A foundation spend is a dm:SpendProposal (spend-decision-model.ttl).
+# Everything else that moves value between the founder's roles, or that a
+# business claims as a deduction or an employee claims as excluded, is a
+# dm:EntityDeal and is graded here, with the same four outcomes.
+#
+# Each check names its pressure (P1 still applies) and its source. Where a
+# source was read, :authority quotes it; where it was not, the text says
+# "inferred" or "not read". Figures come from the edition named, with its
+# year; nothing is from memory. Roles only; every amount in the cases is
+# illustrative. Not legal or tax advice. Shapes: stewardship-shapes.ttl.
+# The instruments these checks come from: irs-instruments.ttl.
+# =====================================================================
+
+<http://example.org/trust-domain/stewardship> a owl:Ontology ;
+    rdfs:label "Stewardship and arm's-length checks"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    owl:imports <http://example.org/trust-domain/decision> ;
+    rdfs:comment "Statutes read 2026-11-21 at uscode.house.gov and govinfo.gov; IRS publications read the same day on irs.gov. Not legal or tax advice."@en .
+
+:Principle_OwnNothingStewardEverything a owl:NamedIndividual ;
+    rdfs:label "Own nothing, steward everything"@en ;
+    rdfs:comment "The founder holds no beneficial interest; he holds keys. So every dollar that reaches him must be pay for real work at a defended price (ST1), every move must be decided on the record before money moves (ST2), and someone who is not his must be able to say no (ST3). Each check guards one way a steward turns into an owner: insider status by control (4946, 4941), grantor-trust ownership (671-679, where 674(c) relies on independent trustees), and alter ego or sham (no written terms, no separate decision)."@en .
+
+# ---------------------------------------------------------------------
+# Vocabulary
+# ---------------------------------------------------------------------
+:EntityDeal a owl:Class ; rdfs:label "Entity deal"@en ;
+    rdfs:comment "A payment, lease, sale, pay package or deduction claim that is not a foundation spend: between the founder's roles, or by one of them to an outside party. Graded before money moves or before the return is filed."@en .
+:dealPayer a owl:ObjectProperty ; rdfs:domain :EntityDeal .
+:dealPayee a owl:ObjectProperty ; rdfs:domain :EntityDeal .
+:dealKind a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :DealKind .
+:DealKind a owl:Class .
+:ServiceFee a :DealKind ; rdfs:label "fee for services (for example a management fee)"@en .
+:Lease a :DealKind ; rdfs:label "lease or rent"@en .
+:Sale a :DealKind ; rdfs:label "sale of goods or property"@en .
+:CompensationDeal a :DealKind ; rdfs:label "pay and benefits for personal services"@en .
+:ExpenseClaim a :DealKind ; rdfs:label "an expense the payer will deduct"@en .
+
+:inFounderOrbit a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "A role the founder controls, serves or is: the foundation, the trusts, the companies, himself. A deal with both sides in orbit gets the stewardship and arm's-length checks."@en .
+:isPrivateFoundation a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:playsRole a owl:ObjectProperty ; rdfs:comment "Links a case role to its role in irs-instruments.ttl."@en .
+:entityTaxForm a owl:ObjectProperty ; rdfs:range :TaxForm .
+:TaxForm a owl:Class .
+:CCorporation a :TaxForm ; rdfs:label "corporation taxed under subchapter C"@en .
+:SCorporation a :TaxForm ; rdfs:label "S corporation"@en .
+:PartnershipForm a :TaxForm ; rdfs:label "partnership"@en .
+:DisregardedEntity a :TaxForm ; rdfs:label "single-owner entity disregarded for income tax"@en .
+
+# Price and paper (arm's length)
+:marketLow a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:marketHigh a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Top of the comparable range. For pay, the whole package (wage plus every benefit) is held to it."@en .
+:comparableSource a owl:ObjectProperty ; rdfs:range :ComparableSource ;
+    rdfs:comment "Where the range came from. A range with no named source is a guess."@en .
+:writtenTerms a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:decisionRecordBeforePayment a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:decisionRecordCitesMission a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:reviewedBy a owl:ObjectProperty ;
+    rdfs:comment "Who checked the deal before money moved."@en .
+:reviewerCanRefuse a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "The reviewer's no stops the deal (a co-trustee's veto, a board vote), not just advice."@en .
+
+# 672(c): who is NOT independent of the founder
+:relatedOrSubordinateTo a owl:ObjectProperty ;
+    rdfs:comment "26 USC 672(c), read: 'the grantor's spouse if living with the grantor'; 'The grantor's father, mother, issue, brother or sister; an employee of the grantor'. Note the gap from 4946(d): a sibling is not family for self-dealing but is related for 672(c). A reviewer the founder can lean on is not a check."@en .
+:siblingOf rdfs:subPropertyOf :relatedOrSubordinateTo .
+:spouseOf a owl:ObjectProperty ; rdfs:subPropertyOf :relatedOrSubordinateTo .
+:parentOf a owl:ObjectProperty ; rdfs:subPropertyOf :relatedOrSubordinateTo .
+:issueOf a owl:ObjectProperty ; rdfs:subPropertyOf :relatedOrSubordinateTo .
+:employeeOf a owl:ObjectProperty ; rdfs:subPropertyOf :relatedOrSubordinateTo .
+
+# Pay packages (Pub 15-B, 162(a)(1))
+:wageAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:providesBenefit a owl:ObjectProperty ; rdfs:range :BenefitItem .
+:BenefitItem a owl:Class ; rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
+:benefitKind a owl:ObjectProperty ; rdfs:range :BenefitKind .
+:benefitAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:benefitMonthly a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:coverageAmount a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:claimedExcluded a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "true: the payer leaves it out of wages under a named exclusion. false: it is paid as taxable wages. Missing: not coded, which ST1d treats as insufficient."@en .
+:substantiated a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records exist: Pub 463 (2025), read: 'you must keep records of all the expenses you have and any advances you receive from your employer.'"@en .
+:onBusinessPremises a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:forEmployerConvenience a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:conditionOfEmployment a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:planFavorsKeyOrHighlyPaid a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:recipientForm a owl:ObjectProperty ; rdfs:range :WorkerForm ;
+    rdfs:comment "How the person getting the benefit stands to the payer for fringe-benefit purposes."@en .
+:WorkerForm a owl:Class .
+:CommonLawEmployee a :WorkerForm ; rdfs:label "current common-law employee"@en .
+:TwoPercentShareholder a :WorkerForm ; rdfs:label "2% shareholder of an S corporation"@en .
+:PartnerForm a :WorkerForm ; rdfs:label "partner"@en .
+:SoleProprietor a :WorkerForm ; rdfs:label "sole proprietor"@en .
+:IndependentContractor a :WorkerForm ; rdfs:label "independent contractor"@en .
+
+:BenefitKind a owl:Class .
+:exclusionBasis a owl:DatatypeProperty ; rdfs:domain :BenefitKind ;
+    rdfs:comment "The rule that excludes it, as read. A kind with no exclusion basis is wages."@en .
+:employeeOnly a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:boolean ;
+    rdfs:comment "Excludable only for a current common-law employee (and certain statutory employees); not for a partner, a sole proprietor or a 2% S corporation shareholder."@en .
+:nondiscriminationRule a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:boolean .
+:needsSubstantiation a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:boolean .
+:annualLimit a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:decimal .
+:monthlyLimit a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:decimal .
+:coverageLimit a owl:DatatypeProperty ; rdfs:domain :BenefitKind ; rdfs:range xsd:decimal .
+:limitYear a owl:DatatypeProperty ; rdfs:domain :BenefitKind .
+:limitSource a owl:DatatypeProperty ; rdfs:domain :BenefitKind .
+:evidence a owl:ObjectProperty ; rdfs:range :EvidenceGrade .
+:EvidenceGrade a owl:Class ; owl:oneOf ( :ReadInPublication :ReadInStatute :ReadHeadingOnly :Inferred :NotRead ) .
+:ReadInPublication a :EvidenceGrade ; rdfs:label "read in the publication"@en .
+:ReadInStatute a :EvidenceGrade ; rdfs:label "read in the statute or regulation"@en .
+:ReadHeadingOnly a :EvidenceGrade ; rdfs:label "heading or summary only; text not read"@en .
+:Inferred a :EvidenceGrade ; rdfs:label "inferred, not read"@en .
+:NotRead a :EvidenceGrade ; rdfs:label "named, not read"@en .
+
+# Benefit kinds. Figures are the edition's own, with its year.
+:Benefit_AccidentHealth a :BenefitKind ; rdfs:label "accident and health coverage"@en ;
+    :exclusionBasis "Pub 15-B (2026), Accident and Health Benefits; Pub 525 (2025), read: 'the value of accident or health plan coverage provided to you by your employer isn't included in your income'" ;
+    :employeeOnly true ; :nondiscriminationRule true ; :evidence :ReadInPublication ;
+    rdfs:comment "15-B, read: 'Don't treat a 2% shareholder of an S corporation as an employee of the corporation for this purpose.' and 'you must include the value of accident or health benefits you provide to the employee in the employee's wages'. Nondiscrimination, read: 'If your plan is a self-insured medical reimbursement plan that favors highly compensated employees,' (insured plans: not modeled)."@en .
+:Benefit_CafeteriaPlan a :BenefitKind ; rdfs:label "cafeteria plan election (section 125)"@en ;
+    :exclusionBasis "Pub 15-B (2026), Cafeteria Plans; IRC 125" ;
+    :employeeOnly true ; :nondiscriminationRule true ; :evidence :ReadInPublication ;
+    rdfs:comment "15-B, read: employees are 'A current common-law employee.' and certain full-time life insurance agents; 'Don't treat a 2% shareholder of an S corporation as an employee of the corporation for this purpose.' If the plan favors highly compensated or key employees, 'you must include in their wages the value of taxable benefits they could have selected.' A plan favors key employees if 'more than 25% of the total of the nontaxable benefits' go to them. Key employee during 2026 includes 'An officer having annual pay of more than $235,000.' Simple cafeteria plan: 'an average of 100 or fewer employees during either of the 2 preceding years'."@en .
+:Benefit_HealthFSA a :BenefitKind ; rdfs:label "health FSA salary reduction"@en ;
+    :exclusionBasis "Pub 15-B (2026), Cafeteria Plans" ; :employeeOnly true ; :nondiscriminationRule true ;
+    :annualLimit "3400"^^xsd:decimal ; :limitYear "plan years beginning in 2026" ;
+    :limitSource "Pub 15-B (2026), read: 'a cafeteria plan may not allow an employee to request salary reduction contributions for a health FSA in excess of $3,400'" ;
+    :evidence :ReadInPublication .
+:Benefit_DependentCare a :BenefitKind ; rdfs:label "dependent care assistance"@en ;
+    :exclusionBasis "Pub 15-B (2026), Dependent Care Assistance; IRC 129 (nondiscrimination 129(d), named in a summary only)" ;
+    :employeeOnly false ; :nondiscriminationRule true ;
+    :annualLimit "7500"^^xsd:decimal ; :limitYear "2026" ;
+    :limitSource "Pub 15-B (2026), read: 'For the 2026 tax year, the annual dependent care FSA limit was raised from $5,000 to $7,500 ($2,500 to $3,750 for married filing separately)'" ;
+    :evidence :ReadInPublication ;
+    rdfs:comment "Who may receive it (partners, 2% shareholders) was not read, so employeeOnly is left false here and the question is listed as not verified."@en .
+:Benefit_EducationalAssistance a :BenefitKind ; rdfs:label "educational assistance"@en ;
+    :exclusionBasis "Pub 15-B (2026), Educational Assistance; IRC 127 (named in a summary only)" ;
+    :employeeOnly false ; :nondiscriminationRule true ;
+    :annualLimit "5250"^^xsd:decimal ; :limitYear "payments made after 2025" ;
+    :limitSource "Pub 15-B (2026), read: 'P.L. 119-21 permanently extends the $5,250 exclusion from income for employer-provided educational assistance for payments made after 2025.'" ;
+    :evidence :ReadInPublication .
+:Benefit_QualifiedParking a :BenefitKind ; rdfs:label "qualified parking or transit"@en ;
+    :exclusionBasis "Pub 15-B (2026), Transportation (Commuting) Benefits" ; :employeeOnly false ;
+    :monthlyLimit "340"^^xsd:decimal ; :limitYear "2026" ;
+    :limitSource "Pub 15-B (2026), read: 'For 2026, the monthly exclusion for qualified parking is $340'" ;
+    :evidence :ReadInPublication .
+:Benefit_GroupTermLife a :BenefitKind ; rdfs:label "group-term life insurance"@en ;
+    :exclusionBasis "IRC 79(a), read: excluded 'only to the extent that such cost exceeds the sum of' the cost of '$50,000 of such insurance'" ;
+    :employeeOnly true ; :nondiscriminationRule true ;
+    :coverageLimit "50000"^^xsd:decimal ; :limitYear "statute, no year" ;
+    :limitSource "IRC 79(a)(1), read: 'the cost of $50,000 of such insurance'; Pub 15-B (2026) Table 2-1, read: 'You must include in your employee's wages the cost of group-term life insurance beyond $50,000 worth of coverage'" ;
+    :evidence :ReadInStatute ;
+    rdfs:comment "79(d)(1)(A), read: in a discriminatory plan, 'subsection (a)(1) shall not apply with respect to any key employee'. 15-B employee list, read: 'A current common-law employee.'; 2% S corporation shareholders excepted."@en .
+:Benefit_LodgingOnPremises a :BenefitKind ; rdfs:label "lodging furnished by the employer"@en ;
+    :exclusionBasis "IRC 119(a), read: lodging 'for the convenience of the employer, but only if' 'the employee is required to accept such lodging on the business premises of his employer as a condition of his employment.'" ;
+    :employeeOnly true ; :evidence :ReadInStatute ;
+    rdfs:comment "Pub 15-B (2026) Table 2-1, read: 'Exempt if furnished on your business premises, for your convenience, and as a condition of employment.' and 'Exemption doesn't apply to S corporation employees who are 2% shareholders.' Partners and sole proprietors: 119 says 'an employee' and defines no owner rule in the text read, so treating them as outside it is inferred."@en .
+:Benefit_WorkingCondition a :BenefitKind ; rdfs:label "working condition benefit (for example mileage reimbursed under the cents-per-mile rule)"@en ;
+    :exclusionBasis "IRC 132(d), read: excluded to the extent that, had the employee paid, 'such payment would be allowable as a deduction under section 162 or 167'; Pub 15-B (2026), read: 'You may use this rate to reimburse an employee for business use of a personal vehicle.'" ;
+    :employeeOnly false ; :needsSubstantiation true ; :evidence :ReadInStatute ;
+    rdfs:comment "15-B, read: 'A person may perform services for you as an independent contractor, partner, or director.' The 2026 mileage rate was not yet published in 15-B; Pub 463 (2025), read: 'For 2025, the standard mileage rate ... is 70 cents ($0.70) per mile.'"@en .
+:Benefit_DeMinimis a :BenefitKind ; rdfs:label "de minimis benefit"@en ;
+    :exclusionBasis "IRC 132(e)(1), read: 'so small as to make accounting for it unreasonable or administratively impracticable'; Pub 15-B (2026), read: 'For this exclusion, treat any recipient of a de minimis benefit as an employee.'" ;
+    :employeeOnly false ; :evidence :ReadInStatute .
+:Benefit_CashCarAllowance a :BenefitKind ; rdfs:label "flat cash car allowance, no records"@en ;
+    :evidence :Inferred ;
+    rdfs:comment "No exclusion basis recorded, so it is wages. Basis: 15-B, read: 'Any fringe benefit you provide is taxable and must be included in the recipient's pay unless the law specifically excludes it.' 15-B's own vehicle and allowance text was not read, so the treatment of an allowance is inferred: cash with no accounting is not a reimbursement of a deductible expense. The lawful route is Benefit_WorkingCondition with records."@en .
+:Benefit_PersonalExpensePaid a :BenefitKind ; rdfs:label "personal or family expense paid by the entity"@en ;
+    :evidence :ReadInPublication ;
+    rdfs:comment "No exclusion basis. Pub 525 (2025), read: fringe benefits are income 'unless you pay FMV for them or they're specifically excluded by law'."@en .
+
+# Deduction facts (162, 262, 263, 195, timing, home)
+:claimedDeduction a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:ordinaryAndNecessary a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "Pub 463 (2025), read: 'An ordinary expense is one that is common and accepted in your trade or business.' 'An expense doesn't have to be required to be considered necessary.'"@en .
+:personalLivingFamily a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:capitalExpenditure a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:section179Election a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:startupExpenditure a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:startupElection a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:activeBusinessBegun a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:payerMethod a owl:ObjectProperty ; rdfs:range :AccountingMethod .
+:payeeMethod a owl:ObjectProperty ; rdfs:range :AccountingMethod .
+:AccountingMethod a owl:Class .
+:CashMethod a :AccountingMethod ; rdfs:label "cash method"@en .
+:AccrualMethod a :AccountingMethod ; rdfs:label "accrual method"@en .
+:paidByYearEnd a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:relatedPayee a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "Payer and payee are related under IRC 267 (not read; Pub 538 names it)."@en .
+:homeOfficeClaim a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:homeUse a owl:ObjectProperty ; rdfs:range :HomeUse .
+:HomeUse a owl:Class .
+:ExclusiveRegularPrincipalPlace a :HomeUse ;
+    rdfs:label "a specific area used only and regularly for the business, as its principal place (including administrative or management work with no other fixed location)"@en .
+:MixedPersonalUse a :HomeUse ; rdfs:label "the area is also used personally"@en .
+:MailingAddressOnly a :HomeUse ; rdfs:label "the home is only the entity's mailing address"@en .
+
+# Comparable sources for the price and pay tests
+:ComparableSource a owl:Class ;
+    rdfs:comment "Where a market range comes from. Each names what it shows and how well it was read."@en .
+:Source_ProxyCompTable a :ComparableSource ; rdfs:label "Public company proxy (DEF 14A), Summary Compensation Table"@en ;
+    :evidence :ReadInStatute ;
+    rdfs:comment "17 CFR 229.402(c)(2)(ix), read: 'All other compensation for the covered fiscal year that the registrant could not properly report in any other column', listing perquisites 'unless the aggregate amount of such compensation is less than $10,000', tax 'gross-ups', plan contributions and 'insurance premiums paid by, or on behalf of, the registrant'; each perquisite 'whose value exceeds $10,000 must be identified and quantified in a footnote'. Use: which perks are disclosed and priced, never a template for perks. The company deducts pay under 162 (reasonable allowance); the executive includes it unless a named exclusion applies. Limits 162(m), 274, 280G and 409A are named here, not read."@en .
+:Source_ExternalManagerDisclosure a :ComparableSource ;
+    rdfs:label "Externally managed REIT or BDC: management agreement disclosed in its 10-K and proxy"@en ;
+    :evidence :Inferred ;
+    rdfs:comment "The public model for a management company that runs an operating company for a fee: fee basis (for example a percent of assets or equity, and any incentive fee), the services the fee covers, and how independent directors approve and renew it. Not read for any filing here; capture those three fields from the filing when used. Executives' own Forms 3, 4 and 5 report stock holdings, not pay, so they are not a source."@en .
+:Source_990PF_PartVII a :ComparableSource ; rdfs:label "Peer foundations' Form 990-PF, Part VII"@en ;
+    :evidence :ReadHeadingOnly ;
+    rdfs:comment "Instructions for Form 990-PF (2025), headings read: 'Line 1. List all officers, directors, trustees, and foundation managers and their compensation.' and 'Line 2. Compensation of five highest-paid employees.'; the general instructions refer to 'the $50,000 minimum for listing the highest paid employees'. Column-by-column rules not read. The comparables that matter for 4941(d)(2)(E)."@en .
+:Source_990_ScheduleJ a :ComparableSource ; rdfs:label "Public charities' Form 990, Schedule J"@en ; :evidence :NotRead .
+:Source_CompSurvey a :ComparableSource ; rdfs:label "Independent compensation or fee survey for similar-size organizations"@en ; :evidence :Inferred .
+
+# ---------------------------------------------------------------------
+# Checks (each maps a constraint in stewardship-shapes.ttl to an outcome)
+# ---------------------------------------------------------------------
+:Stage4_Stewardship a :Stage ; rdfs:label "S stewardship"@en .
+:Stage5_ArmsLength a :Stage ; rdfs:label "A arm's length between the founder's roles"@en .
+:Stage6_Deduction a :Stage ; rdfs:label "D what the business may deduct"@en .
+:Stage7_Exclusion a :Stage ; rdfs:label "X what the employee may exclude"@en .
+
+:Check_DE1 a :DecisionCheck ; :checkConstraint :DE1_DealEvidence ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ; :authority "Design rule: no check passes on a missing fact." .
+
+:Check_ST1a a :DecisionCheck ; :checkConstraint :ST1a_PayComparables ; :inStage :Stage4_Stewardship ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "insider status by control: pay a steward sets for himself" ;
+    :authority "26 USC 162(a)(1), read: 'a reasonable allowance for salaries or other compensation for personal services actually rendered'. Treas. Reg. 53.4941(d)-3(c)(1), read: foundation pay is not self-dealing 'if such compensation (or payment or reimbursement) is not excessive', and 'For the determination whether compensation is excessive, see § 1.162-7' (1.162-7 not read). Design rule: pay to the founder cites comparables from similar-size organizations, kept before the pay is set." .
+:Check_ST1b a :DecisionCheck ; :checkConstraint :ST1b_PackageOverMarket ; :inStage :Stage4_Stewardship ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a wage that looks reasonable with the benefits hidden beside it" ;
+    :authority "162(a)(1) 'reasonable allowance'; 482, read: the Secretary may 'distribute, apportion, or allocate gross income, deductions' between entities 'owned or controlled directly or indirectly by the same interests'. That benefits count in the package is inferred from 53.4941(d)-3(c)(1), which covers 'the payment of compensation (and the payment or reimbursement of expenses ...)', and from 1.162-7 (not read)." .
+:Check_ST1c a :DecisionCheck ; :checkConstraint :ST1c_FoundationPayWithBenefits ; :inStage :Stage4_Stewardship ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "foundation pay under the benchmark only because the benefits were left out" ;
+    :authority "26 USC 4941(d)(2)(E) and 53.4941(d)-3(c)(1): foundation pay to a disqualified person is excepted only if 'not excessive'. Counting fringe benefits toward that test is inferred (the regulation does not name fringe benefits); fail closed: the whole package is held to the benchmark." .
+:Check_ST1d a :DecisionCheck ; :checkConstraint :ST1d_BenefitUncoded ; :inStage :Stage4_Stewardship ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Pub 15-B (2026), read: 'Any fringe benefit you provide is taxable and must be included in the recipient's pay unless the law specifically excludes it.' Every benefit is coded taxable or excluded, with its authority, before it is paid." .
+:Check_ST2 a :DecisionCheck ; :checkConstraint :ST2_DecisionRecord ; :inStage :Stage4_Stewardship ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure , :ReputationalPressure ;
+    :guardsAgainst "alter ego or sham: entities that never decide anything apart from their controller" ;
+    :authority "Design rule (Keystone constraint and authority cascade applied to non-foundation deals): a written decision citing the mission, made before money moves. The alter-ego and sham doctrines are case law, not read here." .
+:Check_ST3 a :DecisionCheck ; :checkConstraint :ST3_IndependentReviewer ; :inStage :Stage4_Stewardship ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "grantor-trust ownership and control with no one able to refuse" ;
+    :authority "26 USC 674(c), read: the power-of-disposition rule does not apply to a power 'solely exercisable (without the approval or consent of any other person) by a trustee or trustees, none of whom is the grantor' and 'no more than half of whom are related or subordinate parties who are subservient to the wishes of the grantor'. 672(c) defines related or subordinate. Applied here as a design rule: each deal between the founder's roles has a reviewer who is neither the founder nor related or subordinate to him, and who can refuse. Whether the family trust is a grantor trust at all was not read (rehearsal/09)." .
+
+:Check_AL0 a :DecisionCheck ; :checkConstraint :AL0_FoundationParty ; :inStage :Stage5_ArmsLength ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "treating a fair price as a cure for self-dealing" ;
+    :authority "26 USC 4941(d)(1) lists the acts (sale, lease, loan, services, pay, transfer) between a foundation and a disqualified person with no fair-price exception; arm's length does not cure them. Only 4941(d)(2) exceptions do." .
+:Check_AL4 a :DecisionCheck ; :checkConstraint :AL4_FoundationPassThrough ; :inStage :Stage5_ArmsLength ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "4941(d)(1) 'indirect'; (d)(1)(E) 'for the benefit of'. A foundation deal with a party that is not itself an insider but passes value to one goes to counsel, at any price." .
+:Check_AL1a a :DecisionCheck ; :checkConstraint :AL1a_NoMarketRange ; :inStage :Stage5_ArmsLength ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Pub 561 (12/2025), read: 'FMV is the price that property would sell for on the open market.' 'It is the price that would be agreed on between a willing buyer and a willing seller'. No range with a named comparable source, no price test." .
+:Check_AL1b a :DecisionCheck ; :checkConstraint :AL1b_OutsideMarket ; :inStage :Stage5_ArmsLength ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 482, read: between organizations 'owned or controlled directly or indirectly by the same interests', the Secretary may reallocate income and deductions 'clearly to reflect the income of any of such organizations'. A price outside the comparable range invites that reallocation." .
+:Check_AL2 a :DecisionCheck ; :checkConstraint :AL2_WrittenTerms ; :inStage :Stage5_ArmsLength ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure , :InstitutionalPressure ;
+    :authority "Design rule: unrelated parties put terms in writing; related ones must too, or the deal cannot be shown to be what it claims (482; sham)." .
+
+:Check_BD0 a :DecisionCheck ; :checkConstraint :BD0_DeductionFacts ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ; :authority "Design rule: a deduction claim records whether it is ordinary and necessary, personal, and capital." .
+:Check_BD1 a :DecisionCheck ; :checkConstraint :BD1_OrdinaryNecessary ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 162(a), read: 'There shall be allowed as a deduction all the ordinary and necessary expenses paid or incurred during the taxable year in carrying on any trade or business'." .
+:Check_BD2 a :DecisionCheck ; :checkConstraint :BD2_PersonalExpense ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 262(a), read: 'Except as otherwise expressly provided in this chapter, no deduction shall be allowed for personal, living, or family expenses.' Instructions for Form 1041 (2025), read: 'Trusts can't be used to transform a taxpayer's personal, living, or educational expenses into deductible items.'" .
+:Check_BD3 a :DecisionCheck ; :checkConstraint :BD3_CapitalExpense ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 263(a)(1), read: no deduction for 'Any amount paid out for new buildings or for permanent improvements or betterments made to increase the value of any property or estate.' The lawful route for qualifying property is the section 179 election: Pub 946 (2025), read: 'For tax years beginning in 2026, the maximum section 179 expense deduction is $2,560,000.' Whether a given item qualifies for 179 is not modeled." .
+:Check_BD4 a :DecisionCheck ; :checkConstraint :BD4_StartupExpense ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 195(a), read: 'no deduction shall be allowed for start-up expenditures.' 195(b)(1), read: on election, a deduction 'for the taxable year in which the active trade or business begins' of the lesser of the expenditures or '$5,000, reduced (but not below zero) by the amount by which such start-up expenditures exceed $50,000', and 'the remainder ... ratably over the 180-month period'. The model checks only that the election exists and the business has begun." .
+:Check_BD5 a :DecisionCheck ; :checkConstraint :BD5_Timing ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Pub 538 (Rev. January 2022), read: 'Under the cash method, generally, you deduct expenses in the tax year in which you actually pay them.' Accrual: 'Generally, you cannot deduct or capitalize a business expense until economic performance occurs.' Related persons: an expense owed to a related cash-method person is 'not deductible until you make the payment' (relationship per 267, not read)." .
+:Check_BD6 a :DecisionCheck ; :checkConstraint :BD6_HomeOffice ; :inStage :Stage6_Deduction ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Pub 587 (2025), read: 'you must use a specific area of your home only for your trade or business' and 'Incidental or occasional business use is not regular use.' Principal place includes 'administrative or management activities' where 'You have no other fixed location where you conduct substantial administrative or management activities'. That a home used only as an entity's mailing address fails the test is inferred; 587 was not found to address mailing addresses." .
+
+:Check_FX0 a :DecisionCheck ; :checkConstraint :FX0_NoExclusionBasis ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Pub 15-B (2026), read: 'Any fringe benefit you provide is taxable and must be included in the recipient's pay unless the law specifically excludes it.' Pub 525 (2025), read: 'an amount included in your income is taxable unless it is specifically exempted by law.'" .
+:Check_FX1 a :DecisionCheck ; :checkConstraint :FX1_NotAnEmployee ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Pub 15-B (2026), read: 'Don't treat a 2% shareholder of an S corporation as an employee of the corporation for this purpose.' and 'Treat a 2% shareholder as you would a partner in a partnership for fringe benefit purposes'. For accident and health, the value goes in wages. The lawful route for the premiums: Instructions for Form 7206 (2025), read: the deduction is open if 'You received wages in 2025 from an S corporation in which you were a more-than-2% shareholder.', or to a partner or a self-employed person with net profit; but not 'for any month you were eligible to participate in any employer' subsidized plan. Sole proprietors are outside the employee list read; treating them like partners is inferred." .
+:Check_FX2 a :DecisionCheck ; :checkConstraint :FX2_Discriminates ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Pub 15-B (2026), read: for a cafeteria plan that favors highly compensated or key employees, 'you must include in their wages the value of taxable benefits they could have selected.' IRC 79(d)(1)(A), read: 'subsection (a)(1) shall not apply with respect to any key employee'. Self-insured medical: 'If your plan is a self-insured medical reimbursement plan that favors highly compensated employees,'." .
+:Check_FX3 a :DecisionCheck ; :checkConstraint :FX3_OverLimit ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "The edition's own limits, with year, on each :BenefitKind (:limitSource). Excluding more than the limit is a wage misreported." .
+:Check_FX4 a :DecisionCheck ; :checkConstraint :FX4_Substantiation ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "132(d), read: excluded only where the payment 'would be allowable as a deduction under section 162 or 167'; Pub 463 (2025), read: 'you must keep records of all the expenses you have'. A reimbursement with no records is not shown to be one." .
+:Check_FX5 a :DecisionCheck ; :checkConstraint :FX5_Lodging119 ; :inStage :Stage7_Exclusion ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "26 USC 119(a), read: lodging is excluded 'for the convenience of the employer, but only if' 'the employee is required to accept such lodging on the business premises of his employer as a condition of his employment.' All three, or it is wages." .
+
+:guardsAgainst a owl:DatatypeProperty ; rdfs:domain :DecisionCheck ;
+    rdfs:comment "The red flag this check turns into a check."@en .
+
+:fringeBenefitAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "On a foundation pay proposal: the yearly value of every benefit beside the wage. ST1c holds wage plus this to the benchmark."@en .

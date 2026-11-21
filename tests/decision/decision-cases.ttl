@@ -23,9 +23,18 @@
 :ManagementCompany a td:DisqualifiedPerson ;
     rdfs:label "Founder's management company" ;
     rdfs:comment "A corporation in which disqualified persons own more than 35 percent of the voting power: 4946(a)(1)(E)." .
-:FamilyTrust a td:DisqualifiedPerson ;
-    rdfs:label "Family trust (presumed disqualified)" ;
-    rdfs:comment "Fail closed: treated as disqualified until counsel confirms otherwise. Its status turns on 4946(a)(1)(A) (substantial contributor, if it funds the foundation) and (G) (more than 35 percent beneficial interest held by disqualified persons)." .
+:FamilyTrust rdfs:label "Family trust: the foundation and family members are beneficiaries; the founder is trustee" ;
+    dm:insiderStatusPending true ;
+    rdfs:comment "Its insider status is derived from the facts in tests/decision/branch-*.ttl: the 4946(d) family's actuarial share (over 35 percent makes it an insider, 4946(a)(1)(G)) and whether it has become a substantial contributor (4946(a)(1)(A)). Being trustee is control, not beneficial interest." .
+td:Founder dm:trusteeOf :FamilyTrust .
+:BusinessTrust rdfs:label "Business trust that owns the operating company; the family trust holds its beneficial interest" ;
+    dm:insiderStatusPending true ;
+    dm:beneficialInterestHeldBy :FamilyTrust .
+:OperatingCompany rdfs:label "Operating company owned by the business trust" ;
+    dm:insiderStatusPending true ;
+    dm:votingControlHeldBy :BusinessTrust ;
+    dm:passesBenefitTo :ManagementCompany ;
+    rdfs:comment "Pays the founder's management company a management fee." .
 :AITrainer rdfs:label "AI trainer (unrelated)" .
 :Contractor rdfs:label "Contractor who works two programs (unrelated)" .
 :FriendsNonprofit a td:PublicCharity ;
@@ -169,12 +178,14 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
 
 # P14 Buy 15 percent of the operating company's voting stock from an unrelated
-#     seller; disqualified persons (through the business trust) hold 30 percent.
-#     Bought from the business trust itself, it would also be R1.
+#     seller; the business trust holds 30 percent. Bought from the business
+#     trust itself, it would also be R1 in branch A.
 :P14_OperatingCoShares a dm:SpendProposal ;
     dm:payee :ThirdPartySeller ; dm:dqScreened true ; dm:spendKind dm:Investment ;
     dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
-    dm:foundationVotingPercentAfter "15"^^xsd:decimal ; dm:disqualifiedVotingPercent "30"^^xsd:decimal .
+    dm:boughtVotingPercent "15"^^xsd:decimal ; dm:chainHeldVotingPercent "30"^^xsd:decimal ;
+    dm:chainTrust :FamilyTrust ; dm:chainHolder :BusinessTrust .
+#     The foundation's total and the insiders' total are derived by rule IR9 (4943(d)(1)).
 
 # P15 Lobbying contract for a curriculum bill.
 :P15_Lobbying a dm:SpendProposal ; dm:assesses :Spend_Lobbying ;
@@ -218,6 +229,16 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
 :P22_RentFromFamilyTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
     rdfs:comment "Leasing between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+
+# P23 Program T-shirts bought from the operating company, at its outside price.
+:P23_OperatingCoPurchase a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :OperatingCompany ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    rdfs:comment "A sale of goods between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+
+# P24 A grant to the family trust to run a program, no expenditure responsibility.
+:P24_GrantToFamilyTrust a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
+    dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    rdfs:comment "Assesses an existing grant node only to carry stage 1." .
 
 # ---------------------------------------------------------------------
 # P1 probe: a check enforced only by conscience

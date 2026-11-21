@@ -217,3 +217,99 @@
 :IntentBent a :ScorerAnswer ; rdfs:label "yes"@en ; :escalatesTo :NeedsCounsel .
 :IntentCannotTell a :ScorerAnswer ; rdfs:label "cannot tell"@en ; :escalatesTo :Insufficient .
 :escalatesTo a owl:ObjectProperty ; rdfs:range :Outcome .
+
+# ---------------------------------------------------------------------
+# Insider branches: the family trust's facts, as settings
+# ---------------------------------------------------------------------
+# Whether the family trust, the business trust and the operating company are
+# disqualified persons is not asserted by hand. Each branch file
+# (tests/decision/branch-*.ttl) sets the family trust's facts; the insider
+# rules below derive the status. In every branch the founder is the family
+# trust's trustee, not a beneficiary, and its beneficiaries are the foundation
+# and family members.
+:InsiderBranch a owl:Class ;
+    rdfs:comment "One assumed set of trust facts. A branch is data, not a legal conclusion; the default run uses the fail-closed branch A."@en .
+:BranchOverLine a :InsiderBranch ; rdfs:label "A: over the line"@en ;
+    rdfs:comment "Default, fail closed. Family members within 4946(d) hold more than 35 percent of the actuarial beneficial interest, and the trust has already given the foundation enough to be a substantial contributor."@en .
+:BranchUnderLine a :InsiderBranch ; rdfs:label "B: under the line"@en ;
+    rdfs:comment "4946(d) family hold 35 percent or less (siblings hold more, but do not count), and the trust has not yet become a substantial contributor."@en .
+:selectedBy a owl:DatatypeProperty ; rdfs:domain :InsiderBranch ;
+    rdfs:comment "The facts file that puts this branch in force."@en .
+
+:insiderStatusPending a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "This role's disqualified-person status is derived by the insider rules from its facts."@en .
+:dqFamilySharePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Actuarial share of the trust's beneficial interest held by disqualified persons, which includes the founder's 4946(d) family: spouse, ancestors, children, grandchildren, great-grandchildren and their spouses (53.4946-1(a)(4), (h))."@en .
+:otherRelativeSharePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Share held by relatives outside 4946(d), such as siblings, nieces and nephews. Does not count toward the 35 percent line."@en .
+:foundationSharePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Actuarial share held by the foundation."@en .
+:foundationInterestKind a owl:ObjectProperty ; rdfs:range :InterestKind .
+:InterestKind a owl:Class ; owl:oneOf ( :IncomeOnly :RemainderOnly :IncomeAndRemainder ) .
+:IncomeOnly a :InterestKind . :RemainderOnly a :InterestKind . :IncomeAndRemainder a :InterestKind .
+:charitableDeductionAllowed a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "A deduction was allowed for amounts in the trust under 170, 545(b)(2), 642(c), 2055, 2106(a)(2) or 2522 (4947(a))."@en .
+:substantialContributor a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "Has given the foundation more than 5,000 dollars and more than 2 percent of all it has received (507(d)(2)(A)). 7701(a)(1) counts a trust as a person, and the status stays for all later periods (507(d)(2)(B)(iv)) unless the 10-year rule in 507(d)(2)(C) ends it."@en .
+:trusteePaid a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "The trust pays its trustee a fee."@en .
+:trusteeOf a owl:ObjectProperty ; rdfs:comment "Serves as trustee: control, not beneficial interest."@en .
+:treatedAs501c3 a owl:DatatypeProperty ; rdfs:comment "Derived: 4947(a)(1)."@en .
+:splitInterestTrust a owl:DatatypeProperty ; rdfs:comment "Derived: 4947(a)(2) applies 4941, 4943, 4944 and 4945 to the trust itself."@en .
+:beneficialInterestHeldBy a owl:ObjectProperty ;
+    rdfs:comment "The trust that holds the subject's whole beneficial interest, counted through 267(c) per 4946(a)(4)."@en .
+:votingControlHeldBy a owl:ObjectProperty ;
+    rdfs:comment "Holds more than 35 percent of the company's voting power, counting indirect holdings per 4946(a)(3)."@en .
+:boughtVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:chainHeldVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Voting stock held further up the trust chain, attributed proportionately to beneficiaries by 4943(d)(1)."@en .
+:chainTrust a owl:ObjectProperty .
+
+:InsiderRule a owl:Class ;
+    rdfs:comment "A SPARQL CONSTRUCT that decide_spend.py runs before the checks: stage 1 rules to a fixed point, then stage 2 once. Each cites its source."@en .
+:construct a owl:DatatypeProperty ; rdfs:domain :InsiderRule .
+:ruleStage a owl:DatatypeProperty ; rdfs:domain :InsiderRule .
+
+:IR1_CharitableTrust a :InsiderRule ; :ruleStage 1 ;
+    :authority "4947(a)(1): all unexpired interests charitable, deduction allowed: treated as a 501(c)(3) organization." ;
+    :construct """CONSTRUCT { ?t dm:treatedAs501c3 true } WHERE {
+        ?t dm:foundationSharePercent ?f ; dm:charitableDeductionAllowed true . FILTER ( ?f >= 100 ) }""" .
+:IR2_SplitInterest a :InsiderRule ; :ruleStage 1 ;
+    :authority "4947(a)(2): charitable and noncharitable interests, deduction allowed: 4941, 4943, 4944, 4945 apply as if a private foundation." ;
+    :construct """CONSTRUCT { ?t dm:splitInterestTrust true } WHERE {
+        ?t dm:foundationSharePercent ?f ; dm:charitableDeductionAllowed true . FILTER ( ?f > 0 && ?f < 100 ) }""" .
+:IR3_OverTheLine a :InsiderRule ; :ruleStage 1 ;
+    :authority "4946(a)(1)(G); 53.4946-1(a)(4) measures beneficial interest by actuarial interest." ;
+    :construct """CONSTRUCT { ?t a td:DisqualifiedPerson } WHERE {
+        ?t dm:insiderStatusPending true ; dm:dqFamilySharePercent ?d . FILTER ( ?d > 35 ) }""" .
+:IR4_SubstantialContributor a :InsiderRule ; :ruleStage 1 ;
+    :authority "4946(a)(1)(A), 507(d)(2); 53.4946-1(a)(8) excludes a 501(c)(3) organization for 4941 only." ;
+    :construct """CONSTRUCT { ?t a td:DisqualifiedPerson } WHERE {
+        ?t dm:insiderStatusPending true ; dm:substantialContributor true .
+        FILTER NOT EXISTS { ?t dm:treatedAs501c3 true } }""" .
+:IR5_HeldThroughTrust a :InsiderRule ; :ruleStage 1 ;
+    :authority "4946(a)(1)(G) with (a)(4): a trust whose beneficial interest is held by an insider is itself an insider." ;
+    :construct """CONSTRUCT { ?b a td:DisqualifiedPerson } WHERE {
+        ?b dm:insiderStatusPending true ; dm:beneficialInterestHeldBy ?t . ?t a td:DisqualifiedPerson }""" .
+:IR6_VotingControl a :InsiderRule ; :ruleStage 1 ;
+    :authority "4946(a)(1)(E): a corporation more than 35 percent of whose voting power insiders own." ;
+    :construct """CONSTRUCT { ?c a td:DisqualifiedPerson } WHERE {
+        ?c dm:insiderStatusPending true ; dm:votingControlHeldBy ?b . ?b a td:DisqualifiedPerson }""" .
+:IR7_TrusteeFee a :InsiderRule ; :ruleStage 1 ;
+    :authority "4941(d)(1)(E): 'use by or for the benefit of, a disqualified person of the income or assets of a private foundation'." ;
+    :construct """CONSTRUCT { ?t dm:passesBenefitTo ?f } WHERE { ?f dm:trusteeOf ?t . ?t dm:trusteePaid true }""" .
+:IR8_FamilyDistributions a :InsiderRule ; :ruleStage 1 ;
+    :authority "4941(d)(1)(E) as a hack-test flag: money paid to the trust can reach 4946(d) family through distributions." ;
+    :construct """CONSTRUCT { ?t dm:passesBenefitTo dm:FounderFamily } WHERE {
+        ?t dm:dqFamilySharePercent ?d . FILTER ( ?d > 0 ) }""" .
+:FounderFamily a td:DisqualifiedPerson ; rdfs:label "The founder's 4946(d) family, as a class"@en .
+:IR9_AttributedHoldings a :InsiderRule ; :ruleStage 2 ;
+    :authority "4943(d)(1): stock held by a trust counts proportionately as its beneficiaries'; not for a foundation's income-only or remainder-only interest in a 4947(a)(2) trust. Insider holdings: the whole block if the holding trust is an insider, else the family's share." ;
+    :construct """CONSTRUCT { ?p dm:foundationVotingPercentAfter ?after ; dm:disqualifiedVotingPercent ?dq } WHERE {
+        ?p dm:boughtVotingPercent ?x ; dm:chainHeldVotingPercent ?h ; dm:chainTrust ?t ; dm:chainHolder ?b .
+        ?t dm:foundationSharePercent ?f ; dm:dqFamilySharePercent ?d .
+        BIND ( EXISTS { ?t dm:splitInterestTrust true . ?t dm:foundationInterestKind ?k .
+                        FILTER ( ?k IN (dm:IncomeOnly, dm:RemainderOnly) ) } AS ?exempt )
+        BIND ( ?x + IF(?exempt, 0, ?h * ?f / 100) AS ?after )
+        BIND ( IF(EXISTS { ?b a td:DisqualifiedPerson }, ?h, ?h * ?d / 100) AS ?dq ) }""" .
+:chainHolder a owl:ObjectProperty .

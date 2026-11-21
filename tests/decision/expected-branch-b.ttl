@@ -1,0 +1,18 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix t: <http://example.org/trust-domain/tests#> .
+
+# Answer key for insider branch B (under the line): only the proposals whose
+# result differs from expected.ttl. Every other proposal keeps its branch A answer.
+# P14 stays needs counsel (R7 R8): the foundation is treated as owning its
+# share of the business trust's stock (4943(d)(1)), and the family's share
+# counts as insider holdings.
+
+:P22_RentFromFamilyTrust t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H2" .
+:P23_OperatingCoPurchase t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H2" .
+:P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "H2 R6" .
+
+# D07: under the line the family trust is not an insider, but it passes value to
+# family members, so a market-rate lease with every paper in place still goes
+# to counsel (4941(d)(1)(E)). Arm's length never makes it pass.
+:D07_FamilyTrustRentsFromFoundation t:expectOutcome dm:NeedsCounsel ; t:expectChecks "AL4" .
