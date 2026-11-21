@@ -2,7 +2,7 @@
 @prefix dm: <http://example.org/trust-domain/decision#> .
 @prefix t: <http://example.org/trust-domain/tests#> .
 
-# Answer key for decide_spend.py: the outcome and the exact set of checks
+# Answer key for decide_spend.py (insider branch A, the default): the outcome and the exact set of checks
 # each proposal is expected to fail. The shapes never read this file.
 
 :P01_TrainerPay          t:expectOutcome dm:Allow ;        t:expectChecks "" .
@@ -28,6 +28,9 @@
 :P20_ResortSeries        t:expectOutcome dm:NeedsCounsel ; t:expectChecks "J1" .
 :P21_ResortSeriesUnclear t:expectOutcome dm:Insufficient ; t:expectChecks "J2" .
 :P22_RentFromFamilyTrust t:expectOutcome dm:Block ;        t:expectChecks "R1" .
+:P23_OperatingCoPurchase t:expectOutcome dm:Block ;        t:expectChecks "R1" .
+:P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "R1 R6" .
+:P25_RentToFamilyBeneficiaryTrust t:expectOutcome dm:Block ; t:expectChecks "R1" .
 
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

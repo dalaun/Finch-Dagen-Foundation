@@ -126,11 +126,16 @@ All synthetic, all amounts illustrative. Run `python3 decide_spend.py` to grade 
 | P20 Resort workshop series, scorer says yes | needs counsel | J1 | |
 | P21 Same, scorer says cannot tell | insufficient | J2 | |
 | P22 Rent to the family trust for program space, at market | block | R1 | Leasing with a disqualified person is self-dealing at any price |
+| P23 Program T-shirts bought from the operating company | block | R1 | A sale of goods with a disqualified person, at any price |
+| P24 Grant to the family trust, no expenditure responsibility | block | R1 R6 | Insider, and a non-charity grantee with no expenditure responsibility |
+| P25 Rent to a family trust that still pays a family beneficiary | block | R1 | Stress case for the insider branches |
+
+These are the default answers (insider branch A). [Insider branches](../../rehearsal/09-insider-branches.md) runs the same cases with the trusts as non-insiders, and four results change.
 
 ## What this draft found that changes the plan
 
 1. **For anything that touches a disqualified person, the letter is already the strict part.** Since 1969 the IRS applies the self-dealing rules "without regard to whether the foundation has suffered a detriment"; "it is immaterial whether the transaction results in a benefit or a detriment to the private foundation." So a fair-priced deal with an insider is a block, not a counsel question. The only door is reasonable pay for personal services. The hack test matters where the law still uses judgment, and at the edges of the 4946 definition.
-2. **The stack's own entities need a disqualified-person answer.** The management company is disqualified if insiders own more than 35 percent (4946(a)(1)(E)). The family trust and the business trust turn on whether they fund the foundation (substantial contributor) and who holds more than 35 percent of their beneficial interest (4946(a)(1)(G)). The chain ends at the foundation as a beneficiary, which makes this non-obvious. Until counsel answers, the model treats both trusts as disqualified (fail closed).
+2. **The stack's own entities need a disqualified-person answer.** The management company is disqualified if insiders own more than 35 percent (4946(a)(1)(E)). The family trust and the business trust turn on whether they fund the foundation (substantial contributor) and who holds more than 35 percent of their beneficial interest (4946(a)(1)(G)). The chain ends at the foundation as a beneficiary, which makes this non-obvious. Until counsel answers, the model treats both trusts as disqualified (fail closed). [Insider branches](../../rehearsal/09-insider-branches.md) runs both answers and checks whether "not disqualified" is possible at all.
 3. **The existing asset-to-program check (A1) is stricter than the law.** It would block an ordinary endowment investment, which 4942's "minimum investment return" assumes a foundation has. Investments skip stage 1 and go to R7 and R8 instead. **Decided (Nov 20, 2026, the founder's call):** keep investments on their own test. A1 stays the rule for spending, and investments are judged by R7 and R8.
 
 ## Not verified in this draft

@@ -1,0 +1,24 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Insider branch A (default, fail closed): the trusts are disqualified persons.
+# Facts that make it so: the founder or family hold more than 35 percent of the
+# family trust's beneficial interest (4946(a)(1)(G)); the business trust's
+# beneficial interest is held through the family trust, so it counts the same
+# way (4946(a)(4), 267(c)); the operating company is more than 35 percent owned
+# by a disqualified person (4946(a)(1)(E), indirect holdings per 4946(a)(3)).
+# Not legal advice: counsel confirms which branch matches the trust documents.
+
+dm:BranchInsiders dm:selectedBy "tests/decision/branch-a.ttl" .
+
+:FamilyTrust a td:DisqualifiedPerson ; dm:passesBenefitTo :FounderChild .
+:BusinessTrust a td:DisqualifiedPerson .
+:OperatingCompany a td:DisqualifiedPerson .
+:FamilyBeneficiaryTrust a td:DisqualifiedPerson .
+
+# P14: the business trust's 30 percent counts as disqualified holdings, so the
+# foundation's own limit drops to 20 - 30, below zero (4943(c)(2)(A)).
+:P14_OperatingCoShares dm:foundationVotingPercentAfter "15"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "30"^^xsd:decimal .

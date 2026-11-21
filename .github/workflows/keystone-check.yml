@@ -27,3 +27,7 @@ jobs:
         run: python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl
       - name: Grade the spend decision cases against their answer key
         run: python3 decide_spend.py
+      - name: Grade the same cases under insider branch B
+        run: python3 decide_spend.py --branch B
+      - name: Show what flips between the insider branches
+        run: python3 decide_spend.py --compare

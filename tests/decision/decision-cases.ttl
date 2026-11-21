@@ -23,9 +23,20 @@
 :ManagementCompany a td:DisqualifiedPerson ;
     rdfs:label "Founder's management company" ;
     rdfs:comment "A corporation in which disqualified persons own more than 35 percent of the voting power: 4946(a)(1)(E)." .
-:FamilyTrust a td:DisqualifiedPerson ;
-    rdfs:label "Family trust (presumed disqualified)" ;
-    rdfs:comment "Fail closed: treated as disqualified until counsel confirms otherwise. Its status turns on 4946(a)(1)(A) (substantial contributor, if it funds the foundation) and (G) (more than 35 percent beneficial interest held by disqualified persons)." .
+:FamilyTrust rdfs:label "Family trust (insider status pending counsel)" ;
+    dm:insiderStatusPending true ;
+    rdfs:comment "Disqualified if disqualified persons hold more than 35 percent of its beneficial interest (4946(a)(1)(G), counted through 267(c) per 4946(a)(4)) or if it is a substantial contributor (4946(a)(1)(A); 7701(a)(1) counts a trust as a person). Asserted one way in each tests/decision/branch-*.ttl file." .
+:BusinessTrust rdfs:label "Business trust that owns the operating company (insider status pending counsel)" ;
+    dm:insiderStatusPending true ;
+    rdfs:comment "Its beneficiary is the family trust, so its status follows the family trust's beneficial owners through 4946(a)(4)." .
+:OperatingCompany rdfs:label "Operating company owned by the business trust (insider status pending counsel)" ;
+    dm:insiderStatusPending true ;
+    dm:passesBenefitTo :ManagementCompany ;
+    rdfs:comment "Disqualified under 4946(a)(1)(E) when disqualified persons own more than 35 percent of its voting power, counting indirect holdings through 267(c) per 4946(a)(3). Pays the founder's management company a management fee." .
+:FamilyBeneficiaryTrust rdfs:label "A family trust that still pays a family beneficiary" ;
+    dm:insiderStatusPending true ;
+    dm:passesBenefitTo :FounderChild ;
+    rdfs:comment "Stress case: assumes counsel said not an insider while a family member still benefits. If the family holds more than 35 percent of its beneficial interest, (G) makes it an insider anyway." .
 :AITrainer rdfs:label "AI trainer (unrelated)" .
 :Contractor rdfs:label "Contractor who works two programs (unrelated)" .
 :FriendsNonprofit a td:PublicCharity ;
@@ -169,12 +180,12 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
 
 # P14 Buy 15 percent of the operating company's voting stock from an unrelated
-#     seller; disqualified persons (through the business trust) hold 30 percent.
-#     Bought from the business trust itself, it would also be R1.
+#     seller; the business trust holds 30 percent. Bought from the business
+#     trust itself, it would also be R1 in branch A.
 :P14_OperatingCoShares a dm:SpendProposal ;
     dm:payee :ThirdPartySeller ; dm:dqScreened true ; dm:spendKind dm:Investment ;
-    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
-    dm:foundationVotingPercentAfter "15"^^xsd:decimal ; dm:disqualifiedVotingPercent "30"^^xsd:decimal .
+    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
+#     Voting percentages depend on the insider branch: see tests/decision/branch-*.ttl.
 
 # P15 Lobbying contract for a curriculum bill.
 :P15_Lobbying a dm:SpendProposal ; dm:assesses :Spend_Lobbying ;
@@ -218,6 +229,20 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
 :P22_RentFromFamilyTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
     rdfs:comment "Leasing between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+
+# P23 Program T-shirts bought from the operating company, at its outside price.
+:P23_OperatingCoPurchase a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :OperatingCompany ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    rdfs:comment "A sale of goods between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+
+# P24 A grant to the family trust to run a program, no expenditure responsibility.
+:P24_GrantToFamilyTrust a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
+    dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    rdfs:comment "Assesses an existing grant node only to carry stage 1." .
+
+# P25 Rent paid to a family trust that passes value on to a family beneficiary.
+:P25_RentToFamilyBeneficiaryTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
+    dm:payee :FamilyBeneficiaryTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase .
 
 # ---------------------------------------------------------------------
 # P1 probe: a check enforced only by conscience

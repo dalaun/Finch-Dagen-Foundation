@@ -1,0 +1,13 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix t: <http://example.org/trust-domain/tests#> .
+
+# Answer key for insider branch B: only the proposals whose result differs from
+# expected.ttl. Every other proposal keeps its branch A answer.
+# P14 stays needs counsel (R7 R8) on purpose: in B the foundation itself is
+# treated as owning the business trust's shares (4943(d)(1)).
+
+:P22_RentFromFamilyTrust t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P23_OperatingCoPurchase t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H2" .
+:P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "R6" .
+:P25_RentToFamilyBeneficiaryTrust t:expectOutcome dm:NeedsCounsel ; t:expectChecks "H2" .

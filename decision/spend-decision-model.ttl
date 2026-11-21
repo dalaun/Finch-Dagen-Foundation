@@ -217,3 +217,15 @@
 :IntentBent a :ScorerAnswer ; rdfs:label "yes"@en ; :escalatesTo :NeedsCounsel .
 :IntentCannotTell a :ScorerAnswer ; rdfs:label "cannot tell"@en ; :escalatesTo :Insufficient .
 :escalatesTo a owl:ObjectProperty ; rdfs:range :Outcome .
+
+# Insider branches: an open counsel question run both ways
+:InsiderBranch a owl:Class ;
+    rdfs:comment "One assumed answer to an open disqualified-person question. A branch is a set of facts (tests/decision/branch-*.ttl), not a legal conclusion; the default run uses the fail-closed branch."@en .
+:BranchInsiders a :InsiderBranch ; rdfs:label "A: the trusts are insiders"@en ;
+    rdfs:comment "Default. The founder or family hold more than 35 percent of each trust's beneficial interest (4946(a)(1)(G)), or the trust is a substantial contributor (4946(a)(1)(A)); the operating company follows under 4946(a)(1)(E)."@en .
+:BranchNotInsiders a :InsiderBranch ; rdfs:label "B: the trusts are not insiders"@en ;
+    rdfs:comment "Only consistent if the foundation holds the whole beneficial interest of both trusts and the family holds none, counted through 267(c) per 4946(a)(4). Then 4943(d)(1) treats the trusts' business holdings as the foundation's own."@en .
+:insiderStatusPending a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "This role's disqualified-person status waits on counsel; each branch file asserts it one way."@en .
+:selectedBy a owl:DatatypeProperty ; rdfs:domain :InsiderBranch ;
+    rdfs:comment "The facts file that puts this branch in force."@en .
