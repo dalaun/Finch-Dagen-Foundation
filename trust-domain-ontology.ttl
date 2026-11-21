@@ -1736,42 +1736,42 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :FringeBenefit rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :Pub_15B
+      owl:someValuesFrom :Pub_15B
     ] .
 
 ###  Wage Instrument governed by Pub 15
 :WageInstrument rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :Pub_15
+      owl:someValuesFrom :Pub_15
     ] .
 
 ###  Non-Cash Operational Instrument governed by IRC §132
 :NonCashOperationalInstrument rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_132
+      owl:someValuesFrom :IRC_132
     ] .
 
 ###  Mobility Instrument governed by Pub 463
 :MobilityInstrument rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :Pub_463
+      owl:someValuesFrom :Pub_463
     ] .
 
 ###  Ordinary and Necessary Expense governed by IRC §162
 :OrdinaryAndNecessaryExpense rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_162
+      owl:someValuesFrom :IRC_162
     ] .
 
 ###  Capital Expenditure governed by IRC §263
 :CapitalExpenditure rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_263
+      owl:someValuesFrom :IRC_263
     ] .
 
 ###  Capability Investment governed by IRC §117 or §127
@@ -1787,14 +1787,14 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :NonGrantorTrustSystem rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_671_679
+      owl:someValuesFrom :IRC_671_679
     ] .
 
 ###  Non-Grantor Trust operates as autonomous accounting system under IRC §§641-685
 :NonGrantorTrustSystem rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_641_685
+      owl:someValuesFrom :IRC_641_685
     ] .
 
 ###  Non-Grantor Trust must have system identifier (EIN)
@@ -1825,7 +1825,7 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 ] rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_7701
+      owl:someValuesFrom :IRC_7701
     ] .
 
 ###  Domestic Trust must pass both court and control tests
@@ -1839,14 +1839,14 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :IncomeProductionExpense rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_212
+      owl:someValuesFrom :IRC_212
     ] .
 
 ###  Fiduciary-Specific Expense governed by IRC §67(e)
 :FiduciarySpecificExpense rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_67e
+      owl:someValuesFrom :IRC_67e
     ] .
 
 ###  Distribution must flow character through to beneficiary
@@ -1869,7 +1869,7 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :ForeignPrivateIrrevocableNonGrantorTrust rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :governedBy ;
-      owl:hasValue :IRC_7701
+      owl:someValuesFrom :IRC_7701
     ] .
 
 ###  Trust Entity must have Purpose - Purpose legitimizes Authority
@@ -2042,14 +2042,18 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
     ] .
 
 ###  Grant to Public Charity is Qualifying Distribution
-:Grant rdfs:subClassOf
+###  (A grant whose grantee is a public charity counts toward IRC §4942.
+###  receivesGrant runs grantee -> grant, so the grant side uses its inverse.)
+[ rdf:type owl:Class ;
+  owl:intersectionOf (
+    :Grant
     [ rdf:type owl:Restriction ;
-      owl:onProperty :receivesGrant ;
-      owl:allValuesFrom [
-        rdf:type owl:Restriction ;
-        owl:onProperty rdf:type ;
-        owl:hasValue :PublicCharity
-      ] ;
+      owl:onProperty [ owl:inverseOf :receivesGrant ] ;
+      owl:someValuesFrom :PublicCharity
+    ]
+  )
+] rdfs:subClassOf
+    [ rdf:type owl:Restriction ;
       owl:onProperty :satisfiesQualifyingDistribution ;
       owl:someValuesFrom :QualifyingDistribution
     ] .
@@ -2070,7 +2074,7 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :SelfDealingProhibition rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :preventsMisuse ;
-      owl:hasValue :SelfDealingTransaction
+      owl:someValuesFrom :SelfDealingTransaction
     ] .
 
 ###  Transaction with Disqualified Person is presumptively Self-Dealing
@@ -2157,7 +2161,7 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :JeopardizingInvestmentRule rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :preventsMisuse ;
-      owl:hasValue :JeopardizingInvestment
+      owl:someValuesFrom :JeopardizingInvestment
     ] .
 
 ###  Prudent Investment is DISJOINT from Jeopardizing Investment
@@ -2172,31 +2176,36 @@ Non-grantor and foreign trusts acquire operational instruments once control, jur
 :LobbyingExpenditure rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :isTaxableExpenditure ;
-      owl:hasValue :TaxableExpenditure
+      owl:someValuesFrom :TaxableExpenditure
     ] .
 
 ###  Political Expenditure triggers IRC §4945(d)(2)
 :PoliticalExpenditure rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :isTaxableExpenditure ;
-      owl:hasValue :TaxableExpenditure
+      owl:someValuesFrom :TaxableExpenditure
     ] .
 
 ###  Grant Without Expenditure Responsibility triggers IRC §4945(d)(4)
 :GrantWithoutExpenditureResponsibility rdfs:subClassOf
     [ rdf:type owl:Restriction ;
       owl:onProperty :isTaxableExpenditure ;
-      owl:hasValue :TaxableExpenditure
+      owl:someValuesFrom :TaxableExpenditure
     ] .
 
 ###  Grant to Non-Exempt Grantee requires Expenditure Responsibility
-[ rdf:type owl:Restriction ;
-  owl:onProperty :receivesGrant ;
-  owl:someValuesFrom [
-    rdf:type owl:Restriction ;
-    owl:onProperty rdf:type ;
-    owl:hasValue :NonExemptGrantee
-  ]
+###  (receivesGrant runs grantee -> grant, so the grant side uses its inverse.
+###  Open: under §4945(d)(4) and (h) such a grant is taxable only when the
+###  foundation does not exercise expenditure responsibility; the model has
+###  no property for that yet, so this axiom still treats every one as taxable.)
+[ rdf:type owl:Class ;
+  owl:intersectionOf (
+    :Grant
+    [ rdf:type owl:Restriction ;
+      owl:onProperty [ owl:inverseOf :receivesGrant ] ;
+      owl:someValuesFrom :NonExemptGrantee
+    ]
+  )
 ] rdfs:subClassOf :GrantWithoutExpenditureResponsibility .
 
 #################################################################

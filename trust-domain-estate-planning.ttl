@@ -2656,15 +2656,13 @@ ep:hasOutcome rdf:type owl:ObjectProperty ;
 
 ###  EVERY TRANSACTION must be classified by relationship type
 ep:Transaction rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty rdf:type ;
-      owl:someValuesFrom [ owl:unionOf (ep:ArmsLengthTransaction ep:RelatedPartyTransaction) ] ] .
+    [ rdf:type owl:Class ;
+      owl:unionOf (ep:ArmsLengthTransaction ep:RelatedPartyTransaction) ] .
 
 ###  EVERY TRANSACTION must be classified by pricing
 ep:Transaction rdfs:subClassOf
-    [ rdf:type owl:Restriction ;
-      owl:onProperty rdf:type ;
-      owl:someValuesFrom [ owl:unionOf (ep:FairValueTransaction ep:BelowMarketTransaction ep:AboveMarketTransaction) ] ] .
+    [ rdf:type owl:Class ;
+      owl:unionOf (ep:FairValueTransaction ep:BelowMarketTransaction ep:AboveMarketTransaction) ] .
 
 ###  CROSS-BORDER TRUST must have validity outcome
 ep:CrossBorderTrust rdfs:subClassOf

@@ -109,13 +109,7 @@ ep:Transaction rdfs:subClassOf [ a owl:Restriction ;
         [ a owl:Class ;
             owl:unionOf ( ep:ArmsLengthTransaction ep:RelatedPartyTransaction ) ],
         [ a owl:Class ;
-            owl:unionOf ( ep:FairValueTransaction ep:BelowMarketTransaction ep:AboveMarketTransaction ) ],
-        [ a owl:Restriction ;
-            owl:onProperty rdf:type ;
-            owl:someValuesFrom [ owl:unionOf ( ep:ArmsLengthTransaction ep:RelatedPartyTransaction ) ] ],
-        [ a owl:Restriction ;
-            owl:onProperty rdf:type ;
-            owl:someValuesFrom [ owl:unionOf ( ep:FairValueTransaction ep:BelowMarketTransaction ep:AboveMarketTransaction ) ] ] .
+            owl:unionOf ( ep:FairValueTransaction ep:BelowMarketTransaction ep:AboveMarketTransaction ) ] .
 
 ep:TransferInvalid owl:disjointWith ep:TransferValid .
 

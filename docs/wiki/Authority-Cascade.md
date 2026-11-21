@@ -66,8 +66,9 @@ The mission decomposes into four operational domains:
 Specific operational activities explicitly authorized by purpose domains:
 
 ```turtle
-:ClinicalTrialsActivity rdf:type :AuthorizedActivity ;
-    :advancesPurpose :FoundationHealthMission .
+:Program_AIAgentTraining rdf:type :AuthorizedActivity ;
+    :advancesPurpose :FoundationOpportunityMission ;
+    :buildsCapability :Cap_ResidentAgentOperators .
 ```
 
 **What they do**: Define **what the trust is allowed to do**
@@ -79,8 +80,8 @@ Specific operational activities explicitly authorized by purpose domains:
 Human capabilities operating in specific roles to execute authorized activities:
 
 ```turtle
-:ResearchScientistDrSmith rdf:type :OperatorInRole ;
-    :servesActivity :ClinicalTrialsActivity .
+:Role_AITrainer rdf:type :OperatorInRole ;
+    :servesActivity :Program_AIAgentTraining .
 ```
 
 **What they do**: Execute the authorized activities
@@ -92,11 +93,11 @@ Human capabilities operating in specific roles to execute authorized activities:
 Categories of expense/enablement necessary to sustain operators:
 
 ```turtle
-:CompensationDomain_DrSmith rdf:type :CompensationDomain ;
-    :sustains :ResearchScientistDrSmith .
+:CompDomain_AITrainer rdf:type :CompensationDomain ;
+    :sustains :Role_AITrainer .
 
-:BenefitsDomain_DrSmith rdf:type :BenefitsDomain ;
-    :sustains :ResearchScientistDrSmith .
+:BenefitsDomain_AITrainer rdf:type :BenefitsDomain ;
+    :sustains :Role_AITrainer .
 ```
 
 **What they do**: Define **where private enablement occurs**
@@ -108,8 +109,8 @@ Categories of expense/enablement necessary to sustain operators:
 Concrete expenditures - the actual dollars out:
 
 ```turtle
-:SalaryPayment_DrSmith_January2024 rdf:type :ActualSpend ;
-    :tracesBackTo :FoundationHealthMission .
+:Pay_AITrainer_Feb2027 rdf:type :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission .
 ```
 
 **What it does**: **Closes the loop** - traces back to purpose
@@ -118,7 +119,9 @@ Concrete expenditures - the actual dollars out:
 
 ---
 
-## Complete Example: Dr. Smith's Salary
+## Complete Example: The AI Trainer's Pay
+
+The foundation's Opportunity program trains South Side residents to run their own AI agent workflows. It pays one AI trainer to teach it. This is the same example `trust-domain-ontology.ttl` uses (`:TheAuthorityCascade`), so the wiki and the graph tell one story. All amounts are illustrative.
 
 ### The Full Cascade
 
@@ -126,79 +129,87 @@ Concrete expenditures - the actual dollars out:
 1. MISSION
    "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability."
    (:FoundationMission)
-   ↓ legitimizes FiduciaryAuthority
+   ↓ legitimizes FoundationAuthority
    ↓ has sub-purpose
 
 2. PURPOSE DOMAIN
-   Health mission - advancing health and wellness
-   (:FoundationHealthMission)
+   Opportunity
+   (:FoundationOpportunityMission)
    ↓ authorizes
 
-3. AUTHORIZED ACTIVITY
-   Conducting clinical trials for novel cancer treatments
-   (:ClinicalTrialsActivity)
+3. AUTHORIZED ACTIVITY (the program)
+   AI agent training for South Side residents
+   (:Program_AIAgentTraining)
+   builds: residents who run their own agent workflows (:Cap_ResidentAgentOperators)
+   tested by: graduates still running their workflow 90 days after training
+   holds: the starter agent template and training guide (:Asset_AgentTrainingTemplate)
    ↓ requires
 
 4. OPERATOR IN ROLE
-   Research scientist Dr. Smith
-   (:ResearchScientistDrSmith)
+   AI trainer
+   (:Role_AITrainer)
    ↓ necessitates
 
 5. EXPENSE DOMAINS
-   - Compensation: Salary for research work
-   - Benefits: Health insurance, retirement
-   (:CompensationDomain_DrSmith, :BenefitsDomain_DrSmith)
+   - Compensation: pay for teaching the program
+   - Benefits: staff benefits
+   (:CompDomain_AITrainer, :BenefitsDomain_AITrainer)
    ↓ manifest as
 
 6. ACTUAL SPEND
-   - $12,500 salary payment (January 2024)
-   - $850 health insurance premium
-   (:SalaryPayment_DrSmith_January2024, :HealthInsurance_DrSmith_January2024)
+   - $4,000 pay (February 2027)
+   - $600 benefits (February 2027)
+   (:Pay_AITrainer_Feb2027, :Pay_AITrainerBenefits_Feb2027)
    ↓ traces back to
 
 7. PURPOSE
-   :FoundationHealthMission ✓
+   :FoundationOpportunityMission ✓ (confirmed by the path above, not just asserted)
 ```
 
 ### The Ontology Representation
 
 ```turtle
 # Level 1-2: Mission → Purpose Domain
-:FoundationMission :hasSubPurpose :FoundationHealthMission .
+:FoundationMission :hasSubPurpose :FoundationOpportunityMission .
 
 # Level 2-3: Purpose Domain → Authorized Activity
-:FoundationHealthMission :authorizes :ClinicalTrialsActivity .
-:ClinicalTrialsActivity :advancesPurpose :FoundationHealthMission .
+:FoundationOpportunityMission :authorizes :Program_AIAgentTraining .
+:Program_AIAgentTraining :advancesPurpose :FoundationOpportunityMission ;
+    :buildsCapability :Cap_ResidentAgentOperators .
+:Asset_AgentTrainingTemplate :deployedIn :Program_AIAgentTraining .
 
 # Level 3-4: Authorized Activity → Operator
-:ClinicalTrialsActivity :requires :ResearchScientistDrSmith .
-:ResearchScientistDrSmith :servesActivity :ClinicalTrialsActivity .
+:Program_AIAgentTraining :requires :Role_AITrainer .
+:Role_AITrainer :servesActivity :Program_AIAgentTraining .
 
 # Level 4-5: Operator → Expense Domains
-:ResearchScientistDrSmith :necessitates :CompensationDomain_DrSmith ,
-                                        :BenefitsDomain_DrSmith .
-:CompensationDomain_DrSmith :sustains :ResearchScientistDrSmith .
+:Role_AITrainer :necessitates :CompDomain_AITrainer ,
+                              :BenefitsDomain_AITrainer .
+:CompDomain_AITrainer :sustains :Role_AITrainer .
 
 # Level 5-6: Expense Domain → Actual Spend
-:CompensationDomain_DrSmith :manifestsAs :SalaryPayment_DrSmith_January2024 .
+:CompDomain_AITrainer :manifestsAs :Pay_AITrainer_Feb2027 .
 
 # Level 6 → Back to Level 2: Actual Spend → Purpose (CLOSES THE LOOP)
-:SalaryPayment_DrSmith_January2024 :tracesBackTo :FoundationHealthMission .
+:Pay_AITrainer_Feb2027 :tracesBackTo :FoundationOpportunityMission .
 ```
 
 ### The Proof
 
-Every dollar ($12,500 salary + $850 insurance) is **provably**:
+Every dollar ($4,000 pay + $600 benefits a month) is **provably**:
 
 1. **Incidental to purpose**
-   - Serves health mission (cancer research)
+   - Serves the Opportunity purpose (residents trained to run their own agents)
    - Not personal enrichment
 
 2. **Inseparable from execution**
-   - Clinical trials cannot occur without qualified researcher
-   - Cannot retain researcher without competitive compensation/benefits
+   - The training cannot run without a trainer
+   - The program cannot keep a qualified trainer without fair pay and benefits
 
-**∴ Satisfies Keystone Constraint ✓**
+3. **Within market rate**
+   - $48,000 a year against a $55,000 benchmark; $7,200 of benefits against $9,000 (both illustrative)
+
+**∴ Satisfies Keystone Constraint ✓** `validate_keystone.py` passes all four AI trainer nodes (the two enablements and the two payments).
 
 ---
 
@@ -374,14 +385,14 @@ SELECT ?spend ?purpose WHERE {
 For **any** expenditure, you can query the complete chain:
 
 ```
-Query: What authorized this $12,500 spend?
+Query: What authorized this $4,000 payment?
 
 Answer (graph traversal):
-$12,500 Salary
-  ← manifests from CompensationDomain_DrSmith
-  ← sustains ResearchScientistDrSmith
-  ← serves ClinicalTrialsActivity
-  ← advances FoundationHealthMission
+$4,000 AI trainer pay
+  ← manifests from CompDomain_AITrainer
+  ← sustains Role_AITrainer
+  ← serves Program_AIAgentTraining
+  ← advances FoundationOpportunityMission
   ← part of FoundationMission ✓
 ```
 

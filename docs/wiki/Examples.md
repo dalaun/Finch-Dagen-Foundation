@@ -6,11 +6,11 @@ This page shows concrete individuals from the ontology demonstrating permissible
 
 ## Complete Authority Cascade Example
 
-### Dr. Smith's Research Compensation
+### The AI Trainer's Pay (Opportunity program)
 
-**The Scenario**: Foundation employs Dr. Smith as a research scientist to conduct clinical trials for novel cancer treatments.
+**The Scenario**: The foundation's Opportunity program trains South Side residents to run their own AI agent workflows. It employs an AI trainer to teach it. This is the same example `trust-domain-ontology.ttl` carries, so you can run it.
 
-**Compensation**: $12,500/month salary + $850/month health insurance
+**Compensation**: $4,000/month pay + $600/month benefits (illustrative)
 
 #### The Complete Traceable Chain
 
@@ -18,77 +18,85 @@ This page shows concrete individuals from the ontology demonstrating permissible
 # 1. MISSION
 :FoundationMission rdf:type :CharitablePurpose ;
     :hasMissionStatement "Empowering lives through health, education, innovation, and opportunity in furtherance of long-term human and systemic capability." ;
-    :hasSubPurpose :FoundationHealthMission .
+    :hasSubPurpose :FoundationOpportunityMission .
 
 # 2. PURPOSE DOMAIN
-:FoundationHealthMission rdf:type :HealthPurpose ;
-    :purposeDescription "Advancing health and wellness through medical research grants,
-                        healthcare access programs, and public health initiatives" .
+:FoundationOpportunityMission rdf:type :OpportunityPurpose ;
+    :authorizes :Program_AIAgentTraining .
 
-# 3. AUTHORIZED ACTIVITY
-:ClinicalTrialsActivity rdf:type :AuthorizedActivity ;
-    :advancesPurpose :FoundationHealthMission ;
-    :requires :ResearchScientistDrSmith ;
-    :performedBy :ResearchScientistDrSmith .
+# 3. AUTHORIZED ACTIVITY (the program, with its lasting capability and its asset)
+:Program_AIAgentTraining rdf:type :AuthorizedActivity ;
+    :advancesPurpose :FoundationOpportunityMission ;
+    :requires :Role_AITrainer ;
+    :buildsCapability :Cap_ResidentAgentOperators .
+
+:Cap_ResidentAgentOperators rdf:type :LongTermCapability ;
+    :capabilityTest "Graduates are still running their own agent workflow 90 days after training." .
+
+:Asset_AgentTrainingTemplate rdf:type :IntangibleAsset ;
+    :deployedIn :Program_AIAgentTraining .
 
 # 4. OPERATOR IN ROLE
-:ResearchScientistDrSmith rdf:type :OperatorInRole ;
-    :servesActivity :ClinicalTrialsActivity ;
-    :necessitates :CompensationDomain_DrSmith ,
-                  :BenefitsDomain_DrSmith .
+:Role_AITrainer rdf:type :OperatorInRole ;
+    :servesActivity :Program_AIAgentTraining ;
+    :necessitates :CompDomain_AITrainer ,
+                  :BenefitsDomain_AITrainer .
 
 # 5. EXPENSE DOMAINS
-:CompensationDomain_DrSmith rdf:type :CompensationDomain ;
-    :sustains :ResearchScientistDrSmith ;
-    :manifestsAs :SalaryPayment_DrSmith_January2024 ;
-    :enablesPrivately :SalaryEnablement_DrSmith .
+:CompDomain_AITrainer rdf:type :CompensationDomain ;
+    :sustains :Role_AITrainer ;
+    :manifestsAs :Pay_AITrainer_Feb2027 ;
+    :enablesPrivately :Enable_AITrainerPay .
 
-:BenefitsDomain_DrSmith rdf:type :BenefitsDomain ;
-    :sustains :ResearchScientistDrSmith ;
-    :manifestsAs :HealthInsurance_DrSmith_January2024 ;
-    :enablesPrivately :BenefitsEnablement_DrSmith .
+:BenefitsDomain_AITrainer rdf:type :BenefitsDomain ;
+    :sustains :Role_AITrainer ;
+    :manifestsAs :Pay_AITrainerBenefits_Feb2027 ;
+    :enablesPrivately :Enable_AITrainerBenefits .
 
 # 6. ACTUAL SPEND
-:SalaryPayment_DrSmith_January2024 rdf:type :ActualSpend ;
-    :tracesBackTo :FoundationHealthMission ;
-    rdfs:label "Actual Spend: Dr. Smith Salary (Jan 2024) - $12,500" .
+:Pay_AITrainer_Feb2027 rdf:type :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    rdfs:label "AI trainer pay, February 2027: $4,000 (illustrative)" .
 
-:HealthInsurance_DrSmith_January2024 rdf:type :ActualSpend ;
-    :tracesBackTo :FoundationHealthMission ;
-    rdfs:label "Actual Spend: Dr. Smith Health Insurance (Jan 2024) - $850" .
+:Pay_AITrainerBenefits_Feb2027 rdf:type :ActualSpend ;
+    :tracesBackTo :FoundationOpportunityMission ;
+    rdfs:label "AI trainer benefits, February 2027: $600 (illustrative)" .
 ```
 
 #### Keystone Constraint Satisfaction
 
 ```turtle
-# SALARY ENABLEMENT
-:SalaryEnablement_DrSmith rdf:type :EmployeeCompensationEnablement ,
-                                   :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;           # TEST 1: ✅
-    :isInseparableFrom :ClinicalTrialsActivity ;        # TEST 2: ✅
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint .
+# PAY ENABLEMENT
+:Enable_AITrainerPay rdf:type :EmployeeCompensationEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;      # TEST 1
+    :isInseparableFrom :Program_AIAgentTraining ;        # TEST 2
+    :hasMarketBenchmark :Benchmark_AITrainer .           # $55,000/yr (illustrative)
 
 # BENEFITS ENABLEMENT
-:BenefitsEnablement_DrSmith rdf:type :OperationalBenefitEnablement ,
-                                     :PermissiblePrivateEnablement ;
-    :isIncidentalTo :FoundationHealthMission ;           # TEST 1: ✅
-    :isInseparableFrom :ClinicalTrialsActivity ;        # TEST 2: ✅
-    :satisfiesKeystoneConstraint :TheKeystoneConstraint .
+:Enable_AITrainerBenefits rdf:type :OperationalBenefitEnablement ;
+    :isIncidentalTo :FoundationOpportunityMission ;      # TEST 1
+    :isInseparableFrom :Program_AIAgentTraining ;        # TEST 2
+    :hasMarketBenchmark :Benchmark_StaffBenefits .       # $9,000/yr (illustrative)
 ```
+
+Writing "satisfies the keystone" on a node proves nothing by itself. The checks in `trust-domain-keystone-shapes.ttl` (K1 to K5) read the links above and decide; run `python3 validate_keystone.py`.
 
 #### Why It's Permissible
 
 **Test 1 - Incidental to Purpose**:
-- ✅ Purpose is advancing health through cancer research
-- ✅ Salary serves the research mission, not personal enrichment
-- ✅ Compensation is incidental to (enables) the health purpose
+- ✅ The purpose is Opportunity: residents who can run their own AI agent workflows
+- ✅ The pay serves that program, not personal enrichment
+- ✅ The expense domain pays an operator the program requires (K2)
 
 **Test 2 - Inseparable from Execution**:
-- ✅ Clinical trials cannot be conducted without qualified researcher
-- ✅ Cannot retain qualified researcher without competitive compensation
-- ✅ Enablement is inseparable from mission execution
+- ✅ The training cannot run without a trainer
+- ✅ The program cannot keep a qualified trainer without fair pay and benefits
+- ✅ The activity it is inseparable from is the one that requires the trainer (K3)
 
-**Result**: ✅ **PERMISSIBLE** - Both tests satisfied
+**Within market rate** (K4, K5):
+- ✅ $48,000 a year against $55,000; $7,200 of benefits against $9,000
+
+**Result**: ✅ **PERMISSIBLE** - all checks pass
 
 ---
 
@@ -272,16 +280,14 @@ Attempted cascade:
     rdfs:label "2024 DNI - $750,000" .
 
 # Expenditure occurring during fiscal year
-:SalaryPayment_DrSmith_January2024 rdf:type :ActualSpend ;
+:Pay_AITrainer_Jan2024 rdf:type :ActualSpend ;
     :occursDuring :FiscalYear2024 ;
     :expenditureDate "2024-01-31"^^xsd:date ;
-    :tracesBackTo :FoundationHealthMission ;
-    rdfs:label "Dr. Smith Salary - January 2024 - $12,500" .
+    :tracesBackTo :FoundationOpportunityMission ;
+    rdfs:label "AI trainer pay - January 2024 - $4,000 (illustrative)" .
 
 # Activity spanning fiscal year
-:ClinicalTrialsActivity_2024 rdf:type :GrantmakingActivity ;
-    :hasTemporalExtent :FiscalYear2024 ;
-    :advancesPurpose :FoundationHealthMission .
+:Program_AIAgentTraining :hasTemporalExtent :FiscalYear2024 .
 ```
 
 **Key Features**:
@@ -295,33 +301,33 @@ Attempted cascade:
 
 ## Grantmaking Example (v4.0)
 
-### Grant to Stanford Medicine
+### Grant for an Industrial Hemp Curriculum (Education program)
+
+This is the grant `trust-domain-ontology.ttl` carries. The grantee is a public charity, left unnamed; the amount is illustrative.
 
 ```turtle
-# Public charity grantee
-:StanfordMedicine rdf:type :PublicCharity ;
-    rdfs:label "Stanford University School of Medicine" ;
-    rdfs:comment "IRC §509(a) public charity - qualifying grantee" .
+# Public charity grantee (receivesGrant runs grantee -> grant)
+:Grantee_CommunityCollege rdf:type :PublicCharity ;
+    :receivesGrant :Grant_HempCurriculum ;
+    rdfs:label "Community college (public charity, unnamed)" .
 
-# Grant to advance health purpose
-:GrantToStanfordMedicine rdf:type :Grant ;
-    :grantAmount "250000.00"^^xsd:decimal ;
-    :receivesGrant :StanfordMedicine ;
-    :satisfiesQualifyingDistribution :QD_StanfordGrant ;
-    rdfs:label "Grant to Stanford Medicine - $250,000" .
+# Grant to advance the education purpose
+:Grant_HempCurriculum rdf:type :Grant ;
+    :grantAmount "40000.00"^^xsd:decimal ;
+    :grantedUnder :Program_HempCurriculumGrants ;
+    :tracesBackTo :FoundationEducationMission ;
+    :satisfiesQualifyingDistribution :QD_HempCurriculumGrant ;
+    rdfs:label "Hemp curriculum grant: $40,000 (illustrative)" .
 
 # Qualifying distribution for IRC §4942
-:QD_StanfordGrant rdf:type :QualifyingDistribution ;
-    rdfs:label "Qualifying Distribution: Stanford Grant" ;
-    rdfs:comment "Counts toward $500K minimum distribution requirement" .
+:QD_HempCurriculumGrant rdf:type :QualifyingDistribution ;
+    rdfs:comment "A grant to a public charity counts toward the IRC §4942 minimum distribution." .
 
-# Grantmaking activity (distinct from operations)
-:GrantmakingActivity_Stanford rdf:type :GrantmakingActivity ;
-    :advancesPurpose :FoundationHealthMission ;
-    :hasTemporalExtent :FiscalYear2024 .
+# Grantmaking activity (distinct from operations), with the capability it builds
+:Program_HempCurriculumGrants rdf:type :GrantmakingActivity ;
+    :advancesPurpose :FoundationEducationMission ;
+    :buildsCapability :Cap_HempWorkforce .
 
-# Foundation makes the grant
-:ExampleFoundationTrust :makesGrant :GrantToStanfordMedicine .
 ```
 
 **Why Grantmaking is Distinct from Operations**:

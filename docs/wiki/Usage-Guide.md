@@ -91,10 +91,15 @@ SELECT ?spend ?operator ?activity ?purpose WHERE {
 
 **Example Result**:
 ```
-| spend                                  | operator                  | activity               | purpose                   |
-|----------------------------------------|---------------------------|------------------------|---------------------------|
-| SalaryPayment_DrSmith_January2024      | ResearchScientistDrSmith  | ClinicalTrialsActivity | FoundationHealthMission   |
-| HealthInsurance_DrSmith_January2024    | ResearchScientistDrSmith  | ClinicalTrialsActivity | FoundationHealthMission   |
+| spend                          | operator                | activity                      | purpose                       |
+|--------------------------------|-------------------------|-------------------------------|-------------------------------|
+| Pay_AITrainerBenefits_Feb2027  | Role_AITrainer          | Program_AIAgentTraining       | FoundationOpportunityMission  |
+| Pay_AITrainer_Feb2027          | Role_AITrainer          | Program_AIAgentTraining       | FoundationOpportunityMission  |
+| Pay_HealthNavigator_Apr2027    | Role_HealthNavigator    | Program_ResidentHealthGraph   | FoundationHealthMission       |
+| Pay_OntologySteward_Jan2027    | Role_OntologySteward    | Program_InstitutionalCapacity | FoundationInnovationMission   |
+| Pay_WorkshopInstructor_Mar2027 | Role_WorkshopInstructor | Program_ChicagoGridLiteracy   | FoundationEducationMission    |
+
+(Run against `trust-domain-ontology.ttl` on Nov 20, 2026. Amounts are illustrative.)
 ```
 
 ### Find All Permissible Private Enablement
@@ -167,7 +172,7 @@ SELECT ?operator ?expenseDomain ?spend WHERE {
 
   ?expenseDomain :manifestsAs ?spend .
 
-  FILTER(?operator = :ResearchScientistDrSmith)
+  FILTER(?operator = :Role_AITrainer)
 }
 ```
 
@@ -265,8 +270,8 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT ?grant ?grantee ?amount ?qd WHERE {
   ?grant a :Grant ;
          :grantAmount ?amount ;
-         :receivesGrant ?grantee ;
          :satisfiesQualifyingDistribution ?qd .
+  ?grantee :receivesGrant ?grant .   # receivesGrant runs grantee -> grant
 
   ?grantee a :PublicCharity .
 
@@ -277,9 +282,9 @@ ORDER BY DESC(?amount)
 
 **Example Result**:
 ```
-| grant                    | grantee          | amount  | qd              |
-|--------------------------|------------------|---------|-----------------|
-| GrantToStanfordMedicine  | StanfordMedicine | 250000  | QD_StanfordGrant|
+| grant                | grantee                  | amount   | qd                     |
+|----------------------|--------------------------|----------|------------------------|
+| Grant_HempCurriculum | Grantee_CommunityCollege | 40000.00 | QD_HempCurriculumGrant |
 ```
 
 ### Calculate Total Qualifying Distributions
@@ -309,8 +314,8 @@ PREFIX : <http://example.org/trust-domain#>
 
 SELECT ?grant ?grantee ?amount WHERE {
   ?grant a :Grant ;
-         :grantAmount ?amount ;
-         :receivesGrant ?grantee .
+         :grantAmount ?amount .
+  ?grantee :receivesGrant ?grant .   # receivesGrant runs grantee -> grant
 
   ?grantee a :NonExemptGrantee .
 }
