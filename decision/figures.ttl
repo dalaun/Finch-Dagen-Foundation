@@ -40,6 +40,9 @@
 :readStatus a owl:ObjectProperty ; rdfs:range :ReadStatus .
 :usedByCheck a owl:ObjectProperty ; rdfs:comment "A check whose shape uses this threshold."@en .
 :shapeLiteral a owl:DatatypeProperty ; rdfs:comment "Text that must appear in the shape of the check that uses the figure, so the shape and the registry cannot drift apart."@en .
+:thresholdValue a owl:DatatypeProperty ; rdfs:range xsd:decimal ; rdfs:comment "The number the shapes compare against, as a number. It must match the first number in figureValue (or that number as a fraction, for a percent), and every shape literal for the figure must contain it."@en .
+:thresholdUse a owl:ObjectProperty ; rdfs:comment "A check-specific comparison, for a figure that one check writes differently from another (PG3b writes the gift period as ?y <= 5)."@en .
+:inCheck a owl:ObjectProperty ; rdfs:comment "The check a thresholdUse belongs to."@en .
 :enacted a owl:DatatypeProperty ; rdfs:range xsd:date .
 :changedSection a owl:DatatypeProperty .
 :pageSection a owl:DatatypeProperty ; rdfs:domain :PageFigure .
@@ -73,40 +76,54 @@
 # ---------------------------------------------------------------------
 :Fig_LienLookback a :Figure ; rdfs:label "Lien placed within 10 years makes a gift a sale" ;
     :figureValue "10 years" ; :governingSection "4941" ; :figureSource "26 USC 4941(d)(2)(A), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG10 ; :shapeLiteral "?y <= 10" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG10 ; :shapeLiteral "?y <= 10" ;
+    :thresholdValue "10"^^xsd:decimal .
 :Fig_UnitrustPayoutMin a :Figure ; rdfs:label "Unitrust payout at least 5 percent" ;
     :figureValue "5 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(A), law.cornell.edu" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u < 5" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u < 5" ;
+    :thresholdValue "5"^^xsd:decimal .
 :Fig_UnitrustPayoutMax a :Figure ; rdfs:label "Unitrust payout at most 50 percent" ;
     :figureValue "50 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(A), law.cornell.edu" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u > 50" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?u > 50" ;
+    :thresholdValue "50"^^xsd:decimal .
 :Fig_RemainderMin a :Figure ; rdfs:label "Remainder worth at least 10 percent" ;
     :figureValue "10 percent" ; :governingSection "664" ; :figureSource "26 USC 664(d)(2)(D), law.cornell.edu" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?r < 10" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG4 ; :shapeLiteral "?r < 10" ;
+    :thresholdValue "10"^^xsd:decimal .
 :Fig_LeadSixty a :Figure ; rdfs:label "Lead interest worth not more than 60 percent escapes 4943" ;
     :figureValue "60 percent" ; :governingSection "4947" ; :figureSource "26 USC 4947(b)(3)(A)" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?cv <= 60" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?cv <= 60" ;
+    :thresholdValue "60"^^xsd:decimal .
 :Fig_HoldingsTwenty a :Figure ; rdfs:label "Permitted holdings 20 percent with insiders" ;
     :figureValue "20 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(2)(A), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?h + ?dq > 20" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?h + ?dq > 20" ;
+    :thresholdValue "20"^^xsd:decimal .
 :Fig_DeMinimisTwo a :Figure ; rdfs:label "Two percent de minimis holding" ;
     :figureValue "2 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(2)(C), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?hv <= 2" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?hv <= 2" ;
+    :thresholdValue "2"^^xsd:decimal .
 :Fig_PassiveNinetyFive a :Figure ; rdfs:label "At least 95 percent passive income is not a business enterprise" ;
     :figureValue "95 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(d)(3)(B), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?p >= 95" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?p >= 95" ;
+    :thresholdValue "95"^^xsd:decimal .
 :Fig_GiftPeriodFive a :Figure ; rdfs:label "Five-year period to dispose of holdings received by gift" ;
     :figureValue "5 years" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(6), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 5" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 5" ;
+    :thresholdValue "5"^^xsd:decimal ;
+    :usedByCheck :Check_PG3b ; :thresholdUse [ :inCheck :Check_PG3b ; :shapeLiteral "?y <= 5" ] .
 :Fig_GiftPeriodExtension a :Figure ; rdfs:label "Extension to ten years" ;
-    :figureValue "5 more years" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(7), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 10" .
+    :figureValue "10 years in all (5 more years)" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(7), uscode.house.gov" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a ; :shapeLiteral "?y > 10" ;
+    :thresholdValue "10"^^xsd:decimal ;
+    :usedByCheck :Check_PG3b ; :thresholdUse [ :inCheck :Check_PG3b ; :shapeLiteral "?y <= 10" ] .
 :Fig_PayoutFive a :Figure ; rdfs:label "Minimum investment return 5 percent" ;
     :figureValue "5 percent" ; :governingSection "4942" ; :figureSource "26 USC 4942(e)(1), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG8 ; :shapeLiteral "0.05 *" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG8 ; :shapeLiteral "0.05 *" ;
+    :thresholdValue "5"^^xsd:decimal .
 :Fig_IncidentalRent a :Figure ; rdfs:label "Personal-property rent over 10 percent is generally not incidental" ;
     :figureValue "10 percent" ; :governingSection "512(b)(3)" ; :figureSource "26 CFR 1.512(b)-1(c)(2)(ii), law.cornell.edu" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG13 ; :shapeLiteral "?p > 10" .
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG13 ; :shapeLiteral "?p > 10" ;
+    :thresholdValue "10"^^xsd:decimal .
 :Fig_PersonalRentFifty a :Figure ; rdfs:label "No exclusion when over 50 percent of rent is for personal property" ;
     :figureValue "50 percent" ; :governingSection "512(b)(3)" ; :figureSource "26 USC 512(b)(3)(B)(i), uscode.house.gov" ;
     :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ;

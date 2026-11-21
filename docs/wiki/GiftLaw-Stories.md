@@ -19,7 +19,7 @@ The audit on the shelf sets how far each page is trusted. It found the pages mos
 
 - **903 stories** read from the nine chapters, all recorded as cases.
 - **263 graded** by the planned-giving checks; 640 are outside the model, each with its category and reason.
-- Of the 263: 234 agree, 15 where the page is stricter (a rule we have no check for), 10 where our checks are stricter, 4 where the page gives no result.
+- Of the 263, compared on the page's own outcome: 228 agree, 16 where the page is stricter (a rule we have no check for), 15 where our checks are stricter, 4 where the page gives no result. The six overturned pages count here as disagreements; the law's answer is compared separately below.
 - **6 page outcomes overturned on primary law**, all read on 2026-11-21:
 
 | Story | Page | Law | Why |
@@ -32,7 +32,7 @@ The audit on the shelf sets how far each page is trusted. It found the pages mos
 | S8-8 | block | needs counsel | Since 2007 a remainder trust with business income stays exempt and pays the excise tax; it does not become fully taxable |
 
 - **6 stories cite a case or ruling for the opposite of its holding**, and each was read: Hoensheid (in part), Ferguson, Newhall (the appeals opinion), and PLRs 200141018 and 200202034.
-- **6 flagged claims** are left for an authority not yet read (691(c), 170(f)(10), 541, the spousal-consent rules, Rev. Rul. 82-197, and one that is arithmetic only).
+- **16 flagged claims** are left for an authority not yet read. Six are graded stories (691(c), 170(f)(10), 541, the spousal-consent rules, Rev. Rul. 82-197, and one that is arithmetic only). Ten are outside the checks but carry a High or outright-error flag, so they still need an answer on primary law: the copyright basis limit (170(e)(1)(A)), the gift-annuity resale, incentive stock options (421, 422), a charity's S corporation income (512(e)), the grantor lead trust deduction, bullion coins, the syndicated easement cap (170(h)(7)) and the term royalty (170(f)(3)).
 
 ## What the stories added to the checks
 
@@ -59,7 +59,7 @@ The audit lists 55 dated figures on the pages. 28 now point to a figure read on 
 
 - `decision/giftlaw-stories-model.ttl`: the story vocabulary, page trust and the regrade fields.
 - `tests/decision/giftlaw-stories/`: the roles, one file of stories per chapter group, the audit's flags (`audit-flags.ttl`) and the page figures (`page-figures.ttl`).
-- `grade_stories.py`: grades every story and prints the disagreements, the overturned pages and the opposite-cited cases. It fails on a malformed record, a flagged Chapter 4 claim that was not regraded, or an opposite-cited story with no note.
+- `grade_stories.py`: grades every story and prints the disagreements, the overturned pages and the opposite-cited cases. It fails on a malformed record or an unknown story scope, a flagged Chapter 4 claim with no primary-law answer (graded or not), or an opposite-cited story with no note.
 - `decision/figures.ttl`, `validate_figures.py`: the figures registry and its check.
 
 ```

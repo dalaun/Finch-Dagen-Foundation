@@ -165,7 +165,7 @@
 # ---------------------------------------------------------------------
 :Check_PG0 a :DecisionCheck ; :checkConstraint :PG0_GiftEvidence ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
     :enforcedBy :SecurityPressure ;
-    :authority "A planned gift with no vehicle named cannot be tested." .
+    :authority "A planned gift with no vehicle named, or a vehicle the checks do not cover, cannot be tested. A payout year with investment assets but no qualifying-distribution figure cannot be tested against 4942(d) and (e)(1): missing evidence is Insufficient, never Allow." .
 
 :Check_PG1 a :DecisionCheck ; :checkConstraint :PG1_LeadForm ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
     :enforcedBy :InstitutionalPressure , :SecurityPressure ;

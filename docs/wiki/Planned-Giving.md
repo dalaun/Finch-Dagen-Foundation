@@ -20,7 +20,7 @@ The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summar
 
 | Check | The question | If it fails | Primary authority (read unless marked) |
 |---|---|---|---|
-| **PG0** | Is a vehicle named? | insufficient | |
+| **PG0** | Is a vehicle named, and is it one the checks cover? For the foundation's payout year, is the distribution figure there? | insufficient | Missing evidence is never an allow |
 | **PG1** | Does a lead trust that claims a deduction pay a guaranteed annuity or a unitrust amount, at least yearly? | block | 1.170A-6(c)(1), (c)(2). Gift tax counterpart 2522(c)(2)(B) not read |
 | **PG2** | Does a split-interest trust with a deduction, an estate the foundation expects from, or the foundation itself sell, lease, lend or redeem with a disqualified person, outside the same-terms and estate exceptions? Payments the trust's terms require to an income beneficiary are excepted. | block | 4941(d)(1), 4947(a)(2), 4941(d)(2)(F), 53.4941(d)-1(b)(3) |
 | **PG3a** | Do the foundation's holdings (or a lead trust's, when its lead is worth over 60 percent) plus insiders' holdings exceed 20 percent of an operating company, after the five-year gift period (or ten with an extension)? | block | 4943(c)(2)(A), (c)(2)(C), (c)(6), (c)(7), (d)(3)(B); 4947(b)(3) |
@@ -83,6 +83,9 @@ All in `tests/decision/planned-giving-cases.ttl`; answers in `tests/decision/exp
 | G36 the foundation leases equipment to the founder's management company at market | block PG13, PG2 | 4941(d)(1): market rent does not cure it |
 | G37 unitrust for the spouse's life, then the children for 20 years | block PG14 | |
 | G38 the spouse for life, then the children for life or 20 years, whichever is shorter | allow | The form the regulation allows |
+| G39 a vehicle name the checks do not cover (a misspelling) | insufficient PG0 | An untested gift is not an allowed one |
+| G40 G35's insider lease, recorded with the lessee only | block PG13 PG2 | PG2 reads the lessee as well as the counterparty |
+| G41 G19's payout year with the distribution figure missing | insufficient PG0 | Missing evidence does not turn a short payout into an allow |
 
 ## Equipment and vehicle leases
 
@@ -95,7 +98,7 @@ So a fleet or equipment lease belongs in an ordinary entity that pays market ren
 
 ## Figures
 
-Every number a check uses lives in `decision/figures.ttl` with the day it was read, its source and the section it comes from. `validate_figures.py` fails a figure with no as-of date, one read before a later law change to its section (PPA 2006, the 2017 tax law, the 2025 law and the latest amendment to each section the checks use), and a threshold that no longer matches the check that uses it. `--selftest` shows it catches all three.
+Every number a check uses lives in `decision/figures.ttl` with the day it was read, its source and the section it comes from. `validate_figures.py` fails a figure with no as-of date, one read before a later law change to its section (PPA 2006, the 2017 tax law, the 2025 law and the latest amendment to each section the checks use), a figure with no governing section, and a threshold that no longer matches every check that uses it. A threshold match is on the whole number (50 does not match 500), and the number must also equal the figure as the law states it. `--selftest` shows it catches each of these.
 
 ## Not verified
 

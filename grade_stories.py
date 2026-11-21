@@ -80,6 +80,9 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
     page, scope = data.value(s, DM.pageOutcome), data.value(s, DM.storyScope)
     if page is not None and page not in severity and page != DM.PageGivesNoGrade:
         bad.append(f"{sid}: pageOutcome {short(page)} is not an outcome")
+    if scope is not None and scope not in (DM.GradedByModel, DM.OutsideModel):
+        bad.append(f"{sid}: storyScope {short(scope)} is not GradedByModel or OutsideModel")
+        continue
     scope_n[short(scope)] += 1
     trust = trust_of(s)
     trust_n[short(trust)] += 1
@@ -102,6 +105,11 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
         leads[str(st).split(":")[0] if st is not None else "status not checked"] += 1
     if data.value(s, DM.authorityUnread) is not None:
         unread.append((sid, str(data.value(s, DM.authorityUnread))))
+    # A flagged legal claim needs a primary-authority answer whether or not the checks grade it.
+    cited_read = data.value(s, DM.citedForOpposite) is not None and bool(data.value(s, DM.citedAuthorityRead))
+    if trust == DM.PageClaimToTest and law is None and data.value(s, DM.authorityUnread) is None and not cited_read and any(
+            "outright-error" in f or "(H," in f for f in flags):
+        bad.append(f"{sid}: flagged claim not regraded on primary authority (set authorityOutcome, authorityUnread, or read the opposite-cited authority)")
     if scope == DM.OutsideModel:
         cat = data.value(s, DM.outsideCategory)
         if cat is None or data.value(s, DM.outsideReason) is None:
@@ -114,12 +122,8 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
         continue
     hits = {check_of[c][0]: check_of[c][1] for c in failed.get(gift, ()) if c in check_of}
     ours = by_severity[max([0, *(severity[o] for o in hits.values())])]
-    if trust == DM.PageClaimToTest and law is None and data.value(s, DM.authorityUnread) is None and any(
-            "outright-error" in f or "(H," in f for f in flags):
-        bad.append(f"{sid}: flagged claim not regraded on primary authority (set authorityOutcome or authorityUnread)")
     if law is not None:
         law_n["ours matches the law" if law == ours else f"ours {short(ours)}, law {short(law)}"] += 1
-        page = law
     if page == DM.PageGivesNoGrade:
         verdict = "page gives no result"
     elif page == ours:

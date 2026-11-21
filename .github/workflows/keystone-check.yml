@@ -37,5 +37,5 @@ jobs:
         run: python3 grade_stories.py
       - name: Check every figure is dated, current and matches the check that uses it
         run: python3 validate_figures.py
-      - name: Show the figures check catches an undated, a stale and a drifted figure
+      - name: Show the figures check catches undated, stale, drifted and mismatched figures
         run: python3 validate_figures.py --selftest

@@ -446,7 +446,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:DeductionArithmetic ;
     dm:outsideReason "valuation of bullion coins" ;
-    dm:pageAccuracyNote "The notes call this doubtful: bullion coins are generally valued as property and may need an appraisal." .
+    dm:pageAccuracyNote "The notes call this doubtful: bullion coins are generally valued as property and may need an appraisal." ;
+    dm:authorityUnread "The rules the audit points to for bullion coins as property needing a qualified appraisal over $5,000 (170(f)(11)); not read. Outside the checks." .
 
 :S4_34 a dm:StoryCase ;
     dm:storyId "S4-34" ;
@@ -1063,7 +1064,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:DeductionArithmetic ;
     dm:outsideReason "conservation easement limits" ;
-    dm:pageAccuracyNote "The notes say the page's case list stops around 2014 and omits the 2.5 times syndicated-easement cap." .
+    dm:pageAccuracyNote "The notes say the page's case list stops around 2014 and omits the 2.5 times syndicated-easement cap." ;
+    dm:authorityUnread "26 USC 170(h)(7), the SECURE 2.0 cap on syndicated easement deductions; not read. Outside the checks." .
 
 :S4_80 a dm:StoryCase ;
     dm:storyId "S4-80" ;
@@ -1268,7 +1270,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:VehicleNotYetModeled ;
     dm:outsideReason "partial interest: term royalty" ;
-    dm:pageAccuracyNote "The notes call this doubtful: a carved-out term royalty is a partial interest and the income may still be taxed to the donors." .
+    dm:pageAccuracyNote "The notes call this doubtful: a carved-out term royalty is a partial interest and the income may still be taxed to the donors." ;
+    dm:authorityUnread "26 USC 170(f)(3), the partial-interest rule the audit points to, and assignment-of-income cases; not read. Outside the checks." .
 
 :S4_95 a dm:StoryCase ;
     dm:storyId "S4-95" ;
@@ -1389,7 +1392,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:DeductionArithmetic ;
     dm:outsideReason "intellectual property deduction" ;
-    dm:pageAccuracyNote "The notes say the clearer reason is the ordinary-income basis limit." .
+    dm:pageAccuracyNote "The notes say the clearer reason is the ordinary-income basis limit." ;
+    dm:authorityUnread "26 USC 170(e)(1)(A) and 1221(a)(3), the basis limit for a creator's own copyright that the audit points to; not read. Outside the checks." .
 
 :S4_103 a dm:StoryCase ;
     dm:storyId "S4-103" ;
@@ -1400,7 +1404,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:DeductionArithmetic ;
-    dm:outsideReason "intellectual property deduction" .
+    dm:outsideReason "intellectual property deduction" ;
+    dm:authorityUnread "26 USC 170(e)(1)(A) and 1221(a)(3), the basis limit for a creator's own copyright that the audit points to; not read. Outside the checks." .
 
 :S4_104 a dm:StoryCase ;
     dm:storyId "S4-104" ;
@@ -1622,7 +1627,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:GiftAnnuityOrPooledFund ;
     dm:outsideReason "gift annuity bailout" ;
-    dm:pageAccuracyNote "The notes flag prearranged-sale risk in the resale to the children and omitted gift tax and unrecaptured 1250 gain." .
+    dm:pageAccuracyNote "The notes flag prearranged-sale risk in the resale to the children and omitted gift tax and unrecaptured 1250 gain." ;
+    dm:authorityUnread "The prearranged-sale rule for a resale to the children that the audit raises; no case or ruling read. Outside the checks." .
 
 :S4_119 a dm:StoryCase ;
     dm:storyId "S4-119" ;
@@ -1797,7 +1803,8 @@
     dm:pageOutcome dm:Allow ;
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:OtherOutside ;
-    dm:outsideReason "stock option taxation" .
+    dm:outsideReason "stock option taxation" ;
+    dm:authorityUnread "26 USC 421(b) and 422(a)(1), the incentive option holding periods the audit points to; not read. Outside the checks." .
 
 :S4_132 a dm:StoryCase ;
     dm:storyId "S4-132" ;
@@ -1876,7 +1883,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:TransferTaxArithmetic ;
     dm:outsideReason "bequest of stock options" ;
-    dm:pageAccuracyNote "The notes say the options were really worth less than stated, and that ISOs are not truly IRD." .
+    dm:pageAccuracyNote "The notes say the options were really worth less than stated, and that ISOs are not truly IRD." ;
+    dm:authorityUnread "26 USC 421(c) and 422(c)(3), on whether an incentive option left at death is income in respect of a decedent; not read. Outside the checks." .
 
 :S4_138 a dm:StoryCase ;
     dm:storyId "S4-138" ;
@@ -1917,7 +1925,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:CharityOperations ;
     dm:outsideReason "charity as S shareholder" ;
-    dm:pageAccuracyNote "The notes say unrelated business income follows K-1 income, not distributions." .
+    dm:pageAccuracyNote "The notes say unrelated business income follows K-1 income, not distributions." ;
+    dm:authorityUnread "26 USC 512(e), how a charity's share of S corporation income is taxed; not read. Outside the checks." .
 
 :S4_141 a dm:StoryCase ;
     dm:storyId "S4-141" ;
@@ -2081,7 +2090,8 @@
     dm:storyScope dm:OutsideModel ;
     dm:outsideCategory dm:VehicleNotYetModeled ;
     dm:outsideReason "grantor lead trust" ;
-    dm:pageAccuracyNote "The notes say the deduction is the present value of the charity's income interest, not the stock's full value." .
+    dm:pageAccuracyNote "The notes say the deduction is the present value of the charity's income interest, not the stock's full value." ;
+    dm:authorityUnread "26 CFR 1.170A-6(c), the grantor lead trust deduction measured as the present value of the income interest; not read. Outside the checks." .
 
 :S4_150 a dm:StoryCase ;
     dm:storyId "S4-150" ;

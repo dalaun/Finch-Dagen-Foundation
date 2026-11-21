@@ -283,3 +283,21 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "15"^^xsd:decimal ;
     dm:unitrustPeriodForm dm:LifeThenShorterOfLifeOrTerm .
+
+# ---------------------------------------------------------------------
+# Evidence gaps (added from the PR 15 review)
+# ---------------------------------------------------------------------
+# G39 A vehicle name the checks do not cover (here, a misspelling).
+:G39_UnknownVehicle a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrus ; dm:deductionAllowed true .
+# G40 G35's insider lease, recorded with the lessee only and no counterparty.
+:G40_InsiderLeaseLesseeOnly a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false .
+# G41 G19's payout year with the distribution figure missing.
+:G41_PayoutNoDistributionFigure a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:investmentAssetsFMV "2000000"^^xsd:decimal ; dm:acquisitionIndebtedness "0"^^xsd:decimal ;
+    dm:taxesForYear "2000"^^xsd:decimal .

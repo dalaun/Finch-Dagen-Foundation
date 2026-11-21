@@ -31,10 +31,19 @@
               :PG13_PersonalPropertyRent , :PG14_UnitrustPeriod .
 
 :PG0_GiftEvidence a sh:SPARQLConstraint ;
-    sh:message "PG0: insufficient - no vehicle named" ;
+    sh:message "PG0: insufficient - no vehicle named, a vehicle the checks do not cover, or a payout year with assets but no distribution figure" ;
     sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
     sh:select """
-        SELECT $this WHERE { FILTER NOT EXISTS { $this dm:giftVehicle ?v } }""" .
+        SELECT $this WHERE {
+          { FILTER NOT EXISTS { $this dm:giftVehicle ?v } }
+          UNION
+          # A vehicle the model declares carries isSplitInterestTrust. RDFS range inference
+          # would type any name as a GiftVehicle, so the class alone cannot catch a typo.
+          { $this dm:giftVehicle ?v . FILTER NOT EXISTS { ?v dm:isSplitInterestTrust ?declared } }
+          UNION
+          { $this dm:giftVehicle dm:FoundationHolding ; dm:investmentAssetsFMV ?a .
+            FILTER NOT EXISTS { $this dm:qualifyingDistributionsByDeadline ?q } }
+        }""" .
 
 :PG1_LeadForm a sh:SPARQLConstraint ;
     sh:message "PG1: a lead trust deduction needs a guaranteed annuity or a unitrust interest (1.170A-6(c)(1))" ;
@@ -50,7 +59,7 @@
     sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
     sh:select """
         SELECT $this ?value WHERE {
-          $this dm:counterparty ?value ; dm:vehicleAct ?act .
+          $this dm:counterparty|dm:lessee ?value ; dm:vehicleAct ?act .
           ?value a td:DisqualifiedPerson .
           FILTER ( ?act != dm:PayoutUnderTermsAct )
           { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }

@@ -111,6 +111,9 @@
 
 :G37_UnitrustLifeThenTerm t:expectOutcome dm:Block ; t:expectChecks "PG14" .
 :G38_UnitrustLifeThenShorter t:expectOutcome dm:Allow .
+:G39_UnknownVehicle t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
+:G40_InsiderLeaseLesseeOnly t:expectOutcome dm:Block ; t:expectChecks "PG13 PG2" .
+:G41_PayoutNoDistributionFigure t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
 
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .
