@@ -20,7 +20,7 @@ The map came from the GiftLaw Pro index. GiftLaw is a secondary source: a summar
 
 | Check | The question | If it fails | Primary authority (read unless marked) |
 |---|---|---|---|
-| **PG0** | Is a vehicle named, and is it one the checks cover? For the foundation's payout year, is the distribution figure there? | insufficient | Missing evidence is never an allow |
+| **PG0** | Is a vehicle named, and is it one the checks cover? For the foundation's payout year, is the distribution figure there? Does a foundation case say anything the checks can read (a transfer, a deal, holdings or a payout year)? | insufficient | Missing evidence is never an allow |
 | **PG1** | Does a lead trust that claims a deduction pay a guaranteed annuity or a unitrust amount, at least yearly? | block | 1.170A-6(c)(1), (c)(2). Gift tax counterpart 2522(c)(2)(B) not read |
 | **PG2** | Does a split-interest trust with a deduction, an estate the foundation expects from, or the foundation itself sell, lease, lend or redeem with a disqualified person, outside the same-terms and estate exceptions? Payments the trust's terms require to an income beneficiary are excepted. | block | 4941(d)(1), 4947(a)(2), 4941(d)(2)(F), 53.4941(d)-1(b)(3) |
 | **PG3a** | Do the foundation's holdings (or a lead trust's, when its lead is worth over 60 percent) plus insiders' holdings exceed 20 percent of an operating company, after the five-year gift period (or ten with an extension)? | block | 4943(c)(2)(A), (c)(2)(C), (c)(6), (c)(7), (d)(3)(B); 4947(b)(3) |
@@ -83,10 +83,13 @@ All in `tests/decision/planned-giving-cases.ttl`; answers in `tests/decision/exp
 | G36 the foundation leases equipment to the founder's management company at market | block PG13, PG2 | 4941(d)(1): market rent does not cure it |
 | G37 unitrust for the spouse's life, then the children for 20 years | block PG14 | |
 | G38 the spouse for life, then the children for life or 20 years, whichever is shorter | allow | The form the regulation allows |
-| G39 a vehicle name the checks do not cover (a misspelling) | insufficient PG0 | An untested gift is not an allowed one |
+| G39 a vehicle name the checks do not cover (a misspelling) | insufficient FC0 PG0 | An untested gift is not an allowed one |
 | G40 G35's insider lease, recorded with the lessee only | block PG13 PG2 | PG2 reads the lessee as well as the counterparty |
 | G41 G19's payout year with the distribution figure missing | insufficient FC0 PG0 | Missing evidence does not turn a short payout into an allow |
 | G42 the foundation itself pays the founder and calls it a payout under its terms | block PG2 | The payout exception is a split-interest trust's, not the foundation's |
+| G43 a unitrust whose term is misspelled | insufficient FC0 | Off the closed list of terms; PG14 could not have fired |
+| G44 the founder gives the foundation property; nothing said about a lien or a sale fixed before the gift | insufficient FC0 | PG10 and PG12 read both |
+| G45 G30's old lien with the trust's assumption of the debt left out | insufficient FC0 | PG10 read a missing answer as "does not assume" |
 
 ## Equipment and vehicle leases
 
@@ -99,7 +102,7 @@ So a fleet or equipment lease belongs in an ordinary entity that pays market ren
 
 ## Missing facts
 
-Every planned gift is also held to the [fail-closed](Fail-Closed.md) rule: a gift that leaves out a fact a check needs (whether a deduction is claimed, the seller and buyer, the trustee, the term, the holdings figures) is insufficient (FC0), never allowed.
+Every planned gift is also held to the [fail-closed](Fail-Closed.md) rule: a gift that leaves out a fact a check needs (whether a deduction is claimed, the seller and buyer, the trustee, the term, the holdings figures, whether the trust assumes a lien, and for a gift to the foundation itself, the lien and sale answers) is insufficient (FC0), never allowed. So is a gift that states a fact the checks cannot read: a term off its closed list, a party no case file declares, or text where a yes/no or an amount belongs.
 
 ## Figures
 

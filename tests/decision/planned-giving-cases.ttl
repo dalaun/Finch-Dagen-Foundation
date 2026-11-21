@@ -254,6 +254,8 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
     dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "6"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (the trust takes the property subject to the lien).
+    dm:trustAssumesLien false ;
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:donorLiableOnDebt false ; dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
     dm:unitrustPeriodForm dm:LivesOnly .
@@ -263,6 +265,8 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
     dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (the trust takes the property subject to the lien).
+    dm:trustAssumesLien false ;
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:donorLiableOnDebt false ; dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
     dm:unitrustPeriodForm dm:LivesOnly .
@@ -272,6 +276,8 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
     dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
     dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (the trust takes the property subject to the lien).
+    dm:trustAssumesLien false ;
     dm:donorLiableOnDebt true ;
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
@@ -374,3 +380,40 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
 :G42_FoundationPaysFounderUnderTerms a dm:PlannedGift ;
     dm:giftVehicle dm:FoundationHolding ;
     dm:counterparty td:Founder ; dm:vehicleAct dm:PayoutUnderTermsAct .
+
+# ---------------------------------------------------------------------
+# Declared for the known-term check (FC0): every party and fiscal year a case
+# names. A name not declared here, or misspelled, makes the case Insufficient.
+# ---------------------------------------------------------------------
+td:ExampleFoundationTrust a dm:Party .
+:FamilyHoldingCompany a dm:Party .
+:FounderChild a dm:Party .
+:IndependentLeadTrustee a dm:Party .
+:ManagementCompany a dm:Party .
+:UnrelatedLessee a dm:Party .
+:UnrelatedPublicCharity a dm:Party .
+
+# ---------------------------------------------------------------------
+# Unknown terms and missing transfer facts (the third PR 15 review)
+# ---------------------------------------------------------------------
+# G43 G01-style unitrust whose term is misspelled. Before the known-term check
+#     the value was simply not LifeThenTerm, PG14 did not fire, and the gift was
+#     Allow. A value off the closed list is Insufficient.
+:G43_UnitrustTermMisspelled a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:holdsSCorpStock false ; dm:producesUBTI false ;
+    dm:unitrustPeriodForm dm:LifeThenTerms ;
+    dm:transferredSubjectToLien false ; dm:saleArrangedBeforeGift false .
+# G44 The founder gives the foundation property and the case says nothing about a
+#     lien or a sale fixed before the gift (PG10 and PG12 read both).
+:G44_FoundationGiftNoTransferFacts a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder .
+# G45 G30's old lien with the trust's assumption of the debt left out. PG10
+#     reads a missing answer as "does not assume", which would pass.
+:G45_OldLienAssumptionMissing a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:unitrustPeriodForm dm:LivesOnly ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    dm:donorLiableOnDebt false ; dm:saleArrangedBeforeGift false .

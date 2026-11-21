@@ -111,10 +111,19 @@
 
 :G37_UnitrustLifeThenTerm t:expectOutcome dm:Block ; t:expectChecks "PG14" .
 :G38_UnitrustLifeThenShorter t:expectOutcome dm:Allow .
-:G39_UnknownVehicle t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
+:G39_UnknownVehicle t:expectOutcome dm:Insufficient ; t:expectChecks "FC0 PG0" .
 :G40_InsiderLeaseLesseeOnly t:expectOutcome dm:Block ; t:expectChecks "PG13 PG2" .
 :G41_PayoutNoDistributionFigure t:expectOutcome dm:Insufficient ; t:expectChecks "FC0 PG0" .
 :G42_FoundationPaysFounderUnderTerms t:expectOutcome dm:Block ; t:expectChecks "PG2" .
 
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .
+# The third PR 15 review: unknown terms, linked records, lien and transfer facts, split pay counted per payment
+:P26a_ConsultantPlanA     t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P26b_ConsultantPlanB     t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:P26c_ConsultantSecondJob t:expectOutcome dm:Allow ;        t:expectChecks "" .
+:D40_BenefitValueMissing  t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .
+:D41_PayeeMisspelled      t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .
+:G43_UnitrustTermMisspelled t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .
+:G44_FoundationGiftNoTransferFacts t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .
+:G45_OldLienAssumptionMissing t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .

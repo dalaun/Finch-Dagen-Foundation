@@ -41,9 +41,10 @@ Not legal or tax advice. Needs: pip install rdflib pyshacl
 import sys
 from collections import defaultdict
 from pathlib import Path
-from rdflib import Graph, Namespace, URIRef, RDF, Literal
+from rdflib import BNode, Graph, Namespace, URIRef, RDF, Literal
 from rdflib.namespace import XSD
 from pyshacl import validate
+import fast_sparql  # noqa: F401  (parse each SPARQL text once; same answers, faster)
 
 HERE = Path(__file__).resolve().parent
 DM = Namespace("http://example.org/trust-domain/decision#")
@@ -123,34 +124,123 @@ def load(b, overrides=None, derived=True):
 
 
 REQUIREMENTS = Graph().parse(HERE / "decision/required-inputs.ttl", format="turtle")
+RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+OWL = Namespace("http://www.w3.org/2002/07/owl#")
+GRADED = (DM.SpendProposal, DM.EntityDeal, DM.PlannedGift)
+NUMERIC = {XSD.decimal, XSD.integer, XSD.int, XSD.long, XSD.double, XSD.float,
+           XSD.nonNegativeInteger, XSD.positiveInteger}
+
+
+def graded_cases(data):
+    return {c for k in GRADED for c in data.subjects(RDF.type, k)}
+
+
+def records(data, case):
+    """The case and the records it owns: blank nodes it links to, such as a benefit
+    on a pay deal. Facts on these count as the case's own facts."""
+    out, todo = [case], [case]
+    while todo:
+        for o in data.objects(todo.pop(), None):
+            if isinstance(o, BNode) and o not in out:
+                out.append(o)
+                todo.append(o)
+    return out
 
 
 def required_inputs(data):
-    """Each case an input requirement covers, with the facts it must state: {case: {property, ...}}."""
-    required = defaultdict(set)
+    """Each node an input requirement covers, with the facts it must state, and the
+    case that owns it: ({node: {property, ...}}, {node: case}). A requirement whose
+    pattern binds ?case is about a record the case links to (?this is the record)."""
+    required, owner = defaultdict(set), {}
     for req in REQUIREMENTS.subjects(RDF.type, DM.InputRequirement):
-        q = f"PREFIX : <{DM}> SELECT DISTINCT ?this WHERE {{ {REQUIREMENTS.value(req, DM.appliesWhen)} }}"
+        pattern = str(REQUIREMENTS.value(req, DM.appliesWhen))
+        linked = "?case" in pattern
+        q = (f"PREFIX : <{DM}> SELECT DISTINCT ?this {'?case' if linked else ''} "
+             f"WHERE {{ {pattern} }}")
         props = set(REQUIREMENTS.objects(req, DM.requiresInput))
-        for (node,) in data.query(q):
-            required[node] |= props
-    return required
+        for row in data.query(q):
+            required[row[0]] |= props
+            owner.setdefault(row[0], row[1] if linked else row[0])
+    return required, owner
 
 
 def missing_inputs(data):
-    """Fail closed: the required facts each covered case leaves out: {case: {property, ...}}.
-    Any case listed gets check FC0, outcome Insufficient."""
-    missing = {}
-    for node, props in required_inputs(data).items():
+    """Fail closed: the required facts each case leaves out, on itself or on a record
+    it owns: {case: {property, ...}}. Any case listed gets check FC0, Insufficient."""
+    required, owner = required_inputs(data)
+    missing = defaultdict(set)
+    for node, props in required.items():
         gone = {p for p in props if data.value(node, p) is None}
         if gone:
-            missing[node] = gone
-    return missing
+            missing[owner[node]] |= gone
+    return dict(missing)
+
+
+def unknown_terms(data):
+    """Fail closed on a fact that is there but means nothing to the checks: a check
+    that compares a value to a known term silently skips a misspelled one. For every
+    fact on a case or a record it owns: the property must be declared; a value of a
+    closed list (owl:oneOf) must be on the list; a value of any other declared range
+    must be declared a member of it; any other named value must be declared at all;
+    a yes/no must be a boolean and an amount a number. Returns ({case: {property, ...}},
+    {malformed literal facts}); the run sets the malformed ones aside before the checks,
+    since a comparison or a sum over text would stop the whole grading."""
+    declared_props = {p for t in (OWL.ObjectProperty, OWL.DatatypeProperty, RDF.Property)
+                      for p in data.subjects(RDF.type, t)}
+    sub = defaultdict(set)
+    for c, sup in data.subject_objects(RDFS.subClassOf):
+        sub[sup].add(c)
+
+    def members(cls):
+        lst = data.value(cls, OWL.oneOf)
+        if lst is not None:
+            return set(data.items(lst))
+        seen, todo = set(), [cls]
+        while todo:
+            k = todo.pop()
+            if k not in seen:
+                seen.add(k)
+                todo.extend(sub[k])
+        return {m for k in seen for m in data.subjects(RDF.type, k)}
+
+    cache = {}
+    unknown, malformed = defaultdict(set), set()
+    for case in graded_cases(data):
+        for node in records(data, case):
+            for p, o in data.predicate_objects(node):
+                if p in (RDF.type, RDFS.label, RDFS.comment) or isinstance(o, BNode):
+                    continue
+                if p not in declared_props:
+                    unknown[case].add(p)
+                    continue
+                ranges = set(data.objects(p, RDFS.range))
+                if isinstance(o, Literal):
+                    if (XSD.boolean in ranges and (o.datatype != XSD.boolean or o.value not in (True, False))) or \
+                            (ranges & NUMERIC and (o.datatype not in NUMERIC or o.value is None)):
+                        unknown[case].add(p)
+                        malformed.add((node, p, o))
+                    continue
+                classes = [c for c in ranges if not str(c).startswith(str(XSD)) and c != RDFS.Literal]
+                for c in classes:
+                    if c not in cache:
+                        cache[c] = members(c)
+                    if o not in cache[c]:
+                        unknown[case].add(p)
+                if not classes and data.value(o, RDF.type) is None:
+                    unknown[case].add(p)
+    return dict(unknown), malformed
 
 
 def run(b, overrides=None, data=None, fail_closed=True):
     """Grade every proposal under branch b, or a prepared (derived) graph. Returns (results, data, failed)."""
     data = load(b, overrides) if data is None else data
-    _, report, _ = validate(data, shacl_graph=shapes, inference="rdfs",
+    unknown, malformed = unknown_terms(data)
+    checked = data
+    if malformed:                  # set aside text where a yes/no or an amount belongs
+        checked = Graph() + data
+        for t in malformed:
+            checked.remove(t)
+    _, report, _ = validate(checked, shacl_graph=shapes, inference="rdfs",
                             advanced=True, allow_warnings=True)
     failed = defaultdict(set)      # focus node -> constraints it failed
     for r in report.subjects(RDF.type, SH.ValidationResult):
@@ -161,17 +251,16 @@ def run(b, overrides=None, data=None, fail_closed=True):
         if c is not None:
             check_of[c] = (str(c).split("#")[-1].split("_")[0], data.value(chk, DM.onFail))
     missing = missing_inputs(data) if fail_closed else {}
+    unknown = unknown if fail_closed else {}
     results = {}
-    graded = (set(data.subjects(RDF.type, DM.SpendProposal)) | set(data.subjects(RDF.type, DM.EntityDeal))
-              | set(data.subjects(RDF.type, DM.PlannedGift)))
-    for p in sorted(graded, key=str):
+    for p in sorted(graded_cases(data), key=str):
         hits = {}
         for n in [p, *data.objects(p, DM.assesses)]:
             for c in failed.get(n, ()):
                 if c in check_of:
                     name, outcome = check_of[c]
                     hits[name] = outcome
-        if missing.get(p):         # FC0: a required fact is missing, so no Allow
+        if missing.get(p) or unknown.get(p):   # FC0: a required fact is missing or unknown, so no Allow
             hits["FC0"] = DM.Insufficient
         worst = max([0, *(severity[o] for o in hits.values())])
         results[p] = (by_severity[worst], set(hits))

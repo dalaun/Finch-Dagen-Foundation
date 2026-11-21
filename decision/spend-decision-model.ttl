@@ -169,7 +169,10 @@
     rdfs:comment "A spend, grant, purchase or investment the foundation is about to make. Graded before money moves."@en .
 :assesses a owl:ObjectProperty ; rdfs:domain :SpendProposal ;
     rdfs:comment "The cascade node (td:ActualSpend, td:Grant or td:Asset) whose stage-1 checks apply."@en .
-:payee a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:comment "Who receives the money or property."@en .
+:payee a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:range :Party ; rdfs:comment "Who receives the money or property."@en .
+:Party a owl:Class ; rdfs:label "Party"@en ;
+    rdfs:comment "A person or entity a case names: a payee, payer, trustee, buyer, reviewer. Each one is declared, so a misspelled name is an unknown term (FC0), not a stranger who passes every insider check."@en .
+td:Founder a :Party .
 :dqScreened a owl:DatatypeProperty ; rdfs:domain :SpendProposal ; rdfs:range xsd:boolean ;
     rdfs:comment "The payee was screened against 26 USC 4946 and its relations recorded. False or missing makes the proposal insufficient."@en .
 :spendKind a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:range :SpendKind .
@@ -179,10 +182,11 @@
 :GrantToOrganization a :SpendKind ; rdfs:label "grant to an organization"@en .
 :GrantToIndividual a :SpendKind ; rdfs:label "grant to an individual for travel, study or similar"@en .
 :Investment a :SpendKind ; rdfs:label "investment"@en .
-:purposeKind a owl:ObjectProperty ; rdfs:domain :SpendProposal .
-:CharitablePurpose a owl:NamedIndividual ; rdfs:label "a 170(c)(2)(B) purpose"@en .
-:InfluenceLegislation a owl:NamedIndividual ; rdfs:label "influence legislation"@en .
-:InfluenceElection a owl:NamedIndividual ; rdfs:label "influence an election"@en .
+:purposeKind a owl:ObjectProperty ; rdfs:domain :SpendProposal ; rdfs:range :PurposeKind .
+:PurposeKind a owl:Class ; owl:oneOf ( :CharitablePurpose :InfluenceLegislation :InfluenceElection ) .
+:CharitablePurpose a owl:NamedIndividual , :PurposeKind ; rdfs:label "a 170(c)(2)(B) purpose"@en .
+:InfluenceLegislation a owl:NamedIndividual , :PurposeKind ; rdfs:label "influence legislation"@en .
+:InfluenceElection a owl:NamedIndividual , :PurposeKind ; rdfs:label "influence an election"@en .
 :approvedGrantProcedure a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :expenditureResponsibility a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :primaryPurposeCharitable a owl:DatatypeProperty ; rdfs:range xsd:boolean .
@@ -194,12 +198,14 @@
     rdfs:comment "Stated on a purchase to say the asset has no other user; a missing assetAlsoUsedBy is insufficient (FC0)."@en .
 :annualAmount a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :benchmarkAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
-:fiscalYear a owl:ObjectProperty .
+:fiscalYear a owl:ObjectProperty ; rdfs:range :FiscalYear .
+:FiscalYear a owl:Class ; rdfs:comment "A foundation fiscal year, declared in the case file (for example :FY2027 a dm:FiscalYear)."@en .
 :comparabilityRecord a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "A written record of what comparable organizations pay for comparable services, kept before the pay is set."@en .
-:beneficiarySelection a owl:ObjectProperty .
-:OpenSelection a owl:NamedIndividual ; rdfs:label "open, objective selection from a charitable class"@en .
-:InsiderDrawnSelection a owl:NamedIndividual ; rdfs:label "eligible class drawn around insiders or their business"@en .
+:beneficiarySelection a owl:ObjectProperty ; rdfs:range :BeneficiarySelection .
+:BeneficiarySelection a owl:Class ; owl:oneOf ( :OpenSelection :InsiderDrawnSelection ) .
+:OpenSelection a owl:NamedIndividual , :BeneficiarySelection ; rdfs:label "open, objective selection from a charitable class"@en .
+:InsiderDrawnSelection a owl:NamedIndividual , :BeneficiarySelection ; rdfs:label "eligible class drawn around insiders or their business"@en .
 
 # Relations that sit just outside 4946 (H1) and benefit flow (H2)
 :closeTo a owl:ObjectProperty ; rdfs:comment "A relationship the 4946 definition does not cover."@en .
@@ -265,7 +271,7 @@
 :boughtVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :chainHeldVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
     rdfs:comment "Voting stock held further up the trust chain, attributed proportionately to beneficiaries by 4943(d)(1)."@en .
-:chainTrust a owl:ObjectProperty .
+:chainTrust a owl:ObjectProperty ; rdfs:range :Party .
 
 :InsiderRule a owl:Class ;
     rdfs:comment "A SPARQL CONSTRUCT that decide_spend.py runs before the checks: stage 1 rules to a fixed point, then stage 2 once. Each cites its source."@en .
@@ -314,4 +320,4 @@
                         FILTER ( ?k IN (dm:IncomeOnly, dm:RemainderOnly) ) } AS ?exempt )
         BIND ( ?x + IF(?exempt, 0, ?h * ?f / 100) AS ?after )
         BIND ( IF(EXISTS { ?b a td:DisqualifiedPerson }, ?h, ?h * ?d / 100) AS ?dq ) }""" .
-:chainHolder a owl:ObjectProperty .
+:chainHolder a owl:ObjectProperty ; rdfs:range :Party .

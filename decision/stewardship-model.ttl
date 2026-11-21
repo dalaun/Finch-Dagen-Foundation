@@ -38,8 +38,8 @@
 # ---------------------------------------------------------------------
 :EntityDeal a owl:Class ; rdfs:label "Entity deal"@en ;
     rdfs:comment "A payment, lease, sale, pay package or deduction claim that is not a foundation spend: between the founder's roles, or by one of them to an outside party. Graded before money moves or before the return is filed."@en .
-:dealPayer a owl:ObjectProperty ; rdfs:domain :EntityDeal .
-:dealPayee a owl:ObjectProperty ; rdfs:domain :EntityDeal .
+:dealPayer a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :Party .
+:dealPayee a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :Party .
 :dealKind a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :DealKind .
 :DealKind a owl:Class .
 :ServiceFee a :DealKind ; rdfs:label "fee for services (for example a management fee)"@en .
@@ -68,7 +68,7 @@
 :writtenTerms a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :decisionRecordBeforePayment a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :decisionRecordCitesMission a owl:DatatypeProperty ; rdfs:range xsd:boolean .
-:reviewedBy a owl:ObjectProperty ;
+:reviewedBy a owl:ObjectProperty ; rdfs:range :Party ;
     rdfs:comment "Who checked the deal before money moved."@en .
 :reviewerCanRefuse a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "The reviewer's no stops the deal (a co-trustee's veto, a board vote), not just advice."@en .

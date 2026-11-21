@@ -48,10 +48,13 @@
 
 :deductionAllowed a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "A charitable deduction (170, 642(c), 2055, 2522 and others listed in 4947(a)(2)) was allowed for the transfer in."@en .
-:deductionFor a owl:ObjectProperty ; rdfs:range :InterestKind .
-:InterestKind a owl:Class .
-:IncomeInterest a :InterestKind ; rdfs:label "the charity's income (lead) interest"@en .
-:RemainderInterest a :InterestKind ; rdfs:label "the charity's remainder interest"@en .
+:deductionFor a owl:ObjectProperty ; rdfs:range :CharitableInterest .
+# Its own class: the spend model's :InterestKind (IncomeOnly, RemainderOnly,
+# IncomeAndRemainder) is a closed list that does not include these two. The
+# known-term check (FC0) found the clash: both files used the one name.
+:CharitableInterest a owl:Class ; owl:oneOf ( :IncomeInterest :RemainderInterest ) .
+:IncomeInterest a :CharitableInterest ; rdfs:label "the charity's income (lead) interest"@en .
+:RemainderInterest a :CharitableInterest ; rdfs:label "the charity's remainder interest"@en .
 :charitableIncomeValuePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
     rdfs:comment "Value of the charitable income interest, as a percent of the trust's fair market value when it was funded (the 4947(b)(3)(A) 60 percent test)."@en .
 :incomeInterestForm a owl:ObjectProperty ; rdfs:range :IncomeForm .
@@ -65,14 +68,14 @@
 :producesUBTI a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "The trust holds an interest (an operating LLC or partnership interest, debt-financed property) that produces unrelated business taxable income."@en .
 :holdsSCorpStock a owl:DatatypeProperty ; rdfs:range xsd:boolean .
-:giftTrustee a owl:ObjectProperty ;
+:giftTrustee a owl:ObjectProperty ; rdfs:range :Party ;
     rdfs:comment "Who serves as trustee of the planned-giving trust."@en .
-:leadBeneficiary a owl:ObjectProperty .
+:leadBeneficiary a owl:ObjectProperty ; rdfs:range :Party .
 :managesFoundation a owl:ObjectProperty ;
     rdfs:comment "A foundation manager (officer, director or trustee) of the foundation named."@en .
 
 # Self-dealing inside the vehicle
-:counterparty a owl:ObjectProperty ;
+:counterparty a owl:ObjectProperty ; rdfs:range :Party ;
     rdfs:comment "The other side of a sale, lease, loan, redemption or payment with the vehicle's property."@en .
 :vehicleAct a owl:ObjectProperty ; rdfs:range :VehicleAct .
 :VehicleAct a owl:Class .
@@ -109,8 +112,8 @@
 :barsSaleToGrantor a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 
 # Bargain sale (1011(b), 1.1011-2)
-:seller a owl:ObjectProperty .
-:buyer a owl:ObjectProperty .
+:seller a owl:ObjectProperty ; rdfs:range :Party .
+:buyer a owl:ObjectProperty ; rdfs:range :Party .
 :basisAllocated a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "The seller's basis is split between the sale part and the gift part in the 1011(b) ratio."@en .
 :isPublicCharity a owl:DatatypeProperty ; rdfs:range xsd:boolean .
@@ -125,7 +128,7 @@
     rdfs:comment "Qualifying distributions charged to the year and made before the first day of the second following year."@en .
 
 # Debt on contributed property, and a sale fixed before the gift (added from the GiftLaw stories)
-:transferor a owl:ObjectProperty ; rdfs:domain :PlannedGift ;
+:transferor a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :Party ;
     rdfs:comment "Who puts the property into the trust or the foundation."@en .
 :transferredSubjectToLien a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
     rdfs:comment "The property carries a mortgage or similar lien when it is transferred."@en .
@@ -143,7 +146,7 @@
     rdfs:comment "Share of the lease's total rent that is for personal property: equipment, vehicles, furniture, goodwill."@en .
 :rentDependsOnProfits a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
     rdfs:comment "The rent depends in whole or in part on anyone's income or profits from the property (a fixed percentage of receipts or sales does not count)."@en .
-:lessee a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:comment "Who rents the property."@en .
+:lessee a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :Party ; rdfs:comment "Who rents the property."@en .
 
 :unitrustPeriodForm a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :UnitrustPeriodForm ;
     rdfs:comment "How long the unitrust pays its noncharitable recipients."@en .

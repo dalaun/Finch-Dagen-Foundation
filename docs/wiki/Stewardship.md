@@ -97,6 +97,8 @@ All in `tests/decision/entity-deal-cases.ttl`; answers in `tests/decision/expect
 | D37 home office, home is only a mailing address | block BD6 | |
 | D38 room used only for the business's administration | allow | |
 | D39 deduction claim with facts blank | insufficient BD0 FC0 | |
+| D40 D10's pay with the benefit's yearly value left out | insufficient FC0 | ST1b used to count a missing benefit value as 0 |
+| D41 D01's fee paid to a payee whose name is misspelled | insufficient FC0 | A name no case file declares is not known to be an outsider |
 | P25 foundation pay under its benchmark, over it with benefits | block ST1c | |
 
 ## Not verified
