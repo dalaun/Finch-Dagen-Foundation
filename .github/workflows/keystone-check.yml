@@ -2,9 +2,9 @@ name: Keystone check
 
 on:
   push:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'tests/**']
   pull_request:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'tests/**']
   workflow_dispatch:
 
 permissions:
@@ -39,3 +39,7 @@ jobs:
         run: python3 validate_figures.py
       - name: Show the figures check catches undated, stale, drifted and mismatched figures
         run: python3 validate_figures.py --selftest
+      - name: Fail closed - delete each fact from every case; no copy may be Allow when it must not be
+        run: python3 validate_fail_closed.py
+      - name: Show the fail-closed test catches fail-opens when FC0 is off
+        run: python3 validate_fail_closed.py --selftest

@@ -38,7 +38,7 @@
 :D02_FeeNoContract                    t:expectOutcome dm:Insufficient ; t:expectChecks "AL2" .
 :D03_FeeAboveMarket                   t:expectOutcome dm:NeedsCounsel ; t:expectChecks "AL1b" .
 :D04_SiblingReviewer                  t:expectOutcome dm:NeedsCounsel ; t:expectChecks "ST3" .
-:D05_FeeNoRange                       t:expectOutcome dm:Insufficient ; t:expectChecks "AL1a" .
+:D05_FeeNoRange                       t:expectOutcome dm:Insufficient ; t:expectChecks "AL1a FC0" .
 :D06_NoDecisionRecord                 t:expectOutcome dm:Insufficient ; t:expectChecks "ST2" .
 :D07_FamilyTrustRentsFromFoundation   t:expectOutcome dm:Block ;        t:expectChecks "AL0" .
 :D08_AccruedFeeToRelated              t:expectOutcome dm:Block ;        t:expectChecks "BD5" .
@@ -67,7 +67,7 @@
 :D36_CashUnpaid                       t:expectOutcome dm:Block ;        t:expectChecks "BD5" .
 :D37_HomeOfficeMailingAddress         t:expectOutcome dm:Block ;        t:expectChecks "BD6" .
 :D38_HomeOfficeAdminRoom              t:expectOutcome dm:Allow ;        t:expectChecks "" .
-:D39_DeductionFactsMissing            t:expectOutcome dm:Insufficient ; t:expectChecks "BD0" .
+:D39_DeductionFactsMissing            t:expectOutcome dm:Insufficient ; t:expectChecks "BD0 FC0" .
 
 # Planned gifts (tests/decision/planned-giving-cases.ttl)
 :G01_LeadAnnuityClean            t:expectOutcome dm:Allow .
@@ -113,7 +113,8 @@
 :G38_UnitrustLifeThenShorter t:expectOutcome dm:Allow .
 :G39_UnknownVehicle t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
 :G40_InsiderLeaseLesseeOnly t:expectOutcome dm:Block ; t:expectChecks "PG13 PG2" .
-:G41_PayoutNoDistributionFigure t:expectOutcome dm:Insufficient ; t:expectChecks "PG0" .
+:G41_PayoutNoDistributionFigure t:expectOutcome dm:Insufficient ; t:expectChecks "FC0 PG0" .
+:G42_FoundationPaysFounderUnderTerms t:expectOutcome dm:Block ; t:expectChecks "PG2" .
 
 # Checks on the checks
 :Probe_HonorCheck        t:expectChecks "P1" .

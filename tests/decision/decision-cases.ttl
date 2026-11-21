@@ -125,57 +125,83 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
 # P02 Curriculum grant to a public charity.
 :P02_CollegeGrant a dm:SpendProposal ; dm:assesses td:Grant_HempCurriculum ;
     dm:payee td:Grantee_CommunityCollege ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
-    dm:purposeKind dm:CharitablePurpose .
+    dm:purposeKind dm:CharitablePurpose ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P03 Founder's personal travel, reimbursed to him.
 :P03_FounderTravel a dm:SpendProposal ; dm:assesses :Spend_FounderTravel ;
-    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:Purchase .
+    dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:assetAlsoUsedBy dm:NoOneElse ; dm:scorerVerdict dm:IntentClean .
 
 # P04 Founder pays himself to direct a program, at market, no comparability record.
 :P04_FounderPayNoRecord a dm:SpendProposal ; dm:assesses :Pay_Director_Feb2027 ;
     dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
-    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P05 Same role and pay the next year, with a written comparability record.
 :P05_FounderPayWithRecord a dm:SpendProposal ; dm:assesses :Pay_Director_Feb2028 ;
     dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
     dm:comparabilityRecord true ;
-    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2028 .
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "72000.00"^^xsd:decimal ; dm:fiscalYear :FY2028 ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P06 The founder's management company paid a market fee to steward the ontology.
 :P06_ManagementFee a dm:SpendProposal ; dm:assesses td:Pay_OntologySteward_Jan2027 ;
-    dm:payee :ManagementCompany ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay .
+    dm:payee :ManagementCompany ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P07 The founder's sibling hired as the street-grid workshop instructor, at market.
 :P07_SiblingInstructor a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
-    dm:payee :FounderSibling ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay .
+    dm:payee :FounderSibling ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P08 Grant to a friend's public charity that will hire the founder's child.
 :P08_FriendGrant a dm:SpendProposal ; dm:assesses :Grant_FriendsNonprofit ;
-    dm:payee :FriendsNonprofit ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization .
+    dm:payee :FriendsNonprofit ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P09 Scholarships picked by the founder, no IRS-approved procedure.
 :P09_Scholarships a dm:SpendProposal ; dm:assesses :Grant_Scholarships ;
-    dm:payee :StudentApplicant ; dm:dqScreened true ; dm:spendKind dm:GrantToIndividual .
+    dm:payee :StudentApplicant ; dm:dqScreened true ; dm:spendKind dm:GrantToIndividual ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P10 Grant to a resident social enterprise LLC, no expenditure responsibility.
 :P10_LLCGrantNoER a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
-    dm:payee :SocialEnterpriseLLC ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization .
+    dm:payee :SocialEnterpriseLLC ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P11 The same grant with expenditure responsibility in place.
 :P11_LLCGrantWithER a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
     dm:payee :SocialEnterpriseLLC ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
-    dm:expenditureResponsibility true .
+    dm:expenditureResponsibility true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P12 Low-interest loan to a resident-owned cooperative (program-related investment).
 :P12_CoopLoan a dm:SpendProposal ;
     dm:payee :ResidentCoop ; dm:dqScreened true ; dm:spendKind dm:Investment ;
-    dm:primaryPurposeCharitable true ; dm:significantIncomePurpose false .
+    dm:primaryPurposeCharitable true ; dm:significantIncomePurpose false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
 
 # P13 Endowment money into a broad index fund.
 :P13_IndexFund a dm:SpendProposal ;
     dm:payee :IndexFund ; dm:dqScreened true ; dm:spendKind dm:Investment ;
-    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true .
+    dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
 
 # P14 Buy 15 percent of the operating company's voting stock from an unrelated
 #     seller; the business trust holds 30 percent. Bought from the business
@@ -184,61 +210,87 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     dm:payee :ThirdPartySeller ; dm:dqScreened true ; dm:spendKind dm:Investment ;
     dm:primaryPurposeCharitable false ; dm:significantIncomePurpose true ;
     dm:boughtVotingPercent "15"^^xsd:decimal ; dm:chainHeldVotingPercent "30"^^xsd:decimal ;
-    dm:chainTrust :FamilyTrust ; dm:chainHolder :BusinessTrust .
+    dm:chainTrust :FamilyTrust ; dm:chainHolder :BusinessTrust ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
 #     The foundation's total and the insiders' total are derived by rule IR9 (4943(d)(1)).
 
 # P15 Lobbying contract for a curriculum bill.
 :P15_Lobbying a dm:SpendProposal ; dm:assesses :Spend_Lobbying ;
     dm:payee :AdvocacyFirm ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
-    dm:purposeKind dm:InfluenceLegislation .
+    dm:purposeKind dm:InfluenceLegislation ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:assetAlsoUsedBy dm:NoOneElse ; dm:scorerVerdict dm:IntentClean .
 
 # P16 Program van the founder also drives on weekends.
 :P16_VanPersonalUse a dm:SpendProposal ; dm:assesses :Asset_ProgramVan ;
     dm:payee :VanDealer ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
-    dm:assetAlsoUsedBy td:Founder .
+    dm:assetAlsoUsedBy td:Founder ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
 
 # P17 Training cohort open only to the management company's consulting clients.
 :P17_ClientCohort a dm:SpendProposal ; dm:assesses td:Pay_AITrainer_Feb2027 ;
     dm:payee :AITrainer ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
-    dm:beneficiarySelection dm:InsiderDrawnSelection .
+    dm:beneficiarySelection dm:InsiderDrawnSelection ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
 
 # P18 One contractor paid by two programs; each under its benchmark, the sum over.
 :P18a_ContractorWorkshops a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :Contractor ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
-    dm:annualAmount "20000.00"^^xsd:decimal ; dm:benchmarkAnnual "24000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+    dm:annualAmount "20000.00"^^xsd:decimal ; dm:benchmarkAnnual "24000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 :P18b_ContractorSteward a dm:SpendProposal ; dm:assesses td:Pay_OntologySteward_Jan2027 ;
     dm:payee :Contractor ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
-    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "78000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 .
+    dm:annualAmount "60000.00"^^xsd:decimal ; dm:benchmarkAnnual "78000.00"^^xsd:decimal ; dm:fiscalYear :FY2027 ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P19 Payee never screened against 4946.
 :P19_Unscreened a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
-    dm:payee :Contractor ; dm:dqScreened false ; dm:spendKind dm:PersonalServicesPay .
+    dm:payee :Contractor ; dm:dqScreened false ; dm:spendKind dm:PersonalServicesPay ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # P20 Grant to a public charity for a workshop series at a resort the founder
 #     favors; every letter check passes, the scorer answers "yes".
 :P20_ResortSeries a dm:SpendProposal ; dm:assesses :Grant_ResortSeries ;
     dm:payee :EventCharity ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
-    dm:scorerVerdict dm:IntentBent .
+    dm:scorerVerdict dm:IntentBent ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection .
 
 # P21 The same grant; the scorer answers "cannot tell".
 :P21_ResortSeriesUnclear a dm:SpendProposal ; dm:assesses :Grant_ResortSeries ;
     dm:payee :EventCharity ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
-    dm:scorerVerdict dm:IntentCannotTell .
+    dm:scorerVerdict dm:IntentCannotTell ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection .
 
 # P22 Rent paid to the family trust for program space, at market.
 :P22_RentFromFamilyTrust a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
-    rdfs:comment "Leasing between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+    rdfs:comment "Leasing between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:assetAlsoUsedBy dm:NoOneElse ; dm:scorerVerdict dm:IntentClean .
 
 # P23 Program T-shirts bought from the operating company, at its outside price.
 :P23_OperatingCoPurchase a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :OperatingCompany ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
-    rdfs:comment "A sale of goods between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." .
+    rdfs:comment "A sale of goods between a foundation and a disqualified person is self-dealing at any price (4941(d)(1)(A)). Assesses the workshop program spend only to carry stage 1." ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:assetAlsoUsedBy dm:NoOneElse ; dm:scorerVerdict dm:IntentClean .
 
 # P24 A grant to the family trust to run a program, no expenditure responsibility.
 :P24_GrantToFamilyTrust a dm:SpendProposal ; dm:assesses :Grant_SocialEnterprise ;
     dm:payee :FamilyTrust ; dm:dqScreened true ; dm:spendKind dm:GrantToOrganization ;
-    rdfs:comment "Assesses an existing grant node only to carry stage 1." .
+    rdfs:comment "Assesses an existing grant node only to carry stage 1." ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
 # ---------------------------------------------------------------------
 # P1 probe: a check enforced only by conscience

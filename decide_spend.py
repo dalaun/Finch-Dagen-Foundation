@@ -109,7 +109,7 @@ def derive(data):
     return data
 
 
-def load(b, overrides=None):
+def load(b, overrides=None, derived=True):
     data = Graph()
     for f in [HERE / "trust-domain-ontology.ttl", model_file,
               HERE / "decision/stewardship-model.ttl", HERE / "decision/irs-instruments.ttl",
@@ -119,12 +119,37 @@ def load(b, overrides=None):
         data.parse(f, format="turtle")
     for prop, value in (overrides or {}).items():
         data.set((CASES.FamilyTrust, DM[prop], value))
-    return derive(data)
+    return derive(data) if derived else data
 
 
-def run(b, overrides=None):
-    """Grade every proposal under branch b. Returns (results, data, failed)."""
-    data = load(b, overrides)
+REQUIREMENTS = Graph().parse(HERE / "decision/required-inputs.ttl", format="turtle")
+
+
+def required_inputs(data):
+    """Each case an input requirement covers, with the facts it must state: {case: {property, ...}}."""
+    required = defaultdict(set)
+    for req in REQUIREMENTS.subjects(RDF.type, DM.InputRequirement):
+        q = f"PREFIX : <{DM}> SELECT DISTINCT ?this WHERE {{ {REQUIREMENTS.value(req, DM.appliesWhen)} }}"
+        props = set(REQUIREMENTS.objects(req, DM.requiresInput))
+        for (node,) in data.query(q):
+            required[node] |= props
+    return required
+
+
+def missing_inputs(data):
+    """Fail closed: the required facts each covered case leaves out: {case: {property, ...}}.
+    Any case listed gets check FC0, outcome Insufficient."""
+    missing = {}
+    for node, props in required_inputs(data).items():
+        gone = {p for p in props if data.value(node, p) is None}
+        if gone:
+            missing[node] = gone
+    return missing
+
+
+def run(b, overrides=None, data=None, fail_closed=True):
+    """Grade every proposal under branch b, or a prepared (derived) graph. Returns (results, data, failed)."""
+    data = load(b, overrides) if data is None else data
     _, report, _ = validate(data, shacl_graph=shapes, inference="rdfs",
                             advanced=True, allow_warnings=True)
     failed = defaultdict(set)      # focus node -> constraints it failed
@@ -135,6 +160,7 @@ def run(b, overrides=None):
         c = data.value(chk, DM.checkConstraint)
         if c is not None:
             check_of[c] = (str(c).split("#")[-1].split("_")[0], data.value(chk, DM.onFail))
+    missing = missing_inputs(data) if fail_closed else {}
     results = {}
     graded = (set(data.subjects(RDF.type, DM.SpendProposal)) | set(data.subjects(RDF.type, DM.EntityDeal))
               | set(data.subjects(RDF.type, DM.PlannedGift)))
@@ -145,6 +171,8 @@ def run(b, overrides=None):
                 if c in check_of:
                     name, outcome = check_of[c]
                     hits[name] = outcome
+        if missing.get(p):         # FC0: a required fact is missing, so no Allow
+            hits["FC0"] = DM.Insufficient
         worst = max([0, *(severity[o] for o in hits.values())])
         results[p] = (by_severity[worst], set(hits))
     return results, data, failed
@@ -196,43 +224,44 @@ def grade(b):
     return bad
 
 
-if sweep:
-    pct = lambda v: Literal(str(v), datatype=XSD.decimal)
-    yes = lambda v: Literal(v)
-    watch = [CASES.P22_RentFromFamilyTrust, CASES.P23_OperatingCoPurchase,
-             CASES.P24_GrantToFamilyTrust, CASES.P14_OperatingCoShares]
-    rows = [("family 0%, siblings 30%", {"dqFamilySharePercent": pct(0)}),
-            ("family 30%, siblings 30%", {}),
-            ("family 35%", {"dqFamilySharePercent": pct(35)}),
-            ("family 36%", {"dqFamilySharePercent": pct(36)}),
-            ("family 60%", {"dqFamilySharePercent": pct(60), "otherRelativeSharePercent": pct(0)}),
-            ("family 30%, trust is a substantial contributor", {"substantialContributor": yes(True)}),
-            ("family 30%, trustee paid", {"trusteePaid": yes(True)}),
-            ("family 30%, deduction allowed, foundation remainder only",
-             {"charitableDeductionAllowed": yes(True), "foundationInterestKind": DM.RemainderOnly})]
-    print("Sweep from branch B; one setting changes per row.\n")
-    print(f"{'family trust settings':58} {'insider':8} " + "  ".join(f"{short(p).split('_')[0]:22}" for p in watch)
-          + "  4943 % (foundation / insiders)")
-    for name, ov in rows:
-        res, data, _ = run("B", ov)
-        insider = "yes" if (CASES.FamilyTrust, RDF.type, TD.DisqualifiedPerson) in data else "no"
-        cells = [f"{label(res[p][0])} {' '.join(sorted(res[p][1])) or ''}".strip() for p in watch]
-        p14 = CASES.P14_OperatingCoShares
-        held = f"{float(data.value(p14, DM.foundationVotingPercentAfter)):g} / {float(data.value(p14, DM.disqualifiedVotingPercent)):g}"
-        print(f"{name:58} {insider:8} " + "  ".join(f"{c:22}" for c in cells) + "  " + held)
-    sys.exit(0)
+if __name__ == "__main__":
+    if sweep:
+        pct = lambda v: Literal(str(v), datatype=XSD.decimal)
+        yes = lambda v: Literal(v)
+        watch = [CASES.P22_RentFromFamilyTrust, CASES.P23_OperatingCoPurchase,
+                 CASES.P24_GrantToFamilyTrust, CASES.P14_OperatingCoShares]
+        rows = [("family 0%, siblings 30%", {"dqFamilySharePercent": pct(0)}),
+                ("family 30%, siblings 30%", {}),
+                ("family 35%", {"dqFamilySharePercent": pct(35)}),
+                ("family 36%", {"dqFamilySharePercent": pct(36)}),
+                ("family 60%", {"dqFamilySharePercent": pct(60), "otherRelativeSharePercent": pct(0)}),
+                ("family 30%, trust is a substantial contributor", {"substantialContributor": yes(True)}),
+                ("family 30%, trustee paid", {"trusteePaid": yes(True)}),
+                ("family 30%, deduction allowed, foundation remainder only",
+                 {"charitableDeductionAllowed": yes(True), "foundationInterestKind": DM.RemainderOnly})]
+        print("Sweep from branch B; one setting changes per row.\n")
+        print(f"{'family trust settings':58} {'insider':8} " + "  ".join(f"{short(p).split('_')[0]:22}" for p in watch)
+              + "  4943 % (foundation / insiders)")
+        for name, ov in rows:
+            res, data, _ = run("B", ov)
+            insider = "yes" if (CASES.FamilyTrust, RDF.type, TD.DisqualifiedPerson) in data else "no"
+            cells = [f"{label(res[p][0])} {' '.join(sorted(res[p][1])) or ''}".strip() for p in watch]
+            p14 = CASES.P14_OperatingCoShares
+            held = f"{float(data.value(p14, DM.foundationVotingPercentAfter)):g} / {float(data.value(p14, DM.disqualifiedVotingPercent)):g}"
+            print(f"{name:58} {insider:8} " + "  ".join(f"{c:22}" for c in cells) + "  " + held)
+        sys.exit(0)
 
-if compare:
-    a, _, _ = run("A")
-    b, _, _ = run("B")
-    flips = [p for p in a if a[p] != b.get(p)]
-    print(f"{'proposal':34} {'branch A':24} branch B")
-    for p in flips:
-        fa = f"{label(a[p][0])} {' '.join(sorted(a[p][1])) or '-'}"
-        fb = f"{label(b[p][0])} {' '.join(sorted(b[p][1])) or '-'}"
-        print(f"{short(p):34} {fa:24} {fb}")
-    print(f"\n{len(flips)} of {len(a)} proposals change between branches; "
-          f"{sum(1 for p in flips if a[p][0] != b[p][0])} change outcome.")
-    sys.exit(0)
+    if compare:
+        a, _, _ = run("A")
+        b, _, _ = run("B")
+        flips = [p for p in a if a[p] != b.get(p)]
+        print(f"{'proposal':34} {'branch A':24} branch B")
+        for p in flips:
+            fa = f"{label(a[p][0])} {' '.join(sorted(a[p][1])) or '-'}"
+            fb = f"{label(b[p][0])} {' '.join(sorted(b[p][1])) or '-'}"
+            print(f"{short(p):34} {fa:24} {fb}")
+        print(f"\n{len(flips)} of {len(a)} proposals change between branches; "
+              f"{sum(1 for p in flips if a[p][0] != b[p][0])} change outcome.")
+        sys.exit(0)
 
-sys.exit(1 if grade(branch) else 0)
+    sys.exit(1 if grade(branch) else 0)

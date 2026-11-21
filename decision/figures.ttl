@@ -100,7 +100,7 @@
     :thresholdValue "20"^^xsd:decimal .
 :Fig_DeMinimisTwo a :Figure ; rdfs:label "Two percent de minimis holding" ;
     :figureValue "2 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(c)(2)(C), uscode.house.gov" ;
-    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?hv <= 2" ;
+    :asOf "2026-11-21"^^xsd:date ; :readStatus :ReadPrimary ; :usedByCheck :Check_PG3a , :Check_PG3b ; :shapeLiteral "?h <= 2" , "?hv <= 2" ;
     :thresholdValue "2"^^xsd:decimal .
 :Fig_PassiveNinetyFive a :Figure ; rdfs:label "At least 95 percent passive income is not a business enterprise" ;
     :figureValue "95 percent" ; :governingSection "4943" ; :figureSource "26 USC 4943(d)(3)(B), uscode.house.gov" ;

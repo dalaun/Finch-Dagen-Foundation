@@ -16,7 +16,7 @@ wrong. The run fails (exit 1) only on a malformed record. Not legal or tax advic
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from rdflib import Graph, Namespace, RDF
+from rdflib import Literal, Graph, Namespace, RDF
 from pyshacl import validate
 
 HERE = Path(__file__).resolve().parent
@@ -93,6 +93,8 @@ for s in sorted(data.subjects(RDF.type, DM.StoryCase), key=lambda x: str(data.va
             bad.append(f"{sid}: authorityOutcome {short(law)} is not an outcome")
         if data.value(s, DM.authorityBasis) is None:
             bad.append(f"{sid}: authorityOutcome needs an authorityBasis")
+        if data.value(s, DM.authorityRead) != Literal(True):
+            bad.append(f"{sid}: authorityOutcome needs authorityRead true (an unread claim is authorityUnread)")
         if page is not None and law != page:
             overturned.append((sid, short(page), short(law), str(data.value(s, DM.authorityBasis) or "")))
     if any("cited-for-opposite" in f for f in flags):

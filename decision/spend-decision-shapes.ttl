@@ -152,6 +152,8 @@
           $this dm:payee ?payee ; dm:fiscalYear ?fy .
           ?p a dm:SpendProposal ; dm:payee ?payee ; dm:fiscalYear ?fy ;
              dm:annualAmount ?amt ; dm:benchmarkAnnual ?bm .
+          # Two proposals for the same payment are alternatives, not a split.
+          FILTER ( ?p = $this || NOT EXISTS { ?p dm:assesses ?pay . $this dm:assesses ?pay } )
         }
         GROUP BY $this
         HAVING ( COUNT(?p) > 1 && SUM(?amt) > MAX(?bm) )""" .

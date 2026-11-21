@@ -71,7 +71,7 @@ These are moves that pass every letter check above and still bend the intent. Ea
 | H1 | Pay someone who sits right next to a disqualified person: a sibling, a friend, a business partner, a company the founder owns 35 percent or less of | 4946(d) leaves siblings out of "family"; the 35 percent line leaves minority stakes out |
 | H2 | Pay a third party who passes the value on to a disqualified person (a grantee that hires the founder's child) | Reaches the letter only as "indirect" self-dealing or "for the benefit of"; the IRS says the indirect rules exist "to prevent transactions from taking place indirectly" that could not be done directly |
 | H3 | A real program whose eligible class is drawn around insiders or their business (training open only to the founder's consulting clients) | The mission label passes; the charitable class does not (4945(d)(5), (g)) |
-| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year |
+| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year (two proposals for the same payment are alternatives and are not summed) |
 | H5 | Insider pay with no written comparability record | 4941(d)(2)(E) allows pay to a disqualified person only if reasonable, necessary and "not excessive"; the founder setting his own pay is where that judgment is disputed |
 | J1, J2 | Anything the rules above did not foresee | The bounded scorer (below) |
 

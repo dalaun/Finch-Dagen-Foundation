@@ -67,7 +67,7 @@ All in `tests/decision/entity-deal-cases.ttl`; answers in `tests/decision/expect
 | D02 the same fee on a handshake | insufficient AL2 | No written terms |
 | D03 fee above the range | needs counsel AL1b | 482 reallocation risk |
 | D04 reviewed by the founder's sibling | needs counsel ST3 | Related under 672(c) |
-| D05 no market range | insufficient AL1a | No comparable source |
+| D05 no market range | insufficient AL1a FC0 | No comparable source |
 | D06 paid first, decided later | insufficient ST2 | No decision record before payment |
 | D07 family trust rents foundation space at market | block AL0 (branch B: needs counsel AL4) | Arm's length does not cure self-dealing |
 | D08 accrual operating company deducts a fee owed to the cash-method management company, unpaid at year end | block BD5 | Related payee: no deduction until paid |
@@ -96,7 +96,7 @@ All in `tests/decision/entity-deal-cases.ttl`; answers in `tests/decision/expect
 | D36 cash-method bill unpaid at year end | block BD5 | |
 | D37 home office, home is only a mailing address | block BD6 | |
 | D38 room used only for the business's administration | allow | |
-| D39 deduction claim with facts blank | insufficient BD0 | |
+| D39 deduction claim with facts blank | insufficient BD0 FC0 | |
 | P25 foundation pay under its benchmark, over it with benefits | block ST1c | |
 
 ## Not verified

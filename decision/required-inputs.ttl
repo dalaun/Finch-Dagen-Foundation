@@ -1,0 +1,209 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Fail closed: a missing fact is Insufficient, never Allow.
+#
+# A SPARQL check only fires when every triple it matches is there. So when a
+# fact the check compares is missing, the check silently does not fire, and a
+# gift, spend or deal with no failed checks is graded Allow. That is failing
+# open, and in a model built to block self-dealing it is the most dangerous
+# kind of bug. The PR 15 review found three; validate_fail_closed.py found the
+# rest by deleting each fact from every worked case.
+#
+# Each requirement below says: when a case is in this situation (appliesWhen,
+# a SPARQL pattern on ?this), it must state these facts (requiresInput). A
+# missing one is check FC0, outcome Insufficient, applied by decide_spend.py to
+# every proposal, deal and planned gift. State a "no" as false or 0; do not
+# leave it out.
+#
+# A fact may be left out only where the check that reads it uses a default that
+# is at least as strict as any real value (conservativeDefault). Not legal or
+# tax advice.
+
+:InputRequirement a owl:Class ; rdfs:comment "A situation and the facts a case in it must state."@en .
+:appliesWhen a owl:DatatypeProperty ; rdfs:domain :InputRequirement ;
+    rdfs:comment "A SPARQL group pattern on ?this that selects the cases the requirement covers."@en .
+:requiresInput a owl:ObjectProperty ; rdfs:domain :InputRequirement ;
+    rdfs:comment "A property every covered case must state."@en .
+:requiredBy a owl:DatatypeProperty ; rdfs:domain :InputRequirement ;
+    rdfs:comment "The checks that read these facts."@en .
+:conservativeDefault a owl:DatatypeProperty ;
+    rdfs:comment "On a property: why leaving it out cannot loosen any check (the default used is the strict one)."@en .
+
+# ---------------------------------------------------------------------
+# Planned gifts
+# ---------------------------------------------------------------------
+:RI_SplitInterestDeduction a :InputRequirement ;
+    rdfs:label "A split-interest trust must say whether a charitable deduction is claimed" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle ?v . ?v :isSplitInterestTrust true ." ;
+    :requiresInput :deductionAllowed ;
+    :requiredBy "PG1 PG2 PG3b PG10 PG11 PG12 PG13" .
+
+:RI_SplitInterestTransfer a :InputRequirement ;
+    rdfs:label "A split-interest trust must say whether the property came subject to a lien and whether a sale was fixed before the gift" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle ?v . ?v :isSplitInterestTrust true ." ;
+    :requiresInput :transferredSubjectToLien , :saleArrangedBeforeGift ;
+    :requiredBy "PG10 PG12" .
+
+:RI_LienDetails a :InputRequirement ;
+    rdfs:label "Property given subject to a lien must say who transferred it and whether the donor stays liable on the debt" ;
+    :appliesWhen "?this a :PlannedGift ; :transferredSubjectToLien true ." ;
+    :requiresInput :transferor , :donorLiableOnDebt ;
+    :requiredBy "PG10 PG11" .
+
+:RI_LeadTrustParties a :InputRequirement ;
+    rdfs:label "A lead trust must name its trustee and who receives the lead interest" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :FamilyLeadTrust ." ;
+    :requiresInput :giftTrustee , :leadBeneficiary ;
+    :requiredBy "PG9" .
+
+:RI_LeadTrustValue a :InputRequirement ;
+    rdfs:label "A lead trust claiming a deduction must state the value of the charity's income interest" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :FamilyLeadTrust ; :deductionAllowed true ." ;
+    :requiresInput :charitableIncomeValuePercent , :incomeInterestForm ;
+    :requiredBy "PG1 PG3a PG3b" .
+
+:RI_UnitrustTerms a :InputRequirement ;
+    rdfs:label "A remainder unitrust must state its payout, its remainder value, how long it pays, and whether it holds S stock or has business income" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :CharitableRemainderUnitrust ." ;
+    :requiresInput :unitrustPercent , :remainderValuePercent , :holdsSCorpStock , :producesUBTI , :unitrustPeriodForm ;
+    :requiredBy "PG4 PG4b PG5 PG14" .
+
+:RI_BusinessHoldings a :InputRequirement ;
+    rdfs:label "A gift that holds a business interest must state every fact the excess business holdings test needs" ;
+    :appliesWhen "?this a :PlannedGift . ?this :holderVotingPercent|:disqualifiedVotingPercent|:holderValuePercent|:passiveIncomePercent|:acquiredByGiftOrBequest|:yearsSinceAcquired ?any ." ;
+    :requiresInput :holderVotingPercent , :disqualifiedVotingPercent , :holderValuePercent ,
+        :passiveIncomePercent , :acquiredByGiftOrBequest ;
+    :requiredBy "PG3a PG3b" .
+
+:RI_HoldingPeriod a :InputRequirement ;
+    rdfs:label "Holdings received by gift or bequest must state how long they have been held" ;
+    :appliesWhen "?this a :PlannedGift ; :acquiredByGiftOrBequest true ." ;
+    :requiresInput :yearsSinceAcquired ;
+    :requiredBy "PG3a PG3b" .
+
+:RI_PayoutYear a :InputRequirement ;
+    rdfs:label "A foundation payout year must state its investment assets and its qualifying distributions" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :FoundationHolding . ?this :investmentAssetsFMV|:qualifyingDistributionsByDeadline|:acquisitionIndebtedness|:taxesForYear ?any ." ;
+    :requiresInput :investmentAssetsFMV , :qualifyingDistributionsByDeadline ;
+    :requiredBy "PG8" .
+
+:RI_Lease a :InputRequirement ;
+    rdfs:label "A lease must name the lessee and state the personal-property share of the rent and whether rent depends on profits" ;
+    :appliesWhen "?this a :PlannedGift ; :vehicleAct :LeaseAct ." ;
+    :requiresInput :lessee , :personalPropertyRentPercent , :rentDependsOnProfits ;
+    :requiredBy "PG2 PG13" .
+
+:RI_PartyNeedsAct a :InputRequirement ;
+    rdfs:label "A gift that names the other party to a deal must say what the deal is" ;
+    :appliesWhen "?this a :PlannedGift ; :counterparty|:lessee ?party ." ;
+    :requiresInput :vehicleAct ;
+    :requiredBy "PG2 PG13" .
+
+:RI_ActNeedsParty a :InputRequirement ;
+    rdfs:label "A deal other than a lease must name the other party" ;
+    :appliesWhen "?this a :PlannedGift ; :vehicleAct ?act . FILTER NOT EXISTS { ?this :lessee ?lessee }" ;
+    :requiresInput :counterparty ;
+    :requiredBy "PG2" .
+
+:RI_BargainSale a :InputRequirement ;
+    rdfs:label "A bargain sale must name the seller and the buyer and say whether basis was split" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :BargainSaleVehicle ." ;
+    :requiresInput :seller , :buyer , :basisAllocated ;
+    :requiredBy "PG7a PG7b" .
+
+:RI_EstateExpectancy a :InputRequirement ;
+    rdfs:label "An estate deal must say whether the foundation has an interest or expectancy" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :EstateAdministration ." ;
+    :requiresInput :foundationHasExpectancy ;
+    :requiredBy "PG2" .
+
+:RI_ResidenceTrust a :InputRequirement ;
+    rdfs:label "A residence trust must say whether the home is used as transient lodging with services" ;
+    :appliesWhen "?this a :PlannedGift ; :giftVehicle :PersonalResidenceTrust ." ;
+    :requiresInput :transientLodgingWithServices ;
+    :requiredBy "PG6" .
+
+:acquisitionIndebtedness :conservativeDefault "PG8 treats missing debt as 0, which makes the required payout larger, never smaller." .
+:taxesForYear :conservativeDefault "PG8 treats missing taxes as 0, which makes the required payout larger, never smaller." .
+
+# ---------------------------------------------------------------------
+# Deals between the founder's roles
+# ---------------------------------------------------------------------
+:RI_ExpenseClaim a :InputRequirement ;
+    rdfs:label "An expense claim must say whether a deduction is claimed" ;
+    :appliesWhen "?this a :EntityDeal ; :dealKind :ExpenseClaim ." ;
+    :requiresInput :claimedDeduction ;
+    :requiredBy "BD0 BD1 BD2 BD3 BD4 BD5 BD6" .
+
+:RI_TimingNeedsDeduction a :InputRequirement ;
+    rdfs:label "A deal that states when or how it is paid must say whether a deduction is claimed" ;
+    :appliesWhen "?this a :EntityDeal . ?this :payerMethod|:payeeMethod|:paidByYearEnd ?any ." ;
+    :requiresInput :claimedDeduction ;
+    :requiredBy "BD5" .
+
+:RI_DeductionClaimed a :InputRequirement ;
+    rdfs:label "A claimed deduction must answer every test a deduction faces" ;
+    :appliesWhen "?this a :EntityDeal ; :claimedDeduction true ." ;
+    :requiresInput :ordinaryAndNecessary , :personalLivingFamily , :capitalExpenditure ,
+        :startupExpenditure , :homeOfficeClaim , :paidByYearEnd , :payerMethod ;
+    :requiredBy "BD0 BD1 BD2 BD3 BD4 BD5 BD6" .
+
+:RI_AccrualPayer a :InputRequirement ;
+    rdfs:label "An accrual-method payer must state the payee's method" ;
+    :appliesWhen "?this a :EntityDeal ; :payerMethod :AccrualMethod ." ;
+    :requiresInput :payeeMethod ;
+    :requiredBy "BD5" .
+
+:RI_AccrualToCash a :InputRequirement ;
+    rdfs:label "An accrual payer paying a cash-method payee must say whether the payee is related" ;
+    :appliesWhen "?this a :EntityDeal ; :payerMethod :AccrualMethod ; :payeeMethod :CashMethod ." ;
+    :requiresInput :relatedPayee ;
+    :requiredBy "BD5" .
+
+:RI_ServiceFee a :InputRequirement ;
+    rdfs:label "A service fee must state its amount and the market range" ;
+    :appliesWhen "?this a :EntityDeal ; :dealKind :ServiceFee ." ;
+    :requiresInput :annualAmount , :marketLow , :marketHigh ;
+    :requiredBy "AL1a AL1b" .
+
+:RI_Compensation a :InputRequirement ;
+    rdfs:label "A pay deal must state the wage and the market range" ;
+    :appliesWhen "?this a :EntityDeal ; :dealKind :CompensationDeal ." ;
+    :requiresInput :wageAnnual , :marketLow , :marketHigh , :recipientForm ;
+    :requiredBy "AL1a ST1b FX1" .
+
+:RI_CompensationBenefits a :InputRequirement ;
+    rdfs:label "A pay deal must list its benefits, or say it has none" ;
+    :appliesWhen "?this a :EntityDeal ; :dealKind :CompensationDeal . FILTER NOT EXISTS { ?this :noFringeBenefits true }" ;
+    :requiresInput :providesBenefit ;
+    :requiredBy "ST1b ST1d FX0 FX1 FX2 FX3 FX4 FX5" .
+
+# ---------------------------------------------------------------------
+# Foundation spends
+# ---------------------------------------------------------------------
+:RI_FoundationPay a :InputRequirement ;
+    rdfs:label "Foundation pay that states an amount must also state the benchmark and the benefits on top" ;
+    :appliesWhen "?this a :SpendProposal ; :spendKind :PersonalServicesPay . ?this :annualAmount|:benchmarkAnnual|:fringeBenefitAnnual ?any ." ;
+    :requiresInput :annualAmount , :benchmarkAnnual , :fringeBenefitAnnual , :payee , :fiscalYear ;
+    :requiredBy "ST1c H4" .
+
+:RI_ScorerAsked a :InputRequirement ;
+    rdfs:label "Every spend must carry the bounded scorer's answer (no, yes or cannot tell)" ;
+    :appliesWhen "?this a :SpendProposal ." ;
+    :requiresInput :scorerVerdict ;
+    :requiredBy "J1 J2" .
+
+:RI_WhoBenefits a :InputRequirement ;
+    rdfs:label "A grant or program pay must say how the people it serves are chosen" ;
+    :appliesWhen "?this a :SpendProposal ; :spendKind ?k . FILTER ( ?k IN ( :GrantToIndividual , :GrantToOrganization , :PersonalServicesPay ) )" ;
+    :requiresInput :beneficiarySelection ;
+    :requiredBy "H3" .
+
+:RI_AssetUse a :InputRequirement ;
+    rdfs:label "A purchase must say who besides program participants uses the asset (NoOneElse if no one)" ;
+    :appliesWhen "?this a :SpendProposal ; :spendKind :Purchase ." ;
+    :requiresInput :assetAlsoUsedBy ;
+    :requiredBy "R3" .

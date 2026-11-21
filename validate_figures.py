@@ -24,6 +24,7 @@ Exits 1 on any FIG problem, so CI can block the merge. Not legal or tax advice.
 
 import re
 import sys
+from collections import defaultdict
 from decimal import Decimal
 from datetime import date
 
@@ -49,9 +50,22 @@ def numbers(text):
     return [Decimal(n) for n in re.findall(r"\d+(?:\.\d+)?", text.replace(",", ""))]
 
 
+def executable(sparql):
+    """The SPARQL a check runs: string contents, IRIs and # comments removed, so an old
+    comparison left in a comment cannot stand in for the real one."""
+    text = re.sub(r'"(?:[^"\\]|\\.)*"', '""', sparql)
+    text = re.sub(r"<[^<>\s]*>", "<>", text)
+    return "\n".join(line.split("#", 1)[0] for line in text.split("\n"))
+
+
 def contains_token(sparql, literal):
-    """The literal must stand whole: '?u > 50' matches '?u > 50 )' but not '?u > 500'."""
-    return re.search(r"(?<![\w.?])" + re.escape(literal) + r"(?![\d.])", sparql) is not None
+    """The literal must stand whole and with its sign: '?u > 50' matches '?u > 50 )' but not
+    '?u > 500', and '0.05 *' does not match '-0.05 *'."""
+    return re.search(r"(?<![\w.?\-])" + re.escape(literal) + r"(?![\d.])", executable(sparql)) is not None
+
+
+def is_percent(value):
+    return "percent" in value or "%" in value
 
 
 laws = []
@@ -75,6 +89,19 @@ SELFTEST = """
 :Fig_SelfTestNoComparison a :Figure ; :governingSection "664" ; :figureSource "x" ; :readStatus :ReadPrimary ;
     :asOf "2026-11-21"^^xsd:date ; :usedByCheck :Check_PG4 ; :figureValue "50 percent" .
 :Fig_SelfTestNoSection a :Figure ; :figureSource "x" ; :readStatus :ReadPrimary ; :asOf "2005-01-01"^^xsd:date .
+:Check_SelfTest a :DecisionCheck ; :checkConstraint :SelfTest_Shape .
+:SelfTest_Shape <http://www.w3.org/ns/shacl#select> '''SELECT $this WHERE {
+    # previous comparison: ?u > 50
+    $this :u ?u ; :y ?y . FILTER ( ?u > 500 && ?y <= 0.1 )
+    BIND ( -0.05 * ?u AS ?value ) }''' .
+:Fig_SelfTestComment a :Figure ; :governingSection "664" ; :figureSource "x" ; :readStatus :ReadPrimary ;
+    :asOf "2026-11-21"^^xsd:date ; :usedByCheck :Check_SelfTest ; :shapeLiteral "?u > 50" ; :thresholdValue "50"^^xsd:decimal ; :figureValue "50 percent" .
+:Fig_SelfTestSign a :Figure ; :governingSection "4942" ; :figureSource "x" ; :readStatus :ReadPrimary ;
+    :asOf "2026-11-21"^^xsd:date ; :usedByCheck :Check_SelfTest ; :shapeLiteral "0.05 *" ; :thresholdValue "5"^^xsd:decimal ; :figureValue "5 percent" .
+:Fig_SelfTestFraction a :Figure ; :governingSection "4941" ; :figureSource "x" ; :readStatus :ReadPrimary ;
+    :asOf "2026-11-21"^^xsd:date ; :usedByCheck :Check_SelfTest ; :shapeLiteral "?y <= 0.1" ; :thresholdValue "10"^^xsd:decimal ; :figureValue "10 years" .
+:Fig_SelfTestSecond a :Figure ; :governingSection "4943" ; :figureSource "x" ; :readStatus :ReadPrimary ;
+    :asOf "2026-11-21"^^xsd:date ; :usedByCheck :Check_PG3a ; :shapeLiteral "?h <= 3" , "?hv <= 2" ; :thresholdValue "2"^^xsd:decimal ; :figureValue "2 percent" .
 """
 if "--selftest" in sys.argv:
     g.parse(data=SELFTEST, format="turtle")
@@ -111,21 +138,28 @@ for fig in figures:
         if not value_nums or value_nums[0] != threshold:
             problems.append(f"FIG3 {name}: thresholdValue {threshold} does not match figureValue "
                             f"'{g.value(fig, DM.figureValue)}'")
-    default = g.value(fig, DM.shapeLiteral)
-    specific = {g.value(u, DM.inCheck): g.value(u, DM.shapeLiteral) for u in g.objects(fig, DM.thresholdUse)}
+    # Every comparison listed must be there: a check that compares the figure twice lists both.
+    default = sorted(str(v) for v in g.objects(fig, DM.shapeLiteral))
+    specific = defaultdict(list)
+    for u in g.objects(fig, DM.thresholdUse):
+        specific[g.value(u, DM.inCheck)] += [str(v) for v in g.objects(u, DM.shapeLiteral)]
+    percent = is_percent(str(g.value(fig, DM.figureValue) or ""))
     for check in checks:
         cname = check.split("#")[-1]
-        literal = specific.get(check, default)
+        literals = specific.get(check) or default
         constraint = g.value(check, DM.checkConstraint)
         sparql = str(g.value(constraint, SH.select) or "") if constraint is not None else ""
         if not sparql:
             problems.append(f"FIG3 {name}: {cname} has no shape to compare")
-        elif literal is None:
+        elif not literals:
             problems.append(f"FIG3 {name}: no comparison given for {cname}")
-        elif not contains_token(sparql, str(literal)):
-            problems.append(f"FIG3 {name}: {cname} shape no longer contains '{literal}' as a whole token")
-        elif threshold is not None and not any(n == threshold or n * 100 == threshold for n in numbers(str(literal))):
-            problems.append(f"FIG3 {name}: comparison '{literal}' for {cname} does not use thresholdValue {threshold}")
+        for literal in literals if sparql else []:
+            if not contains_token(sparql, literal):
+                problems.append(f"FIG3 {name}: {cname} shape no longer contains '{literal}' as a whole token")
+            elif threshold is not None and not any(
+                    n == threshold or (percent and n * 100 == threshold) for n in numbers(literal)):
+                problems.append(f"FIG3 {name}: comparison '{literal}' for {cname} does not use thresholdValue {threshold}"
+                                + ("" if percent else " (a fraction counts only for a percent figure)"))
 
 pages = sorted(g.subjects(RDF.type, DM.PageFigure))
 refreshed, primary, unverified = 0, 0, []
@@ -151,11 +185,12 @@ if "--list" in sys.argv:
 if "--selftest" in sys.argv:
     want = {"FIG1 Fig_SelfTestUndated", "FIG2 Fig_SelfTestStale", "FIG3 Fig_SelfTestDrift",
             "FIG3 Fig_SelfTestPrefix", "FIG3 Fig_SelfTestValue", "FIG3 Fig_SelfTestNoComparison",
-            "FIG4 Fig_SelfTestNoSection"}
+            "FIG4 Fig_SelfTestNoSection", "FIG3 Fig_SelfTestComment", "FIG3 Fig_SelfTestSign",
+            "FIG3 Fig_SelfTestFraction", "FIG3 Fig_SelfTestSecond"}
     got = {" ".join(p.split(":")[0].split()[:2]) for p in problems}
     missing = want - got
     others = [p for p in problems if "SelfTest" not in p]
-    print("Self-test: the check catches an undated, a stale, a drifted, a prefix-matched, a mismatched-value, an uncompared and an unsectioned figure." if not missing and not others
+    print("Self-test: the check catches an undated, a stale, a drifted, a prefix-matched, a mismatched-value, an uncompared and an unsectioned figure, a comparison left in a comment, a flipped sign, a year read as a fraction and a second comparison loosened." if not missing and not others
           else f"Self-test FAILED: missed {sorted(missing)}; other problems {others}")
     sys.exit(1 if missing or others else 0)
 for line in problems:

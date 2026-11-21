@@ -85,6 +85,8 @@
 # Pay packages (Pub 15-B, 162(a)(1))
 :wageAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :providesBenefit a owl:ObjectProperty ; rdfs:range :BenefitItem .
+:noFringeBenefits a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "True on a pay deal with no benefits on top of the wage; a pay deal with neither this nor providesBenefit is insufficient (FC0)."@en .
 :BenefitItem a owl:Class ; rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
 :benefitKind a owl:ObjectProperty ; rdfs:range :BenefitKind .
 :benefitAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .

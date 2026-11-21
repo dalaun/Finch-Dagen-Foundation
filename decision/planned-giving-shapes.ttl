@@ -61,7 +61,11 @@
         SELECT $this ?value WHERE {
           $this dm:counterparty|dm:lessee ?value ; dm:vehicleAct ?act .
           ?value a td:DisqualifiedPerson .
-          FILTER ( ?act != dm:PayoutUnderTermsAct )
+          # 4947(a)(2)(A): a payment a split-interest trust's terms require to an income
+          # beneficiary is not self-dealing. The exception is the trust's alone; a payment by
+          # the foundation itself or an estate still gets the check.
+          FILTER ( ?act != dm:PayoutUnderTermsAct
+                   || NOT EXISTS { $this dm:giftVehicle ?sv . ?sv dm:isSplitInterestTrust true } )
           { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
           UNION
           { $this dm:giftVehicle dm:EstateAdministration ; dm:foundationHasExpectancy true }

@@ -85,7 +85,8 @@ All in `tests/decision/planned-giving-cases.ttl`; answers in `tests/decision/exp
 | G38 the spouse for life, then the children for life or 20 years, whichever is shorter | allow | The form the regulation allows |
 | G39 a vehicle name the checks do not cover (a misspelling) | insufficient PG0 | An untested gift is not an allowed one |
 | G40 G35's insider lease, recorded with the lessee only | block PG13 PG2 | PG2 reads the lessee as well as the counterparty |
-| G41 G19's payout year with the distribution figure missing | insufficient PG0 | Missing evidence does not turn a short payout into an allow |
+| G41 G19's payout year with the distribution figure missing | insufficient FC0 PG0 | Missing evidence does not turn a short payout into an allow |
+| G42 the foundation itself pays the founder and calls it a payout under its terms | block PG2 | The payout exception is a split-interest trust's, not the foundation's |
 
 ## Equipment and vehicle leases
 
@@ -96,9 +97,13 @@ A trust or the foundation that owns equipment or vehicles and rents them to an o
 
 So a fleet or equipment lease belongs in an ordinary entity that pays market rent, not in the trust or the foundation. *Statute and regulation read; the structuring advice is ours.*
 
+## Missing facts
+
+Every planned gift is also held to the [fail-closed](Fail-Closed.md) rule: a gift that leaves out a fact a check needs (whether a deduction is claimed, the seller and buyer, the trustee, the term, the holdings figures) is insufficient (FC0), never allowed.
+
 ## Figures
 
-Every number a check uses lives in `decision/figures.ttl` with the day it was read, its source and the section it comes from. `validate_figures.py` fails a figure with no as-of date, one read before a later law change to its section (PPA 2006, the 2017 tax law, the 2025 law and the latest amendment to each section the checks use), a figure with no governing section, and a threshold that no longer matches every check that uses it. A threshold match is on the whole number (50 does not match 500), and the number must also equal the figure as the law states it. `--selftest` shows it catches each of these.
+Every number a check uses lives in `decision/figures.ttl` with the day it was read, its source and the section it comes from. `validate_figures.py` fails a figure with no as-of date, one read before a later law change to its section (PPA 2006, the 2017 tax law, the 2025 law and the latest amendment to each section the checks use), a figure with no governing section, and a threshold that no longer matches every check that uses it. A threshold match is on the whole number (50 does not match 500) and its sign (0.05 does not match -0.05), in the query the check runs (an old comparison left in a comment does not count), and the number must also equal the figure as the law states it; a fraction (0.05 for 5) counts only for a percent figure. A check that compares a figure twice (PG3a and PG3b test both voting and value holdings against 2 percent) registers both comparisons. `--selftest` shows it catches each of these.
 
 ## Not verified
 
