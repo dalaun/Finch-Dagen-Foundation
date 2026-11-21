@@ -16,6 +16,23 @@
     "personal_reserve_months": 6,
     "business_reserve_months": 3
   },
+  "building": {
+    "label": "SYNTHETIC placeholder building: a small multi-unit rental the founder owns and lives in. Not his numbers. Rents, costs and the mortgage share are placeholders to replace privately.",
+    "rented_units_gross_rent_annual": 24000,
+    "vacancy_rate": 0.05,
+    "rental_share_operating_costs_annual": 6000,
+    "rental_share_mortgage_payment_annual": 8000,
+    "rental_effective_tax_rate": 0.15,
+    "rent_counted_share": 0.75,
+    "vacant_unit": {
+      "rent_annual": 14400,
+      "rehab_cost_total": 15000,
+      "rehab_months": 4,
+      "lease_up_months": 2
+    },
+    "lien_for_business_loan": null,
+    "facts": {}
+  },
   "arms": [
     {
       "id": "A",
@@ -173,6 +190,123 @@
       },
       "facts": {},
       "founder_fulltime_uplift_annual": 80000
+    },
+    {
+      "id": "D",
+      "label": "Buy a business with its mixed-use building, live upstairs, keep the W-2",
+      "kind": "buy",
+      "business": {
+        "price": 300000,
+        "sde_annual": 150000,
+        "revenue_annual": 600000,
+        "manager_market_wage_annual": 60000,
+        "working_capital": 20000
+      },
+      "real_estate": {
+        "label": "SYNTHETIC: storefront plus apartments; the business occupies the storefront, the founder lives in one apartment",
+        "price": 450000,
+        "loan_rate": 0.1,
+        "loan_term_months": 300,
+        "business_rent_annual": 36000,
+        "apartments_gross_rent_annual": 30000,
+        "vacancy_rate": 0.05,
+        "operating_costs_annual": 12000,
+        "rent_counted_share": 0.75,
+        "rental_effective_tax_rate": 0.15,
+        "founder_lives_here": true,
+        "vacated_home_unit_rent_annual": 14400,
+        "vacated_unit_lease_up_months": 2,
+        "facts": {}
+      },
+      "valuation_multiple": 2.49,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "seller_transition_months": 12,
+      "entity_tax_rate": 0.0,
+      "interest_share_of_debt": 0.5,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.05,
+        "ramp_months": 12,
+        "cost_annual": 8000,
+        "start_month": 4
+      },
+      "financing": {
+        "equity_injection_pct": 0.1,
+        "seller_note_pct_of_price": 0.05,
+        "seller_note_max_share_of_equity": 0.5,
+        "seller_note_standby_months": 120,
+        "seller_note_rate": 0.06,
+        "seller_note_term_months": 180,
+        "closing_costs_pct": 0.03,
+        "finance_closing_costs": 1,
+        "finance_working_capital": 1,
+        "sba_rate": 0.105,
+        "sba_term_months": 120,
+        "sba_guarantee_fee_pct": 0.02,
+        "reserve_floor_share_at_close": 0.5
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 60000
+    },
+    {
+      "id": "DH",
+      "label": "Same as D, cash to close from a home-equity loan on the building he owns",
+      "kind": "buy",
+      "business": {
+        "price": 300000,
+        "sde_annual": 150000,
+        "revenue_annual": 600000,
+        "manager_market_wage_annual": 60000,
+        "working_capital": 20000
+      },
+      "real_estate": {
+        "label": "SYNTHETIC: storefront plus apartments; the business occupies the storefront, the founder lives in one apartment",
+        "price": 450000,
+        "loan_rate": 0.1,
+        "loan_term_months": 300,
+        "business_rent_annual": 36000,
+        "apartments_gross_rent_annual": 30000,
+        "vacancy_rate": 0.05,
+        "operating_costs_annual": 12000,
+        "rent_counted_share": 0.75,
+        "rental_effective_tax_rate": 0.15,
+        "founder_lives_here": true,
+        "vacated_home_unit_rent_annual": 14400,
+        "vacated_unit_lease_up_months": 2,
+        "facts": {}
+      },
+      "valuation_multiple": 2.49,
+      "valuation_multiple_above_1m": 3.73,
+      "owner_parttime_wage_annual": 0,
+      "seller_transition_months": 12,
+      "entity_tax_rate": 0.0,
+      "interest_share_of_debt": 0.5,
+      "ai": {
+        "margin_gain_pct_of_revenue": 0.05,
+        "ramp_months": 12,
+        "cost_annual": 8000,
+        "start_month": 4
+      },
+      "financing": {
+        "equity_injection_pct": 0.1,
+        "seller_note_pct_of_price": 0.05,
+        "seller_note_max_share_of_equity": 0.5,
+        "seller_note_standby_months": 120,
+        "seller_note_rate": 0.06,
+        "seller_note_term_months": 180,
+        "closing_costs_pct": 0.03,
+        "finance_closing_costs": 1,
+        "finance_working_capital": 1,
+        "sba_rate": 0.105,
+        "sba_term_months": 120,
+        "sba_guarantee_fee_pct": 0.02,
+        "reserve_floor_share_at_close": 0.5,
+        "home_equity_loan_share_of_cash": 1.0,
+        "home_equity_loan_rate": 0.09,
+        "home_equity_loan_term_months": 120
+      },
+      "facts": {},
+      "founder_fulltime_uplift_annual": 60000
     }
   ]
 }

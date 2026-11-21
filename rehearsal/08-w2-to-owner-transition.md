@@ -2,7 +2,7 @@
 
 [Back to the rehearsal overview](README.md)
 
-**Status:** design, proposed 2026-11-20. Runs on synthetic inputs only. Nothing here applies for a loan, contacts a seller or employer, or moves money.
+**Status:** design, proposed 2026-11-20; building added 2026-11-21. Runs on synthetic inputs only. Nothing here applies for a loan, contacts a seller or employer, or moves money.
 
 **This is design and education, not legal, tax or lending advice.** Every number in this repository is a placeholder. The founder's real inputs live in the private project folder.
 
@@ -34,10 +34,12 @@ python3 transition_twin.py --selftest            # built-in cases
 | B | Buy a business just under the step-down size, keep the W-2, add AI margin gains. |
 | B0 | The same purchase as B with no AI gain. The gap between B and B0 is what the AI work is worth. |
 | C | Grow the transport company first, self-funded (SBA money is not available to it). The same arm, with the cannabis flag off, stands in for growing the government-contracting company. |
+| D | Buy a business together with its mixed-use building: the business downstairs, apartments upstairs, the founder living in one. A property company he owns holds the building, and the business pays it market rent. Paid from savings. |
+| DH | The same purchase, with the cash to close borrowed against the building he already owns (a home-equity loan) and repaid from outside income. |
 
 ### What the synthetic run shows
 
-Placeholders: a W-2 founder whose replacement income (salary plus the benefits he would have to buy) is 120 units, business sizes from public BizBuySell medians, rates from no particular lender. The **pattern** is the finding, not the numbers.
+Placeholders: a W-2 founder whose replacement income (salary plus the benefits he would have to buy) is 120 thousand, business sizes from public BizBuySell medians, rates from no particular lender. The **pattern** is the finding, not the numbers.
 
 | Arm | Lender coverage at close | Step-down month | Result |
 |---|---|---|---|
@@ -53,6 +55,88 @@ Four findings come out of it:
 2. **AI decides the marginal deal.** A business just under the line, plus a few points of margin from automating its back office, clears it; the same business without that gain never does. The gain also compounds into value: cash flow times the multiple, and BizBuySell's Q3 2026 averages put businesses over $1 million at 3.73x cash flow against 2.30x below it, so margin that pushes a business over that size is worth more than its own dollars.
 3. **Leaving has to pay on its own.** Staying on the W-2 while a paid manager runs the business usually beats stepping down, because the family gives up a salary and benefits to save one manager's wage. The step-down only pays when the manager wage saved plus what the founder adds full-time is at least the salary and benefits that stop. The twin makes this a test part (`step_down_pays`), and "what I add full-time" is the input the founder has to evidence.
 4. **Growing what he has is slower and safer.** No personal guarantee and no equity check, but no outside money either, and the transport company's growth comes out of savings. Whether that beats buying depends almost entirely on the growth rate, which is the least-known input in the model.
+
+## The founder's building in the twin
+
+The founder already owns an income-producing asset: a small multi-unit rental building he lives in and is finishing. In the twin it is an optional `building` block. When it is present, every arm runs twice, as written and again with the building (`+bldg`), so its effect is visible on its own.
+
+How it enters the model:
+
+- **Net rent lowers the bar, one for one.** The rented units' trailing twelve months of net rent (after vacancy, their share of operating costs and their share of the mortgage payment) reduces what the business must pay him to replace salary and benefits. Only a counted share of it (75% in the synthetic inputs, a placeholder haircut) enters the step-down test. Because the size rule multiplies the replacement income by about 1.8, each counted dollar of net rent cuts the business earnings he needs by about 1.8 dollars.
+- **Leaving still has to pay on its own.** Rent doesn't enter the `step_down_pays` part: he keeps the rent whether or not he leaves the W-2.
+- **The vacant unit is a project with a date.** Its remaining rehab cost comes out of savings over the rehab months, and its rent starts after a lease-up period. It is the one income lever that needs no lender, no seller and no employer sign-off.
+- **The building can be on the line.** SBA's collateral rules for 7(a) loans, as two lending firms report them, have the lender take a lien on owners' available equity in personal real estate when business assets don't fully secure the loan, and personal real estate includes investment property (Starfield & Smith, Aug 2025; MMCG, Aug 2026; the two differ on loan-size and ownership thresholds, and SBA's own text wasn't read). Check T18 turns that into a test: with a lien, the run fails if personal cash ever goes below zero.
+
+### What the synthetic run shows with the building
+
+Placeholder building: three rented units (two leased now, one being finished) net about 22.5 thousand a year once all three are leased, after vacancy, their share of costs and their share of the mortgage. That is about 7.5 thousand per unit. Replacement income is 120 thousand.
+
+| Arm | Step-down month without the building | With the building |
+|---|---|---|
+| A | n/a | n/a, and savings at year six are about half again higher |
+| Bm | not met | not met: the Chicago-median business is too small even with rent |
+| B | 25 | 19: the building takes six months off the W-2 |
+| B0 | not met | not met, but coverage after paying him reaches 1.21x against the 1.25x floor |
+| C | 65 | 62 |
+
+Three findings:
+
+1. **Rent and AI do the same job.** Both close the gap between what a business earns and what it must pay him. The B0 arithmetic, in thousands a year:
+   - The business earns 200 before owner labor and owes about 80 in loan payments.
+   - The floor says 1.25 x 80 = 100 must be left after paying him, so it can pay him at most 200 - 100 = 100.
+   - He needs 120 (salary plus benefits), so the gap is 20.
+   - Counting 75% of net rent, the building has to net 20 / 0.75 = about 26.7 to fill the gap. The placeholder building nets 22.5, so it falls about 4.3 short: about 360 a month more net rent across the building, or about 0.6 of a unit at 7.5 per unit. With that, B0 steps down in month 23 with no AI gain at all.
+   - Rent alone replacing the whole 120, with no business, would take about 120 / 7.5 = 16 leased units at these placeholder margins, or about 21 if only 75% is counted.
+2. **Finish the building before buying.** The test counts trailing twelve months of rent, so a unit leased a year before the purchase is fully counted by the time the step-down test can run.
+3. **A purchase can put the building at risk.** If the lender takes a lien, every month a business shortfall drains personal cash is a month the building backs the loan. That makes the six-month personal reserve a protection for the building, not just for living costs.
+
+### Building checks
+
+| Id | Check | Why (source) |
+|---|---|---|
+| T17 | The rented units' trailing twelve months of rent cover their share of the mortgage and operating costs | A building that drains savings is a cost, not an asset (model rule) |
+| T18 | If the building secures the business loan, personal cash never goes below zero in the run | SOP 50 10 8 collateral rules as reported (Starfield & Smith; MMCG). Amber until the lender's lien terms are known |
+| T19 | Any move of the building into a trust or company is checked first against the mortgage's due-on-sale clause and the local homeowner property-tax exemption | 12 U.S.C. 1701j-3(d)(8): for "residential real property containing less than five dwelling units," a lender may not call the loan on "a transfer into an inter vivos trust in which the borrower is and remains a beneficiary" and "which does not relate to a transfer of rights of occupancy." A transfer to an LLC is not on that list. The exemption effect is not verified |
+| T20 | The Foundation never uses, rents, buys, lends on or takes a pledge of the building, and pays nothing toward it | 4941(d)(1)(A) to (E) |
+| T21 | Rehab costs are kept with receipts and added to basis; the founder's own labor is never added to basis or deducted | IRS Pub. 551 (12/2025): "Don't include the value of your own labor, or any other labor you didn't pay for, in the basis of any property you construct." |
+| T22 | Costs are split between his own unit and the rented units on a written, consistent basis; only the rented share is a rental expense or depreciated | IRS Pub. 527 (2025): "you must divide your expenses between rental and personal use"; "You can deduct depreciation only on the part of your property used for rental purposes." |
+| T23 | When the owner manages the building himself, no management fee is counted as income or expense | A fee paid to yourself is not a cost (model rule) |
+
+**Who should hold the building.** Two facts point away from the Foundation's side of the stack and toward a simple holder. The Foundation can have no dealings with it (T20). And while rental real estate on its own is unlikely to be an excess business holding (the IRS says a "business enterprise" excludes a business with at least 95% of its gross income from passive sources, and lists "rents from real property" as passive), a building held by a trust that benefits the Foundation still draws the Foundation into every later sale, lease or loan decision. Keeping it out of the Foundation's benefit chain, and moving it only after T19 is cleared, is the default until counsel says otherwise.
+
+## A business you live in, and a home-equity down payment
+
+The founder asked about a business he can live in, and about using the equity a legalized extra unit adds to his building. Arms D and DH rehearse both.
+
+How the twin models it:
+
+- **Two companies, one building.** A property company he owns buys the building. The business he buys leases the storefront from it at a written, market rent, and the other apartments are leased to unrelated tenants. The property company's net (business rent plus apartment rent, less costs and its own loan) is rental income to him, and it lowers what the business must pay him, the same way his current building's rent does. If he moves into the new building, his own unit in the current building can be rented, and the twin adds that rent too.
+- **One project, one down payment.** The 10% equity is on the whole project, business and building together, so the cash to close roughly doubles against a business-only purchase of the same business.
+- **A home-equity loan as the down payment.** In DH a loan against the building he already owns pays the cash to close. As lending and legal writers describe SBA's current rules, borrowed money can count as the equity only if it is repaid from income outside the business being bought ("cash from personal loans with outside repayment sources," Starfield & Smith, May 2025; Windsor Advantage, July 2025; SBA's own text not read). Check T24 tests that at close: his W-2 take-home plus today's rent, after living costs, must cover the loan's payment. The loan is also a lien on his building, so check T18 is always decided for DH, never amber.
+
+### What the synthetic run shows
+
+Placeholders: a business earning 150 thousand a year before rent and owner labor, priced at 300 thousand; a building priced at 450 thousand with two apartments for rent and one for him; the building loan at 10% over 25 years; the home-equity loan at 9% over 10 years.
+
+| Arm | Lender coverage at close | Step-down month | Result |
+|---|---|---|---|
+| D | n/a | not met | Can't close: the cash for a business-plus-building down payment is more than placeholder savings allow while keeping the reserve floor. |
+| DH | 1.12x | not met | Closes with the home-equity loan, and the outside-income test passes, but the combined business and building fall under the 1.25x lender floor (T15 fails). |
+| DH with his current building | 1.12x | not met | Personal cash at year six is the highest of any arm, because three sources of rent come in while the W-2 carries living costs. But peak debt is about 805 thousand, every dollar of it backed by him, and the business alone never covers its own loan after paying him. |
+
+Three findings:
+
+1. **The building is what makes it bigger, not what makes it work.** Buying the real estate adds a second loan as large as the business loan. At a placeholder 10% the building's own loan eats most of its rent. At a 7% building loan rate, the same deal meets the 1.25x floor exactly. So the building loan's rate and term decide this path. That points to asking lenders about SBA's 504 program, which is built for owner-occupied real estate, alongside a 7(a) loan for the business. (The 7% is a sensitivity, not a quoted rate.)
+2. **It's a wealth path, not an exit path, on these numbers.** D builds personal cash and real estate while he keeps the W-2. It doesn't let him leave within six years, because the business left after paying rent is too small to pay him and its own loan. A bigger business in the same building would change that. The test is the same size rule as before, applied to what the business earns after its rent.
+3. **The home-equity loan is the unlock, and it puts the home on the line twice.** Without it the deal can't close on placeholder savings. With it, his current building backs the down payment loan and, very likely, the SBA loan's lien as well. That makes checks T18 and T24 the ones to watch.
+
+### Checks for these paths
+
+| Id | Check | Why (source) |
+|---|---|---|
+| T24 | A home-equity loan used for the down payment is repaid from income outside the business being bought: W-2 take-home and today's rent, after living costs, cover its payment at close | Starfield & Smith (May 2025): "For borrowed funds used as equity injection, lenders must show an outside source of repayment." Windsor Advantage (July 2025) says the same of home-equity lines. SBA text not read |
+| T25 | The business occupies at least 51% of the building being bought | SBA's long-standing occupancy rule for financing a building with the business. Not verified against the current SOP |
+| T26 | The business pays the property company a written, market rent; the apartments go to unrelated tenants at market | Keeps the rent real for the lender and for tax; ties to T8 and the structure checks |
 
 ## Buy versus build
 
@@ -168,10 +252,14 @@ Nothing of the employer's was read for this file. These are the documents and qu
 6. **Lender:** confirm against the current SOP the equity, seller-note, coverage, valuation and seller-transition rules above, and whether my W-2 income counts toward coverage at close.
 7. **ERISA attorney (only if old plan balances exist):** is a ROBS worth its compliance cost for me?
 8. **Counsel:** if the government-contracting company ever seeks an SBA loan, does the management company's agreement make it a passive business under the SOP?
+9. **Lender:** would you take a lien on my rental building for an acquisition loan, at what equity level and loan size, and could a home-equity loan on it count toward my equity injection if I repay it from my salary?
+10. **Real estate counsel:** should the building stay in my name, go into a revocable trust or go into an LLC, given the mortgage's due-on-sale clause, the homeowner property-tax exemption on my own unit, and liability for the rented units?
+11. **CPA:** how do I split costs and depreciation between my unit and the rented units, how do the dwelling-unit rules for a home I live in apply to a building where I rent the other units, what will a later sale look like (home-sale exclusion on my unit, depreciation recapture on the rest), and what rent should the twin count?
+12. **Lender:** for a business with its building, would you use a 504 loan for the building and a 7(a) for the business, what rate and term would each carry, and does a home-equity loan on my current building count as my equity if my salary and current rents repay it? Would a cash-out refinance count the same way?
 
 ## What the founder supplies (privately)
 
-The twin needs his real inputs, in the private project folder, never here: gross salary, the employer benefits he would have to replace, living costs (from the 12-month export already requested), cash available for a purchase, and his honest estimate of what his full-time work would add. With those, the twin prints his size rule, the cash a purchase needs, and the month each arm would let him step down.
+The twin needs his real inputs, in the private project folder, never here: the building's rents by unit, its operating costs, the mortgage payment and how much of the building is his own unit, the vacant unit's remaining rehab cost and expected rent, gross salary, the employer benefits he would have to replace, living costs (from the 12-month export already requested), cash available for a purchase, and his honest estimate of what his full-time work would add. With those, the twin prints his size rule, the cash a purchase needs, and the month each arm would let him step down.
 
 ## Sources read (2026-11-20)
 
@@ -191,4 +279,14 @@ The twin needs his real inputs, in the private project folder, never here: gross
 - 26 U.S.C. 4941 and 4943; 26 CFR 53.4941(d)-1, 53.4941(d)-2, 53.4943-8 (Cornell LII and eCFR)
 - BizBuySell Insight Report, Q3 2026, and data tables (Chicago 2025 closed sales): https://www.bizbuysell.com/insight-report/ and https://www.bizbuysell.com/insight-report-data-tables
 
-**Not verified, so not relied on:** SOP 50 10 8.1's own text; whether SBA counts ROBS funds as equity under 8.1; Illinois non-compete and employee-invention statutes; whether 280E reaches a transporter.
+Building sources read 2026-11-21:
+
+- 12 U.S.C. 1701j-3 (Cornell LII): https://www.law.cornell.edu/uscode/text/12/1701j-3
+- IRS Publication 551 (12/2025), Basis of Assets: https://www.irs.gov/publications/p551
+- IRS Publication 527 (2025), Residential Rental Property: https://www.irs.gov/publications/p527
+- IRS, Business enterprise, excess business holdings: https://www.irs.gov/charities-non-profits/private-foundations/business-enterprise-excess-business-holdings-of-private-foundations
+- IRS, Treatment of gross income from passive sources: https://www.irs.gov/charities-non-profits/private-foundations/taxes-on-excess-business-holdings-of-private-foundations-treatment-of-gross-income-from-passive-sources
+- Starfield & Smith, collateral rules for standard 7(a) loans in 50 10 8 (August 12, 2025): https://starfieldsmith.com/2025/08/best-practices-updated-collateral-rules-for-standard-7a-loans-in-50-10-8/
+- MMCG Invest, collateral and the guaranty (August 14, 2026): https://www.mmcginvest.com/post/sba-will-not-decline-your-loan-for-collateral-it-will-take-your-guaranty
+
+**Not verified, so not relied on:** whether a home-equity loan repaid from salary counts as equity injection; how moving the building affects the homeowner property-tax exemption; Pub. 527's chapters on renting part of a property and dwelling units used as a home (not readable); SOP 50 10 8.1's own text; whether SBA counts ROBS funds as equity under 8.1; Illinois non-compete and employee-invention statutes; whether 280E reaches a transporter.

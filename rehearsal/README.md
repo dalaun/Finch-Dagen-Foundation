@@ -45,6 +45,7 @@ A third likely finding: some business-shaped spending (software and AI tools, ho
 | [04-ontology-notes.md](04-ontology-notes.md) and [rehearsal-ontology.ttl](rehearsal-ontology.ttl) | Ontology sketch on gist, reusing the trust-domain core |
 | [answer-key-cases.ttl](answer-key-cases.ttl) | The cases the twin must get right before its optimizer is trusted |
 | [07-structure-integrity-checks.md](07-structure-integrity-checks.md) and [structure-check-cases.ttl](structure-check-cases.ttl) | Checks S1 to S17 every structure version must pass, from the IRS's abusive-trust guidance; today's stack scored in roles; eval cases SK1 to SK16 |
+| [08-w2-to-owner-transition.md](08-w2-to-owner-transition.md), [transition_twin.py](transition_twin.py), [transition-inputs-synthetic.json](transition-inputs-synthetic.json) and [transition-checks.ttl](transition-checks.ttl) | The move from W-2 income to business owner, rehearsed month by month with and without the founder's building, plus a business he lives in and a home-equity down payment; step-down test; checks T1 to T26 |
 | [05-questions-for-attorney-and-cpa.md](05-questions-for-attorney-and-cpa.md) | What to ask, in plain words |
 | [06-handoff-transaction-export.md](06-handoff-transaction-export.md) | The one thing only the founder can supply |
 
