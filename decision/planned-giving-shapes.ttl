@@ -1,0 +1,241 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Planned-giving shapes (DRAFT, proposed 2026-11-21). Read facts only.
+# Outcomes, pressures and authorities are in planned-giving-model.ttl.
+# A required fact that is missing fails closed. Not legal or tax advice.
+# =====================================================================
+
+<http://example.org/trust-domain/planned-giving-shapes> a owl:Ontology ;
+    rdfs:label "Planned-giving shapes"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    sh:declare [ sh:prefix "td" ; sh:namespace "http://example.org/trust-domain#"^^xsd:anyURI ] ,
+               [ sh:prefix "dm" ; sh:namespace "http://example.org/trust-domain/decision#"^^xsd:anyURI ] ,
+               [ sh:prefix "rdf" ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ] .
+
+:PlannedGiftShape a sh:NodeShape ;
+    rdfs:label "Planned-giving checks"@en ;
+    sh:targetClass :PlannedGift ;
+    sh:sparql :PG0_GiftEvidence , :PG1_LeadForm , :PG2_VehicleSelfDealing ,
+              :PG3a_ExcessHoldingsPastPeriod , :PG3b_ExcessHoldingsNoPlan ,
+              :PG4_UnitrustLimits , :PG4b_UnitrustUBTI , :PG5_SStockInRemainderTrust ,
+              :PG6_ResidenceTrust , :PG7a_BargainSaleToFoundation , :PG7b_BasisNotAllocated ,
+              :PG8_PayoutShortfall , :PG9_FounderBothSides ,
+              :PG10_EncumberedTransfer , :PG11_DonorLiableOnTrustDebt , :PG12_SaleFixedBeforeGift ,
+              :PG13_PersonalPropertyRent , :PG14_UnitrustPeriod .
+
+:PG0_GiftEvidence a sh:SPARQLConstraint ;
+    sh:message "PG0: insufficient - no vehicle named, a vehicle the checks do not cover, or a payout year with assets but no distribution figure" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          { FILTER NOT EXISTS { $this dm:giftVehicle ?v } }
+          UNION
+          # A vehicle the model declares carries isSplitInterestTrust. RDFS range inference
+          # would type any name as a GiftVehicle, so the class alone cannot catch a typo.
+          { $this dm:giftVehicle ?v . FILTER NOT EXISTS { ?v dm:isSplitInterestTrust ?declared } }
+          UNION
+          { $this dm:giftVehicle dm:FoundationHolding ; dm:investmentAssetsFMV ?a .
+            FILTER NOT EXISTS { $this dm:qualifyingDistributionsByDeadline ?q } }
+        }""" .
+
+:PG1_LeadForm a sh:SPARQLConstraint ;
+    sh:message "PG1: a lead trust deduction needs a guaranteed annuity or a unitrust interest (1.170A-6(c)(1))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true .
+          FILTER NOT EXISTS { $this dm:incomeInterestForm ?f . FILTER ( ?f IN ( dm:GuaranteedAnnuity , dm:UnitrustInterest ) ) }
+        }""" .
+
+:PG2_VehicleSelfDealing a sh:SPARQLConstraint ;
+    sh:message "PG2: a split-interest trust or an estate the foundation expects from deals with a disqualified person, outside 4941(d)(2)(F) and 53.4941(d)-1(b)(3)" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:counterparty|dm:lessee ?value ; dm:vehicleAct ?act .
+          ?value a td:DisqualifiedPerson .
+          # 4947(a)(2)(A): a payment a split-interest trust's terms require to an income
+          # beneficiary is not self-dealing. The exception is the trust's alone; a payment by
+          # the foundation itself or an estate still gets the check.
+          FILTER ( ?act != dm:PayoutUnderTermsAct
+                   || NOT EXISTS { $this dm:giftVehicle ?sv . ?sv dm:isSplitInterestTrust true } )
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
+          UNION
+          { $this dm:giftVehicle dm:EstateAdministration ; dm:foundationHasExpectancy true }
+          UNION
+          { $this dm:giftVehicle dm:FoundationHolding }
+          FILTER NOT EXISTS { $this dm:vehicleAct dm:RedemptionAct ; dm:sameTermsAllHolders true ; dm:atLeastFairMarketValue true }
+          FILTER NOT EXISTS { $this dm:giftVehicle dm:EstateAdministration ; dm:fiduciaryPowerOfSale true ;
+                              dm:probateCourtApproved true ; dm:beforeEstateTerminates true ;
+                              dm:atLeastFairMarketValue true ; dm:atLeastAsLiquid true }
+        }""" .
+
+:PG3a_ExcessHoldingsPastPeriod a sh:SPARQLConstraint ;
+    sh:message "PG3a: excess business holdings (4943) past the gift disposition period, or not acquired by gift" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          { $this dm:giftVehicle dm:FoundationHolding }
+          UNION
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true .
+            FILTER NOT EXISTS { $this dm:deductionFor dm:RemainderInterest . FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest } }
+            FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest ; dm:charitableIncomeValuePercent ?cv . FILTER ( ?cv <= 60 ) } }
+          $this dm:holderVotingPercent ?h ; dm:disqualifiedVotingPercent ?dq .
+          FILTER ( ?h + ?dq > 20 )
+          FILTER NOT EXISTS { $this dm:passiveIncomePercent ?p . FILTER ( ?p >= 95 ) }
+          FILTER NOT EXISTS { $this dm:holderValuePercent ?hv . FILTER ( ?h <= 2 && ?hv <= 2 ) }
+          OPTIONAL { $this dm:acquiredByGiftOrBequest ?g }
+          OPTIONAL { $this dm:yearsSinceAcquired ?y }
+          OPTIONAL { $this dm:extensionGranted ?x }
+          BIND ( COALESCE(?g, false) AS ?gift )
+          BIND ( COALESCE(?x, false) AS ?ext )
+          FILTER ( !?gift || !BOUND(?y) || ?y > 10 || ( ?y > 5 && !?ext ) )
+        }""" .
+
+:PG3b_ExcessHoldingsNoPlan a sh:SPARQLConstraint ;
+    sh:message "PG3b: holdings over the 4943 limit inside the gift period, with no written plan to dispose of the excess" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          { $this dm:giftVehicle dm:FoundationHolding }
+          UNION
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true .
+            FILTER NOT EXISTS { $this dm:deductionFor dm:RemainderInterest . FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest } }
+            FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest ; dm:charitableIncomeValuePercent ?cv . FILTER ( ?cv <= 60 ) } }
+          $this dm:holderVotingPercent ?h ; dm:disqualifiedVotingPercent ?dq ;
+                dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired ?y .
+          FILTER ( ?h + ?dq > 20 )
+          FILTER NOT EXISTS { $this dm:passiveIncomePercent ?p . FILTER ( ?p >= 95 ) }
+          FILTER NOT EXISTS { $this dm:holderValuePercent ?hv . FILTER ( ?h <= 2 && ?hv <= 2 ) }
+          OPTIONAL { $this dm:extensionGranted ?x }
+          BIND ( COALESCE(?x, false) AS ?ext )
+          FILTER ( ?y <= 5 || ( ?y <= 10 && ?ext ) )
+          FILTER NOT EXISTS { $this dm:writtenDispositionPlan true }
+        }""" .
+
+:PG4_UnitrustLimits a sh:SPARQLConstraint ;
+    sh:message "PG4: unitrust payout outside 5 to 50 percent, or remainder worth under 10 percent, or either not stated (664(d)(2))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:giftVehicle dm:CharitableRemainderUnitrust .
+          OPTIONAL { $this dm:unitrustPercent ?u }
+          OPTIONAL { $this dm:remainderValuePercent ?r }
+          FILTER ( !BOUND(?u) || !BOUND(?r) || ?u < 5 || ?u > 50 || ?r < 10 )
+        }""" .
+
+:PG4b_UnitrustUBTI a sh:SPARQLConstraint ;
+    sh:message "PG4b: the remainder trust holds property producing unrelated business income, taxed at 100 percent (664(c)(2))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:producesUBTI true }""" .
+
+:PG5_SStockInRemainderTrust a sh:SPARQLConstraint ;
+    sh:message "PG5: S corporation stock into a remainder trust, which is not a permitted shareholder (1361(b)(1)(B), (e)(1)(B)(iii))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:holdsSCorpStock true }""" .
+
+:PG6_ResidenceTrust a sh:SPARQLConstraint ;
+    sh:message "PG6: a residence trust that holds more than one residence, is not used mainly as a residence, provides transient lodging with services, or does not bar a sale back to the grantor (25.2702-5)" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:giftVehicle dm:PersonalResidenceTrust .
+          FILTER ( NOT EXISTS { $this dm:onlyOneResidence true }
+                || NOT EXISTS { $this dm:primaryUseAsResidence true }
+                || EXISTS { $this dm:transientLodgingWithServices true }
+                || NOT EXISTS { $this dm:barsSaleToGrantor true } )
+        }""" .
+
+:PG7a_BargainSaleToFoundation a sh:SPARQLConstraint ;
+    sh:message "PG7a: a bargain sale by a disqualified person to the private foundation is still a sale (4941(d)(1)(A))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:giftVehicle dm:BargainSaleVehicle ; dm:seller ?value ; dm:buyer ?b .
+          ?value a td:DisqualifiedPerson . ?b dm:isPrivateFoundation true .
+        }""" .
+
+:PG7b_BasisNotAllocated a sh:SPARQLConstraint ;
+    sh:message "PG7b: bargain sale with no 1011(b) basis split" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:giftVehicle dm:BargainSaleVehicle .
+          FILTER NOT EXISTS { $this dm:basisAllocated true }
+        }""" .
+
+:PG8_PayoutShortfall a sh:SPARQLConstraint ;
+    sh:message "PG8: qualifying distributions below the distributable amount (4942(d), (e)(1))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:giftVehicle dm:FoundationHolding ; dm:investmentAssetsFMV ?a ;
+                dm:qualifyingDistributionsByDeadline ?q .
+          OPTIONAL { $this dm:acquisitionIndebtedness ?d }
+          OPTIONAL { $this dm:taxesForYear ?t }
+          BIND ( 0.05 * ( ?a - COALESCE(?d, 0) ) - COALESCE(?t, 0) AS ?value )
+          FILTER ( ?q < ?value )
+        }""" .
+
+:PG9_FounderBothSides a sh:SPARQLConstraint ;
+    sh:message "PG9: the founder is trustee of a lead trust whose lead beneficiary is a foundation he manages" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:giftVehicle dm:FamilyLeadTrust ; dm:giftTrustee td:Founder ; dm:leadBeneficiary ?f .
+          td:Founder dm:managesFoundation ?f .
+        }""" .
+
+:PG10_EncumberedTransfer a sh:SPARQLConstraint ;
+    sh:message "PG10: an insider transfers property under a lien the trust assumes or that was placed within 10 years (or of unknown age): a sale under 4941(d)(2)(A)" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this ?value WHERE {
+          $this dm:transferor ?value ; dm:transferredSubjectToLien true .
+          ?value a td:DisqualifiedPerson .
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
+          UNION { $this dm:giftVehicle dm:FoundationHolding }
+          OPTIONAL { $this dm:trustAssumesLien ?a }
+          OPTIONAL { $this dm:lienPlacedYearsBefore ?y }
+          FILTER ( COALESCE(?a, false) || !BOUND(?y) || ?y <= 10 )
+        }""" .
+
+:PG11_DonorLiableOnTrustDebt a sh:SPARQLConstraint ;
+    sh:message "PG11: the donor stays liable on debt on a remainder trust's property" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:donorLiableOnDebt true }""" .
+
+:PG12_SaleFixedBeforeGift a sh:SPARQLConstraint ;
+    sh:message "PG12: a buyer was bound, or the sale practically certain, before the gift" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:saleArrangedBeforeGift true }""" .
+
+:PG13_PersonalPropertyRent a sh:SPARQLConstraint ;
+    sh:message "PG13: rent from personal property that 512(b)(3) does not exclude: unrelated business income (all of it to excise tax in a remainder trust)" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          $this dm:vehicleAct dm:LeaseAct .
+          { $this dm:giftVehicle dm:CharitableRemainderUnitrust } UNION { $this dm:giftVehicle dm:FoundationHolding }
+          UNION { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true }
+          OPTIONAL { $this dm:personalPropertyRentPercent ?p }
+          OPTIONAL { $this dm:rentDependsOnProfits ?r }
+          FILTER ( !BOUND(?p) || ?p > 10 || COALESCE(?r, false) )
+        }""" .
+
+:PG14_UnitrustPeriod a sh:SPARQLConstraint ;
+    sh:message "PG14: a unitrust paying one person for life and then another for a term of years does not qualify (1.664-3(a)(5)(i))" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE { $this dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:unitrustPeriodForm dm:LifeThenTerm }""" .

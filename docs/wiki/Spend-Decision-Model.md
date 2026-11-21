@@ -71,7 +71,7 @@ These are moves that pass every letter check above and still bend the intent. Ea
 | H1 | Pay someone who sits right next to a disqualified person: a sibling, a friend, a business partner, a company the founder owns 35 percent or less of | 4946(d) leaves siblings out of "family"; the 35 percent line leaves minority stakes out |
 | H2 | Pay a third party who passes the value on to a disqualified person (a grantee that hires the founder's child) | Reaches the letter only as "indirect" self-dealing or "for the benefit of"; the IRS says the indirect rules exist "to prevent transactions from taking place indirectly" that could not be done directly |
 | H3 | A real program whose eligible class is drawn around insiders or their business (training open only to the founder's consulting clients) | The mission label passes; the charitable class does not (4945(d)(5), (g)) |
-| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year |
+| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year (two proposals for the same payment are alternatives and are not summed) |
 | H5 | Insider pay with no written comparability record | 4941(d)(2)(E) allows pay to a disqualified person only if reasonable, necessary and "not excessive"; the founder setting his own pay is where that judgment is disputed |
 | J1, J2 | Anything the rules above did not foresee | The bounded scorer (below) |
 
@@ -157,6 +157,7 @@ These are the default answers (insider branch A: the family trust is over the li
 - `decision/spend-decision-shapes.ttl`: the SHACL checks for stages 0, 2 and 3, and P1.
 - `tests/decision/decision-cases.ttl` and `expected.ttl`: the worked cases and the answer key.
 - [Stewardship](Stewardship.md): deals between the founder's roles (stewardship, arm's length, what a business may deduct, what an employee may exclude), in `decision/stewardship-model.ttl`, `decision/stewardship-shapes.ttl` and `tests/decision/entity-deal-cases.ttl`.
+- [Planned Giving](Planned-Giving.md): planned-giving vehicles and the foundation's own holdings and payout, in `decision/planned-giving-model.ttl`, `decision/planned-giving-shapes.ttl` and `tests/decision/planned-giving-cases.ttl`.
 - `decision/irs-instruments.ttl`: the IRS publications as instruments, linked to roles and checks.
 - `decide_spend.py`: runs stage 1 (the keystone shapes) and stages 0, 2 and 3 together and grades the result.
 

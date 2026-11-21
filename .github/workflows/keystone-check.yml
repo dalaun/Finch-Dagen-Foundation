@@ -2,9 +2,9 @@ name: Keystone check
 
 on:
   push:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'tests/**']
   pull_request:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'tests/**']
+    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'tests/**']
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
       - name: Run keystone and cascade checks against the answer key
         run: python3 validate_keystone.py
       - name: OWL lint on the decision model
-        run: python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl
+        run: python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl tests/decision/giftlaw-stories/*.ttl
       - name: Grade the spend decision cases against their answer key
         run: python3 decide_spend.py
       - name: Grade the same cases under insider branch B
@@ -33,3 +33,13 @@ jobs:
         run: python3 decide_spend.py --compare
       - name: Sweep the family trust's settings one at a time
         run: python3 decide_spend.py --sweep
+      - name: Grade the GiftLaw example stories and show where the page and the checks disagree
+        run: python3 grade_stories.py
+      - name: Check every figure is dated, current and matches the check that uses it
+        run: python3 validate_figures.py
+      - name: Show the figures check catches undated, stale, drifted and mismatched figures
+        run: python3 validate_figures.py --selftest
+      - name: Fail closed - delete each fact from every case; no copy may be Allow when it must not be
+        run: python3 validate_fail_closed.py
+      - name: Show the fail-closed test catches fail-opens when FC0 is off
+        run: python3 validate_fail_closed.py --selftest

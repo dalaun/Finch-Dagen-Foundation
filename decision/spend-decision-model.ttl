@@ -190,6 +190,8 @@
 :foundationVotingPercentAfter a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :disqualifiedVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :assetAlsoUsedBy a owl:ObjectProperty ; rdfs:comment "Anyone besides program participants who uses the asset."@en .
+:NoOneElse a owl:NamedIndividual ; rdfs:label "no one besides program participants"@en ;
+    rdfs:comment "Stated on a purchase to say the asset has no other user; a missing assetAlsoUsedBy is insufficient (FC0)."@en .
 :annualAmount a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :benchmarkAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :fiscalYear a owl:ObjectProperty .

@@ -1,0 +1,145 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Figures GiftLaw pages print that the audit on the shelf calls dated (audit-index section 3, 55 rows).
+# Generated from the audit; :currentFigure points to the figure read on 2026-11-21 where one was read.
+# A row with no :currentFigure was not verified against primary law.
+
+:PageFig_F2 a :PageFigure ; rdfs:label "F2" ; :pageSection "1.1.4" ;
+    :pagePrints "10% food-inventory cap" ; :auditSays "15%" ; :auditLawChange "other (later increase; audit names no act)" ; :auditStories "sec: S1-16, S1-17, S1-18, S1-19, S1-20" ;
+    :currentFigure :Fig_FoodInventoryCap .
+:PageFig_F7 a :PageFigure ; rdfs:label "F7" ; :pageSection "1.3.1" ;
+    :pagePrints "2000CM mortality table" ; :auditSays "not given in row (2010CM per F260)" ; :auditLawChange "other (IRS table update)" ; :auditStories "sec: S1-44, S1-45" ;
+    :currentFigure :Fig_MortalityTable .
+:PageFig_F9 a :PageFigure ; rdfs:label "F9" ; :pageSection "1.4.5" ;
+    :pagePrints "$1.5M estate exemption" ; :auditSays "not given in row" ; :auditLawChange "other (exemption increases; not named)" ; :auditStories "none" .
+:PageFig_F10 a :PageFigure ; rdfs:label "F10" ; :pageSection "1.5.1" ;
+    :pagePrints "older misstatement thresholds" ; :auditSays "150% / 200%" ; :auditLawChange "PPA 2006" ; :auditStories "sec: S1-63" ;
+    :currentFigure :Fig_MisstatementThresholds .
+:PageFig_I7 a :PageFigure ; rdfs:label "I7" ; :pageSection "1.5.1" ;
+    :pagePrints "$2,500 Statement of Value fee" ; :auditSays "$8,400 for 1-3 items + $800 each extra" ; :auditLawChange "other (IRS fee increase)" ; :auditStories "sec: S1-63" .
+:PageFig_I10 a :PageFigure ; rdfs:label "I10" ; :pageSection "1.7.20" ;
+    :pagePrints "$6.01M Maine exemption (2022)" ; :auditSays "$7,160,000 (2026)" ; :auditLawChange "inflation indexing (state)" ; :auditStories "none" .
+:PageFig_F13 a :PageFigure ; rdfs:label "F13" ; :pageSection "1.7.22" ;
+    :pagePrints "older MA estate threshold" ; :auditSays "$2M (2023)" ; :auditLawChange "other (state law 2023)" ; :auditStories "none" .
+:PageFig_F15 a :PageFigure ; rdfs:label "F15" ; :pageSection "1.7.33" ;
+    :pagePrints "2022-pinned exclusion text" ; :auditSays "not given" ; :auditLawChange "other (state)" ; :auditStories "sec: S1-75" .
+:PageFig_X8 a :PageFigure ; rdfs:label "X8" ; :pageSection "1.7.41" ;
+    :pagePrints "RI figures through 2025" ; :auditSays "$87,940 credit (2026)" ; :auditLawChange "inflation indexing (state)" ; :auditStories "none" .
+:PageFig_F18 a :PageFigure ; rdfs:label "F18" ; :pageSection "1.7.44" ;
+    :pagePrints "Hall tax rate" ; :auditSays "repealed (2021)" ; :auditLawChange "other (state law)" ; :auditStories "none" .
+:PageFig_X5 a :PageFigure ; rdfs:label "X5" ; :pageSection "1.7.49" ;
+    :pagePrints "35% top rate, $3,076,000 exclusion" ; :auditSays "$3,000,000 exclusion, 10-20% rates (from July 1 2026)" ; :auditLawChange "other (state law 2026)" ; :auditStories "none" .
+:PageFig_X9 a :PageFigure ; rdfs:label "X9" ; :pageSection "2.2.1" ;
+    :pagePrints "15% LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; audit names no act)" ; :auditStories "S2-9" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F23 a :PageFigure ; rdfs:label "F23" ; :pageSection "2.2.2" ;
+    :pagePrints "15% LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "S2-12" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F29 a :PageFigure ; rdfs:label "F29" ; :pageSection "3.3.8" ;
+    :pagePrints "older deduction wording" ; :auditSays "not given" ; :auditLawChange "other (not named)" ; :auditStories "sec: S3-68, S3-69, S3-70, S3-71, S3-72" .
+:PageFig_I13 a :PageFigure ; rdfs:label "I13" ; :pageSection "3.7.3" ;
+    :pagePrints "50% cash AGI limit" ; :auditSays "60%" ; :auditLawChange "2025 law (OBBBA made it permanent; TCJA 2017 origin)" ; :auditStories "sec: S3-131" ;
+    :currentFigure :Fig_CashLimit .
+:PageFig_F48 a :PageFigure ; rdfs:label "F48" ; :pageSection "4.1.5" ;
+    :pagePrints "$2,500 Statement of Value fee" ; :auditSays "not given in row (I7: $8,400)" ; :auditLawChange "other (IRS fee increase)" ; :auditStories "none" .
+:PageFig_F51 a :PageFigure ; rdfs:label "F51" ; :pageSection "4.2.1" ;
+    :pagePrints "15% accumulated earnings tax" ; :auditSays "20%" ; :auditLawChange "other (2013 law)" ; :auditStories "S4-17" ;
+    :currentFigure :Fig_AccumulatedEarnings .
+:PageFig_X3 a :PageFigure ; rdfs:label "X3" ; :pageSection "4.2.1" ;
+    :pagePrints "$100,000 QCD limit" ; :auditSays "$111,000 (2026)" ; :auditLawChange "inflation indexing (SECURE 2.0)" ; :auditStories "sec: S4-16, S4-17, S4-18" ;
+    :currentFigure :Fig_QCDLimit .
+:PageFig_F59 a :PageFigure ; rdfs:label "F59" ; :pageSection "4.2.3" ;
+    :pagePrints "15% dividend/LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "sec: S4-20, S4-21, S4-22" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F62 a :PageFigure ; rdfs:label "F62" ; :pageSection "4.2.4" ;
+    :pagePrints "no corporate floor" ; :auditSays "1% floor (from 2026)" ; :auditLawChange "2025 law (OBBBA)" ; :auditStories "S4-23" ;
+    :currentFigure :Fig_CorporateFloor .
+:PageFig_F68 a :PageFigure ; rdfs:label "F68" ; :pageSection "4.2.6" ;
+    :pagePrints "7% two-life gift annuity rate" ; :auditSays "not given (above current ACGA rates)" ; :auditLawChange "other (ACGA rate schedule)" ; :auditStories "S4-27" .
+:PageFig_F73 a :PageFigure ; rdfs:label "F73" ; :pageSection "4.3.3" ;
+    :pagePrints "15% dividend/LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "sec: S4-34, S4-35, S4-36, S4-37" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F76 a :PageFigure ; rdfs:label "F76" ; :pageSection "4.3.4" ;
+    :pagePrints "\"new\" vehicle rules" ; :auditSays "not given" ; :auditLawChange "other (2004-05 rules; not named)" ; :auditStories "sec: S4-38, S4-39" .
+:PageFig_F100 a :PageFigure ; rdfs:label "F100" ; :pageSection "4.6.1" ;
+    :pagePrints "age 70 1/2" ; :auditSays "not given" ; :auditLawChange "other (SECURE-era age changes; not named)" ; :auditStories "sec: S4-57, S4-58" .
+:PageFig_F97 a :PageFigure ; rdfs:label "F97" ; :pageSection "4.6.1" ;
+    :pagePrints "22.9 Uniform / 13.4 single-life at 75" ; :auditSays "24.6 / about 14.8 (2022 tables)" ; :auditLawChange "other (2022 IRS tables)" ; :auditStories "S4-58" .
+:PageFig_F125 a :PageFigure ; rdfs:label "F125" ; :pageSection "4.7.1" ;
+    :pagePrints "15% LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "S4-77" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_X4 a :PageFigure ; rdfs:label "X4" ; :pageSection "4.7.1" ;
+    :pagePrints "$100,000 QCD limit" ; :auditSays "$111,000 (2026)" ; :auditLawChange "inflation indexing (SECURE 2.0)" ; :auditStories "sec: S4-77, S4-78, S4-79, S4-80" ;
+    :currentFigure :Fig_QCDLimit .
+:PageFig_F148 a :PageFigure ; rdfs:label "F148" ; :pageSection "4.8.1" ;
+    :pagePrints "\"newer\" LLC wording" ; :auditSays "not given" ; :auditLawChange "other (not named)" ; :auditStories "sec: S4-97" .
+:PageFig_F182 a :PageFigure ; rdfs:label "F182" ; :pageSection "4.11.1" ;
+    :pagePrints "EE and HH as common bond types" ; :auditSays "HH not issued since 2004" ; :auditLawChange "other (Treasury program change)" ; :auditStories "none" .
+:PageFig_F184 a :PageFigure ; rdfs:label "F184" ; :pageSection "4.11.1" ;
+    :pagePrints "Series E earning interest" ; :auditSays "none earn (last matured 2010)" ; :auditLawChange "other (bond maturity)" ; :auditStories "none" .
+:PageFig_F185 a :PageFigure ; rdfs:label "F185" ; :pageSection "4.11.1" ;
+    :pagePrints "paper bond purchases" ; :auditSays "electronic only since 2012; refund paper I bonds ended 2025" ; :auditLawChange "other (Treasury program change)" ; :auditStories "none" .
+:PageFig_X6 a :PageFigure ; rdfs:label "X6" ; :pageSection "4.11.1" ;
+    :pagePrints "income-producing HH bonds" ; :auditSays "none (all matured by Aug 2024)" ; :auditLawChange "other (bond maturity)" ; :auditStories "none" .
+:PageFig_F192 a :PageFigure ; rdfs:label "F192" ; :pageSection "4.12.1" ;
+    :pagePrints "2001 statistics; 15% top rate (2003)" ; :auditSays "20% (2013) + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "sec: S4-125, S4-126" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F206 a :PageFigure ; rdfs:label "F206" ; :pageSection "4.12.4" ;
+    :pagePrints "older 4940 tax not mentioned" ; :auditSays "1.39% (2020)" ; :auditLawChange "2019 law" ; :auditStories "none" ;
+    :currentFigure :Fig_4940Rate .
+:PageFig_F210 a :PageFigure ; rdfs:label "F210" ; :pageSection "4.13.1" ;
+    :pagePrints "pre-2018 AMT exemption" ; :auditSays "not given" ; :auditLawChange "TCJA 2017" ; :auditStories "sec: S4-131" .
+:PageFig_F231 a :PageFigure ; rdfs:label "F231" ; :pageSection "4.14.6" ;
+    :pagePrints "no corporate floor" ; :auditSays "1% floor (2026)" ; :auditLawChange "2025 law (OBBBA)" ; :auditStories "S4-145" ;
+    :currentFigure :Fig_CorporateFloor .
+:PageFig_I18 a :PageFigure ; rdfs:label "I18" ; :pageSection "5.1.1" ;
+    :pagePrints "15% LTCG rate" ; :auditSays "20% + 3.8% NIIT" ; :auditLawChange "other (2013 rate changes; not named)" ; :auditStories "S5-3" ;
+    :currentFigure :Fig_TopCapitalGainRate .
+:PageFig_F260 a :PageFigure ; rdfs:label "F260" ; :pageSection "6.1.2" ;
+    :pagePrints "2000CM table" ; :auditSays "2010CM (June 2023)" ; :auditLawChange "other (IRS table update)" ; :auditStories "S6-3" ;
+    :currentFigure :Fig_MortalityTable .
+:PageFig_F261 a :PageFigure ; rdfs:label "F261" ; :pageSection "6.1.2" ;
+    :pagePrints "pre-2022 RMD tables" ; :auditSays "2022 tables" ; :auditLawChange "other (IRS table update)" ; :auditStories "sec: S6-3" .
+:PageFig_F263 a :PageFigure ; rdfs:label "F263" ; :pageSection "6.1.3" ;
+    :pagePrints "1999 actuarial books" ; :auditSays "2009 and 2023 editions" ; :auditLawChange "other (IRS table update)" ; :auditStories "none" .
+:PageFig_F264 a :PageFigure ; rdfs:label "F264" ; :pageSection "6.1.4" ;
+    :pagePrints "Table 90CM" ; :auditSays "2010CM (2023)" ; :auditLawChange "other (IRS table update)" ; :auditStories "S6-4" ;
+    :currentFigure :Fig_MortalityTable .
+:PageFig_F273 a :PageFigure ; rdfs:label "F273" ; :pageSection "6.3.2" ;
+    :pagePrints "older ACGA rate table" ; :auditSays "newer ACGA tables (2020 on)" ; :auditLawChange "other (ACGA rate schedule)" ; :auditStories "S6-14" .
+:PageFig_F293 a :PageFigure ; rdfs:label "F293" ; :pageSection "6.5.1" ;
+    :pagePrints "Table 90CM" ; :auditSays "2010CM" ; :auditLawChange "other (IRS table update)" ; :auditStories "S6-33" ;
+    :currentFigure :Fig_MortalityTable .
+:PageFig_I23 a :PageFigure ; rdfs:label "I23" ; :pageSection "7.1.2" ;
+    :pagePrints "$10,000 manager cap" ; :auditSays "$20,000" ; :auditLawChange "not named in audit" ; :auditStories "sec: S7-7, S7-8, S7-9, S7-10" ;
+    :currentFigure :Fig_4941Manager ; :matchNote "The audit names only section 7.1.2; matched to the 4941(c)(2) cap, the one manager cap read at $20,000 besides 4958(d)(2). Inferred." .
+:PageFig_I25 a :PageFigure ; rdfs:label "I25" ; :pageSection "7.1.5" ;
+    :pagePrints "older 990 penalty amounts" ; :auditSays "$25/day up to $13,000; $130/day up to $66,500 (2026)" ; :auditLawChange "inflation indexing" ; :auditStories "none" .
+:PageFig_I29 a :PageFigure ; rdfs:label "I29" ; :pageSection "7.1.9" ;
+    :pagePrints "2% / 1% 4940 tax" ; :auditSays "1.39% (2020)" ; :auditLawChange "2019 law" ; :auditStories "none" ;
+    :currentFigure :Fig_4940Rate .
+:PageFig_I30 a :PageFigure ; rdfs:label "I30" ; :pageSection "7.2.1" ;
+    :pagePrints "2% / 1% 4940 tax" ; :auditSays "1.39% (2020)" ; :auditLawChange "2019 law" ; :auditStories "none" ;
+    :currentFigure :Fig_4940Rate .
+:PageFig_F315 a :PageFigure ; rdfs:label "F315" ; :pageSection "7.2.7" ;
+    :pagePrints "two-tier 4940 rate and 4940(e) reduction" ; :auditSays "1.39% single rate" ; :auditLawChange "2019 law" ; :auditStories "none" ;
+    :currentFigure :Fig_4940Rate .
+:PageFig_F317 a :PageFigure ; rdfs:label "F317" ; :pageSection "7.2.9" ;
+    :pagePrints "50% cash limit" ; :auditSays "60%" ; :auditLawChange "TCJA 2017" ; :auditStories "sec: S7-21, S7-22, S7-23" ;
+    :currentFigure :Fig_CashLimit .
+:PageFig_I34 a :PageFigure ; rdfs:label "I34" ; :pageSection "7.2.9" ;
+    :pagePrints "2% 4940 tax" ; :auditSays "1.39%" ; :auditLawChange "2019 law" ; :auditStories "sec: S7-21, S7-22, S7-23" ;
+    :currentFigure :Fig_4940Rate .
+:PageFig_I35 a :PageFigure ; rdfs:label "I35" ; :pageSection "7.2.9" ;
+    :pagePrints "50% cash limit" ; :auditSays "60%" ; :auditLawChange "TCJA 2017 (permanent under 2025 law per I13)" ; :auditStories "sec: S7-21, S7-22, S7-23" ;
+    :currentFigure :Fig_CashLimit .
+:PageFig_F326 a :PageFigure ; rdfs:label "F326" ; :pageSection "8.1.2" ;
+    :pagePrints "state registration counts and fees" ; :auditSays "not given" ; :auditLawChange "other (state rules)" ; :auditStories "S8-2" .
+:PageFig_F328 a :PageFigure ; rdfs:label "F328" ; :pageSection "8.1.3" ;
+    :pagePrints "$30-$100 penalty range" ; :auditSays "not given" ; :auditLawChange "inflation indexing (implied; not named)" ; :auditStories "none" .
+:PageFig_F338 a :PageFigure ; rdfs:label "F338" ; :pageSection "8.2.3" ;
+    :pagePrints "5% first-tier self-dealing tax" ; :auditSays "10%" ; :auditLawChange "other (2006 law; audit names no act)" ; :auditStories "S8-8" ;
+    :currentFigure :Fig_4941SelfDealer .
+:PageFig_F339 a :PageFigure ; rdfs:label "F339" ; :pageSection "8.2.3" ;
+    :pagePrints "3 + 3 month extension" ; :auditSays "6-month automatic" ; :auditLawChange "other (IRS procedure)" ; :auditStories "sec: S8-8, S8-9" .

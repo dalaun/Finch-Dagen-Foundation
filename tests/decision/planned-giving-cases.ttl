@@ -1,0 +1,376 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Worked planned gifts for decide_spend.py: lead trusts, remainder unitrusts,
+# business interests, the estate exception, a residence trust, bargain sales
+# and the foundation's own payout. Synthetic: roles only, every amount and
+# percentage illustrative. No verdict is stated here; expected.ttl is the
+# answer key. Not legal or tax advice.
+
+# Roles used here. td:Founder is a disqualified person in trust-domain-ontology.ttl;
+# :FounderChild and :ManagementCompany are disqualified persons in decision-cases.ttl.
+td:Founder dm:managesFoundation td:ExampleFoundationTrust .
+:FamilyHoldingCompany a td:DisqualifiedPerson ;
+    rdfs:label "A family company that issued the shares a trust holds; insiders own more than 35 percent" .
+:UnrelatedPublicCharity dm:isPublicCharity true ; rdfs:label "An unrelated public charity" .
+:IndependentLeadTrustee rdfs:label "Independent trustee of a lead trust (unrelated to the founder, not his employee)" .
+
+# ---------------------------------------------------------------------
+# Lead trusts: the foundation takes the lead, family takes the remainder
+# ---------------------------------------------------------------------
+# G01 Lead annuity trust, independent trustee, holds marketable securities only.
+:G01_LeadAnnuityClean a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ; dm:charitableIncomeValuePercent "90"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G02 Lead trust that pays the foundation "all net income" and claims a deduction.
+:G02_LeadNetIncome a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:OtherIncomeForm ; dm:charitableIncomeValuePercent "90"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G03 Near-zeroed-out lead trust (lead worth 95 percent) funded with 60 percent of
+#     the operating company; insiders hold 30 percent more. Year 2, no plan.
+:G03_LeadHoldsBusinessNoPlan a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ; dm:charitableIncomeValuePercent "95"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    dm:holderVotingPercent "60"^^xsd:decimal ; dm:holderValuePercent "60"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "2"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G04 The same trust in year 7, no extension.
+:G04_LeadHoldsBusinessPastPeriod a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ; dm:charitableIncomeValuePercent "95"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    dm:holderVotingPercent "60"^^xsd:decimal ; dm:holderValuePercent "60"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "7"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G05 Lead trust kept at 55 percent charitable value, holding the same business.
+:G05_LeadAtSixtyHoldsBusiness a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:UnitrustInterest ; dm:charitableIncomeValuePercent "55"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    dm:holderVotingPercent "60"^^xsd:decimal ; dm:holderValuePercent "60"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "7"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G06 Clean lead trust, but the founder is its trustee and manages the foundation.
+:G06_FounderTrusteeOfLead a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ; dm:charitableIncomeValuePercent "90"^^xsd:decimal ;
+    dm:giftTrustee td:Founder ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G07 Lead trust sells a business interest to the founder's management company at market.
+:G07_LeadSellsToInsider a dm:PlannedGift ;
+    dm:giftVehicle dm:FamilyLeadTrust ; dm:deductionAllowed true ; dm:deductionFor dm:IncomeInterest ;
+    dm:incomeInterestForm dm:GuaranteedAnnuity ; dm:charitableIncomeValuePercent "90"^^xsd:decimal ;
+    dm:giftTrustee :IndependentLeadTrustee ; dm:leadBeneficiary td:ExampleFoundationTrust ;
+    dm:counterparty :ManagementCompany ; dm:vehicleAct dm:SaleOrExchangeAct ; dm:atLeastFairMarketValue true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# ---------------------------------------------------------------------
+# Remainder unitrusts: the family takes the payout, the foundation the rest
+# ---------------------------------------------------------------------
+# G08 The family company redeems the unitrust's shares on the same terms as every holder, at value.
+:G08_RedemptionSameTerms a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:counterparty :FamilyHoldingCompany ; dm:vehicleAct dm:RedemptionAct ;
+    dm:sameTermsAllHolders true ; dm:atLeastFairMarketValue true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G09 The same redemption, but family holders are offered a better price.
+:G09_RedemptionFavorsFamily a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:counterparty :FamilyHoldingCompany ; dm:vehicleAct dm:RedemptionAct ;
+    dm:sameTermsAllHolders false ; dm:atLeastFairMarketValue true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G10 The unitrust pays its 5 percent amount to the founder, as its terms require.
+:G10_UnitrustPaysFounder a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:counterparty td:Founder ; dm:vehicleAct dm:PayoutUnderTermsAct ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G11 A 60 percent payout.
+:G11_UnitrustPayoutTooHigh a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "60"^^xsd:decimal ; dm:remainderValuePercent "12"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G12 A remainder worth 8 percent.
+:G12_UnitrustRemainderTooSmall a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "8"^^xsd:decimal ; dm:remainderValuePercent "8"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G13 An operating LLC interest into the unitrust; its income is unrelated business income.
+:G13_UnitrustHoldsOperatingLLC a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ; dm:producesUBTI true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G14 S corporation stock into the unitrust.
+:G14_SStockIntoUnitrust a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ; dm:holdsSCorpStock true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# ---------------------------------------------------------------------
+# The foundation's own holdings and payout
+# ---------------------------------------------------------------------
+# G15 S corporation stock given to the foundation itself: 15 percent, insiders 5 percent.
+:G15_SStockToFoundation a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:holdsSCorpStock true ;
+    dm:holderVotingPercent "15"^^xsd:decimal ; dm:holderValuePercent "15"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "5"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "1"^^xsd:decimal .
+
+# G16 The foundation receives 40 percent of the operating company by bequest; year 3, written plan.
+:G16_BequestWithPlan a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:holderVotingPercent "40"^^xsd:decimal ; dm:holderValuePercent "40"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "3"^^xsd:decimal ; dm:writtenDispositionPlan true .
+
+# G17 The foundation owns all of a rental holding company: 97 percent passive income.
+:G17_PassiveHoldingCompany a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:holderVotingPercent "100"^^xsd:decimal ; dm:holderValuePercent "100"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "0"^^xsd:decimal ; dm:passiveIncomePercent "97"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "9"^^xsd:decimal .
+
+# G18 A year's payout: noncharitable-use assets 2,000,000, taxes 2,000, distributions 120,000.
+:G18_PayoutMet a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:investmentAssetsFMV "2000000"^^xsd:decimal ; dm:acquisitionIndebtedness "0"^^xsd:decimal ;
+    dm:taxesForYear "2000"^^xsd:decimal ; dm:qualifyingDistributionsByDeadline "120000"^^xsd:decimal .
+
+# G19 The same year with 60,000 distributed.
+:G19_PayoutShort a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:investmentAssetsFMV "2000000"^^xsd:decimal ; dm:acquisitionIndebtedness "0"^^xsd:decimal ;
+    dm:taxesForYear "2000"^^xsd:decimal ; dm:qualifyingDistributionsByDeadline "60000"^^xsd:decimal .
+
+# ---------------------------------------------------------------------
+# The estate administration exception
+# ---------------------------------------------------------------------
+# G20 The estate sells business shares the foundation would receive to the founder's
+#     child: power of sale, court approval, before the estate closes, at value, for cash.
+:G20_EstateSaleApproved a dm:PlannedGift ;
+    dm:giftVehicle dm:EstateAdministration ; dm:foundationHasExpectancy true ;
+    dm:counterparty :FounderChild ; dm:vehicleAct dm:SaleOrExchangeAct ;
+    dm:fiduciaryPowerOfSale true ; dm:probateCourtApproved true ; dm:beforeEstateTerminates true ;
+    dm:atLeastFairMarketValue true ; dm:atLeastAsLiquid true .
+
+# G21 The same sale without the court's approval.
+:G21_EstateSaleNoCourt a dm:PlannedGift ;
+    dm:giftVehicle dm:EstateAdministration ; dm:foundationHasExpectancy true ;
+    dm:counterparty :FounderChild ; dm:vehicleAct dm:SaleOrExchangeAct ;
+    dm:fiduciaryPowerOfSale true ; dm:probateCourtApproved false ; dm:beforeEstateTerminates true ;
+    dm:atLeastFairMarketValue true ; dm:atLeastAsLiquid true .
+
+# ---------------------------------------------------------------------
+# The home: a qualified personal residence trust
+# ---------------------------------------------------------------------
+# G22 One residence, lived in, one room used as the principal place of business, sale back barred.
+:G22_ResidenceTrustWithOffice a dm:PlannedGift ;
+    dm:giftVehicle dm:PersonalResidenceTrust ; dm:onlyOneResidence true ; dm:primaryUseAsResidence true ;
+    dm:transientLodgingWithServices false ; dm:barsSaleToGrantor true .
+
+# G23 The same home rented out as short-term lodging with cleaning and meals.
+:G23_ResidenceTrustLodging a dm:PlannedGift ;
+    dm:giftVehicle dm:PersonalResidenceTrust ; dm:onlyOneResidence true ; dm:primaryUseAsResidence true ;
+    dm:transientLodgingWithServices true ; dm:barsSaleToGrantor true .
+
+# G24 A trust instrument that leaves the sale back to the grantor open.
+:G24_ResidenceTrustSaleBack a dm:PlannedGift ;
+    dm:giftVehicle dm:PersonalResidenceTrust ; dm:onlyOneResidence true ; dm:primaryUseAsResidence true ;
+    dm:transientLodgingWithServices false ; dm:barsSaleToGrantor false .
+
+# ---------------------------------------------------------------------
+# Bargain sales
+# ---------------------------------------------------------------------
+# G25 The founder sells property to the foundation at half its value.
+:G25_BargainSaleToFoundation a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ; dm:seller td:Founder ; dm:buyer td:ExampleFoundationTrust ;
+    dm:basisAllocated true .
+
+# G26 The same sale to an unrelated public charity, basis split.
+:G26_BargainSaleToPublicCharity a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ; dm:seller td:Founder ; dm:buyer :UnrelatedPublicCharity ;
+    dm:basisAllocated true .
+
+# G27 The same sale with no basis split.
+:G27_BargainSaleNoBasisSplit a dm:PlannedGift ;
+    dm:giftVehicle dm:BargainSaleVehicle ; dm:seller td:Founder ; dm:buyer :UnrelatedPublicCharity ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:basisAllocated false .
+
+# G28 A planned gift with no vehicle named.
+:G28_NoVehicle a dm:PlannedGift .
+
+# ---------------------------------------------------------------------
+# Debt and a sale fixed before the gift (added from the GiftLaw stories)
+# ---------------------------------------------------------------------
+# G29 The founder funds the unitrust with land under a 6-year-old loan; the trust takes it subject to the loan.
+:G29_UnitrustMortgagedLand a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "6"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:donorLiableOnDebt false ; dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G30 The same land with a loan placed 12 years ago, not assumed.
+:G30_UnitrustOldLien a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:donorLiableOnDebt false ; dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G31 The 12-year-old loan, but the founder stays personally liable on it.
+:G31_UnitrustRecourseDebt a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "6"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:transferredSubjectToLien true ; dm:lienPlacedYearsBefore "12"^^xsd:decimal ;
+    dm:donorLiableOnDebt true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G32 Company stock into the unitrust after a buyer has signed to buy the company.
+:G32_UnitrustSaleAlreadySigned a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:transferor td:Founder ; dm:saleArrangedBeforeGift true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# ---------------------------------------------------------------------
+# Renting out equipment and vehicles (added from the audit of the GiftLaw pages)
+# ---------------------------------------------------------------------
+# G33 The unitrust owns a warehouse and its forklifts and leases both to an unrelated firm;
+#     equipment is 8 percent of the rent, fixed rent.
+:G33_UnitrustLeaseIncidentalEquipment a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :UnrelatedLessee ;
+    dm:personalPropertyRentPercent "8"^^xsd:decimal ; dm:rentDependsOnProfits false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G34 The unitrust leases a fleet of delivery vans (all personal property) to an unrelated firm.
+:G34_UnitrustLeasesVans a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :UnrelatedLessee ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G35 The same vans leased to the founder's management company.
+:G35_UnitrustLeasesVansToInsider a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ; dm:counterparty :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+
+# G36 The foundation itself leases equipment to the founder's management company at market rent.
+:G36_FoundationLeasesToInsider a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ; dm:counterparty :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false .
+
+:UnrelatedLessee rdfs:label "A business unrelated to the founder that rents property" .
+
+# ---------------------------------------------------------------------
+# The unitrust payment period (added from regrading GiftLaw story S4-66)
+# ---------------------------------------------------------------------
+# G37 Spouse for life, then the children for 20 years.
+:G37_UnitrustLifeThenTerm a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "15"^^xsd:decimal ;
+    dm:unitrustPeriodForm dm:LifeThenTerm ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+# G38 Spouse for life, then the children for their lives or 20 years, whichever is shorter.
+:G38_UnitrustLifeThenShorter a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "15"^^xsd:decimal ;
+    dm:unitrustPeriodForm dm:LifeThenShorterOfLifeOrTerm ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# ---------------------------------------------------------------------
+# Evidence gaps (added from the PR 15 review)
+# ---------------------------------------------------------------------
+# G39 A vehicle name the checks do not cover (here, a misspelling).
+:G39_UnknownVehicle a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrus ; dm:deductionAllowed true .
+# G40 G35's insider lease, recorded with the lessee only and no counterparty.
+:G40_InsiderLeaseLesseeOnly a dm:PlannedGift ;
+    dm:giftVehicle dm:CharitableRemainderUnitrust ; dm:deductionAllowed true ; dm:deductionFor dm:RemainderInterest ;
+    dm:unitrustPercent "5"^^xsd:decimal ; dm:remainderValuePercent "40"^^xsd:decimal ;
+    dm:vehicleAct dm:LeaseAct ; dm:lessee :ManagementCompany ;
+    dm:personalPropertyRentPercent "100"^^xsd:decimal ; dm:rentDependsOnProfits false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:holdsSCorpStock false ; dm:producesUBTI false ; dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false ;
+    dm:unitrustPeriodForm dm:LivesOnly .
+# G41 G19's payout year with the distribution figure missing.
+:G41_PayoutNoDistributionFigure a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:investmentAssetsFMV "2000000"^^xsd:decimal ; dm:acquisitionIndebtedness "0"^^xsd:decimal ;
+    dm:taxesForYear "2000"^^xsd:decimal .
+
+# G42 the foundation itself pays the founder and calls it a payout under its terms.
+# The payout exception belongs to a split-interest trust's income beneficiary
+# (4947(a)(2)(A)); the foundation's own payment to a disqualified person is a
+# transfer of its income or assets (4941(d)(1)(E)).
+:G42_FoundationPaysFounderUnderTerms a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ;
+    dm:counterparty td:Founder ; dm:vehicleAct dm:PayoutUnderTermsAct .

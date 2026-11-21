@@ -1,0 +1,385 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# Planned-giving vehicles as instruments (DRAFT, proposed 2026-11-21)
+#
+# A map from the GiftLaw Pro index (a secondary source) to the Code and
+# regulations behind it (the primary source). Each vehicle the founder's
+# structure could use is a dm:PlannedGift, graded with the same four outcomes
+# as a foundation spend and an entity deal. Each check names its pressure
+# (P1 still applies), the primary authority, and how well that was read:
+#   ReadInStatute - quoted from the Code or regulation
+#   Inferred      - our reading of text that was read
+#   NotRead       - named only
+# GiftLaw Pro is recorded as :secondarySource. Only 2 of its 25 priority pages
+# loaded; the site turned the rest away, so nothing here rests on GiftLaw alone.
+# Roles only; every amount in the cases is illustrative. Not legal or tax advice.
+# Shapes: planned-giving-shapes.ttl. Cases: tests/decision/planned-giving-cases.ttl.
+# =====================================================================
+
+<http://example.org/trust-domain/planned-giving> a owl:Ontology ;
+    rdfs:label "Planned-giving vehicles as instruments"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    owl:imports <http://example.org/trust-domain/irs-instruments> ;
+    rdfs:comment "Statutes read 2026-11-21 at uscode.house.gov (664, 1011, 4941, 4943, 4947); 2702, 1361, 4942 and the regulations read the same day at law.cornell.edu. GiftLaw Pro sections 3.5.1 and 3.10.1 read; the rest refused automated fetches. Not legal or tax advice."@en .
+
+# ---------------------------------------------------------------------
+# Vocabulary
+# ---------------------------------------------------------------------
+:PlannedGift a owl:Class ; rdfs:label "Planned gift"@en ;
+    rdfs:comment "A transfer through a planned-giving vehicle (a lead trust, a remainder trust, a bargain sale, a residence trust, an estate), or a year of the foundation's own holdings and payout. Graded before the transfer is signed."@en .
+:giftVehicle a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :GiftVehicle .
+:GiftVehicle a owl:Class .
+:isSplitInterestTrust a owl:DatatypeProperty ; rdfs:domain :GiftVehicle ; rdfs:range xsd:boolean ;
+    rdfs:comment "A trust with charitable and noncharitable interests. When a charitable deduction was allowed for it, 4947(a)(2) applies the private-foundation rules to it."@en .
+:FamilyLeadTrust a :GiftVehicle ; rdfs:label "non-grantor (family) charitable lead trust"@en ; :isSplitInterestTrust true ;
+    rdfs:comment "The charity, here the foundation, takes a payment for a term; family members take what is left. GiftLaw 3.5.1 (secondary, read): 'the lead trust remainder will pass to family'; the trust 'must file Form 1041 and pay taxes on its ordinary income and capital gain', with an 'unlimited income tax deduction for distributions to qualified charities' (642(c), not read)."@en .
+:CharitableRemainderUnitrust a :GiftVehicle ; rdfs:label "charitable remainder unitrust"@en ; :isSplitInterestTrust true ;
+    rdfs:comment "Pays a fixed percentage of its yearly value to noncharitable recipients, then the remainder goes to charity. 664(c)(1), read: it shall 'not be subject to any tax imposed by this subtitle.'"@en .
+:BargainSaleVehicle a :GiftVehicle ; rdfs:label "bargain sale (part gift, part sale)"@en ; :isSplitInterestTrust false .
+:PersonalResidenceTrust a :GiftVehicle ; rdfs:label "qualified personal residence trust"@en ; :isSplitInterestTrust false .
+:EstateAdministration a :GiftVehicle ; rdfs:label "an estate or revocable trust in which the foundation has an interest or expectancy"@en ; :isSplitInterestTrust false .
+:FoundationHolding a :GiftVehicle ; rdfs:label "the foundation's own holdings and payout for a year"@en ; :isSplitInterestTrust false .
+
+:deductionAllowed a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "A charitable deduction (170, 642(c), 2055, 2522 and others listed in 4947(a)(2)) was allowed for the transfer in."@en .
+:deductionFor a owl:ObjectProperty ; rdfs:range :InterestKind .
+:InterestKind a owl:Class .
+:IncomeInterest a :InterestKind ; rdfs:label "the charity's income (lead) interest"@en .
+:RemainderInterest a :InterestKind ; rdfs:label "the charity's remainder interest"@en .
+:charitableIncomeValuePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Value of the charitable income interest, as a percent of the trust's fair market value when it was funded (the 4947(b)(3)(A) 60 percent test)."@en .
+:incomeInterestForm a owl:ObjectProperty ; rdfs:range :IncomeForm .
+:IncomeForm a owl:Class .
+:GuaranteedAnnuity a :IncomeForm ; rdfs:label "guaranteed annuity interest"@en .
+:UnitrustInterest a :IncomeForm ; rdfs:label "unitrust interest"@en .
+:OtherIncomeForm a :IncomeForm ; rdfs:label "any other income interest (for example, all net income)"@en .
+:unitrustPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:remainderValuePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Value of the charitable remainder, determined under 7520, as a percent of the property's net fair market value when contributed."@en .
+:producesUBTI a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "The trust holds an interest (an operating LLC or partnership interest, debt-financed property) that produces unrelated business taxable income."@en .
+:holdsSCorpStock a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:giftTrustee a owl:ObjectProperty ;
+    rdfs:comment "Who serves as trustee of the planned-giving trust."@en .
+:leadBeneficiary a owl:ObjectProperty .
+:managesFoundation a owl:ObjectProperty ;
+    rdfs:comment "A foundation manager (officer, director or trustee) of the foundation named."@en .
+
+# Self-dealing inside the vehicle
+:counterparty a owl:ObjectProperty ;
+    rdfs:comment "The other side of a sale, lease, loan, redemption or payment with the vehicle's property."@en .
+:vehicleAct a owl:ObjectProperty ; rdfs:range :VehicleAct .
+:VehicleAct a owl:Class .
+:SaleOrExchangeAct a :VehicleAct ; rdfs:label "sale or exchange"@en .
+:LeaseAct a :VehicleAct ; rdfs:label "lease"@en .
+:LoanAct a :VehicleAct ; rdfs:label "loan or extension of credit"@en .
+:RedemptionAct a :VehicleAct ; rdfs:label "redemption, liquidation, merger or recapitalization"@en .
+:PayoutUnderTermsAct a :VehicleAct ; rdfs:label "a payment the trust's terms require to an income beneficiary"@en .
+:sameTermsAllHolders a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:atLeastFairMarketValue a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:foundationHasExpectancy a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:fiduciaryPowerOfSale a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "The executor or trustee has a power of sale, a power to reallocate the property to another beneficiary, or must sell under an option (53.4941(d)-1(b)(3)(i))."@en .
+:probateCourtApproved a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:beforeEstateTerminates a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:atLeastAsLiquid a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+
+# Business holdings (4943)
+:holderVotingPercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "The foundation's or trust's own share of the company's voting stock (or profits interest)."@en .
+:holderValuePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:passiveIncomePercent a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Share of the company's gross income from passive sources (dividends, interest, rents, royalties, capital gains)."@en .
+:acquiredByGiftOrBequest a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:yearsSinceAcquired a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:extensionGranted a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:writtenDispositionPlan a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "A written plan, on the decision record, to bring holdings inside the limit before the disposition period ends."@en .
+
+# Residence trust (2702, 25.2702-5)
+:onlyOneResidence a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:primaryUseAsResidence a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:transientLodgingWithServices a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+:barsSaleToGrantor a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+
+# Bargain sale (1011(b), 1.1011-2)
+:seller a owl:ObjectProperty .
+:buyer a owl:ObjectProperty .
+:basisAllocated a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
+    rdfs:comment "The seller's basis is split between the sale part and the gift part in the 1011(b) ratio."@en .
+:isPublicCharity a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+
+# Payout (4942)
+:investmentAssetsFMV a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Fair market value of assets other than those used directly in the exempt purpose (4942(e)(1)(A))."@en .
+:acquisitionIndebtedness a owl:DatatypeProperty ; rdfs:range xsd:decimal .
+:taxesForYear a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Subtitle A and 4940 taxes for the year, which reduce the distributable amount (4942(d)(2))."@en .
+:qualifyingDistributionsByDeadline a owl:DatatypeProperty ; rdfs:range xsd:decimal ;
+    rdfs:comment "Qualifying distributions charged to the year and made before the first day of the second following year."@en .
+
+# Debt on contributed property, and a sale fixed before the gift (added from the GiftLaw stories)
+:transferor a owl:ObjectProperty ; rdfs:domain :PlannedGift ;
+    rdfs:comment "Who puts the property into the trust or the foundation."@en .
+:transferredSubjectToLien a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The property carries a mortgage or similar lien when it is transferred."@en .
+:trustAssumesLien a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The trust or foundation assumes the debt rather than only taking the property subject to it."@en .
+:lienPlacedYearsBefore a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:decimal ;
+    rdfs:comment "How many years before the transfer a disqualified person placed the lien."@en .
+:donorLiableOnDebt a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The donor stays personally liable on debt on the trust's property (recourse debt, or a guarantee)."@en .
+:saleArrangedBeforeGift a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "When the property was given, a buyer was already bound to buy it, or the sale was practically certain."@en .
+
+# Rent from personal property (added from the audit of the GiftLaw pages)
+:personalPropertyRentPercent a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:decimal ;
+    rdfs:comment "Share of the lease's total rent that is for personal property: equipment, vehicles, furniture, goodwill."@en .
+:rentDependsOnProfits a owl:DatatypeProperty ; rdfs:domain :PlannedGift ; rdfs:range xsd:boolean ;
+    rdfs:comment "The rent depends in whole or in part on anyone's income or profits from the property (a fixed percentage of receipts or sales does not count)."@en .
+:lessee a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:comment "Who rents the property."@en .
+
+:unitrustPeriodForm a owl:ObjectProperty ; rdfs:domain :PlannedGift ; rdfs:range :UnitrustPeriodForm ;
+    rdfs:comment "How long the unitrust pays its noncharitable recipients."@en .
+:UnitrustPeriodForm a owl:Class ; owl:oneOf ( :LivesOnly :TermOnly :LifeThenShorterOfLifeOrTerm :LifeThenTerm ) .
+:LivesOnly a :UnitrustPeriodForm ; rdfs:label "for the life or lives of named individuals"@en .
+:TermOnly a :UnitrustPeriodForm ; rdfs:label "for a term of years not over 20"@en .
+:LifeThenShorterOfLifeOrTerm a :UnitrustPeriodForm ; rdfs:label "A for life, then B for life or a term of up to 20 years, whichever is shorter"@en .
+:LifeThenTerm a :UnitrustPeriodForm ; rdfs:label "A for life, then B for a term of years"@en .
+
+# Secondary sources
+:SecondarySource a owl:Class ; rdfs:label "Secondary source (a summary of the law, not the law)"@en .
+:secondarySource a owl:ObjectProperty ; rdfs:range :SecondarySource .
+:fetchResult a owl:DatatypeProperty ; rdfs:domain :SecondarySource .
+
+:Stage8_PlannedGiving a :Stage ; rdfs:label "G planned-giving vehicles"@en .
+
+# ---------------------------------------------------------------------
+# Checks
+# ---------------------------------------------------------------------
+:Check_PG0 a :DecisionCheck ; :checkConstraint :PG0_GiftEvidence ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "A planned gift with no vehicle named, or a vehicle the checks do not cover, cannot be tested. A payout year with investment assets but no qualifying-distribution figure cannot be tested against 4942(d) and (e)(1): missing evidence is Insufficient, never Allow." .
+
+:Check_PG1 a :DecisionCheck ; :checkConstraint :PG1_LeadForm ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a lead trust that pays the charity 'net income' and still claims a deduction" ;
+    :authority "26 CFR 1.170A-6(c)(1), read: 'No deduction is allowed under section 170' 'unless the income interest is either a guaranteed annuity interest or a unitrust interest'. (c)(2)(i)(A): a guaranteed annuity is 'a determinable amount ... paid periodically, but not less often than annually'. (c)(2)(ii)(A): a unitrust interest is 'a fixed percentage of the net fair market value of the trust assets, determined annually'. The gift tax counterpart, 2522(c)(2)(B), was not read; GiftLaw 3.5.1 (secondary, read) states the same form for family lead trusts." .
+
+:Check_PG2 a :DecisionCheck ; :checkConstraint :PG2_VehicleSelfDealing ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "treating a split-interest trust or an estate as outside the self-dealing rules because it is not the foundation, or the foundation itself selling to, leasing to or lending to an insider" ;
+    :authority "26 USC 4947(a)(2), read: for a trust 'not exempt from tax under section 501(a)' with a deduction allowed, section 4941 'shall apply as if such trust were a private foundation', except (A) 'any amounts payable under the terms of such trust to income beneficiaries'. Exceptions kept open: 4941(d)(2)(F), read, a redemption or similar where 'all of the securities of the same class as that held by the foundation are subject to the same terms' and the foundation receives 'no less than fair market value'; and 53.4941(d)-1(b)(3), read, for an estate or revocable trust: a power of sale, 'approved by the probate court', before the estate terminates, at least 'the fair market value of the foundation's interest or expectancy', and 'at least as liquid as the one it gave up'." .
+
+:Check_PG3a a :DecisionCheck ; :checkConstraint :PG3a_ExcessHoldingsPastPeriod ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a family business held by the foundation or a high-value lead trust indefinitely" ;
+    :authority "26 USC 4943(c)(2)(A): permitted holdings are 20 percent of voting stock less what disqualified persons own. (c)(2)(C), read: de minimis 'not more than 2 percent of the voting stock and not more than 2 percent in value'. (d)(3)(B), read: not a business enterprise if 'at least 95 percent of the gross income of which is derived from passive sources.' 4947(b)(3), read: 4943 does not apply to a split-interest trust if (A) the charitable income interest has 'an aggregate value not more than 60 percent of the aggregate fair market value', or (B) the deduction was for 'every remainder beneficiary but not to any income beneficiary'. (c)(6) gives five years after a gift or bequest; (c)(7), read: 'The Secretary may extend for an additional 5-year period'. The 35 percent effective-control alternative is not modeled." .
+
+:Check_PG3b a :DecisionCheck ; :checkConstraint :PG3b_ExcessHoldingsNoPlan ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :authority "Inside the 4943(c)(6) or (c)(7) period the holding is not yet taxed, but the period ends. Without a written plan to dispose of the excess, the gift sets up a tax. The plan requirement is ours (inferred); the extension conditions in (c)(7) were read in summary only." .
+
+:Check_PG4 a :DecisionCheck ; :checkConstraint :PG4_UnitrustLimits ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a remainder trust that pays out almost everything to the family and leaves charity a token" ;
+    :authority "26 USC 664(d)(2)(A), read: 'a fixed percentage (which is not less than 5 percent nor more than 50 percent) of the net fair market value of its assets'. 664(d)(2)(D), read: 'the value (determined under section 7520) of such remainder interest in such property is at least 10 percent'. 1.664-1(a)(1)(i), read, repeats the 5 percent floor; 1.664-3 was read only in part." .
+
+:Check_PG4b a :DecisionCheck ; :checkConstraint :PG4b_UnitrustUBTI ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "putting an operating LLC interest into a remainder trust and losing its income to the excise tax" ;
+    :authority "26 USC 664(c)(2)(A), read: 'an excise tax equal to the amount of such unrelated business taxable income'. The trust stays exempt but every dollar of that income goes to tax. GiftLaw 4.8.1 (LLC taxation and UBI) was not readable." .
+
+:Check_PG5 a :DecisionCheck ; :checkConstraint :PG5_SStockInRemainderTrust ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a transfer that ends the operating company's S election" ;
+    :authority "26 USC 1361(b)(1)(B), read: an S corporation may not 'have as a shareholder a person (other than an estate, a trust described in subsection (c)(2)' 'or an organization described in subsection (c)(6)) who is not an individual'. (c)(2)(A) does not list a remainder trust, and (e)(1)(B)(iii), read, excludes 'any charitable remainder annuity trust or charitable remainder unitrust' from the electing small business trust. That this ends the election is inferred from that text. GiftLaw 3.10.1 (secondary) summarizes PLR 200203034: a transfer of S stock to a unitrust 'Fails to Qualify'." .
+
+:Check_PG6 a :DecisionCheck ; :checkConstraint :PG6_ResidenceTrust ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a residence trust that holds more than a residence, rents rooms with services, or can sell the home back to the grantor" ;
+    :authority "26 CFR 25.2702-5(c), read. The trust may hold 'one residence' and qualified proceeds; a residence's 'primary use is as a residence of the term holder when occupied by the term holder'; business use is allowed 'provided that such use is secondary'; not if 'used to provide transient lodging' with 'substantial services'. (c)(9): the instrument 'must prohibit the trust from selling or transferring the residence, directly or indirectly, to the grantor'. Example (d)(1), read: one room as the principal place of business, and 'The residence is a personal residence.' 2702(a)(3)(A)(ii), read at Cornell without a currency stamp." .
+
+:Check_PG7a a :DecisionCheck ; :checkConstraint :PG7a_BargainSaleToFoundation ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "calling a sale by an insider to the foundation a gift because the price is low" ;
+    :authority "4941(d)(1)(A), read: 'sale or exchange ... of property between a private foundation and a disqualified person' is self-dealing, with no exception for a low price. That a bargain sale is a sale for this purpose is inferred from 1.1011-2(a)(1), read, which treats it as 'a sale or exchange of property'. An outright gift has no consideration and is not touched." .
+
+:Check_PG7b a :DecisionCheck ; :checkConstraint :PG7b_BasisNotAllocated ; :inStage :Stage8_PlannedGiving ; :onFail :Insufficient ;
+    :enforcedBy :InstitutionalPressure ;
+    :authority "26 USC 1011(b), read: basis for the sale part is 'that portion of the adjusted basis which bears the same ratio to the adjusted basis as the amount realized' 'bears to the fair market value of the property.' 1.1011-2(b), read, repeats it. A bargain sale without that split misstates the gain." .
+
+:Check_PG8 a :DecisionCheck ; :checkConstraint :PG8_PayoutShortfall ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a foundation that holds the family's assets and pays out less than the law requires" ;
+    :authority "26 USC 4942(e)(1), read: minimum investment return 'is 5 percent of the excess of' noncharitable-use assets over 'the acquisition indebtedness with respect to such assets'. (d), read: distributable amount is that return less 'the sum of the taxes imposed on such private foundation for the taxable year under subtitle A and section 4940'. (a), read: 'a tax equal to 30 percent' of income not distributed 'before the first day of the second (or any succeeding) taxable year'; (b) 100 percent if it stays undistributed. Carryovers and set-asides are not modeled." .
+
+:Check_PG9 a :DecisionCheck ; :checkConstraint :PG9_FounderBothSides ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "the founder steering a lead trust's payments into a foundation he also runs, which can pull the trust back into his estate" ;
+    :authority "Inferred. The rulings GiftLaw 3.5.1 summarizes (secondary) have independent trustees: 200030014 (the donor and spouse are not trustees, no salaries), 200108032 (the donor may not be trustee), 200537020 (an unrelated trustee). The estate-inclusion sections (2036, 2038) were not read. ST3's independent reviewer is the same idea." .
+
+:Check_PG10 a :DecisionCheck ; :checkConstraint :PG10_EncumberedTransfer ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a mortgaged property given to a remainder trust or the foundation, which the law counts as a sale by an insider" ;
+    :authority "26 USC 4941(d)(2)(A), read 2026-11-21 at law.cornell.edu: 'the transfer of real or personal property by a disqualified person to a private foundation shall be treated as a sale or exchange' 'if the property is subject to a mortgage or similar lien which the foundation assumes' or 'a mortgage or similar lien which a disqualified person placed on the property' 'within the 10-year period ending on the date of the transfer'. 26 CFR 53.4941(d)-2(a)(2), read: 'similar lien' 'shall include, but is not limited to, deeds of trust and vendors' liens'. It reaches a remainder or lead trust with a deduction through 4947(a)(2), read. A lien whose age is unknown fails closed. That the donor placed the lien is assumed when the donor transfers it." .
+
+:Check_PG11 a :DecisionCheck ; :checkConstraint :PG11_DonorLiableOnTrustDebt ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a remainder trust whose payments discharge the donor's own debt, which the IRS treats as a grantor trust that cannot qualify" ;
+    :authority "Not read. PLR 9015049, as GiftLaw 5.1.2 and 4.7.5 summarize it (secondary): debt the donor stays liable on makes the trust a grantor trust under 677, and a grantor trust cannot be a remainder trust (1.664-1(a)(4)); 1.677(a)-1(d) and 1.664-1(a)(4) were not read. The pages say commentators doubt it but nobody has tested it, so the check fails closed. A private letter ruling may not be cited as precedent (6110(k)(3), read 2026-11-21)." .
+
+:Check_PG12 a :DecisionCheck ; :checkConstraint :PG12_SaleFixedBeforeGift ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "giving company stock to a trust or charity after the sale is already set, so the gain is taxed to the donor anyway" ;
+    :authority "Read in part on 2026-11-21. Ferguson v. Commissioner, 174 F.3d 997 (9th Cir. 1999), read: stock that had ripened into a right to cash before the gift was completed left the gain with the donors. Estate of Hoensheid, T.C. Memo. 2023-34, read in part: the donors' right to the sale proceeds was fixed by the day of the gift, so the gain was theirs. Rev. Rul. 78-197, read on Tax Notes: redemption proceeds are the donor's only if the charity was legally bound or could be compelled to give up the shares; no revocation found, status not verified, and a 2020 Tax Court memorandum (read only in summary) uses the ripening test instead. Palmer not read. Where the line falls turns on facts, so a sale fixed before the gift goes to counsel." .
+
+:Check_PG13 a :DecisionCheck ; :checkConstraint :PG13_PersonalPropertyRent ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a remainder trust or the foundation renting out equipment or vehicles and treating the rent as passive" ;
+    :authority "26 USC 512(b)(3), read 2026-11-21 (unchanged since Pub. L. 91-172, 1969): excluded are 'all rents from real property' and rents from personal property leased with it only 'if the rents attributable to such personal property are an incidental amount of the total rents'; no exclusion 'if more than 50 percent of the total rent' is for personal property, or if the rent 'depends in whole or in part on the income or profits'. 26 CFR 1.512(b)-1(c)(2)(ii), read: generally not incidental 'if such rents exceed 10 percent of the total rents'. Rent that is not excluded is unrelated business taxable income: for a remainder trust, 664(c)(2)(A), read, takes all of it as excise tax (Pub. L. 109-432, 2006, for years after 2006). Leasing to a disqualified person is self-dealing whatever the rent (PG2)." .
+
+:Check_PG14 a :DecisionCheck ; :checkConstraint :PG14_UnitrustPeriod ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure ;
+    :guardsAgainst "a unitrust that pays one person for life and then another for a term of years, which does not qualify" ;
+    :authority "26 CFR 1.664-3(a)(5)(i), read 2026-11-21: the period may not run 'to A for his life and then to B for a term of years'; A for life, then B for life or a term of up to 20 years, whichever is shorter, is allowed when both are alive at creation. Found by regrading GiftLaw story S4-66 against the audit." .
+
+# ---------------------------------------------------------------------
+# Secondary sources: the GiftLaw Pro sections behind each route
+# ---------------------------------------------------------------------
+:GL_3_5_1 a :SecondarySource ; rdfs:label "GiftLaw Pro 3.5.1 Family, or Non-Grantor, Lead Trusts"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=3&SS=5&SS2=1"^^xsd:anyURI ; :fetchResult "read 2026-11-21" .
+:GL_3_10_1 a :SecondarySource ; rdfs:label "GiftLaw Pro 3.10.1 Unitrust Duration and Recipients"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=3&SS=10&SS2=1"^^xsd:anyURI ; :fetchResult "read 2026-11-21" .
+:GL_5_3_3 a :SecondarySource ; rdfs:label "GiftLaw Pro 5.3.3 Lead Trusts and Excess Business Holdings"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=5&SS=3&SS2=3"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_7_2_2 a :SecondarySource ; rdfs:label "GiftLaw Pro 7.2.2 Self-Dealing"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=7&SS=2&SS2=2"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_7_2_3 a :SecondarySource ; rdfs:label "GiftLaw Pro 7.2.3 Minimum and Qualifying Distributions"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=7&SS=2&SS2=3"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_7_2_4 a :SecondarySource ; rdfs:label "GiftLaw Pro 7.2.4 Excess Business Holdings"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=7&SS=2&SS2=4"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_4_8_3 a :SecondarySource ; rdfs:label "GiftLaw Pro 4.8.3 Partnerships and LLCs: Self-Dealing Issues"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=4&SS=8&SS2=3"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_4_14_2 a :SecondarySource ; rdfs:label "GiftLaw Pro 4.14.2 Charity as Sub S Shareholder"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=4&SS=14&SS2=2"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_4_2_3 a :SecondarySource ; rdfs:label "GiftLaw Pro 4.2.3 C Corporations: Stock Sale with Unitrust"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=4&SS=2&SS2=3"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_3_7_5 a :SecondarySource ; rdfs:label "GiftLaw Pro 3.7.5 Life Estate vs. Qualified Personal Residence Trust"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=3&SS=7&SS2=5"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_2_1 a :SecondarySource ; rdfs:label "GiftLaw Pro 2.1 Bargain Sale"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_section.jsp?WebID=GL1999-0001&CC=2&SS=1"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+:GL_7_2_9 a :SecondarySource ; rdfs:label "GiftLaw Pro 7.2.9 Private Operating Foundations"@en ;
+    :sourceUrl "https://giftlawpro.giftlegacy.com/glawpro_subsection.jsp?WebID=GL1999-0001&CC=7&SS=2&SS2=9"^^xsd:anyURI ; :fetchResult "refused automated fetch" .
+
+# ---------------------------------------------------------------------
+# Instruments: the Code and regulations behind each vehicle
+# ---------------------------------------------------------------------
+:IRC4947 a :Instrument ; rdfs:label "IRC 4947 and Reg. 1.170A-6: lead and other split-interest trusts"@en ;
+    :edition "uscode.house.gov, current through P.L. 119-120; 1.170A-6 at law.cornell.edu" ; :status :Current ;
+    :sourceUrl "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section4947&num=0&edition=prelim"^^xsd:anyURI ;
+    :grants :PermLead_FamilyRemainder , :PermLead_HoldBusinessAt60 .
+:PermLead_FamilyRemainder a :Permission ;
+    :permits "Pay the foundation a fixed annuity or unitrust amount for a term, then pass the remainder to family members, with a charitable deduction for the lead interest." ;
+    :condition "The lead interest is a guaranteed annuity or a unitrust interest, paid at least annually (1.170A-6(c)). The trust is then treated as a private foundation for self-dealing (4947(a)(2)). A low 7520 rate makes the lead interest worth more (GiftLaw 3.5.1, secondary)." ;
+    :usableBy :Role_FamilyTrust , :Role_FounderAsTrustee ;
+    :becomesCheck :Check_PG1 , :Check_PG2 , :Check_PG9 ;
+    :ircSection "170(f)(2)(B), 642(c), 2522(c)(2)(B), 4947(a)(2)" ; :evidence :ReadInStatute ;
+    :secondarySource :GL_3_5_1 ;
+    :householdMisses "The family keeps the remainder; the foundation gets a dependable stream; and the gift is valued after the charity's share is subtracted." .
+:PermLead_HoldBusinessAt60 a :Permission ;
+    :permits "Hold an interest in the family business inside a lead trust without the excess-business-holdings tax." ;
+    :condition "4947(b)(3)(A): the charitable income interest is worth 'not more than 60 percent' of the trust's fair market value. That keeps more of the gift taxable when the trust is funded; whether that trade is worth it is a counsel and numbers question (inferred)." ;
+    :usableBy :Role_FamilyTrust , :Role_BusinessTrust ;
+    :becomesCheck :Check_PG3a , :Check_PG3b ;
+    :ircSection "4943, 4947(b)(3)" ; :evidence :ReadInStatute ;
+    :secondarySource :GL_5_3_3 .
+
+:IRC4943 a :Instrument ; rdfs:label "IRC 4943: excess business holdings"@en ;
+    :edition "uscode.house.gov, current through P.L. 119-120" ; :status :Current ;
+    :sourceUrl "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section4943&num=0&edition=prelim"^^xsd:anyURI ;
+    :grants :Perm4943_GiftPeriod , :Perm4943_Passive .
+:Perm4943_GiftPeriod a :Permission ;
+    :permits "Receive a business interest by gift or bequest and hold it over the limit for five years, extendable by five more." ;
+    :condition "4943(c)(6) and (c)(7); the extension is the Secretary's to grant. Holdings must be down to the limit when the period ends." ;
+    :usableBy :Role_Foundation ; :becomesCheck :Check_PG3a , :Check_PG3b ;
+    :ircSection "4943(c)(6), (c)(7)" ; :evidence :ReadInStatute ; :secondarySource :GL_7_2_4 .
+:Perm4943_Passive a :Permission ;
+    :permits "Hold any share of a company that earns at least 95 percent of its gross income from passive sources." ;
+    :condition "4943(d)(3)(B). A holding company of rental property or securities qualifies; an operating company does not." ;
+    :usableBy :Role_Foundation , :Role_FamilyTrust ; :becomesCheck :Check_PG3a ;
+    :ircSection "4943(d)(3)(B)" ; :evidence :ReadInStatute ; :secondarySource :GL_7_2_4 .
+
+:IRC4941Estate a :Instrument ; rdfs:label "Reg. 53.4941(d)-1(b)(3): the estate administration exception"@en ;
+    :edition "law.cornell.edu, read 2026-11-21" ; :status :Current ;
+    :sourceUrl "https://www.law.cornell.edu/cfr/text/26/53.4941(d)-1"^^xsd:anyURI ;
+    :grants :Perm4941_EstateSale , :Perm4941_SameTermsRedemption .
+:Perm4941_EstateSale a :Permission ;
+    :permits "Let a family member or a family company buy, from the estate, property the foundation would otherwise receive, without self-dealing." ;
+    :condition "All five: a power of sale (or to reallocate, or a required sale under an option); probate court approval; before the estate terminates for income tax; the foundation gets at least fair market value of its interest; and what it gets is at least as liquid as what it gave up." ;
+    :usableBy :Role_FounderAsTrustee , :Role_Foundation ; :becomesCheck :Check_PG2 ;
+    :ircSection "4941(d)" ; :evidence :ReadInStatute ; :secondarySource :GL_7_2_2 ;
+    :householdMisses "A bequest of the operating company to the foundation can be converted to cash inside the estate, with the business staying in family hands, if the court approves a fair price." .
+:Perm4941_SameTermsRedemption a :Permission ;
+    :permits "Let a company that is a disqualified person redeem the shares a foundation or split-interest trust holds." ;
+    :condition "4941(d)(2)(F): every holder of the class gets the same terms, and the foundation gets no less than fair market value. GiftLaw 3.10.1 (secondary) summarizes PLR 200720021: 'Redemption of stock from a CRT by a disqualified for-profit is not self-dealing.'" ;
+    :usableBy :Role_OperatingCompany , :Role_Foundation ; :becomesCheck :Check_PG2 ;
+    :ircSection "4941(d)(2)(F)" ; :evidence :ReadInStatute ; :secondarySource :GL_3_10_1 , :GL_4_2_3 .
+
+:IRC664 a :Instrument ; rdfs:label "IRC 664: charitable remainder unitrusts"@en ;
+    :edition "uscode.house.gov, current through P.L. 119-124" ; :status :Current ;
+    :sourceUrl "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section664&num=0&edition=prelim"^^xsd:anyURI ;
+    :grants :Perm664_SellInsideTrust .
+:Perm664_SellInsideTrust a :Permission ;
+    :permits "Contribute appreciated property, let the trust sell it free of income tax, and take a fixed percentage of the trust each year." ;
+    :condition "Payout 5 to 50 percent; remainder worth at least 10 percent (664(d)(2)). The trust pays an excise tax equal to any unrelated business taxable income (664(c)(2)). Not for S corporation stock (1361)." ;
+    :usableBy :Role_FounderAsTrustee , :Role_FamilyTrust ;
+    :becomesCheck :Check_PG4 , :Check_PG4b , :Check_PG5 ;
+    :ircSection "664(c), 664(d)(2)" ; :evidence :ReadInStatute ; :secondarySource :GL_3_10_1 , :GL_4_2_3 .
+
+:IRC1361 a :Instrument ; rdfs:label "IRC 1361: who may hold S corporation stock"@en ;
+    :edition "law.cornell.edu, read 2026-11-21" ; :status :Current ;
+    :sourceUrl "https://www.law.cornell.edu/uscode/text/26/1361"^^xsd:anyURI ;
+    :grants :Perm1361_FoundationShareholder .
+:Perm1361_FoundationShareholder a :Permission ;
+    :permits "Give S corporation stock to the foundation itself; a 501(c)(3) organization 'may be a shareholder in an S corporation' (1361(c)(6))." ;
+    :condition "The foundation's share of S income is likely unrelated business income (512(e), not read), and 4943 still applies to the foundation's holding." ;
+    :usableBy :Role_Foundation ; :becomesCheck :Check_PG5 , :Check_PG3a ;
+    :ircSection "1361(c)(6)" ; :evidence :ReadInStatute ; :secondarySource :GL_4_14_2 .
+
+:IRC2702 a :Instrument ; rdfs:label "IRC 2702 and Reg. 25.2702-5: qualified personal residence trusts"@en ;
+    :edition "law.cornell.edu, read 2026-11-21" ; :status :Current ;
+    :sourceUrl "https://www.law.cornell.edu/cfr/text/26/25.2702-5"^^xsd:anyURI ;
+    :grants :Perm2702_ResidenceTrust .
+:Perm2702_ResidenceTrust a :Permission ;
+    :permits "Move the home into a trust, keep living in it for a term, and value the gift as the remainder only." ;
+    :condition "One residence (principal or one other); primary use as the term holder's residence; a home office is fine if secondary; no transient lodging with services; the instrument bars any sale back to the grantor." ;
+    :usableBy :Role_FounderAsTrustee ; :becomesCheck :Check_PG6 ;
+    :ircSection "2702(a)(3)(A)(ii)" ; :evidence :ReadInStatute ; :secondarySource :GL_3_7_5 .
+
+:IRC1011b a :Instrument ; rdfs:label "IRC 1011(b) and Reg. 1.1011-2: bargain sales"@en ;
+    :edition "uscode.house.gov, current through P.L. 119-142" ; :status :Current ;
+    :sourceUrl "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section1011&num=0&edition=prelim"^^xsd:anyURI ;
+    :grants :Perm1011_BargainSale .
+:Perm1011_BargainSale a :Permission ;
+    :permits "Sell property to a public charity below its value; the discount is a gift." ;
+    :condition "Basis is split in the 1011(b) ratio. A sale by a disqualified person to the private foundation is self-dealing at any price (inferred, PG7a)." ;
+    :usableBy :Role_FounderAsTrustee , :Role_OperatingCompany ; :notUsableBy :Role_Foundation ;
+    :becomesCheck :Check_PG7a , :Check_PG7b ;
+    :ircSection "1011(b), 170" ; :evidence :ReadInStatute ; :secondarySource :GL_2_1 .
+
+:IRC4942 a :Instrument ; rdfs:label "IRC 4942: minimum distributions"@en ;
+    :edition "law.cornell.edu, read 2026-11-21" ; :status :Current ;
+    :sourceUrl "https://www.law.cornell.edu/uscode/text/26/4942"^^xsd:anyURI ;
+    :grants :Perm4942_Payout .
+:Perm4942_Payout a :Permission ;
+    :permits "Keep the foundation's investment assets, including family business interests, as long as qualifying distributions reach the distributable amount by the end of the following year." ;
+    :condition "5 percent of noncharitable-use assets less acquisition debt, less the year's income and 4940 taxes. Operating foundation status ((j)(3)) has its own tests; the percentage that replaced 'substantially all' was not on the page read." ;
+    :usableBy :Role_Foundation ; :becomesCheck :Check_PG8 ;
+    :ircSection "4942(a), (d), (e)(1), (j)(3)" ; :evidence :ReadInStatute ; :secondarySource :GL_7_2_3 , :GL_7_2_9 .

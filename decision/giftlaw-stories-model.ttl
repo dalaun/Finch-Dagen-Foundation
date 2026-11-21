@@ -1,0 +1,86 @@
+@prefix : <http://example.org/trust-domain/decision#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+# GiftLaw Pro example stories as graded cases (DRAFT, proposed 2026-11-21)
+#
+# Every example, worked scenario and narrated ruling in the nine GiftLaw Pro
+# chapter notes on the shelf becomes a :StoryCase. A story the planned-giving
+# checks can grade carries a :storyGift (a :PlannedGift with the story's facts as
+# roles); grade_stories.py runs the checks on it and compares our grade with the
+# outcome the page reaches. A story outside the model says why, by category.
+# GiftLaw is a secondary source: a page's outcome is what the page says, not the
+# law. Rulings are cited by number only; their text was not read. Not legal or
+# tax advice. Cases: tests/decision/giftlaw-stories/.
+# =====================================================================
+
+<http://example.org/trust-domain/giftlaw-stories> a owl:Ontology ;
+    rdfs:label "GiftLaw Pro example stories as graded cases"@en ;
+    owl:versionInfo "0.1.0-proposed" ;
+    owl:imports <http://example.org/trust-domain/planned-giving> .
+
+:StoryCase a owl:Class ; rdfs:label "Story case"@en ;
+    rdfs:comment "One example story from a GiftLaw Pro page: its facts as roles, the outcome the page reaches, the authority it cites, and whether our checks can grade it."@en .
+:storyId a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "The story's number in the shelf extract, for example S5-13."@en .
+:storySection a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string .
+:storyKind a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "example, scenario, private letter ruling, revenue ruling, case, TAM, index title."@en .
+:pageSays a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "The page's result in our own words, one sentence."@en .
+:citesAuthority a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string .
+:pageOutcome a owl:ObjectProperty ; rdfs:domain :StoryCase ;
+    rdfs:comment "The page's result on our four outcomes. Allow: works with no penalty tax and no lost deduction. Block: forbidden, disqualifies the trust or the deduction, or triggers a self-dealing, excess holdings, payout or jeopardy tax. Needs counsel: works but with a tax cost the checks route to counsel, or the page calls it uncertain or untested. Insufficient: the page says a required record or figure is missing. Or :PageGivesNoGrade."@en .
+:PageGivesNoGrade a owl:NamedIndividual ; rdfs:label "the page gives no result"@en .
+:storyScope a owl:ObjectProperty ; rdfs:domain :StoryCase ; rdfs:range :StoryScope .
+:StoryScope a owl:Class ; owl:oneOf ( :GradedByModel :OutsideModel ) .
+:GradedByModel a :StoryScope ; rdfs:label "graded by the planned-giving checks"@en .
+:OutsideModel a :StoryScope ; rdfs:label "outside the model"@en .
+:storyGift a owl:ObjectProperty ; rdfs:domain :StoryCase ; rdfs:range :PlannedGift .
+:outsideCategory a owl:ObjectProperty ; rdfs:domain :StoryCase ; rdfs:range :OutsideCategory .
+:outsideReason a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string .
+:OutsideCategory a owl:Class ; rdfs:label "Why a story is outside the model"@en ;
+    owl:oneOf ( :VehicleNotYetModeled :OutrightGiftToPublicCharity :GiftAnnuityOrPooledFund
+                :LifeInsurance :DeductionArithmetic :TransferTaxArithmetic :StateLaw
+                :FoundationGrantmaking :SubstantiationAndAppraisal :CharityOperations :OtherOutside ) .
+:VehicleNotYetModeled a :OutsideCategory ; rdfs:label "a vehicle the checks don't model yet (annuity remainder trust, grantor lead trust, NIMCRUT or FLIP mechanics, retained life estate, partial interest)"@en .
+:OutrightGiftToPublicCharity a :OutsideCategory ; rdfs:label "an outright gift to a public charity"@en .
+:GiftAnnuityOrPooledFund a :OutsideCategory ; rdfs:label "a gift annuity or pooled income fund"@en .
+:LifeInsurance a :OutsideCategory ; rdfs:label "life insurance"@en .
+:DeductionArithmetic a :OutsideCategory ; rdfs:label "deduction size, percentage limits or carryover"@en .
+:TransferTaxArithmetic a :OutsideCategory ; rdfs:label "estate, gift or generation-skipping tax arithmetic"@en .
+:StateLaw a :OutsideCategory ; rdfs:label "state law"@en .
+:FoundationGrantmaking a :OutsideCategory ; rdfs:label "foundation grant procedures, scholarships, expenditure responsibility, set-asides"@en .
+:SubstantiationAndAppraisal a :OutsideCategory ; rdfs:label "receipts, appraisals and Form 8283"@en .
+:CharityOperations a :OutsideCategory ; rdfs:label "a charity's own operations, UBIT or status"@en .
+:OtherOutside a :OutsideCategory ; rdfs:label "other"@en .
+:gapNote a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "The rule the page turns on that no check has yet, when the story's vehicle is modeled."@en .
+:pageAccuracyNote a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "Where the shelf notes or the primary law read say the page is wrong or out of date."@en .
+
+# ---------------------------------------------------------------------
+# Weighting the pages by the audit on the shelf (added 2026-11-21)
+# ---------------------------------------------------------------------
+:auditFlag a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "A flag from the audit that names this story directly: id, severity, type, then the audit's point. Generated into tests/decision/giftlaw-stories/audit-flags.ttl."@en .
+:pageTrust a owl:ObjectProperty ; rdfs:domain :StoryCase ; rdfs:range :PageTrust ;
+    rdfs:comment "How far the page's outcome is trusted. When not stated, grade_stories.py sets it: Chapter 4 and any story with a High flag are claims to test, Chapter 9 is leads only, the rest is a map."@en .
+:PageTrust a owl:Class ; owl:oneOf ( :PageMap :PageClaimToTest :PageLeadOnly ) .
+:PageMap a :PageTrust ; rdfs:label "a map of the topic; check anything acted on"@en .
+:PageClaimToTest a :PageTrust ; rdfs:label "a claim to test against primary law, not the expected answer"@en .
+:PageLeadOnly a :PageTrust ; rdfs:label "a lead to a ruling or case; check it has not been superseded before citing it"@en .
+:authorityOutcome a owl:ObjectProperty ; rdfs:domain :StoryCase ;
+    rdfs:comment "The outcome on primary authority, regraded where the audit flags the page. When present, our grade is compared to this, not to the page."@en .
+:authorityBasis a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "The primary authority behind authorityOutcome, and whether it was read."@en .
+:authorityRead a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:boolean .
+:authorityUnread a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "For a flagged claim that could not be regraded: the authority that would settle it, not yet read."@en .
+:citedForOpposite a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "The page cites this case or ruling for the reverse of its holding: what it actually held, and whether we read it."@en .
+:citedAuthorityRead a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:boolean .
+:authorityStatus a owl:DatatypeProperty ; rdfs:domain :StoryCase ; rdfs:range xsd:string ;
+    rdfs:comment "For a Chapter 9 lead: whether the cited ruling has been revoked, modified or superseded, as checked, or that it was not checked."@en .

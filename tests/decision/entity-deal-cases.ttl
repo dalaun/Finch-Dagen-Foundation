@@ -104,7 +104,9 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
     dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:payerMethod dm:AccrualMethod ; dm:payeeMethod dm:CashMethod ; dm:relatedPayee true ; dm:paidByYearEnd false .
+    dm:payerMethod dm:AccrualMethod ; dm:payeeMethod dm:CashMethod ; dm:relatedPayee true ; dm:paidByYearEnd false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:startupExpenditure false .
 
 # ---------------------------------------------------------------------
 # S: the founder's pay as an employee (stewardship plus 15-B)
@@ -150,7 +152,9 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
     dm:comparabilityRecord false ; dm:comparableSource dm:Source_CompSurvey ;
     dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
-    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:noFringeBenefits true .
 
 # D14 A wage inside the range; with benefits the package is above it.
 :D14_PackageOverMarket a dm:EntityDeal ;
@@ -287,54 +291,80 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
 # D30 The operating company pays for a family vacation and deducts it.
 :D30_FamilyVacation a dm:EntityDeal ;
     dm:dealPayer :OperatingCompany ; dm:dealPayee :TravelAgency ; dm:dealKind dm:ExpenseClaim ;
-    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily true ; dm:capitalExpenditure false .
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily true ; dm:capitalExpenditure false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D31 A hobby purchase with no tie to the business.
 :D31_HobbyGear a dm:EntityDeal ;
     dm:dealPayer :ManagementCompany ; dm:dealPayee :HobbyShop ; dm:dealKind dm:ExpenseClaim ;
-    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily false ; dm:capitalExpenditure false .
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary false ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D32 A new roof deducted as a repair.
 :D32_RoofAsRepair a dm:EntityDeal ;
     dm:dealPayer :OperatingCompany ; dm:dealPayee :Roofer ; dm:dealKind dm:ExpenseClaim ;
-    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure true .
+    dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D33 Equipment deducted in year one under a section 179 election.
 :D33_EquipmentSection179 a dm:EntityDeal ;
     dm:dealPayer :OperatingCompany ; dm:dealPayee :EquipmentVendor ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure true ;
-    dm:section179Election true .
+    dm:section179Election true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D34 Start-up costs deducted with the 195(b) election, after opening.
 :D34_StartupWithElection a dm:EntityDeal ;
     dm:dealPayer :ManagementCompany ; dm:dealPayee :FormationAdvisers ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:startupExpenditure true ; dm:startupElection true ; dm:activeBusinessBegun true .
+    dm:startupExpenditure true ; dm:startupElection true ; dm:activeBusinessBegun true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ;
+    dm:payerMethod dm:CashMethod .
 
 # D35 The same costs deducted with no election.
 :D35_StartupNoElection a dm:EntityDeal ;
     dm:dealPayer :ManagementCompany ; dm:dealPayee :FormationAdvisers ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:startupExpenditure true ; dm:startupElection false ; dm:activeBusinessBegun true .
+    dm:startupExpenditure true ; dm:startupElection false ; dm:activeBusinessBegun true ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:paidByYearEnd true ;
+    dm:payerMethod dm:CashMethod .
 
 # D36 A cash-method company deducts a bill it pays next year.
 :D36_CashUnpaid a dm:EntityDeal ;
     dm:dealPayer :ManagementCompany ; dm:dealPayee :EquipmentVendor ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:payerMethod dm:CashMethod ; dm:paidByYearEnd false .
+    dm:payerMethod dm:CashMethod ; dm:paidByYearEnd false ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:homeOfficeClaim false ; dm:startupExpenditure false .
 
 # D37 Self-employed home office where the home is only the mailing address.
 :D37_HomeOfficeMailingAddress a dm:EntityDeal ;
     dm:dealPayer td:Founder ; dm:dealPayee :HomeCosts ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:homeOfficeClaim true ; dm:homeUse dm:MailingAddressOnly .
+    dm:homeOfficeClaim true ; dm:homeUse dm:MailingAddressOnly ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D38 The lawful route: a room used only and regularly for the business's
 #     administrative and management work, with no other fixed location.
 :D38_HomeOfficeAdminRoom a dm:EntityDeal ;
     dm:dealPayer td:Founder ; dm:dealPayee :HomeCosts ; dm:dealKind dm:ExpenseClaim ;
     dm:claimedDeduction true ; dm:ordinaryAndNecessary true ; dm:personalLivingFamily false ; dm:capitalExpenditure false ;
-    dm:homeOfficeClaim true ; dm:homeUse dm:ExclusiveRegularPrincipalPlace .
+    dm:homeOfficeClaim true ; dm:homeUse dm:ExclusiveRegularPrincipalPlace ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:paidByYearEnd true ; dm:startupExpenditure false ;
+    dm:payerMethod dm:CashMethod .
 
 # D39 A deduction claim with the facts left blank.
 :D39_DeductionFactsMissing a dm:EntityDeal ;
@@ -349,4 +379,6 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:payee td:Founder ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
     dm:comparabilityRecord true ;
     dm:annualAmount "60000.00"^^xsd:decimal ; dm:fringeBenefitAnnual "18000.00"^^xsd:decimal ;
-    dm:benchmarkAnnual "72000.00"^^xsd:decimal .
+    dm:benchmarkAnnual "72000.00"^^xsd:decimal ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:beneficiarySelection dm:OpenSelection ; dm:fiscalYear :FY2028 ; dm:scorerVerdict dm:IntentClean .
