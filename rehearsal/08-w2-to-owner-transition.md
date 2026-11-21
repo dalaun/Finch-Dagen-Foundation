@@ -37,7 +37,7 @@ python3 transition_twin.py --selftest            # built-in cases
 
 ### What the synthetic run shows
 
-Placeholders: a W-2 founder whose replacement income (salary plus the benefits he would have to buy) is 120 units, business sizes from public BizBuySell medians, rates from no particular lender. The **pattern** is the finding, not the numbers.
+Placeholders: a W-2 founder whose replacement income (salary plus the benefits he would have to buy) is 120 thousand, business sizes from public BizBuySell medians, rates from no particular lender. The **pattern** is the finding, not the numbers.
 
 | Arm | Lender coverage at close | Step-down month | Result |
 |---|---|---|---|
@@ -67,7 +67,7 @@ How it enters the model:
 
 ### What the synthetic run shows with the building
 
-Placeholder building: rented units bring about 22 units of net rent a year once the vacant unit is leased (replacement income is 120).
+Placeholder building: three rented units (two leased now, one being finished) net about 22.5 thousand a year once all three are leased, after vacancy, their share of costs and their share of the mortgage. That is about 7.5 thousand per unit. Replacement income is 120 thousand.
 
 | Arm | Step-down month without the building | With the building |
 |---|---|---|
@@ -79,7 +79,12 @@ Placeholder building: rented units bring about 22 units of net rent a year once 
 
 Three findings:
 
-1. **Rent and AI do the same job.** Both close the gap between what a business earns and what it must pay him. In the synthetic run, about 4.3 more units of net rent a year (roughly the vacant unit's rent, finished and leased) lets the no-AI purchase B0 step down in month 23, with no AI gain at all. Finishing the building is cheaper and more certain than any margin project.
+1. **Rent and AI do the same job.** Both close the gap between what a business earns and what it must pay him. The B0 arithmetic, in thousands a year:
+   - The business earns 200 before owner labor and owes about 80 in loan payments.
+   - The floor says 1.25 x 80 = 100 must be left after paying him, so it can pay him at most 200 - 100 = 100.
+   - He needs 120 (salary plus benefits), so the gap is 20.
+   - Counting 75% of net rent, the building has to net 20 / 0.75 = about 26.7 to fill the gap. The placeholder building nets 22.5, so it falls about 4.3 short: about 360 a month more net rent across the building, or about 0.6 of a unit at 7.5 per unit. With that, B0 steps down in month 23 with no AI gain at all.
+   - Rent alone replacing the whole 120, with no business, would take about 120 / 7.5 = 16 leased units at these placeholder margins, or about 21 if only 75% is counted.
 2. **Finish the building before buying.** The test counts trailing twelve months of rent, so a unit leased a year before the purchase is fully counted by the time the step-down test can run.
 3. **A purchase can put the building at risk.** If the lender takes a lien, every month a business shortfall drains personal cash is a month the building backs the loan. That makes the six-month personal reserve a protection for the building, not just for living costs.
 
