@@ -145,18 +145,24 @@
         SELECT $this WHERE { $this dm:beneficiarySelection dm:InsiderDrawnSelection . }""" .
 
 :H4_SplitPayee a sh:SPARQLConstraint ;
-    sh:message "H4: split pay - this payee's proposals in the same year, summed, exceed the highest benchmark among them" ;
+    sh:message "H4: split pay - this payee's payments in the same year, summed, exceed the highest benchmark among them" ;
     sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    # One contribution per distinct payment across the whole payee-year group. Two
+    # proposals that assess the same payment are alternatives, not a split, so the
+    # payment counts once, at the larger amount (the stricter of the two). A
+    # proposal that assesses no payment counts as its own.
     sh:select """
         SELECT $this (SUM(?amt) AS ?value) WHERE {
-          $this dm:payee ?payee ; dm:fiscalYear ?fy .
-          ?p a dm:SpendProposal ; dm:payee ?payee ; dm:fiscalYear ?fy ;
-             dm:annualAmount ?amt ; dm:benchmarkAnnual ?bm .
-          # Two proposals for the same payment are alternatives, not a split.
-          FILTER ( ?p = $this || NOT EXISTS { ?p dm:assesses ?pay . $this dm:assesses ?pay } )
+          { SELECT $this ?payment (MAX(?a) AS ?amt) (MAX(?b) AS ?bm) WHERE {
+              $this dm:payee ?payee ; dm:fiscalYear ?fy .
+              ?p a dm:SpendProposal ; dm:payee ?payee ; dm:fiscalYear ?fy ;
+                 dm:annualAmount ?a ; dm:benchmarkAnnual ?b .
+              OPTIONAL { ?p dm:assesses ?assessed }
+              BIND ( COALESCE(?assessed, ?p) AS ?payment )
+            } GROUP BY $this ?payment }
         }
         GROUP BY $this
-        HAVING ( COUNT(?p) > 1 && SUM(?amt) > MAX(?bm) )""" .
+        HAVING ( COUNT(?payment) > 1 && SUM(?amt) > MAX(?bm) )""" .
 
 :H5_InsiderPayNoComparability a sh:SPARQLConstraint ;
     sh:message "H5: insider pay (4941(d)(2)(E)) - pay to a disqualified person with no written comparability record; reasonableness goes to counsel" ;

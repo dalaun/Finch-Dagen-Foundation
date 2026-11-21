@@ -250,6 +250,29 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     dm:fringeBenefitAnnual "0"^^xsd:decimal ;
     dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
+# P26 One consultant, one year, three proposals: P26a and P26b are two ways to
+#     make the same payment (alternatives), P26c is a second payment. Counted once
+#     per payment, at the larger alternative, the year is 35,000 + 30,000 = 65,000,
+#     under the 70,000 benchmark: no split. Counting both alternatives would
+#     wrongly reach 95,000 for P26c.
+:P26a_ConsultantPlanA a dm:SpendProposal ; dm:assesses td:Pay_AITrainer_Feb2027 ;
+    dm:payee :Consultant ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "30000.00"^^xsd:decimal ; dm:benchmarkAnnual "40000.00"^^xsd:decimal ; dm:fiscalYear :FY2029 ;
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
+:P26b_ConsultantPlanB a dm:SpendProposal ; dm:assesses td:Pay_AITrainer_Feb2027 ;
+    dm:payee :Consultant ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "35000.00"^^xsd:decimal ; dm:benchmarkAnnual "40000.00"^^xsd:decimal ; dm:fiscalYear :FY2029 ;
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
+:P26c_ConsultantSecondJob a dm:SpendProposal ; dm:assesses td:Pay_OntologySteward_Jan2027 ;
+    dm:payee :Consultant ; dm:dqScreened true ; dm:spendKind dm:PersonalServicesPay ;
+    dm:annualAmount "30000.00"^^xsd:decimal ; dm:benchmarkAnnual "70000.00"^^xsd:decimal ; dm:fiscalYear :FY2029 ;
+    dm:fringeBenefitAnnual "0"^^xsd:decimal ;
+    dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
+:Consultant a dm:Party .
+:FY2029 a dm:FiscalYear .
+
 # P19 Payee never screened against 4946.
 :P19_Unscreened a dm:SpendProposal ; dm:assesses td:Pay_WorkshopInstructor_Mar2027 ;
     dm:payee :Contractor ; dm:dqScreened false ; dm:spendKind dm:PersonalServicesPay ;
@@ -299,3 +322,27 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     dm:inStage dm:Stage3_Hack ; dm:onFail dm:NeedsCounsel ;
     dm:enforcedBy dm:MoralPressure ;
     dm:authority "The founder attests the spend serves the mission." .
+
+# ---------------------------------------------------------------------
+# Declared for the known-term check (FC0): every party and fiscal year a case
+# names. A name not declared here, or misspelled, makes the case Insufficient.
+# ---------------------------------------------------------------------
+td:Grantee_CommunityCollege a dm:Party .
+:AITrainer a dm:Party .
+:AdvocacyFirm a dm:Party .
+:BusinessTrust a dm:Party .
+:Contractor a dm:Party .
+:EventCharity a dm:Party .
+:FamilyTrust a dm:Party .
+:FounderSibling a dm:Party .
+:FriendsNonprofit a dm:Party .
+:IndexFund a dm:Party .
+:ManagementCompany a dm:Party .
+:OperatingCompany a dm:Party .
+:ResidentCoop a dm:Party .
+:SocialEnterpriseLLC a dm:Party .
+:StudentApplicant a dm:Party .
+:ThirdPartySeller a dm:Party .
+:VanDealer a dm:Party .
+:FY2027 a dm:FiscalYear .
+:FY2028 a dm:FiscalYear .

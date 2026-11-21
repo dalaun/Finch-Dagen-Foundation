@@ -19,7 +19,7 @@ The audit on the shelf sets how far each page is trusted. It found the pages mos
 
 - **903 stories** read from the nine chapters, all recorded as cases.
 - **263 graded** by the planned-giving checks; 640 are outside the model, each with its category and reason.
-- Of the 263, compared on the page's own outcome: 228 agree, 16 where the page is stricter (a rule we have no check for), 15 where our checks are stricter, 4 where the page gives no result. The six overturned pages count here as disagreements; the law's answer is compared separately below.
+- Of the 263, compared on the page's own outcome: 227 agree, 16 where the page is stricter (a rule we have no check for), 16 where our checks are stricter, 4 where the page gives no result. S1-17 moved from agree to ours stricter in the third review pass: its gift to the foundation states nothing the checks read (the 170(e)(5) rule it turns on has no check yet), so it is insufficient, not allowed. The six overturned pages count here as disagreements; the law's answer is compared separately below.
 - **6 page outcomes overturned on primary law**, all read on 2026-11-21:
 
 | Story | Page | Law | Why |

@@ -18,6 +18,15 @@
 # every proposal, deal and planned gift. State a "no" as false or 0; do not
 # leave it out.
 #
+# A requirement whose pattern binds ?case is about a record the case links to
+# (?this is the record, such as one benefit on a pay deal); a missing fact there
+# makes the owning case Insufficient.
+#
+# A fact that is there but unknown fails closed the same way (decide_spend.py,
+# unknown_terms): an undeclared property, a value off a closed list, a value not
+# declared a member of the property's range (for example a party no case file
+# declares), or a yes/no or amount of the wrong type.
+#
 # A fact may be left out only where the check that reads it uses a default that
 # is at least as strict as any real value (conservativeDefault). Not legal or
 # tax advice.
@@ -42,15 +51,15 @@
     :requiredBy "PG1 PG2 PG3b PG10 PG11 PG12 PG13" .
 
 :RI_SplitInterestTransfer a :InputRequirement ;
-    rdfs:label "A split-interest trust must say whether the property came subject to a lien and whether a sale was fixed before the gift" ;
-    :appliesWhen "?this a :PlannedGift ; :giftVehicle ?v . ?v :isSplitInterestTrust true ." ;
+    rdfs:label "A split-interest trust, or a gift to the foundation that names who transfers it, must say whether the property came subject to a lien and whether a sale was fixed before the gift" ;
+    :appliesWhen "{ ?this a :PlannedGift ; :giftVehicle ?v . ?v :isSplitInterestTrust true . } UNION { ?this a :PlannedGift ; :giftVehicle :FoundationHolding ; :transferor ?t . }" ;
     :requiresInput :transferredSubjectToLien , :saleArrangedBeforeGift ;
     :requiredBy "PG10 PG12" .
 
 :RI_LienDetails a :InputRequirement ;
-    rdfs:label "Property given subject to a lien must say who transferred it and whether the donor stays liable on the debt" ;
+    rdfs:label "Property given subject to a lien must say who transferred it, whether the trust assumes the debt and whether the donor stays liable on it" ;
     :appliesWhen "?this a :PlannedGift ; :transferredSubjectToLien true ." ;
-    :requiresInput :transferor , :donorLiableOnDebt ;
+    :requiresInput :transferor , :trustAssumesLien , :donorLiableOnDebt ;
     :requiredBy "PG10 PG11" .
 
 :RI_LeadTrustParties a :InputRequirement ;
@@ -174,6 +183,30 @@
     :appliesWhen "?this a :EntityDeal ; :dealKind :CompensationDeal ." ;
     :requiresInput :wageAnnual , :marketLow , :marketHigh , :recipientForm ;
     :requiredBy "AL1a ST1b FX1" .
+
+:RI_BenefitItem a :InputRequirement ;
+    rdfs:label "Each benefit on a pay deal must say what it is and what it is worth a year" ;
+    :appliesWhen "?case a :EntityDeal ; :providesBenefit ?this ." ;
+    :requiresInput :benefitKind , :benefitAnnual ;
+    :requiredBy "ST1b FX0 FX1 FX2 FX3 FX4 FX5" .
+
+:RI_BenefitNondiscrimination a :InputRequirement ;
+    rdfs:label "An excluded benefit whose exclusion has a nondiscrimination rule must say whether the plan favors key or highly paid employees" ;
+    :appliesWhen "?case a :EntityDeal ; :providesBenefit ?this . ?this :claimedExcluded true ; :benefitKind ?k . ?k :nondiscriminationRule true ." ;
+    :requiresInput :planFavorsKeyOrHighlyPaid ;
+    :requiredBy "FX2" .
+
+:RI_BenefitMonthlyLimit a :InputRequirement ;
+    rdfs:label "An excluded benefit with a monthly limit must state the monthly amount" ;
+    :appliesWhen "?case a :EntityDeal ; :providesBenefit ?this . ?this :claimedExcluded true ; :benefitKind ?k . ?k :monthlyLimit ?lim ." ;
+    :requiresInput :benefitMonthly ;
+    :requiredBy "FX3" .
+
+:RI_BenefitCoverageLimit a :InputRequirement ;
+    rdfs:label "An excluded benefit with a coverage limit must state the coverage" ;
+    :appliesWhen "?case a :EntityDeal ; :providesBenefit ?this . ?this :claimedExcluded true ; :benefitKind ?k . ?k :coverageLimit ?lim ." ;
+    :requiresInput :coverageAmount ;
+    :requiredBy "FX3" .
 
 :RI_CompensationBenefits a :InputRequirement ;
     rdfs:label "A pay deal must list its benefits, or say it has none" ;

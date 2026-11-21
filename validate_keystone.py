@@ -18,6 +18,7 @@ from collections import defaultdict
 from pathlib import Path
 from rdflib import Graph, Namespace, URIRef, RDF
 from pyshacl import validate
+import fast_sparql  # noqa: F401  (parse each SPARQL text once; same answers, faster)
 
 HERE = Path(__file__).resolve().parent
 TD = Namespace("http://example.org/trust-domain#")
