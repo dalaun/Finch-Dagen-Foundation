@@ -136,22 +136,37 @@ def graded_cases(data):
 
 
 def records(data, case):
-    """The case and the records it owns: blank nodes it links to, such as a benefit
-    on a pay deal. Facts on these count as the case's own facts."""
+    """The case and the records it owns: blank nodes it links to, and named nodes it
+    links to through a property whose range is an owned record (dm:OwnedRecord, such
+    as a benefit on a pay deal). Facts on these count as the case's own facts. A
+    record two cases link to is owned by both."""
+    owned = owned_record_properties(data)
     out, todo = [case], [case]
     while todo:
-        for o in data.objects(todo.pop(), None):
-            if isinstance(o, BNode) and o not in out:
+        node = todo.pop()
+        for p, o in data.predicate_objects(node):
+            if (isinstance(o, BNode) or (p in owned and isinstance(o, URIRef))) and o not in out:
                 out.append(o)
                 todo.append(o)
     return out
 
 
+def owned_record_properties(data):
+    """Properties whose range is dm:OwnedRecord or a subclass of it."""
+    kinds, todo = set(), [DM.OwnedRecord]
+    while todo:
+        k = todo.pop()
+        if k not in kinds:
+            kinds.add(k)
+            todo.extend(data.subjects(RDFS.subClassOf, k))
+    return {p for k in kinds for p in data.subjects(RDFS.range, k)}
+
+
 def required_inputs(data):
     """Each node an input requirement covers, with the facts it must state, and the
-    case that owns it: ({node: {property, ...}}, {node: case}). A requirement whose
+    cases that own it: ({node: {property, ...}}, {node: {case, ...}}). A requirement whose
     pattern binds ?case is about a record the case links to (?this is the record)."""
-    required, owner = defaultdict(set), {}
+    required, owner = defaultdict(set), defaultdict(set)
     for req in REQUIREMENTS.subjects(RDF.type, DM.InputRequirement):
         pattern = str(REQUIREMENTS.value(req, DM.appliesWhen))
         linked = "?case" in pattern
@@ -160,7 +175,7 @@ def required_inputs(data):
         props = set(REQUIREMENTS.objects(req, DM.requiresInput))
         for row in data.query(q):
             required[row[0]] |= props
-            owner.setdefault(row[0], row[1] if linked else row[0])
+            owner[row[0]].add(row[1] if linked else row[0])
     return required, owner
 
 
@@ -172,7 +187,8 @@ def missing_inputs(data):
     for node, props in required.items():
         gone = {p for p in props if data.value(node, p) is None}
         if gone:
-            missing[owner[node]] |= gone
+            for case in owner[node]:
+                missing[case] |= gone
     return dict(missing)
 
 
@@ -182,11 +198,13 @@ def unknown_terms(data):
     fact on a case or a record it owns: the property must be declared; a value of a
     closed list (owl:oneOf) must be on the list; a value of any other declared range
     must be declared a member of it; any other named value must be declared at all;
-    a yes/no must be a boolean and an amount a number. Returns ({case: {property, ...}},
+    a named term may not be written as text; a yes/no must be a boolean and an amount
+    a number. Returns ({case: {property, ...}},
     {malformed literal facts}); the run sets the malformed ones aside before the checks,
     since a comparison or a sum over text would stop the whole grading."""
     declared_props = {p for t in (OWL.ObjectProperty, OWL.DatatypeProperty, RDF.Property)
                       for p in data.subjects(RDF.type, t)}
+    object_props = set(data.subjects(RDF.type, OWL.ObjectProperty))
     sub = defaultdict(set)
     for c, sup in data.subject_objects(RDFS.subClassOf):
         sub[sup].add(c)
@@ -215,7 +233,12 @@ def unknown_terms(data):
                     continue
                 ranges = set(data.objects(p, RDFS.range))
                 if isinstance(o, Literal):
-                    if (XSD.boolean in ranges and (o.datatype != XSD.boolean or o.value not in (True, False))) or \
+                    named = p in object_props or any(not str(c).startswith(str(XSD)) and c != RDFS.Literal
+                                                     for c in ranges)
+                    if named:      # text where a named term belongs ("LifeThenTerm" for :LifeThenTerm)
+                        unknown[case].add(p)
+                        malformed.add((node, p, o))
+                    elif (XSD.boolean in ranges and (o.datatype != XSD.boolean or o.value not in (True, False))) or \
                             (ranges & NUMERIC and (o.datatype not in NUMERIC or o.value is None)):
                         unknown[case].add(p)
                         malformed.add((node, p, o))
@@ -229,6 +252,39 @@ def unknown_terms(data):
                 if not classes and data.value(o, RDF.type) is None:
                     unknown[case].add(p)
     return dict(unknown), malformed
+
+
+SPLIT_PAY_FACTS = ("payee", "fiscalYear", "annualAmount", "benchmarkAnnual")
+
+
+def split_pay_siblings(data, missing, unknown):
+    """Fail closed across cases: H4 sums a payee's pay in a year over every proposal
+    that states all four of its facts, so one proposal missing a fact (or stating one
+    the checks cannot read) silently drops out of its siblings' sum. Returns the
+    proposals whose split-pay total cannot be trusted: {proposal, ...}, each a
+    complete proposal sharing the incomplete one's payee and year, or its year when
+    the payee is the missing fact, or its payee when the year is."""
+    facts = [DM[f] for f in SPLIT_PAY_FACTS]
+    known = {}
+    for p in data.subjects(RDF.type, DM.SpendProposal):
+        pay = (data.value(p, DM.annualAmount) is not None       # a spend that states no
+               or data.value(p, DM.benchmarkAnnual) is not None)  # amount is not in any sum
+        if pay:
+            bad = missing.get(p, set()) | unknown.get(p, set())
+            known[p] = {f: (None if f in bad else data.value(p, f)) for f in facts}
+    payee, year = DM.payee, DM.fiscalYear
+    out = set()
+    for x, kx in known.items():
+        if all(kx[f] is not None for f in facts):
+            continue
+        if kx[payee] is None and kx[year] is None:
+            continue                               # nothing to tie it to; x itself is FC0
+        for y, ky in known.items():
+            if y == x or any(ky[f] is None for f in facts):
+                continue
+            if (kx[payee] is None or kx[payee] == ky[payee]) and (kx[year] is None or kx[year] == ky[year]):
+                out.add(y)
+    return out
 
 
 def run(b, overrides=None, data=None, fail_closed=True):
@@ -252,6 +308,7 @@ def run(b, overrides=None, data=None, fail_closed=True):
             check_of[c] = (str(c).split("#")[-1].split("_")[0], data.value(chk, DM.onFail))
     missing = missing_inputs(data) if fail_closed else {}
     unknown = unknown if fail_closed else {}
+    siblings = split_pay_siblings(data, missing, unknown) if fail_closed else set()
     results = {}
     for p in sorted(graded_cases(data), key=str):
         hits = {}
@@ -262,6 +319,8 @@ def run(b, overrides=None, data=None, fail_closed=True):
                     hits[name] = outcome
         if missing.get(p) or unknown.get(p):   # FC0: a required fact is missing or unknown, so no Allow
             hits["FC0"] = DM.Insufficient
+        if p in siblings:                      # FC1: a split-pay sibling is missing or unknown
+            hits["FC1"] = DM.Insufficient
         worst = max([0, *(severity[o] for o in hits.values())])
         results[p] = (by_severity[worst], set(hits))
     return results, data, failed

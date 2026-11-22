@@ -87,7 +87,10 @@
 :providesBenefit a owl:ObjectProperty ; rdfs:range :BenefitItem .
 :noFringeBenefits a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "True on a pay deal with no benefits on top of the wage; a pay deal with neither this nor providesBenefit is insufficient (FC0)."@en .
-:BenefitItem a owl:Class ; rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
+:BenefitItem a owl:Class ; rdfs:subClassOf :OwnedRecord ;
+    rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
+:OwnedRecord a owl:Class ;
+    rdfs:comment "A record a case owns, reached through a property with this range: its facts count as the case's own for the fail-closed check (FC0), whether it is written inline or as its own named node, and a record two cases link to belongs to both."@en .
 :benefitKind a owl:ObjectProperty ; rdfs:range :BenefitKind .
 :benefitAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :benefitMonthly a owl:DatatypeProperty ; rdfs:range xsd:decimal .
