@@ -3,8 +3,9 @@ name: Keystone check
 on:
   push:
     paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'fast_sparql.py', 'tests/**', 'rehearsal/synthetic/**']
+  # Every pull request, no path filter: "keystone" is a required check, and a
+  # required check that never starts leaves a pull request waiting forever.
   pull_request:
-    paths: ['**.ttl', 'validate_keystone.py', 'validate_owl_lint.py', 'decide_spend.py', 'validate_figures.py', 'grade_stories.py', 'validate_fail_closed.py', 'fast_sparql.py', 'tests/**', 'rehearsal/synthetic/**']
   workflow_dispatch:
 
 permissions:
@@ -51,3 +52,9 @@ jobs:
         run: |
           python3 rehearsal/synthetic/synthetic_year.py --out /tmp/ledgers
           python3 rehearsal/synthetic/rehearsal_run.py --ledgers /tmp/ledgers
+      - name: Pinned rehearsal checks (Dalaun's lane) - tax figures, structure answer key, w stays 0
+        run: python3 tests/rehearsal/pinned_checks.py
+      - name: The score ledger's newest rows are what this engine computes
+        run: python3 tests/rehearsal/check_ledger.py
+      - name: Lane guard's own cases
+        run: python3 .github/lane/lane_guard.py --selftest

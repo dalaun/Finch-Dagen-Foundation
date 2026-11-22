@@ -39,4 +39,4 @@ Every fee is a placeholder until a professional quotes it (backlog FEE-QUOTES), 
 
 ## What the loop is not allowed to do
 
-Tune anything to make arm B win. Change w (his setting). Use real amounts, merchants, names or accounts in this repository. Merge, approve or push to main.
+Tune anything to make arm B win. Change w (his setting). Use real amounts, merchants, names or accounts in this repository. Merge, approve, bypass or push to main. Its pull requests that stay in the agent lane merge themselves once every required check passes ([lane guard](../../.github/lane/README.md)); anything else waits for him.

@@ -1,0 +1,55 @@
+name: Lane guard
+
+# Decides whether a pull request is in the agent lane (.github/CODEOWNERS).
+# Agent lane: turns on auto-merge, so the pull request merges itself once every
+# required check passes. Dalaun's lane: fails this check and turns auto-merge off,
+# so only Dalaun can merge it (with his bypass, after his review).
+#
+# pull_request_target runs THIS file, CODEOWNERS and lane_guard.py from main,
+# never from the pull request, so a pull request cannot change the rules it is
+# judged by. It never checks out or runs the pull request's code.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+    branches: [main]
+
+permissions:
+  contents: write        # needed to turn auto-merge on
+  pull-requests: write
+
+concurrency:
+  group: lane-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lane-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main (the rules), not the pull request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - name: The guard's own cases
+        run: python3 .github/lane/lane_guard.py --selftest
+      - name: Decide the lane
+        id: lane
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/lane/lane_guard.py
+      - name: Agent lane - turn on auto-merge (merges once every required check passes)
+        if: steps.lane.outputs.lane == 'agent'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --auto --merge
+      - name: Dalaun's lane - turn auto-merge off and fail, so it waits for Dalaun
+        if: steps.lane.outputs.lane != 'agent'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --disable-auto || true
+          echo "Dalaun's lane: needs Dalaun's review. See the step above for why."
+          exit 1
