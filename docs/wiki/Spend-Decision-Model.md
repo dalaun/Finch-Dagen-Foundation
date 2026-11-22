@@ -71,7 +71,7 @@ These are moves that pass every letter check above and still bend the intent. Ea
 | H1 | Pay someone who sits right next to a disqualified person: a sibling, a friend, a business partner, a company the founder owns 35 percent or less of | 4946(d) leaves siblings out of "family"; the 35 percent line leaves minority stakes out |
 | H2 | Pay a third party who passes the value on to a disqualified person (a grantee that hires the founder's child) | Reaches the letter only as "indirect" self-dealing or "for the benefit of"; the IRS says the indirect rules exist "to prevent transactions from taking place indirectly" that could not be done directly |
 | H3 | A real program whose eligible class is drawn around insiders or their business (training open only to the founder's consulting clients) | The mission label passes; the charitable class does not (4945(d)(5), (g)) |
-| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year (two proposals for the same payment are alternatives and are not summed) |
+| H4 | Split one person's pay across two programs, each under its own benchmark | A hack of **this model**, now patched: K5 tests one payment at a time, so H4 sums per payee per year. Each payment counts once across the whole group: two proposals for the same payment are alternatives, so that payment counts once, at the larger amount. If any proposal in the group is missing its payee, year, amount or benchmark, or states one the checks cannot read, the others get FC1, insufficient: the sum they would be judged on is incomplete |
 | H5 | Insider pay with no written comparability record | 4941(d)(2)(E) allows pay to a disqualified person only if reasonable, necessary and "not excessive"; the founder setting his own pay is where that judgment is disputed |
 | J1, J2 | Anything the rules above did not foresee | The bounded scorer (below) |
 
@@ -122,6 +122,7 @@ All synthetic, all amounts illustrative. Run `python3 decide_spend.py` to grade 
 | P16 Program van the founder drives on weekends | block | R3 | Passes the asset-to-program check; fails "use by" |
 | P17 Training cohort only for the management company's clients | needs counsel | H3 | Mission label, private class |
 | P18a/b One contractor paid by two programs | needs counsel | H4 | Each payment passes K5; the sum does not |
+| P26a/b/c One consultant: two ways to make one payment, plus a second payment | allow | none | 35,000 + 30,000 is under the 70,000 benchmark. Counting both alternatives, as H4 used to from the second payment's side, wrongly reached 95,000 |
 | P19 Payee never screened | insufficient | E1 | |
 | P20 Resort workshop series, scorer says yes | needs counsel | J1 | |
 | P21 Same, scorer says cannot tell | insufficient | J2 | |

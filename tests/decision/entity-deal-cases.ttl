@@ -120,7 +120,9 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:recipientForm dm:CommonLawEmployee ;
     dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
     dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII , dm:Source_CompSurvey ;
-    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (planFavorsKeyOrHighlyPaid).
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ;
+                         dm:planFavorsKeyOrHighlyPaid false ] ;
     dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
     dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
 
@@ -130,7 +132,9 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:recipientForm dm:TwoPercentShareholder ;
     dm:wageAnnual "80000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
     dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
-    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (planFavorsKeyOrHighlyPaid).
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ;
+                         dm:planFavorsKeyOrHighlyPaid false ] ;
     dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
     dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
 
@@ -162,7 +166,9 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:recipientForm dm:CommonLawEmployee ;
     dm:wageAnnual "95000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
     dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
-    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ] ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario (planFavorsKeyOrHighlyPaid).
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:benefitAnnual "9000"^^xsd:decimal ; dm:claimedExcluded true ;
+                         dm:planFavorsKeyOrHighlyPaid false ] ;
     dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
     dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
 
@@ -382,3 +388,43 @@ td:ExampleFoundationTrust dm:inFounderOrbit true ; dm:isPrivateFoundation true ;
     dm:benchmarkAnnual "72000.00"^^xsd:decimal ;
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:beneficiarySelection dm:OpenSelection ; dm:fiscalYear :FY2028 ; dm:scorerVerdict dm:IntentClean .
+
+# D40 D10's pay with the benefit's yearly value left out. ST1b used to count a
+#     missing value as 0, so a package over market could pass.
+:D40_BenefitValueMissing a dm:EntityDeal ;
+    dm:dealPayer :ManagementCompany ; dm:dealPayee td:Founder ; dm:dealKind dm:CompensationDeal ;
+    dm:recipientForm dm:CommonLawEmployee ;
+    dm:wageAnnual "95000"^^xsd:decimal ; dm:marketLow "70000"^^xsd:decimal ; dm:marketHigh "100000"^^xsd:decimal ;
+    dm:comparabilityRecord true ; dm:comparableSource dm:Source_990PF_PartVII ;
+    dm:providesBenefit [ dm:benefitKind dm:Benefit_AccidentHealth ; dm:claimedExcluded true ;
+                         dm:planFavorsKeyOrHighlyPaid false ] ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+# D41 D01's management fee paid to a payee whose name is misspelled. A name no
+#     case file declares is not known to be an outsider, so it is Insufficient,
+#     not an arm's-length deal.
+:D41_PayeeMisspelled a dm:EntityDeal ;
+    dm:dealPayer :OperatingCompany ; dm:dealPayee :ManagmentCompany ; dm:dealKind dm:ServiceFee ;
+    dm:annualAmount "120000"^^xsd:decimal ; dm:marketLow "100000"^^xsd:decimal ; dm:marketHigh "140000"^^xsd:decimal ;
+    dm:comparableSource dm:Source_ExternalManagerDisclosure ;
+    dm:writtenTerms true ; dm:decisionRecordBeforePayment true ; dm:decisionRecordCitesMission true ;
+    dm:reviewedBy :IndependentCoTrustee ; dm:reviewerCanRefuse true .
+
+# ---------------------------------------------------------------------
+# Declared for the known-term check (FC0): every party and fiscal year a case
+# names. A name not declared here, or misspelled, makes the case Insufficient.
+# ---------------------------------------------------------------------
+td:ExampleFoundationTrust a dm:Party .
+:EquipmentVendor a dm:Party .
+:FamilyTrust a dm:Party .
+:FormationAdvisers a dm:Party .
+:FounderSibling a dm:Party .
+:HobbyShop a dm:Party .
+:HomeCosts a dm:Party .
+:IndependentCoTrustee a dm:Party .
+:ManagementCompany a dm:Party .
+:ManagementCompanyAsSCorp a dm:Party .
+:OperatingCompany a dm:Party .
+:Roofer a dm:Party .
+:TravelAgency a dm:Party .
+:FY2028 a dm:FiscalYear .

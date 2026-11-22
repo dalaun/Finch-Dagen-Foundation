@@ -38,8 +38,8 @@
 # ---------------------------------------------------------------------
 :EntityDeal a owl:Class ; rdfs:label "Entity deal"@en ;
     rdfs:comment "A payment, lease, sale, pay package or deduction claim that is not a foundation spend: between the founder's roles, or by one of them to an outside party. Graded before money moves or before the return is filed."@en .
-:dealPayer a owl:ObjectProperty ; rdfs:domain :EntityDeal .
-:dealPayee a owl:ObjectProperty ; rdfs:domain :EntityDeal .
+:dealPayer a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :Party .
+:dealPayee a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :Party .
 :dealKind a owl:ObjectProperty ; rdfs:domain :EntityDeal ; rdfs:range :DealKind .
 :DealKind a owl:Class .
 :ServiceFee a :DealKind ; rdfs:label "fee for services (for example a management fee)"@en .
@@ -68,7 +68,7 @@
 :writtenTerms a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :decisionRecordBeforePayment a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :decisionRecordCitesMission a owl:DatatypeProperty ; rdfs:range xsd:boolean .
-:reviewedBy a owl:ObjectProperty ;
+:reviewedBy a owl:ObjectProperty ; rdfs:range :Party ;
     rdfs:comment "Who checked the deal before money moved."@en .
 :reviewerCanRefuse a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "The reviewer's no stops the deal (a co-trustee's veto, a board vote), not just advice."@en .
@@ -87,7 +87,10 @@
 :providesBenefit a owl:ObjectProperty ; rdfs:range :BenefitItem .
 :noFringeBenefits a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "True on a pay deal with no benefits on top of the wage; a pay deal with neither this nor providesBenefit is insufficient (FC0)."@en .
-:BenefitItem a owl:Class ; rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
+:BenefitItem a owl:Class ; rdfs:subClassOf :OwnedRecord ;
+    rdfs:comment "One benefit in a pay package, coded taxable or excluded."@en .
+:OwnedRecord a owl:Class ;
+    rdfs:comment "A record a case owns, reached through a property with this range: its facts count as the case's own for the fail-closed check (FC0), whether it is written inline or as its own named node, and a record two cases link to belongs to both."@en .
 :benefitKind a owl:ObjectProperty ; rdfs:range :BenefitKind .
 :benefitAnnual a owl:DatatypeProperty ; rdfs:range xsd:decimal .
 :benefitMonthly a owl:DatatypeProperty ; rdfs:range xsd:decimal .
