@@ -1,6 +1,6 @@
 # Trustee rehearsal: an A/B digital twin of the entity stack
 
-**Status:** design, proposed 2026-11-20. Not run. Nothing here moves money, files anything, or opens an account.
+**Status:** design, proposed 2026-11-20. First run on a synthetic year 2026-11-22 ([loop/GOAL.md](loop/GOAL.md)); not yet run on real data. Nothing here moves money, files anything, or opens an account.
 
 **This is design and education, not legal or tax advice.** Every route the twin finds is a question for a licensed attorney or CPA before it becomes a real step.
 
@@ -51,6 +51,8 @@ A third likely finding: some business-shaped spending (software and AI tools, ho
 | [../docs/wiki/Planned-Giving.md](../docs/wiki/Planned-Giving.md) and [../decision/planned-giving-model.ttl](../decision/planned-giving-model.ttl) | Planned-giving vehicles (lead trusts, remainder unitrusts, business interests, the estate exception, a residence trust, bargain sales, the foundation's payout) read as instruments from the GiftLaw Pro index, each checked against the Code or regulations |
 | [05-questions-for-attorney-and-cpa.md](05-questions-for-attorney-and-cpa.md) | What to ask, in plain words |
 | [06-handoff-transaction-export.md](06-handoff-transaction-export.md) | The one thing only the founder can supply |
+| [synthetic/](synthetic/README.md) | A seeded, SYNTHETIC twelve-month ledger built from public benchmarks (BLS, HUD, IRS, Illinois), four scenarios, and the runner that flies arm A and arm B on it with the real spend checks |
+| [loop/GOAL.md](loop/GOAL.md), [loop/score-ledger.csv](loop/score-ledger.csv), [loop/BACKLOG.md](loop/BACKLOG.md) | The rehearsal loop's goal and score, its dated scores, and the backlog it works from, each item with a done test |
 
 ## How this fits the repository
 

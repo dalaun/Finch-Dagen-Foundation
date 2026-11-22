@@ -1,0 +1,19 @@
+{
+  "label": "Fact fields for the structure eval cases SK1-SK16 (structure-check-cases.ttl). Each case states only the facts its description gives; everything else is unknown. rehearsal_run.py --selftest grades these and must match the answer key, including after every entity name is randomized.",
+  "cases": {
+    "SK1": {"entities": ["Business Trust", "Founder", "Other Trusts"], "facts": {"has_trust": true, "founder_controls_trust": true, "trust_reported_as": "separate", "founder_runs_trust_owned_business_day_to_day": true, "business_run_by_entity_filing_as_trust": true}},
+    "SK2": {"entities": ["Operating LLC", "Family Trust", "Founder"], "facts": {"founder_relationship_to_trust_property_unchanged": false, "founder_runs_trust_owned_business_day_to_day": false, "income_lands_with_who_earned_it": true, "se_or_payroll_tax_reduction_claimed": false, "business_run_by_entity_filing_as_trust": false}},
+    "SK3": {"entities": ["Residence Trust", "Founder"], "facts": {"founder_relationship_to_trust_property_unchanged": true, "personal_lines_deducted": 3, "residence_or_furnishings_depreciated": true, "related_party_flows": [{"at_market": false, "documented": null, "service_or_use_real": true, "paid": null}]}},
+    "SK4": {"entities": ["Family Trust", "Relative Trustee", "Founder"], "facts": {"has_trust": true, "founder_controls_trust": true, "trust_reported_as": "separate", "trustee_related_or_subordinate": true, "trustee_signs_whatever_founder_sends": true, "trust_payment_tools_outside_trustee": true}},
+    "SK5": {"entities": ["Family Trust", "Professional Trustee"], "facts": {"has_trust": true, "founder_controls_trust": false, "trust_reported_as": "separate", "trustee_related_or_subordinate": false, "trustee_signs_whatever_founder_sends": false, "trustee_decision_log_with_declines": true, "trust_payment_tools_outside_trustee": false}},
+    "SK6": {"entities": ["Management Company", "Operating Company"], "facts": {"related_party_flows": [{"at_market": null, "documented": false, "service_or_use_real": false, "paid": true}]}},
+    "SK7": {"entities": ["Management Company", "Operating Company"], "facts": {"related_party_flows": [{"at_market": true, "documented": true, "service_or_use_real": true, "paid": true}]}},
+    "SK8": {"entities": ["Founder", "Family Trust", "Client"], "facts": {"income_lands_with_who_earned_it": false}},
+    "SK9": {"entities": ["Charity"], "facts": {"has_charity": true, "charity_exempt_or_application_filed": false}},
+    "SK10": {"entities": ["Foundation", "Family Member"], "facts": {"has_charity": true, "charity_pays_family_costs": true}},
+    "SK11": {"entities": ["Entity 1", "Entity 2", "Entity 3"], "facts": {"chain_layers_without_own_activity": 3}},
+    "SK12": {"entities": ["Foreign Trust", "US Beneficiary"], "facts": {"foreign_trust_unreported": true}},
+    "SK13": {"entities": ["Trust", "Founder"], "facts": {"stepped_up_basis_claimed_on_transfer": true, "transfers_reported_inconsistently": true}},
+    "SK14": {"entities": ["House Trust", "Founder"], "facts": {"retained_use_assumed_outside_estate": true}}
+  }
+}

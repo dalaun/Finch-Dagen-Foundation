@@ -1,0 +1,95 @@
+{
+  "label": "SYNTHETIC scenarios for the trustee rehearsal. Amounts point at public benchmarks (benchmarks-ce.json, benchmarks-tax.json) or are ASSUMPTIONS named as such. Entities appear as roles. Not the founder's numbers.",
+  "year": 2026,
+  "lines": [
+    {"id": "wages", "label": "gross pay (W-2 job)", "domain": "I1", "direction": "credit", "annual": "wages.chicago_all_occupations_mean_annual", "scaled": false, "per_month": 2, "cv": 0.0, "payer": "employer", "payee": "founder", "season": "flat"},
+    {"id": "rent_units", "label": "rent from the two rented units", "domain": "I2", "direction": "credit", "annual": {"ref": "rent.chicago_fmr_2br_monthly", "times": 24}, "scaled": false, "per_month": 2, "cv": 0.0, "day": 1, "payer": "tenant", "payee": "building", "season": "flat"},
+    {"id": "mgmt_revenue", "label": "consulting revenue, management company role (ASSUMPTION)", "domain": "I3", "direction": "credit", "annual": 24000, "scaled": false, "per_month": 1, "cv": 0.6, "payer": "client", "payee": "management_company", "season": "flat"},
+
+    {"id": "groceries", "label": "groceries", "domain": "D2", "annual": "ce_chicago.food_at_home", "per_month": 6, "cv": 0.35, "year_cv": 0.1, "count_jitter": true},
+    {"id": "supplies", "label": "household supplies", "domain": "D2", "annual": "ce_chicago.housekeeping_supplies", "per_month": 2, "cv": 0.4},
+    {"id": "meals", "label": "meals out", "domain": "D7", "annual": "ce_chicago.food_away_from_home", "per_month": 6, "cv": 0.5, "year_cv": 0.15, "business_share": 0.15, "evidence": ["who_why"]},
+    {"id": "own_unit_interest", "label": "mortgage interest, own unit's share (ASSUMPTION: 40% of owned-dwelling cost)", "domain": "D10", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.40}, "scaled": false, "per_month": 1, "cv": 0.0, "day": 1},
+    {"id": "own_unit_tax", "label": "property tax, own unit's share (ASSUMPTION: 35%)", "domain": "D10", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.35}, "scaled": false, "months": [3, 8], "per_month": 1, "cv": 0.0, "day": 1, "payee": "county"},
+    {"id": "own_unit_insurance", "label": "building insurance, own unit's share (ASSUMPTION: 10%)", "domain": "D10", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.10}, "scaled": false, "months": [5], "per_month": 1, "cv": 0.0, "day": 15},
+    {"id": "own_unit_upkeep", "label": "repairs and upkeep, own unit (ASSUMPTION: 15%)", "domain": "D10", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.15}, "per_month": 1, "cv": 0.8, "season": "summer"},
+    {"id": "rented_interest", "label": "mortgage interest, rented units' share", "domain": "D8", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.80}, "scaled": false, "per_month": 1, "cv": 0.0, "day": 1, "payer": "building"},
+    {"id": "rented_tax", "label": "property tax, rented units' share", "domain": "D8", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.70}, "scaled": false, "months": [3, 8], "per_month": 1, "cv": 0.0, "day": 1, "payer": "building", "payee": "county"},
+    {"id": "rented_insurance", "label": "building insurance, rented units' share", "domain": "D8", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.20}, "scaled": false, "months": [5], "per_month": 1, "cv": 0.0, "day": 15, "payer": "building"},
+    {"id": "rented_repairs", "label": "repairs and materials, rented units", "domain": "D8", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.30}, "scaled": false, "per_month": 2, "cv": 0.9, "season": "summer", "payer": "building", "evidence": ["invoice_tied_to_unit"]},
+    {"id": "heat_power", "label": "gas and electric, own unit", "domain": "D10", "annual": {"ref": "ce_chicago.utilities_fuels_public_services", "times": 0.55}, "per_month": 2, "cv": 0.1, "season": "heating"},
+    {"id": "water", "label": "water and sewer, own unit", "domain": "D10", "annual": {"ref": "ce_chicago.utilities_fuels_public_services", "times": 0.10}, "months": [2, 5, 8, 11], "per_month": 1, "cv": 0.1},
+    {"id": "phone_net", "label": "phone and internet", "domain": "D11", "annual": {"ref": "ce_chicago.utilities_fuels_public_services", "times": 0.35}, "per_month": 2, "cv": 0.05, "business_share": 0.30, "evidence": ["business_use_basis"]},
+    {"id": "household_ops", "label": "household services", "domain": "D6", "annual": "ce_chicago.household_operations", "per_month": 2, "cv": 0.4},
+    {"id": "furnishings", "label": "furnishings and equipment", "domain": "D6", "annual": "ce_chicago.household_furnishings_equipment", "per_month": 1, "cv": 0.9, "season": "holiday"},
+    {"id": "apparel", "label": "clothing and shoes", "domain": "D9", "annual": "ce_chicago.apparel_and_services", "per_month": 2, "cv": 0.7, "season": "holiday"},
+    {"id": "car_payment", "label": "vehicle payment (net outlay)", "domain": "D12", "annual": "ce_chicago.vehicle_purchases_net_outlay", "per_month": 1, "cv": 0.0, "day": 10, "business_share": 0.20, "evidence": ["mileage_log"]},
+    {"id": "fuel", "label": "fuel", "domain": "D12", "annual": "ce_chicago.gasoline_and_other_fuels", "per_month": 4, "cv": 0.25, "business_share": 0.20, "evidence": ["mileage_log"]},
+    {"id": "vehicle_other", "label": "vehicle insurance, repairs, plates", "domain": "D12", "annual": "ce_chicago.other_vehicle_expenses", "per_month": 2, "cv": 0.8, "business_share": 0.20, "evidence": ["mileage_log"]},
+    {"id": "transit", "label": "transit and rideshare (commute)", "domain": "D3", "annual": "ce_chicago.public_and_other_transportation", "per_month": 8, "cv": 0.5},
+    {"id": "lodging_away", "label": "lodging away from home", "domain": "D6", "annual": "ce_chicago.other_lodging", "per_month": 1, "months": [3, 7, 11], "cv": 0.4, "business_share": 0.15, "evidence": ["trip_log"]},
+    {"id": "healthcare", "label": "withheld (sensitive)", "domain": "D20", "annual": "ce_chicago.healthcare", "per_month": 2, "cv": 0.6},
+    {"id": "entertainment", "label": "entertainment", "domain": "D6", "annual": "ce_chicago.entertainment", "per_month": 3, "cv": 0.6, "season": "summer"},
+    {"id": "personal_care", "label": "personal care", "domain": "D6", "annual": "ce_chicago.personal_care", "per_month": 2, "cv": 0.4},
+    {"id": "alcohol_tobacco_misc", "label": "other personal", "domain": "D6", "annual": {"ref": "ce_chicago.miscellaneous", "times": 1.0}, "per_month": 2, "cv": 0.6},
+    {"id": "alcohol", "label": "alcohol", "domain": "D6", "annual": "ce_chicago.alcoholic_beverages", "per_month": 2, "cv": 0.5},
+    {"id": "reading", "label": "books, news, research", "domain": "D5", "annual": "ce_chicago.reading", "per_month": 1, "cv": 0.3, "business_share": 0.50, "evidence": ["deliverable_link"]},
+    {"id": "tuition", "label": "tuition for a family member, paid to the school", "domain": "D16", "annual": "ce_chicago.education", "months": [1, 8], "per_month": 1, "cv": 0.0, "day": 15, "payee": "school", "evidence": ["paid_directly_to_school"]},
+    {"id": "giving", "label": "gifts to charities", "domain": "D17", "annual": "ce_chicago.cash_contributions", "per_month": 1, "cv": 0.8, "season": "holiday", "payee": "public_charity", "evidence": ["acknowledgment_letter"]},
+    {"id": "life_insurance", "label": "life insurance", "domain": "D13", "annual": "ce_chicago.life_and_other_personal_insurance", "per_month": 1, "cv": 0.0, "day": 20},
+    {"id": "retirement", "label": "retirement saving (payroll)", "domain": "SAV", "annual": "ce_chicago.retirement_pensions_social_security", "scaled": false, "per_month": 2, "cv": 0.0},
+    {"id": "software", "label": "software, AI and cloud tools (ASSUMPTION)", "domain": "D1", "annual": 3600, "scaled": false, "per_month": 4, "cv": 0.3, "business_share": 0.90, "evidence": ["use_log", "invoice_to_entity", "paid_from_entity_account"]},
+    {"id": "trading_tools", "label": "trading tools and courses (ASSUMPTION)", "domain": "D4", "annual": 1200, "scaled": false, "per_month": 1, "cv": 0.5}
+  ],
+  "scenarios": [
+    {
+      "id": "base",
+      "label": "Base: a Chicago household at the BLS mean, a 3-unit building he lives in, a small consulting company, today's stack",
+      "seed": 20261122,
+      "spending_scale": 1.0,
+      "evidence_rate": 0.8,
+      "stack_version": "today",
+      "asset": null
+    },
+    {
+      "id": "lean",
+      "label": "Lean: spending cut to the third-income-fifth level, weaker record keeping, the flat stack (no business trust)",
+      "seed": 20261123,
+      "spending_scale": {"ref": "ce_us_quintiles_2025.third_quintile_expenditures", "over": "ce_us_quintiles_2025.all_expenditures"},
+      "evidence_rate": 0.6,
+      "stack_version": "flat",
+      "asset": null
+    },
+    {
+      "id": "asset_rental",
+      "label": "Asset: base, plus a second 2-unit building the Family Trust holds in Arm B (he holds it personally in Arm A)",
+      "seed": 20261124,
+      "spending_scale": 1.0,
+      "evidence_rate": 0.8,
+      "stack_version": "flat",
+      "asset": {"kind": "rental", "holder_in_b": "family_trust"},
+      "extra_lines": [
+        {"id": "asset_rent", "label": "rent, second building (two units)", "domain": "I4", "direction": "credit", "annual": {"ref": "rent.chicago_fmr_2br_monthly", "times": 24}, "scaled": false, "per_month": 2, "cv": 0.0, "day": 1, "payer": "tenant", "payee": "asset"},
+        {"id": "asset_interest", "label": "mortgage interest, second building", "domain": "A1", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.80}, "scaled": false, "per_month": 1, "cv": 0.0, "day": 1, "payer": "asset"},
+        {"id": "asset_tax", "label": "property tax, second building", "domain": "A1", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.70}, "scaled": false, "months": [3, 8], "per_month": 1, "cv": 0.0, "day": 1, "payer": "asset", "payee": "county"},
+        {"id": "asset_insurance", "label": "insurance, second building", "domain": "A1", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.20}, "scaled": false, "months": [5], "per_month": 1, "cv": 0.0, "day": 15, "payer": "asset"},
+        {"id": "asset_repairs", "label": "repairs, second building", "domain": "A1", "annual": {"ref": "ce_chicago.owned_dwellings", "times": 0.30}, "scaled": false, "per_month": 2, "cv": 0.9, "season": "summer", "payer": "asset"}
+      ]
+    },
+    {
+      "id": "asset_business",
+      "label": "Asset: base, plus a bought service business at the Chicago median (BizBuySell, from transition-inputs-synthetic.json), run by a hired manager, held through an LLC the Family Trust owns in Arm B",
+      "seed": 20261125,
+      "spending_scale": 1.0,
+      "evidence_rate": 0.8,
+      "stack_version": "flat",
+      "asset": {"kind": "business", "holder_in_b": "family_trust"},
+      "extra_lines": [
+        {"id": "biz_sde", "label": "acquired business cash flow before owner labor (BizBuySell Chicago median SDE)", "domain": "I4", "direction": "credit", "annual": 128618, "scaled": false, "per_month": 1, "cv": 0.15, "payer": "customers", "payee": "asset"},
+        {"id": "biz_manager", "label": "market wage, hired manager (placeholder from transition inputs)", "domain": "A1", "annual": 60000, "scaled": false, "per_month": 2, "cv": 0.0, "payer": "asset", "payee": "employee"},
+        {"id": "biz_interest", "label": "loan interest, SBA 7(a) on 90% of the median price at 10.5% (first-year interest, placeholder rate)", "domain": "A1", "annual": 24424, "scaled": false, "per_month": 1, "cv": 0.0, "day": 5, "payer": "asset", "payee": "lender"},
+        {"id": "biz_principal", "label": "loan principal, first year (not deductible)", "domain": "A2", "annual": 14280, "scaled": false, "per_month": 1, "cv": 0.0, "day": 5, "payer": "asset", "payee": "lender"}
+      ]
+    }
+  ]
+}

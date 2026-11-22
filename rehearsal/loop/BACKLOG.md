@@ -1,0 +1,28 @@
+# Rehearsal loop backlog
+
+[Back to the goal](GOAL.md)
+
+The daily loop takes the **top open item**, works it, and opens one draft PR. An item is done only when its done test passes. Move a finished item to the Done list with the date and PR. Add new items at the bottom of their section. Keep this file SYNTHETIC: no real amounts, names or accounts.
+
+## Open, in order
+
+1. **PRETAX.** The engine taxes all wages for income tax and FICA alike. Pre-tax payroll deductions are not modeled: health premiums under a cafeteria plan (IRC 125) lower both; a 401(k) deferral lowers income tax only (3121(v)). Done test: scenarios.json can state each deduction with its section, the engine applies each one to the right taxes, and a selftest case shows both.
+2. **NIIT.** Net investment income tax (IRC 1411) is not modeled for retained trust income or for the founder's rental income. Done test: the 1411 text and thresholds are read and cited in benchmarks-tax.json, the engine applies it to trust retained income above the trust threshold, and a selftest case shows it.
+3. **QBI-RENTAL.** The rental's Schedule E income gets no 199A deduction in the engine. Done test: Rev. Proc. 2019-38 safe harbor (250 hours, separate books) is read; the engine gives the rental QBI only when a scenario says the safe-harbor facts are present; a selftest case shows both ways.
+4. **KIDDIE-TAX.** Add a scenario variant where a beneficiary is under the 152(c)(3) age limits. Done test: 152(c)(3) and 1(g) text read and cited; the variant taxes that beneficiary's unearned income at the parent's rate; the report shows the income-splitting result vanish.
+5. **170P.** Confirm from the statute text whether the new non-itemizer deduction (170(p), 2026 on) covers gifts to a private non-operating foundation. Done test: the text is quoted with its URL in benchmarks-tax.json; the engine applies it only if the text says so.
+6. **674C-SPOUSE.** Read 674(c) and 672(c) in full for how a spouse trustee counts. Done test: the rule's exact sentence is quoted in benchmarks-tax.json grantor_trust and the trustee_related_or_subordinate fact cites it.
+7. **CE-SPREAD.** The year-level spread on each spending line is an assumption. Done test: the BLS CE standard errors (XLSX tables) are read for the Chicago area; each line's `year_cv` cites one or is marked ASSUMPTION with a reason.
+8. **OWNED-SPLIT.** The 40/35/10/15 split of owned-dwelling cost is an assumption. Done test: replaced with BLS CE owned-dwelling subcategories (mortgage interest, property taxes, maintenance, insurance) with the table URL.
+9. **REAL-PROPTAX.** Property tax uses the Cook County average rate. Done test: the rate is from a Cook County Treasurer or Clerk source for the current tax year, with URL and as-of date.
+10. **FEE-QUOTES.** Every fee in stack.json is a placeholder except two state fees. Done test: each fee has a published price page or a quote range with URL and date, or stays marked PLACEHOLDER with why.
+11. **IL-EXEMPTION.** Illinois treatment of a foundation and of a grantor trust is assumed to follow federal. Done test: Illinois statute or Department of Revenue page cited for each.
+12. **280E-CHECK.** Confirm the transport company has no line the engine routes that a special disallowance blocks. Done test: each routed domain lists its blocking sections checked, with citations.
+13. **REALISM.** Synthetic-data realism checks. Done test: a script compares each scenario's domain totals to the CE table it came from and fails if any line drifts more than 10 percent from its benchmark after scaling; it runs in CI.
+14. **REGISTER-GAPS.** Instruments in 01-instrument-register.md marked unverified. Done test: each one has its primary-source quote and URL, or is moved to a "could not verify" list.
+15. **COUNSEL-QS.** Questions for counsel that the runs raised. Done test: each is added to 05-questions-for-attorney-and-cpa.md in plain words, in roles, with the scenario that raised it. Start with: whether an unrelated individual trustee at a nominal fee is realistic and what duties it carries; whether the Family Trust holding an LLC that pays the founder wages keeps S5 and S12 passing.
+16. **HEALTH-SWAP.** Leaving W-2 pay means replacing employer family health coverage. Done test: a scenario variant prices individual-market family coverage from a cited Illinois or federal marketplace source, applies the self-employed health deduction (162(l)) where it fits, and the transition report shows it.
+
+## Done
+
+(none yet)

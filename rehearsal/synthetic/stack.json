@@ -1,0 +1,218 @@
+{
+  "label": "SYNTHETIC stack settings for the rehearsal: structure versions in roles, fixed costs, and the settings the score depends on. Every fee is a PLACEHOLDER until a professional quotes it; a missing fee blocks the run, it never defaults to zero.",
+  "legacy_weight_w": 0.0,
+  "legacy_weight_note": "w is the founder's weight on program output against money (03-ab-rehearsal-spec.md, Objective). 0 means money only. It is his setting to choose, never tuned to make Arm B win.",
+  "assumptions": {
+    "building_depreciable_basis": 240000,
+    "building_rented_share": 0.6667,
+    "asset_building_depreciable_basis": 240000,
+    "asset_business_amortizable_basis": 212472,
+    "residential_recovery_years": 27.5,
+    "intangible_amortization_years": 15,
+    "meals_deductible_share": 0.5,
+    "beneficiary_other_income": "ce_us_quintiles_2025.second_quintile_income",
+    "beneficiary_filing_status": "single",
+    "founder_filing_status": "single",
+    "trust_distributes_share_of_dni": 1.0,
+    "asset_yield_for_value": 0.07,
+    "notes": [
+      "Depreciable bases are ASSUMPTIONS (land excluded). 212,472 = 80% of the BizBuySell Chicago median price 265,590, amortized over 15 years under IRC 197.",
+      "The adult beneficiary is a synthetic family member at the BLS second-income-fifth average. A child under the kiddie-tax ages would be taxed at the parent's rate instead (IRC 1(g)), and the income-splitting result would vanish.",
+      "asset_yield_for_value turns a break-even income into a rough asset value. It is an ASSUMPTION for perspective, not a market cap rate."
+    ],
+    "adult_beneficiaries": 2,
+    "trustee_kind": "professional"
+  },
+  "fees_placeholder": {
+    "llc_annual_report": "fees.il_llc_annual_report",
+    "registered_agent_each": 125,
+    "bookkeeping_each_entity": 600,
+    "form_1041_prep_each": 1200,
+    "form_990pf_prep": 2000,
+    "il_ag_charity_annual_fee": "fees.il_ag_charity_annual_report",
+    "independent_trustee_minimum": 2500,
+    "independent_trustee_rate_of_assets": 0.01,
+    "form_709_prep_once": 800,
+    "note": "All PLACEHOLDERS except the two state fees, which point at benchmarks-tax.json. Replace with quotes (backlog item FEE-QUOTES).",
+    "unrelated_individual_trustee": 1000
+  },
+  "versions": {
+    "today": {
+      "label": "Today's stack, in roles: a business trust owns the operating company; the management company manages it; the Family Trust is the business trust's beneficiary; the Foundation is the Family Trust's beneficiary; the founder owns the transport company and the building",
+      "llcs": [
+        "management_company",
+        "operating_company",
+        "transport_company"
+      ],
+      "trusts_filing_1041": [
+        "business_trust"
+      ],
+      "family_trust": {
+        "trustee": "founder",
+        "grantor": true
+      },
+      "foundation": {
+        "exists": true,
+        "assets": 0,
+        "net_investment_income": 0
+      },
+      "management_fee_flow": "no_benchmark_on_file",
+      "facts": {
+        "personal_lines_deducted": 0,
+        "residence_or_furnishings_depreciated": false,
+        "stepped_up_basis_claimed_on_transfer": null,
+        "se_or_payroll_tax_reduction_claimed": false,
+        "purpose_includes_irs_false_claim": false,
+        "has_trust": true,
+        "founder_controls_trust": null,
+        "trust_reported_as": null,
+        "founder_relationship_to_trust_property_unchanged": null,
+        "founder_runs_trust_owned_business_day_to_day": null,
+        "related_party_flows": [
+          {
+            "at_market": null,
+            "documented": null,
+            "service_or_use_real": null,
+            "paid": null
+          }
+        ],
+        "income_lands_with_who_earned_it": null,
+        "chain_layers_without_own_activity": null,
+        "business_run_by_entity_filing_as_trust": null,
+        "has_charity": true,
+        "charity_exempt_or_application_filed": null,
+        "charity_pays_family_costs": false,
+        "foreign_trust_unreported": null,
+        "transfers_reported_inconsistently": null,
+        "retained_use_assumed_outside_estate": null
+      },
+      "facts_basis": "07-structure-integrity-checks.md, table 'Today's stack, in roles'. Unknown facts are null (amber). Pass by the twin's design: no personal deductions (S6), no residence depreciation (S7; step-up not claimed is unknown, so S7 is amber until the transfers are papered), no self-employment claim (S10), purpose on file (S17). The Foundation pays no family costs by the twin's own gates (K1, K13)."
+    },
+    "flat": {
+      "label": "The flat version (the change that clears the most checks): an ordinary LLC holds the operating business and pays the founder market wages; the Family Trust holds the LLC interests; no business trust; the Foundation funded by gifts, not as the end of an income chain",
+      "llcs": [
+        "management_company",
+        "operating_company",
+        "transport_company"
+      ],
+      "trusts_filing_1041": [],
+      "family_trust": {
+        "trustee": "founder",
+        "grantor": true
+      },
+      "foundation": {
+        "exists": true,
+        "assets": 0,
+        "net_investment_income": 0
+      },
+      "management_fee_flow": "contract_benchmark_records_paid",
+      "facts": {
+        "personal_lines_deducted": 0,
+        "residence_or_furnishings_depreciated": false,
+        "stepped_up_basis_claimed_on_transfer": null,
+        "se_or_payroll_tax_reduction_claimed": false,
+        "purpose_includes_irs_false_claim": false,
+        "has_trust": true,
+        "founder_controls_trust": true,
+        "trust_reported_as": "grantor",
+        "trust_payment_tools_outside_trustee": false,
+        "trust_transactions_follow_terms": null,
+        "founder_relationship_to_trust_property_unchanged": false,
+        "founder_runs_trust_owned_business_day_to_day": false,
+        "related_party_flows": [
+          {
+            "at_market": true,
+            "documented": true,
+            "service_or_use_real": true,
+            "paid": true
+          }
+        ],
+        "income_lands_with_who_earned_it": null,
+        "chain_layers_without_own_activity": 0,
+        "business_run_by_entity_filing_as_trust": false,
+        "has_charity": true,
+        "charity_exempt_or_application_filed": null,
+        "charity_pays_family_costs": false,
+        "foreign_trust_unreported": null,
+        "transfers_reported_inconsistently": null,
+        "retained_use_assumed_outside_estate": null
+      },
+      "facts_basis": "AS DESIGNED, not yet proven by documents. The Family Trust, with the founder as trustee, is reported as his grantor trust, so S1-S3 pass on that design. S5, S11, S12 pass because the business trust is gone and the founder is paid wages by an LLC. S8 passes only once the written agreement, benchmark, records and payments exist. S4, S9, S13-S16 stay amber until papers exist."
+    },
+    "flat_independent": {
+      "label": "The flat version with an independent trustee for the Family Trust, so it can be a separate (non-grantor) taxpayer that distributes its income to adult family beneficiaries",
+      "llcs": [
+        "management_company",
+        "operating_company",
+        "transport_company"
+      ],
+      "trusts_filing_1041": [
+        "family_trust"
+      ],
+      "family_trust": {
+        "trustee": "independent",
+        "grantor": false
+      },
+      "foundation": {
+        "exists": true,
+        "assets": 0,
+        "net_investment_income": 0
+      },
+      "management_fee_flow": "contract_benchmark_records_paid",
+      "facts": {
+        "personal_lines_deducted": 0,
+        "residence_or_furnishings_depreciated": false,
+        "stepped_up_basis_claimed_on_transfer": null,
+        "se_or_payroll_tax_reduction_claimed": false,
+        "purpose_includes_irs_false_claim": false,
+        "has_trust": true,
+        "founder_controls_trust": false,
+        "trust_reported_as": "separate",
+        "trust_payment_tools_outside_trustee": null,
+        "trust_transactions_follow_terms": null,
+        "founder_relationship_to_trust_property_unchanged": false,
+        "founder_runs_trust_owned_business_day_to_day": false,
+        "related_party_flows": [
+          {
+            "at_market": true,
+            "documented": true,
+            "service_or_use_real": true,
+            "paid": true
+          }
+        ],
+        "income_lands_with_who_earned_it": null,
+        "chain_layers_without_own_activity": 0,
+        "business_run_by_entity_filing_as_trust": false,
+        "has_charity": true,
+        "charity_exempt_or_application_filed": null,
+        "charity_pays_family_costs": false,
+        "foreign_trust_unreported": null,
+        "transfers_reported_inconsistently": null,
+        "retained_use_assumed_outside_estate": null,
+        "trustee_related_or_subordinate": null,
+        "trustee_signs_whatever_founder_sends": null,
+        "trustee_decision_log_with_declines": null
+      },
+      "facts_basis": "AS DESIGNED. The Family Trust is a separate (non-grantor) taxpayer, so S1-S3 need a trustee who is not the founder and not related or subordinate to him (IRC 672(c), 674(c)), signs alone and keeps a decision log; until that trustee exists they are amber. This is the version where the founder is NOT the trustee."
+    }
+  },
+  "spend_check_map": {
+    "note": "Each flow the twin proposes in Arm B is graded by a real run of decide_spend.py (insider branch A, fail closed) or by the rehearsal answer key. A flow with no mapped case is Insufficient, never Allow.",
+    "mileage_with_log": "decide:D21_MileageWithLog",
+    "mileage_without_log": "decide:D22_MileageNoLog",
+    "management_fee_contract_benchmark_records_paid": "decide:D01_ManagementFeeClean",
+    "management_fee_no_benchmark_on_file": "decide:D02_FeeNoContract",
+    "family_vacation_through_company": "decide:D30_FamilyVacation",
+    "home_office_mailing_address_only": "decide:D37_HomeOfficeMailingAddress",
+    "home_office_exclusive_admin_room": "decide:D38_HomeOfficeAdminRoom",
+    "foundation_payout_met": "decide:G18_PayoutMet",
+    "foundation_payout_short": "decide:G19_PayoutShort",
+    "software_with_use_log": "key:K4",
+    "software_without_use_log": "key:K5",
+    "groceries_through_company": "key:K2",
+    "commute_through_company": "key:K11",
+    "suits_through_company": "key:K22",
+    "tuition_paid_to_school": "key:K12",
+    "groceries_through_foundation": "key:K1"
+  }
+}
