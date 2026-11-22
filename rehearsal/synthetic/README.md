@@ -13,7 +13,7 @@ The rehearsal (03-ab-rehearsal-spec.md) needs twelve months of transactions to f
 | File | What it holds |
 |---|---|
 | benchmarks-ce.json | BLS Consumer Expenditure Survey, Chicago area and US income fifths: what an average household spends by category |
-| benchmarks-tax.json | 2026 federal brackets and deductions (Rev. Proc. 2025-32), payroll, Illinois rates and fees, Chicago wages (BLS OEWS), HUD fair market rents, Cook County property tax, and the grantor-trust rule text |
+| benchmarks-tax.json | 2026 federal brackets and deductions (Rev. Proc. 2025-32), payroll and pre-tax payroll rules (125, 3121), Illinois rates and fees, Chicago wages (BLS OEWS), HUD fair market rents, Cook County property tax, and the grantor-trust rule text |
 | scenarios.json | The spending lines, each mapped to a domain in 02, and four scenarios: base, lean, a rental held in the stack, a bought service business held in the stack |
 | stack.json | Stack versions in roles (today, flat, flat with an independent trustee), the facts each one asserts for checks S1-S17, placeholder fees, and which spend case grades each flow |
 | synthetic_year.py | Seeded generator. Same seed, byte-identical ledger |

@@ -1,6 +1,7 @@
 {
   "label": "SYNTHETIC scenarios for the trustee rehearsal. Amounts point at public benchmarks (benchmarks-ce.json, benchmarks-tax.json) or are ASSUMPTIONS named as such. Entities appear as roles. Not the founder's numbers.",
   "year": 2026,
+  "payroll": {"note": "How the payroll lines are taxed. The BLS CE 'retirement, pensions and Social Security' line includes the employee's Social Security contributions (benchmarks-ce.json ce_glossary), so the runner takes the employee FICA it computes out of that line and treats the rest as a 401(k) elective deferral. A scenario may also list pre-tax deductions under 'pretax', each {\"section\": \"125\" or \"401k\", \"annual\": amount}: 125 leaves income-tax and FICA wages, 401k leaves income-tax wages only (benchmarks-tax.json payroll_pretax).", "retirement_line_includes_fica": true, "retirement_rest_section": "401k"},
   "lines": [
     {"id": "wages", "label": "gross pay (W-2 job)", "domain": "I1", "direction": "credit", "annual": "wages.chicago_all_occupations_mean_annual", "scaled": false, "per_month": 2, "cv": 0.0, "payer": "employer", "payee": "founder", "season": "flat"},
     {"id": "rent_units", "label": "rent from the two rented units", "domain": "I2", "direction": "credit", "annual": {"ref": "rent.chicago_fmr_2br_monthly", "times": 24}, "scaled": false, "per_month": 2, "cv": 0.0, "day": 1, "payer": "tenant", "payee": "building", "season": "flat"},
