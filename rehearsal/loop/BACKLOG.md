@@ -22,6 +22,7 @@ The daily loop takes the **top open item**, works it, and opens one draft PR. An
 14. **REGISTER-GAPS.** Instruments in 01-instrument-register.md marked unverified. Done test: each one has its primary-source quote and URL, or is moved to a "could not verify" list.
 15. **COUNSEL-QS.** Questions for counsel that the runs raised. Done test: each is added to 05-questions-for-attorney-and-cpa.md in plain words, in roles, with the scenario that raised it. Start with: whether an unrelated individual trustee at a nominal fee is realistic and what duties it carries; whether the Family Trust holding an LLC that pays the founder wages keeps S5 and S12 passing.
 16. **HEALTH-SWAP.** Leaving W-2 pay means replacing employer family health coverage. Done test: a scenario variant prices individual-market family coverage from a cited Illinois or federal marketplace source, applies the self-employed health deduction (162(l)) where it fits, and the transition report shows it.
+17. **UTILITY-PASS.** Utilities charged to tenants are not modeled. Done test: scenarios.json can mark a utility as tenant-paid per unit; for a unit under a housing voucher, the engine lowers the approved contract rent by the utility allowance instead of adding the charge (the HUD rule that gross rent, contract rent plus utility allowance, is what the payment standard caps, read and cited); a selftest case shows both kinds of unit.
 
 ## Done
 
