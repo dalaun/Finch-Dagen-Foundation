@@ -9,7 +9,10 @@ A pull request is in the agent lane only when ALL of these hold:
   2. it comes from a branch of this repository, not a fork;
   3. it is not a draft;
   4. rehearsal/loop/score-ledger.csv, if touched, only gains rows at the end
-     (history is never rewritten) and is not deleted.
+     (history is never rewritten) and is not deleted;
+  5. the check code inside agent-lane files (CHECK_BLOCKS) only gains lines:
+     every line it had is still there, so an agent can add a check but not
+     loosen or remove one.
 
 Anything else is Dalaun's lane. The guard fails closed: an unknown pattern,
 an unreadable file list or an API error is Dalaun's lane.
@@ -36,6 +39,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 LEDGER = "rehearsal/loop/score-ledger.csv"
+# Check code that lives inside agent-lane files. Its lines may only grow: an
+# agent may add a check, but changing or removing an existing line of it is
+# Dalaun's lane (loosening a check waits for him).
+CHECK_BLOCKS = {
+    "rehearsal/synthetic/rehearsal_run.py": "selftest",
+    "rehearsal/synthetic/synthetic_year.py": "main",
+}
 
 
 # ------------------------------------------------------------------ CODEOWNERS
@@ -78,9 +88,30 @@ def owners_of(path: str, rules: list) -> list:
 
 # ------------------------------------------------------------------ decision
 
-def decide(pr: dict, files: list, rules: list, ledger_versions=None) -> tuple:
-    """Return (lane, reasons). lane is 'agent' or 'owner'."""
+def block_lines(text: str, func: str) -> list:
+    """The non-blank lines of top-level function `func`, stripped."""
+    out, inside = [], False
+    for line in text.splitlines():
+        if line.startswith(f"def {func}("):
+            inside = True
+        elif inside and line and not line[0].isspace() and not line.startswith(("#", ")")):
+            break
+        if inside and line.strip():
+            out.append(line.strip())
+    return out
+
+
+def only_grows(base: str, head: str, func: str) -> bool:
+    from collections import Counter
+    b, h = Counter(block_lines(base, func)), Counter(block_lines(head, func))
+    return bool(b) and not (b - h)
+
+
+def decide(pr: dict, files: list, rules: list, ledger_versions=None, check_versions=None) -> tuple:
+    """Return (lane, reasons). lane is 'agent' or 'owner'.
+    check_versions: {path: (base_text, head_text)} for the CHECK_BLOCKS files touched."""
     reasons = []
+    check_versions = check_versions or {}
     head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name")
     base_repo = ((pr.get("base") or {}).get("repo") or {}).get("full_name")
     if not head_repo or head_repo != base_repo:
@@ -104,6 +135,17 @@ def decide(pr: dict, files: list, rules: list, ledger_versions=None) -> tuple:
                     base, head = ledger_versions
                     if not head.startswith(base):
                         reasons.append("rewrites earlier rows of the score ledger (rows may only be added at the end)")
+        for path, func in CHECK_BLOCKS.items():
+            if path not in (f.get("filename"), f.get("previous_filename")):
+                continue
+            if f.get("status") in ("removed", "renamed"):
+                reasons.append(f"deletes or renames {path}, which holds checks")
+            elif f.get("status") == "modified":
+                if path not in check_versions:
+                    reasons.append(f"could not read {path} to check its checks only grow (fail closed)")
+                elif not only_grows(*check_versions[path], func):
+                    reasons.append(f"changes or removes an existing line of {func}() in {path} "
+                                   "(checks may only be added)")
     return ("owner" if reasons else "agent"), reasons
 
 
@@ -149,11 +191,18 @@ def run_in_actions() -> int:
         if any(f.get("filename") == LEDGER and f.get("status") == "modified" for f in files):
             ledger_versions = (file_at(repo, LEDGER, pr["base"]["sha"], token),
                                file_at(repo, LEDGER, pr["head"]["sha"], token))
-        lane, reasons = decide(pr, files, rules, ledger_versions)
+        check_versions = {}
+        for f in files:
+            if f.get("filename") in CHECK_BLOCKS and f.get("status") == "modified":
+                path = f["filename"]
+                check_versions[path] = (file_at(repo, path, pr["base"]["sha"], token),
+                                        file_at(repo, path, pr["head"]["sha"], token))
+        lane, reasons = decide(pr, files, rules, ledger_versions, check_versions)
     except Exception as e:  # fail closed
         lane, reasons = "owner", [f"the guard could not finish ({type(e).__name__}: {e})"]
     if lane == "agent":
-        msg = "Agent lane: every file is the rehearsal loop's own work. It merges itself once every required check passes."
+        msg = ("Agent lane: every file is the rehearsal loop's own work. It merges itself once every required "
+               "check passes, including a Verifier pass on this exact commit from an agent that did not write it.")
     else:
         msg = "Dalaun's lane: this pull request needs Dalaun. It " + "; it ".join(reasons) + "."
     print(msg)
@@ -177,13 +226,28 @@ def selftest() -> int:
     rules = parse_codeowners((ROOT / ".github" / "CODEOWNERS").read_text())
     same = {"head": {"repo": {"full_name": "o/r"}}, "base": {"repo": {"full_name": "o/r"}}, "draft": False}
 
-    def lane(files, pr=same, lv=None):
+    def lane(files, pr=same, lv=None, cv=None):
         return decide(pr, [{"filename": f, "status": "modified"} if isinstance(f, str) else f for f in files],
-                      rules, lv)[0]
+                      rules, lv, cv)[0]
 
     ok(lane(["rehearsal/loop/BACKLOG.md"]) == "agent", "backlog only: agent lane")
-    ok(lane(["rehearsal/synthetic/rehearsal_run.py", "rehearsal/synthetic/benchmarks-tax.json",
-             "rehearsal/loop/BACKLOG.md"]) == "agent", "engine + figures + backlog: agent lane")
+    rr = "rehearsal/synthetic/rehearsal_run.py"
+    base = "def helper():\n    return 1\n\ndef selftest() -> int:\n    ok(a == 1, 'one')\n    ok(b == 2, 'two')\n\ndef main():\n    pass\n"
+    grown = base.replace("    ok(b == 2, 'two')\n", "    ok(b == 2, 'two')\n    ok(c == 3, 'three')\n")
+    loosened = base.replace("ok(b == 2, 'two')", "ok(True, 'two')")
+    dropped = base.replace("    ok(b == 2, 'two')\n", "")
+    helper_changed = base.replace("return 1", "return 2")
+    ok(lane([rr, "rehearsal/synthetic/benchmarks-tax.json", "rehearsal/loop/BACKLOG.md"],
+            cv={rr: (base, grown)}) == "agent", "engine + figures + backlog, a check added: agent lane")
+    ok(lane([rr], cv={rr: (base, helper_changed)}) == "agent", "engine change outside the checks: agent lane")
+    ok(lane([rr], cv={rr: (base, loosened)}) == "owner", "a check loosened: Dalaun's lane")
+    ok(lane([rr], cv={rr: (base, dropped)}) == "owner", "a check removed: Dalaun's lane")
+    ok(lane([rr]) == "owner", "engine file unreadable: Dalaun's lane (fail closed)")
+    ok(lane([{"filename": rr, "status": "removed"}]) == "owner", "engine file deleted: Dalaun's lane")
+    real = (ROOT / rr).read_text()
+    ok(len(block_lines(real, "selftest")) > 20, "the real selftest() is found")
+    ok(len(block_lines((ROOT / "rehearsal/synthetic/synthetic_year.py").read_text(), "main")) > 5,
+       "the real synthetic_year main() is found")
     ok(lane(["rehearsal/synthetic/structure-cases-facts.json"]) == "owner", "answer-key facts: Dalaun's lane")
     ok(lane(["rehearsal/loop/GOAL.md"]) == "owner", "goal file: Dalaun's lane")
     ok(lane(["rehearsal/loop/BACKLOG.md", ".github/workflows/keystone-check.yml"]) == "owner",

@@ -58,3 +58,5 @@ jobs:
         run: python3 tests/rehearsal/check_ledger.py
       - name: Lane guard's own cases
         run: python3 .github/lane/lane_guard.py --selftest
+      - name: Verifier pass's own cases
+        run: python3 .github/lane/verifier_pass.py --selftest

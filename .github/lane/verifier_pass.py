@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Verifier pass: an agent that did not write the code passes the exact commit.
+
+Green checks and a bot review are not a verdict. An agent-lane pull request
+merges only after a verifier records a pass on the pull request's current head
+commit. The pass is a GitHub commit status:
+
+  context      "Verifier pass"
+  state        success
+  description  "pass <first 12 of the sha> by <verifier>: <one line>"
+  commit       the pull request's head commit, and only that one
+
+A status belongs to one commit, so any new push leaves the new head with no
+pass and the merge waits again. Unlike a check that reruns on a review, a status
+has one current value per commit, so an old red result can't block a later
+pass (the vault's PR 41 lesson).
+
+The verifier must be named in .github/lane/verifiers (Dalaun's lane), must not
+be the pull request's author, and must not have authored or committed any of
+its commits. Copilot and other review bots never count (her rule: a bot review
+is not a verdict).
+
+  verifier_pass.py --post --pr N --sha SHA --as LOGIN --note "..."
+      the verifier, with its own token in GH_TOKEN, after its review: refuses
+      if SHA is not the current head, the pull request is not in the agent
+      lane yet (lane guard), or LOGIN wrote any of it. Never run by the author.
+  verifier_pass.py --check --pr N
+      say whether the pull request's head has a valid pass (exit 0) or not (1)
+  verifier_pass.py --audit-recent --days 2
+      every pull request merged in the last DAYS days: if anyone but Dalaun
+      merged it, its merged head had to carry a valid pass. Exit 1 otherwise,
+      so the audit shows red. (A merge made by github-actions starts no push
+      workflow, so the audit runs on a schedule, not on the merge.)
+  verifier_pass.py --selftest
+
+Standard library only. Needs GH_TOKEN and GITHUB_REPOSITORY (or --repo).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import time
+import urllib.request
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+CONTEXT = "Verifier pass"
+OWNER = "dalaun"
+NEVER = {"copilot", "copilot-pull-request-reviewer[bot]", "copilot-swe-agent[bot]", "github-actions[bot]"}
+
+
+def allowed_verifiers(text: str) -> set:
+    return {ln.split("#", 1)[0].strip().lower() for ln in text.splitlines()} - {""} - NEVER
+
+
+def writers(pr: dict, commits: list) -> set:
+    who = {((pr.get("user") or {}).get("login") or "").lower()}
+    for c in commits:
+        for k in ("author", "committer"):
+            login = ((c.get(k) or {}) or {}).get("login")
+            if login:
+                who.add(login.lower())
+    return who - {""}
+
+
+def valid_pass(statuses: list, head_sha: str, allowed: set, wrote: set) -> tuple:
+    """Return (ok, why). statuses: the head commit's statuses, newest first (GitHub's order)."""
+    for s in statuses:
+        if s.get("context") != CONTEXT:
+            continue
+        login = ((s.get("creator") or {}).get("login") or "").lower()
+        # Only the newest status per context counts, as on GitHub.
+        if s.get("state") != "success":
+            return False, f"the newest '{CONTEXT}' is {s.get('state')}"
+        if login not in allowed:
+            return False, f"'{CONTEXT}' set by {login or 'unknown'}, who is not in .github/lane/verifiers"
+        if login in wrote:
+            return False, f"'{CONTEXT}' set by {login}, who wrote part of this pull request"
+        if head_sha[:12] not in (s.get("description") or ""):
+            return False, f"'{CONTEXT}' does not name the commit {head_sha[:12]}"
+        return True, f"passed by {login} on {head_sha[:12]}"
+    return False, f"no '{CONTEXT}' on {head_sha[:12]}"
+
+
+# ------------------------------------------------------------------ GitHub API
+
+def api(path: str, method: str = "GET", body: dict | None = None):
+    req = urllib.request.Request("https://api.github.com" + path, method=method,
+                                 data=json.dumps(body).encode() if body else None, headers={
+        "Authorization": "Bearer " + os.environ["GH_TOKEN"],
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "verifier-pass",
+    })
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.load(r)
+
+
+def pr_state(repo: str, number: int) -> tuple:
+    pr = api(f"/repos/{repo}/pulls/{number}")
+    commits = api(f"/repos/{repo}/pulls/{number}/commits?per_page=100")
+    statuses = api(f"/repos/{repo}/commits/{pr['head']['sha']}/statuses?per_page=100")
+    allowed = allowed_verifiers((ROOT / ".github" / "lane" / "verifiers").read_text())
+    return pr, commits, statuses, allowed
+
+
+def check(repo: str, number: int) -> int:
+    pr, commits, statuses, allowed = pr_state(repo, number)
+    ok, why = valid_pass(statuses, pr["head"]["sha"], allowed, writers(pr, commits))
+    print(("ok    " if ok else "WAIT  ") + why)
+    return 0 if ok else 1
+
+
+def post(repo: str, number: int, sha: str, login: str, note: str) -> int:
+    pr, commits, _, allowed = pr_state(repo, number)
+    head = pr["head"]["sha"]
+    login = login.lower()
+    if not sha or head[:len(sha)] != sha or len(sha) < 12:
+        print(f"REFUSE  you reviewed {sha or 'no commit'}, but the head is now {head[:12]}: review the head again")
+        return 1
+    if login not in allowed:
+        print(f"REFUSE  {login} is not in .github/lane/verifiers")
+        return 1
+    if login in writers(pr, commits):
+        print(f"REFUSE  {login} wrote part of this pull request; a verifier must not have")
+        return 1
+    runs = api(f"/repos/{repo}/commits/{head}/check-runs?check_name=lane-guard").get("check_runs", [])
+    if not any(r.get("conclusion") == "success" for r in runs):
+        print("REFUSE  the lane guard has not passed on this commit: a pass is only for agent-lane pull requests")
+        return 1
+    desc = f"pass {head[:12]} by {login}: {note}"[:140]
+    api(f"/repos/{repo}/statuses/{head}", "POST", {"state": "success", "context": CONTEXT, "description": desc})
+    print("posted  " + desc)
+    return 0
+
+
+def audit_one(repo: str, pr: dict) -> tuple:
+    merger = ((pr.get("merged_by") or {}).get("login") or "").lower()
+    if merger == OWNER:
+        return True, f"PR #{pr['number']}: Dalaun merged it, his call"
+    commits = api(f"/repos/{repo}/pulls/{pr['number']}/commits?per_page=100")
+    statuses = api(f"/repos/{repo}/commits/{pr['head']['sha']}/statuses?per_page=100")
+    allowed = allowed_verifiers((ROOT / ".github" / "lane" / "verifiers").read_text())
+    ok, why = valid_pass(statuses, pr["head"]["sha"], allowed, writers(pr, commits))
+    return ok, f"PR #{pr['number']} merged by {merger}: {why}"
+
+
+def audit_recent(repo: str, days: int) -> int:
+    since = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - days * 86400))
+    pulls = api(f"/repos/{repo}/pulls?state=closed&sort=updated&direction=desc&per_page=50")
+    bad = 0
+    for p in pulls:
+        if not p.get("merged_at") or p["merged_at"] < since or p["base"]["ref"] != "main":
+            continue
+        ok, why = audit_one(repo, api(f"/repos/{repo}/pulls/{p['number']}"))
+        print(("pass  " if ok else "FAIL  ") + why)
+        bad += not ok
+    if bad:
+        print(f"\n{bad} merge(s) without a valid verifier pass. Open a revert pull request for Dalaun "
+              "for each, and tell him in one line.")
+    else:
+        print("every merge in the window was Dalaun's or carried a valid verifier pass")
+    return 1 if bad else 0
+
+
+# ------------------------------------------------------------------ selftest
+
+def selftest() -> int:
+    fails = 0
+
+    def ok(cond, msg):
+        nonlocal fails
+        print(("ok    " if cond else "FAIL  ") + msg)
+        fails += not cond
+
+    head = "abcdef1234567890" * 2
+    allowed = allowed_verifiers("dalaun-northstar-grokbot[bot]\nCopilot\n# comment\n")
+    pr = {"user": {"login": "dalaun-finchdagen-claude[bot]"}}
+    commits = [{"author": {"login": "dalaun-finchdagen-claude[bot]"}, "committer": {"login": "web-flow"}}]
+    wrote = writers(pr, commits)
+
+    def st(login, state="success", desc=None, ctx=CONTEXT):
+        return {"context": ctx, "state": state, "creator": {"login": login},
+                "description": desc if desc is not None else f"pass {head[:12]} by {login}: ok"}
+
+    g = "dalaun-northstar-grokbot[bot]"
+    ok(valid_pass([st(g)], head, allowed, wrote)[0], "a listed non-author verifier on the head: pass")
+    ok(not valid_pass([], head, allowed, wrote)[0], "no status: wait")
+    ok(not valid_pass([st("copilot")], head, allowed, wrote)[0], "Copilot never counts, even if listed")
+    ok("copilot" not in allowed, "Copilot is dropped from the verifier list")
+    ok(not valid_pass([st("dalaun-finchdagen-claude[bot]")], head,
+                      allowed | {"dalaun-finchdagen-claude[bot]"}, wrote)[0], "the author verifying itself: wait")
+    ok(not valid_pass([st("someone-else[bot]")], head, allowed, wrote)[0], "an unlisted verifier: wait")
+    ok(not valid_pass([st(g, desc="pass 000000000000 by x: ok")], head, allowed, wrote)[0],
+       "a pass naming another commit: wait")
+    ok(not valid_pass([st(g, state="failure"), st(g)], head, allowed, wrote)[0],
+       "the newest status is a failure: wait (only the newest counts)")
+    ok(valid_pass([st(g), st(g, state="failure")], head, allowed, wrote)[0],
+       "a pass after an earlier failure: pass")
+    ok(valid_pass([st("x", ctx="other"), st(g)], head, allowed, wrote)[0], "other contexts are ignored")
+    co = [{"author": {"login": g}, "committer": {"login": "web-flow"}}]
+    ok(not valid_pass([st(g)], head, allowed, writers(pr, co))[0], "a verifier that wrote a commit: wait")
+    print(f"\n{fails} failed")
+    return 1 if fails else 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--repo", default=os.environ.get("GITHUB_REPOSITORY", "dalaun/Finch-Dagen-Foundation"))
+    ap.add_argument("--pr", type=int)
+    ap.add_argument("--sha")
+    ap.add_argument("--as", dest="login")
+    ap.add_argument("--note", default="reviewed the diff and reran the checks")
+    ap.add_argument("--post", action="store_true")
+    ap.add_argument("--check", action="store_true")
+    ap.add_argument("--audit-recent", action="store_true")
+    ap.add_argument("--days", type=int, default=2)
+    ap.add_argument("--selftest", action="store_true")
+    a = ap.parse_args()
+    if a.selftest:
+        return selftest()
+    if a.audit_recent:
+        return audit_recent(a.repo, a.days)
+    if a.check:
+        return check(a.repo, a.pr)
+    if a.post:
+        return post(a.repo, a.pr, a.sha or "", a.login or "", a.note)
+    ap.print_help()
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
