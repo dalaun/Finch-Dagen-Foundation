@@ -1,0 +1,160 @@
+{
+  "label": "Public tax, wage, rent and fee figures used by the SYNTHETIC rehearsal. Each names its source, date and URL as read. Figures for tax year 2026.",
+  "read_on": "2026-11-22",
+  "federal_2026": {
+    "source": "IRS Rev. Proc. 2025-32 (tax year 2026 inflation adjustments, incl. Pub. L. 119-21 amendments), Oct 2025",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+    "status": "READ",
+    "single_brackets": [
+      [
+        0,
+        0.1
+      ],
+      [
+        12400,
+        0.12
+      ],
+      [
+        50400,
+        0.22
+      ],
+      [
+        105700,
+        0.24
+      ],
+      [
+        201775,
+        0.32
+      ],
+      [
+        256225,
+        0.35
+      ],
+      [
+        640600,
+        0.37
+      ]
+    ],
+    "mfj_brackets": [
+      [
+        0,
+        0.1
+      ],
+      [
+        24800,
+        0.12
+      ],
+      [
+        100800,
+        0.22
+      ],
+      [
+        211400,
+        0.24
+      ],
+      [
+        403550,
+        0.32
+      ],
+      [
+        512450,
+        0.35
+      ],
+      [
+        768700,
+        0.37
+      ]
+    ],
+    "trust_brackets": [
+      [
+        0,
+        0.1
+      ],
+      [
+        3300,
+        0.24
+      ],
+      [
+        11700,
+        0.35
+      ],
+      [
+        16000,
+        0.37
+      ]
+    ],
+    "standard_deduction_single": 16100,
+    "standard_deduction_mfj": 32200,
+    "annual_gift_exclusion": 19000,
+    "basic_exclusion_amount": 15000000,
+    "salt_cap_2026": 40400,
+    "salt_phase_down_threshold_2026": 505000,
+    "salt_source": "26 USC 164(b)(6)-(7) as amended by Pub. L. 119-21 sec. 70120, read at https://www.law.cornell.edu/uscode/text/26/164 (READ 2026-11-22)",
+    "qbi_rate": 0.2,
+    "qbi_source": "26 USC 199A(a), sunset in old (i) removed by Pub. L. 119-21 sec. 70105, read at https://www.law.cornell.edu/uscode/text/26/199A (READ 2026-11-22). Rental income gets no QBI deduction in this model (conservative: a rental counts only if it is a trade or business)."
+  },
+  "payroll_2026": {
+    "source": "SSA Office of the Chief Actuary, Contribution and Benefit Base",
+    "url": "https://www.ssa.gov/oact/cola/cbb.html",
+    "status": "READ",
+    "ss_wage_base": 184500,
+    "employee_fica_rate": 0.0765,
+    "se_rate_oasdi": 0.124,
+    "se_rate_hi": 0.029,
+    "se_net_earnings_factor": 0.9235,
+    "rates_note": "7.65%, 12.4%, 2.9% and 92.35% are statutory (IRC 3101, 1401, 1402(a)(12)); not re-read in this run."
+  },
+  "illinois": {
+    "source": "Illinois Department of Revenue, Income Tax Rates",
+    "url": "https://tax.illinois.gov/research/taxrates/income.html",
+    "status": "READ",
+    "individual_rate": 0.0495,
+    "trust_rate": 0.0495,
+    "trust_replacement_tax": 0.015,
+    "note": "Illinois exemption allowance not modeled (backlog IL-EXEMPTION)."
+  },
+  "fees": {
+    "source": "805 ILCS 180/50-10(b)(11) (LLC annual report); Illinois Attorney General AG990-IL Filing Instructions rev. 01/24",
+    "url": "https://ilga.gov/legislation/ilcs/documents/080501800K50-10.htm ; https://illinoisattorneygeneral.gov/Page-Attachments/FormAG990ILFilingInstuctions.pdf",
+    "status": "READ",
+    "il_llc_annual_report": 75,
+    "il_ag_charity_annual_report": 15
+  },
+  "wages": {
+    "source": "BLS Occupational Employment and Wage Statistics, Chicago-Naperville-Elgin IL-IN, May 2025, release 26-848-CHI, Jul 23 2026",
+    "url": "https://www.bls.gov/regions/midwest/news-release/2026/occupationalemploymentandwages_chicago_20260723.htm",
+    "status": "READ",
+    "chicago_all_occupations_mean_hourly": 35.28,
+    "chicago_all_occupations_mean_annual": 73382,
+    "note": "Annual = mean hourly x 2,080 hours, the convention BLS uses for OEWS annual wages. The release gives no median."
+  },
+  "rent": {
+    "source": "HUD FY2026 Fair Market Rents, Chicago-Joliet-Naperville IL HUD Metro FMR Area (effective Oct 1 2025; not among areas revised Apr 21 2026)",
+    "url": "https://www.huduser.gov/portal/datasets/fmr/fmr2026/FY2026_FMR_Schedule.pdf",
+    "status": "READ",
+    "chicago_fmr_0br_monthly": 1480,
+    "chicago_fmr_1br_monthly": 1581,
+    "chicago_fmr_2br_monthly": 1781,
+    "chicago_fmr_3br_monthly": 2294,
+    "chicago_fmr_4br_monthly": 2653,
+    "note": "FMR is a 40th-percentile metro rent, not a ZIP-level rent; the 60620 small-area FMR was not read."
+  },
+  "property_tax": {
+    "source": "Civic Federation, Estimated Effective Property Tax Rates 2013-2022 (Oct 2024); Cook County Treasurer TY2024 analysis (Nov 2025)",
+    "url": "https://civicfed.org/Effective_Property_Tax_2013_2022 ; https://cookcountytreasurer.com/pdfs/taxbillanalysisandstatistics/taxyear2024analysisenglishversion.pdf",
+    "status": "READ",
+    "chicago_residential_effective_rate_ty2022": 0.0169,
+    "chicago_median_residential_bill_ty2024": 4457,
+    "note": "Used only as a realism check on the synthetic building's property tax (backlog REAL-PROPTAX)."
+  },
+  "not_read": [
+    "26 USC 170(p) statute text: IRS IR-2026-135 says non-itemizers may deduct up to 1,000 (2,000 joint) of cash gifts from 2026, and gifts to supporting organizations and donor-advised funds do not qualify. Whether gifts to a private non-operating foundation qualify is NOT confirmed; the model gives them no deduction.",
+    "26 USC 152(c)(3) age test behind the kiddie tax (1(g)(2)).",
+    "Illinois exemption allowance."
+  ],
+  "grantor_trust": {
+    "source": "26 USC 674(a), (c), (d); 672(c); Treas. Reg. 1.671-4(b); read at law.cornell.edu 2026-11-22",
+    "status": "READ",
+    "rule": "A trust whose income can be sprinkled by the grantor (or a nonadverse party) is the grantor's for income tax (674(a)). The independent-trustee exception (674(c)) needs trustees none of whom is the grantor and no more than half related or subordinate (672(c): spouse, parents, issue, siblings, employees). A grantor trust with one owner may skip Form 1041 under the optional method (1.671-4(b)(2)(ii)(B)), unless it has a foreign situs or foreign assets (1.671-4(b)(6))."
+  }
+}
