@@ -42,6 +42,15 @@ The run takes the first step below that has no move yet and whose earlier step i
 - The one thing for Dalaun: ask his CPA, "Would my rental income, and a business I buy and run through a hired manager, be passive activities for me under section 469, and could I qualify as a real estate professional?"
 - Status: open
 
+### 2. question: Will the Family Trust pay out all of its income each year, or keep part of it?
+
+- Key: `trust-distributes-dni`
+- Opened: 2026-11-23
+- For: lawyer, then CPA
+- Why it matters: the engine assumes the trust distributes 100 percent of its distributable net income (DNI) to the two adult beneficiaries, who are taxed at their own lower brackets. In a scratch run (not committed) that assumed only 50 percent is distributed, break-even with an unrelated individual trustee roughly doubles, from about 148,000 to about 313,000 a year of asset income, because retained income is taxed at the compressed trust brackets (and above the top trust bracket start, NIIT applies). Whether income goes out is a trustee-discretion or mandatory-payout choice written into the instrument, so it decides how big the asset must be.
+- The one thing for Dalaun: ask his lawyer, "Should the Family Trust be written to require distributing its income each year, or leave it to the trustee's discretion, and what does each do to who pays the tax?" Then ask his CPA to confirm the tax result.
+- Status: open
+
 ## Closed
 
 (none yet)
