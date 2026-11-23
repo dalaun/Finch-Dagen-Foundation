@@ -38,7 +38,9 @@ check id in a comment:
 | loan out goes to counsel | R7 | spend-decision-shapes.ttl |
 | equipment rent goes to counsel | PG13 | decision/planned-giving-shapes.ttl |
 | stock gift needs a disposal plan | PG3b | planned-giving-shapes.ttl |
-| who is an insider | IR3, IR4, IR5, dm:dqScreened | decision/spend-decision-model.ttl, tests/decision/branch-*.ttl |
+| the plan's date falls before the period ends | PG3c, RI_DispositionPlanDates | planned-giving-shapes.ttl, decision/required-inputs.ttl |
+| holding blocked once the plan's date passes | PG3d | planned-giving-shapes.ttl |
+| who is an insider | IR3, IR4, IR5, IR10 (gift ledger), L1 | decision/spend-decision-model.ttl, tests/decision/branch-*.ttl, tests/decision/gift-ledger.ttl |
 
 ## Run it
 
@@ -47,13 +49,16 @@ sh formal/keystone/run.sh
 ```
 
 Needs Java 11+ and curl; it fetches TLC 1.7.4 once and checks its sha256. About
-25 seconds. Every line must say `ok`:
+40 seconds. Every line must say `ok`:
 
 - `pass-*` configs must pass.
-- `finding-*` configs are known findings in the current code. They must fail on
-  the named rule by the named path until the code is fixed.
-- `break-*` configs remove one guard on purpose. They must fail. If one passes,
-  the model lost its ability to fail: fix the model, not the break.
+- `limit-*` configs show what checks cannot do (a person must still sell the
+  gifted stock). They must fail on the named rule by the named path.
+- `finding-*` configs, when there are any, are known findings in the current
+  code. They must fail by the named path until the code is fixed.
+- `break-*` configs remove one guard on purpose, or put back how the code worked
+  before a finding was fixed. They must fail. If one passes, the model lost its
+  ability to fail: fix the model, not the break.
 
 ## Read a result
 
@@ -83,6 +88,8 @@ covered file. Do not move the sync commit for a run you could not finish.
 
 ## When a finding is fixed
 
-When the checks derive insider status from a gift ledger, `finding-typed-screen`
-should pass: change its expected result in `run.sh` to `pass` in the same PR as
-the fix, and keep `break-*` failing.
+Do not flip a finding to pass. Change the guard constant that described the old
+code (as `DeriveScreen` and `DatedPlan` did) so the passing configs describe the
+fixed code, and rename the finding's config to `break-*`, so it keeps failing and
+guards against the old behavior coming back. Do it in the same PR as the fix, with
+worked cases that fail when the fix is switched off.

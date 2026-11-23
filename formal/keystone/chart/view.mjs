@@ -15,7 +15,9 @@ export const state = (v) => {
   parts.push(held ? "Foundation holds value" : "Foundation holds nothing");
   if (v.eqOwner === "Foundation")
     parts.push(v.eqUser === "Foundation" ? "owns the equipment" : `equipment used by ${who[v.eqUser]}`);
-  if (v.stock === "Foundation") parts.push(v.deadline ? "still holds the stock, period over" : "holds the stock");
+  if (v.stock === "Foundation")
+    parts.push(v.deadline ? "still holds the stock, period over"
+      : v.warned ? "holds the stock, blocked past the plan date" : "holds the stock");
   if (Object.entries(v.owner).some(([t, o]) => o === "Grantee" && v.fdn[t])) parts.push("a grant is out");
   if (v.broke.length) parts.push(`breaks ${v.broke.join(" and ")}`);
   return parts.join(", ");
@@ -45,7 +47,8 @@ export const step = (action, from, to) => {
     case "Grant": return `the foundation grants to ${who[dst]}`;
     case "GranteeSpends": return `the grantee pays ${who[dst]}`;
     case "PrivateMove": return "private money moves inside the stack";
-    case "Rescreen": return "the insider settings are updated";
+    case "Rescreen": return "the insider settings are updated by hand";
+    case "PlanDateHits": return "the plan's sale date passes";
     case "PeriodEnds": return "the disposition period ends";
     default: return action;
   }

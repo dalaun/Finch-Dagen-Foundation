@@ -1,0 +1,35 @@
+@prefix : <http://example.org/trust-domain/decision-cases#> .
+@prefix dm: <http://example.org/trust-domain/decision#> .
+@prefix td: <http://example.org/trust-domain#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# The foundation's gift ledger for the worked cases. Synthetic: roles, never real
+# names; every amount is illustrative. Insider rule IR10 (decision/spend-decision-model.ttl)
+# derives each substantial contributor (507(d)(2)) from these entries; nobody types it.
+#
+# Running totals at the close of each year, and what IR10 makes of each giver:
+#   2026: 8,000 received.   Early donor 8,000 (100 percent): substantial contributor.
+#   2027: 484,000 received. Outside donor 400,000, supply vendor 20,000: substantial.
+#         Printer vendor 6,000 is over 5,000 but 1.2 percent, under 2: not substantial.
+#         Early donor is 1.7 percent now, but status reached in 2026 stays (507(d)(2)(B)(iv)).
+#         The community fund is a public charity: not a disqualified person for 4941.
+
+:FoundationGiftLedger a dm:GiftLedger ; dm:ledgerComplete true .
+
+:Gift_EarlyDonor_2026 a dm:Contribution ; dm:giver :EarlyDonor ;
+    dm:contributionAmount "8000"^^xsd:decimal ; dm:receivedOn "2026-06-01"^^xsd:date .
+:Gift_OutsideDonor_2027 a dm:Contribution ; dm:giver :OutsideDonor ;
+    dm:contributionAmount "400000"^^xsd:decimal ; dm:receivedOn "2027-01-15"^^xsd:date .
+:Gift_CommunityFund_2027 a dm:Contribution ; dm:giver :CommunityFund ;
+    dm:contributionAmount "50000"^^xsd:decimal ; dm:receivedOn "2027-02-01"^^xsd:date .
+:Gift_SupplyVendor_2027 a dm:Contribution ; dm:giver :SupplyVendor ;
+    dm:contributionAmount "20000"^^xsd:decimal ; dm:receivedOn "2027-03-01"^^xsd:date .
+:Gift_PrinterVendor_2027 a dm:Contribution ; dm:giver :PrinterVendor ;
+    dm:contributionAmount "6000"^^xsd:decimal ; dm:receivedOn "2027-04-01"^^xsd:date .
+
+:EarlyDonor a dm:Party ; rdfs:label "Supplier that gave in the foundation's first year (unrelated)" .
+:OutsideDonor a dm:Party ; rdfs:label "Large outside donor (unrelated)" .
+:CommunityFund a dm:Party , td:PublicCharity ; rdfs:label "Community fund (public charity)" .
+:SupplyVendor a dm:Party ; rdfs:label "Program supply vendor that also gave (unrelated by family or ownership)" .
+:PrinterVendor a dm:Party ; rdfs:label "Print shop that also gave (unrelated by family or ownership)" .

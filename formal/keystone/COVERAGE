@@ -7,7 +7,10 @@ covered:
   - decision/stewardship-shapes.ttl
   - decision/planned-giving-shapes.ttl
   - decision/spend-decision-model.ttl
+  - decision/planned-giving-model.ttl
+  - decision/required-inputs.ttl
   - trust-domain-keystone-shapes.ttl
   - tests/decision/branch-a.ttl
   - tests/decision/branch-b.ttl
+  - tests/decision/gift-ledger.ttl
   - decide_spend.py

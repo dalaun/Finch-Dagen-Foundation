@@ -104,6 +104,12 @@
 :extensionGranted a owl:DatatypeProperty ; rdfs:range xsd:boolean .
 :writtenDispositionPlan a owl:DatatypeProperty ; rdfs:range xsd:boolean ;
     rdfs:comment "A written plan, on the decision record, to bring holdings inside the limit before the disposition period ends."@en .
+:acquiredOn a owl:DatatypeProperty ; rdfs:range xsd:date ;
+    rdfs:comment "Date the gift or bequest of the holding was received: the day the 4943(c)(6) period begins."@en .
+:disposeBy a owl:DatatypeProperty ; rdfs:range xsd:date ;
+    rdfs:comment "The date in the written disposition plan by which the excess will be sold. It must fall before the period ends (PG3c), and once it passes with the excess still held the holding is blocked (PG3d). A dated plan is what a reminder can watch; an undated one is not a plan (FC0)."@en .
+:asOf a owl:DatatypeProperty ; rdfs:range xsd:date ;
+    rdfs:comment "The date the case states its holdings: the day it is graded."@en .
 
 # Residence trust (2702, 25.2702-5)
 :onlyOneResidence a owl:DatatypeProperty ; rdfs:range xsd:boolean .
@@ -188,6 +194,15 @@
 :Check_PG3b a :DecisionCheck ; :checkConstraint :PG3b_ExcessHoldingsNoPlan ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
     :enforcedBy :InstitutionalPressure , :SecurityPressure ;
     :authority "Inside the 4943(c)(6) or (c)(7) period the holding is not yet taxed, but the period ends. Without a written plan to dispose of the excess, the gift sets up a tax. The plan requirement is ours (inferred); the extension conditions in (c)(7) were read in summary only." .
+
+:Check_PG3c a :DecisionCheck ; :checkConstraint :PG3c_PlanDateAfterPeriod ; :inStage :Stage8_PlannedGiving ; :onFail :NeedsCounsel ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a disposition plan that passes PG3b on paper but sets its sale after the period ends" ;
+    :authority "26 USC 4943(c)(6): the holding is treated as held by a disqualified person 'during the 5-year period beginning on the date' of the gift or bequest; (c)(7) may extend it 'for an additional 5-year period'. A plan dated on or after the period's end leaves the excess taxed (4943(a)). The dated-plan requirement is ours (inferred), found by the keystone model (formal/keystone)." .
+:Check_PG3d a :DecisionCheck ; :checkConstraint :PG3d_PlanDatePassed ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
+    :enforcedBy :InstitutionalPressure , :SecurityPressure ;
+    :guardsAgainst "a written plan that never gets carried out, and a holding period stated in years that disagrees with the dates" ;
+    :authority "26 USC 4943(a)(1): tax on excess business holdings; (c)(6) and (c)(7) as for PG3c. Once the plan's own date passes with the excess still held, the foundation is off its plan; once the dates show the period over, the holding is excess whatever yearsSinceAcquired says (the dates decide). Inferred from the statute; the checks can only raise the alarm, a person still has to sell." .
 
 :Check_PG4 a :DecisionCheck ; :checkConstraint :PG4_UnitrustLimits ; :inStage :Stage8_PlannedGiving ; :onFail :Block ;
     :enforcedBy :InstitutionalPressure ;
@@ -310,8 +325,8 @@
     :grants :Perm4943_GiftPeriod , :Perm4943_Passive .
 :Perm4943_GiftPeriod a :Permission ;
     :permits "Receive a business interest by gift or bequest and hold it over the limit for five years, extendable by five more." ;
-    :condition "4943(c)(6) and (c)(7); the extension is the Secretary's to grant. Holdings must be down to the limit when the period ends." ;
-    :usableBy :Role_Foundation ; :becomesCheck :Check_PG3a , :Check_PG3b ;
+    :condition "4943(c)(6) and (c)(7); the extension is the Secretary's to grant. Holdings must be down to the limit when the period ends, so the plan carries a sale date before then and a reminder watches it." ;
+    :usableBy :Role_Foundation ; :becomesCheck :Check_PG3a , :Check_PG3b , :Check_PG3c , :Check_PG3d ;
     :ircSection "4943(c)(6), (c)(7)" ; :evidence :ReadInStatute ; :secondarySource :GL_7_2_4 .
 :Perm4943_Passive a :Permission ;
     :permits "Hold any share of a company that earns at least 95 percent of its gross income from passive sources." ;
