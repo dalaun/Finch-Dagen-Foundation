@@ -15,8 +15,9 @@ name: Verifier pass
 # the dispatch named. Settings (Dalaun's, once): environment "verifier" with
 # deployment branches limited to main, holding variable VERIFIER_APP_ID and
 # secret VERIFIER_APP_KEY for the verifier app, dalaun-finchdagen-verifier, which
-# is NOT the badge that writes the loop's pull requests. It needs Commit statuses and Pull requests:
-# read and write, and nothing else.
+# is NOT the badge that writes the loop's pull requests. It needs Commit statuses, Pull requests and Issues:
+# read and write (the report comment goes through the issues API), and
+# nothing else.
 
 on:
   workflow_dispatch:
