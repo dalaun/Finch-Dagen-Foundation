@@ -52,8 +52,19 @@ jobs:
     name: Post the verifier's verdict
     runs-on: ubuntu-latest
     environment: verifier
-    if: vars.VERIFIER_APP_ID != ''
+    # No job-level "if" on vars.VERIFIER_APP_ID: a variable stored in the
+    # verifier environment is not visible until the job is inside that
+    # environment, so such an "if" skipped every run (2026-11-23, PR 27).
+    # A missing app now fails loudly instead: a skipped run is a gap, not a pass.
     steps:
+      - name: The verifier app is set up in the verifier environment
+        env:
+          APP_ID: ${{ vars.VERIFIER_APP_ID }}
+        run: |
+          if [ -z "$APP_ID" ]; then
+            echo "::error::VERIFIER_APP_ID is not set in the verifier environment; no verdict was posted."
+            exit 1
+          fi
       - uses: actions/checkout@v4
         with:
           ref: main
