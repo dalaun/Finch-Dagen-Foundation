@@ -1,0 +1,10 @@
+# Who may record a "Verifier pass" on an agent-lane pull request (verifier_pass.py).
+# One GitHub login a line. Dalaun's lane: only he changes this list.
+# A verifier never counts on a pull request it opened or wrote a commit in.
+# Copilot and other review bots never count, even if listed: a bot review is
+# not a verdict. Each badge here must be installed on this repository with
+# "Commit statuses: read and write".
+dalaun-northstar-grokbot[bot]
+dalaun-northstar-muse[bot]
+dalaun-northstar-claude[bot]
+dalaun-finchdagen-claude[bot]
