@@ -1,7 +1,7 @@
 # What the model in Keystone.tla describes, and the commit at which it was last
 # confirmed to describe it. Move sync-commit forward only after reading every
 # change to these files since it and confirming the model still matches.
-sync-commit: 9555ad53edb401f2c3fb88d58e33fe5b538afc31
+sync-commit: 1799736f497351ad85988ecef8e06167f42ddc8a
 covered:
   - decision/spend-decision-shapes.ttl
   - decision/stewardship-shapes.ttl
