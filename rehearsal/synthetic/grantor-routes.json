@@ -1,0 +1,531 @@
+{
+  "label": "SYNTHETIC design routes for the Family Trust's terms, graded by grantor_check.py against IRC 671-679. Not legal or tax advice; every route is a question for counsel before it is a plan.",
+  "assumption": "The founder is the grantor (his assets fund the trust). He is not a beneficiary, and neither is his spouse.",
+  "routes": [
+    {
+      "id": "R1",
+      "name": "He is sole trustee and decides who gets income and principal",
+      "expect": "grantor",
+      "control_cost": "None: he keeps every decision.",
+      "verdict_note": "Grantor trust under 674(a). All income is taxed to him, so the income-splitting the rehearsal counts on disappears. This is the version the engine already calls 'him as trustee (grantor trust)'.",
+      "ask_counsel": [],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "founder"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "founder"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "none",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R2",
+      "name": "He is trustee for investments and administration; an independent special distribution trustee decides who gets what",
+      "expect": "non-grantor",
+      "control_cost": "He gives up the who-gets-how-much decision only. He keeps investments, records, the assets' operations, and the right to replace the distribution trustee with another independent one.",
+      "verdict_note": "Non-grantor under 674(c): the power is held only by a trustee who is not him and not related or subordinate (672(c): not his spouse, parent, child, sibling or employee). Reg. 1.674(d)-2(a): his power to replace that trustee must be limited to appointing another independent person.",
+      "ask_counsel": [
+        "Can the instrument split the trusteeship this way (administrative trustee and special distribution trustee) under the Illinois Trust Code, and who is a good independent distribution trustee at a fee the structure can carry?",
+        "Confirm my power to remove the distribution trustee is limited to appointing another independent trustee (Reg. 1.674(d)-2(a))."
+      ],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder",
+          "independent"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "only_to_appoint_another_independent",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R3",
+      "name": "He is sole trustee; income is paid out every year in fixed shares; principal only for health, education, support or maintenance",
+      "expect": "non-grantor",
+      "control_cost": "He keeps all administration but cannot steer income: shares are fixed in the document and can't be changed for need. Principal goes out only under the standard. No one may add beneficiaries.",
+      "verdict_note": "Non-grantor: fixed shares are not a power of disposition, and a principal power limited to health, education, support or maintenance fits 674(b)(5)(A) whoever holds it. It also answers next move 2: income goes out every year, so little is taxed at the trust's compressed brackets.",
+      "ask_counsel": [
+        "Should income be mandatory in fixed shares, and how do the shares adjust when a beneficiary dies or a new child is born (after-born children are the one addition the rules allow)?",
+        "Does my holding a principal power under a health, education, support or maintenance standard cause estate or gift tax problems for me as the funder (sections not modeled here)?"
+      ],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder"
+        ],
+        "powers": [
+          {
+            "name": "income",
+            "over": "income",
+            "kind": "mandatory_fixed_shares",
+            "holders": [
+              "founder"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "founder"
+            ],
+            "standard": "reasonably_definite",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "none",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R4",
+      "name": "He is trustee; an independent Illinois distribution trust advisor (not a trustee) directs distributions",
+      "expect": "unsettled",
+      "control_cost": "Same as R2. The advisor is a fiduciary with a trustee's duties (760 ILCS 3/808(e)); he, as the directed trustee, is liable only for willful misconduct in following directions (808(f)).",
+      "verdict_note": "Amber: 674(c) speaks of trustees. Whether a non-trustee distribution trust advisor under 760 ILCS 3/808(c) counts is not settled by the text read. Naming that person a co-trustee for distributions (R2) removes the doubt.",
+      "ask_counsel": [
+        "Does a distribution trust advisor under 760 ILCS 3/808 who is not a trustee qualify for the 674(c) independent-trustee exception, or should the advisor be a co-trustee?"
+      ],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "independent_distribution_advisor"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "independent_distribution_advisor"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "none",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R5",
+      "name": "He is sole trustee; he distributes income for health, education, support or maintenance",
+      "expect": "grantor",
+      "control_cost": "None.",
+      "verdict_note": "The trap. A standard saves a principal power (674(b)(5)(A)), but an income power under a standard is saved only by 674(d), which is closed to the founder and his spouse. Grantor.",
+      "ask_counsel": [],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder"
+        ],
+        "powers": [
+          {
+            "name": "income_for_needs",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "founder"
+            ],
+            "standard": "reasonably_definite_external",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "none",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R6",
+      "name": "R2, but he can fire the distribution trustee and appoint anyone, himself included",
+      "expect": "grantor",
+      "control_cost": "None in practice, which is the problem.",
+      "verdict_note": "Grantor: an unrestricted removal power lets him take the decision back (Reg. 1.674(d)-2(a)).",
+      "ask_counsel": [],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder",
+          "independent"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "unrestricted",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R7",
+      "name": "R2, with a power for anyone to add beneficiaries",
+      "expect": "grantor",
+      "control_cost": "Flexibility to add people later.",
+      "verdict_note": "Grantor: a power to add beneficiaries (other than after-born or adopted children) removes the 674(c) exception (Reg. 1.674(d)-2(b)).",
+      "ask_counsel": [],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder",
+          "independent"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": true,
+        "founder_power_to_remove_replace_trustee": "only_to_appoint_another_independent",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R8",
+      "name": "R2, with his nonfiduciary power to swap assets of equal value",
+      "expect": "grantor",
+      "control_cost": "None.",
+      "verdict_note": "Grantor under 675(4)(C). Planners add this on purpose to make a trust a grantor trust; it must stay out of his instrument.",
+      "ask_counsel": [],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": true
+        },
+        "trustees": [
+          "founder",
+          "independent"
+        ],
+        "powers": [
+          {
+            "name": "income_sprinkle",
+            "over": "income",
+            "kind": "discretionary",
+            "holders": [
+              "independent"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "only_to_appoint_another_independent",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    },
+    {
+      "id": "R9",
+      "name": "R3, plus he picks which charities receive the foundation's fixed share",
+      "expect": "non-grantor",
+      "control_cost": "He keeps the charitable choice; the family shares stay fixed.",
+      "verdict_note": "Non-grantor: choosing among charitable beneficiaries is excepted by 674(b)(4) when those amounts are irrevocably payable for 170(c) purposes. Note the cost: amounts deducted under 642(c) make the trust a split-interest trust under 4947(a)(2), so the private foundation self-dealing rules (4941) apply to it.",
+      "ask_counsel": [
+        "If the Family Trust deducts payments to the foundation under 642(c)(1), it becomes a 4947(a)(2) split-interest trust. How do we keep me and my family clear of self-dealing (4941) with that trust, and should the charitable share be segregated (4947(a)(2)(B))?"
+      ],
+      "terms": {
+        "domestic": {
+          "us_court_primary_supervision": true,
+          "us_persons_control_substantial_decisions": true
+        },
+        "revocation": {
+          "revocable": false,
+          "revoke_power_holders": []
+        },
+        "reversion_value_share_at_inception": 0.0,
+        "benefit_to_grantor": {
+          "income_may_go_to_founder_or_spouse": false,
+          "income_may_pay_premiums_on_founder_or_spouse": false
+        },
+        "admin": {
+          "deal_for_less_than_adequate_consideration": false,
+          "founder_may_borrow_without_adequate_interest_or_security": false,
+          "founder_loan_unrepaid": false,
+          "vote_closely_held_stock_nonfiduciary": false,
+          "direct_investments_in_closely_held_stock_nonfiduciary": false,
+          "swap_power_nonfiduciary": false
+        },
+        "trustees": [
+          "founder"
+        ],
+        "powers": [
+          {
+            "name": "income",
+            "over": "income",
+            "kind": "mandatory_fixed_shares",
+            "holders": [
+              "founder"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "charity_choice",
+            "over": "income",
+            "kind": "charity_only",
+            "holders": [
+              "founder"
+            ],
+            "standard": "none",
+            "needs_adverse_consent": false
+          },
+          {
+            "name": "principal",
+            "over": "corpus",
+            "kind": "discretionary",
+            "holders": [
+              "founder"
+            ],
+            "standard": "reasonably_definite",
+            "needs_adverse_consent": false
+          }
+        ],
+        "anyone_may_add_beneficiaries": false,
+        "founder_power_to_remove_replace_trustee": "none",
+        "beneficiary_sole_power_to_vest_in_self": false
+      }
+    }
+  ]
+}

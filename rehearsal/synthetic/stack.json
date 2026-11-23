@@ -49,7 +49,59 @@
       ],
       "family_trust": {
         "trustee": "founder",
-        "grantor": true
+        "grantor": true,
+        "terms": {
+          "domestic": {
+            "us_court_primary_supervision": true,
+            "us_persons_control_substantial_decisions": true
+          },
+          "revocation": {
+            "revocable": false,
+            "revoke_power_holders": []
+          },
+          "reversion_value_share_at_inception": 0.0,
+          "benefit_to_grantor": {
+            "income_may_go_to_founder_or_spouse": false,
+            "income_may_pay_premiums_on_founder_or_spouse": false
+          },
+          "admin": {
+            "deal_for_less_than_adequate_consideration": false,
+            "founder_may_borrow_without_adequate_interest_or_security": false,
+            "founder_loan_unrepaid": false,
+            "vote_closely_held_stock_nonfiduciary": false,
+            "direct_investments_in_closely_held_stock_nonfiduciary": false,
+            "swap_power_nonfiduciary": false
+          },
+          "trustees": [
+            "founder"
+          ],
+          "powers": [
+            {
+              "name": "income_sprinkle",
+              "over": "income",
+              "kind": "discretionary",
+              "holders": [
+                "founder"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            },
+            {
+              "name": "principal",
+              "over": "corpus",
+              "kind": "discretionary",
+              "holders": [
+                "founder"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            }
+          ],
+          "anyone_may_add_beneficiaries": false,
+          "founder_power_to_remove_replace_trustee": "none",
+          "beneficiary_sole_power_to_vest_in_self": false
+        },
+        "terms_note": "He is sole trustee with discretion over income and principal (route R1 in grantor-routes.json): grantor_check.py derives a grantor trust, matching grantor true."
       },
       "foundation": {
         "exists": true,
@@ -98,7 +150,59 @@
       "trusts_filing_1041": [],
       "family_trust": {
         "trustee": "founder",
-        "grantor": true
+        "grantor": true,
+        "terms": {
+          "domestic": {
+            "us_court_primary_supervision": true,
+            "us_persons_control_substantial_decisions": true
+          },
+          "revocation": {
+            "revocable": false,
+            "revoke_power_holders": []
+          },
+          "reversion_value_share_at_inception": 0.0,
+          "benefit_to_grantor": {
+            "income_may_go_to_founder_or_spouse": false,
+            "income_may_pay_premiums_on_founder_or_spouse": false
+          },
+          "admin": {
+            "deal_for_less_than_adequate_consideration": false,
+            "founder_may_borrow_without_adequate_interest_or_security": false,
+            "founder_loan_unrepaid": false,
+            "vote_closely_held_stock_nonfiduciary": false,
+            "direct_investments_in_closely_held_stock_nonfiduciary": false,
+            "swap_power_nonfiduciary": false
+          },
+          "trustees": [
+            "founder"
+          ],
+          "powers": [
+            {
+              "name": "income_sprinkle",
+              "over": "income",
+              "kind": "discretionary",
+              "holders": [
+                "founder"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            },
+            {
+              "name": "principal",
+              "over": "corpus",
+              "kind": "discretionary",
+              "holders": [
+                "founder"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            }
+          ],
+          "anyone_may_add_beneficiaries": false,
+          "founder_power_to_remove_replace_trustee": "none",
+          "beneficiary_sole_power_to_vest_in_self": false
+        },
+        "terms_note": "He is sole trustee with discretion over income and principal (route R1 in grantor-routes.json): grantor_check.py derives a grantor trust, matching grantor true."
       },
       "foundation": {
         "exists": true,
@@ -151,7 +255,59 @@
       ],
       "family_trust": {
         "trustee": "independent",
-        "grantor": false
+        "grantor": false,
+        "terms": {
+          "domestic": {
+            "us_court_primary_supervision": true,
+            "us_persons_control_substantial_decisions": true
+          },
+          "revocation": {
+            "revocable": false,
+            "revoke_power_holders": []
+          },
+          "reversion_value_share_at_inception": 0.0,
+          "benefit_to_grantor": {
+            "income_may_go_to_founder_or_spouse": false,
+            "income_may_pay_premiums_on_founder_or_spouse": false
+          },
+          "admin": {
+            "deal_for_less_than_adequate_consideration": false,
+            "founder_may_borrow_without_adequate_interest_or_security": false,
+            "founder_loan_unrepaid": false,
+            "vote_closely_held_stock_nonfiduciary": false,
+            "direct_investments_in_closely_held_stock_nonfiduciary": false,
+            "swap_power_nonfiduciary": false
+          },
+          "trustees": [
+            "independent"
+          ],
+          "powers": [
+            {
+              "name": "income_sprinkle",
+              "over": "income",
+              "kind": "discretionary",
+              "holders": [
+                "independent"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            },
+            {
+              "name": "principal",
+              "over": "corpus",
+              "kind": "discretionary",
+              "holders": [
+                "independent"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            }
+          ],
+          "anyone_may_add_beneficiaries": false,
+          "founder_power_to_remove_replace_trustee": "none",
+          "beneficiary_sole_power_to_vest_in_self": false
+        },
+        "terms_note": "An independent trustee holds every distribution decision (674(c)); he holds no power to remove or replace it. grantor_check.py derives non-grantor, matching grantor false."
       },
       "foundation": {
         "exists": true,
