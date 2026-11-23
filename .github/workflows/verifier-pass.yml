@@ -15,8 +15,9 @@ name: Verifier pass
 # the dispatch named. Settings (Dalaun's, once): environment "verifier" with
 # deployment branches limited to main, holding variable VERIFIER_APP_ID and
 # secret VERIFIER_APP_KEY for the verifier app, dalaun-finchdagen-verifier, which
-# is NOT the badge that writes the loop's pull requests. It needs Commit statuses and Pull requests:
-# read and write, and nothing else.
+# is NOT the badge that writes the loop's pull requests. It needs Commit statuses, Pull requests and Issues:
+# read and write (the report comment goes through the issues API), and
+# nothing else.
 
 on:
   workflow_dispatch:
@@ -52,8 +53,19 @@ jobs:
     name: Post the verifier's verdict
     runs-on: ubuntu-latest
     environment: verifier
-    if: vars.VERIFIER_APP_ID != ''
+    # No job-level "if" on vars.VERIFIER_APP_ID: a variable stored in the
+    # verifier environment is not visible until the job is inside that
+    # environment, so such an "if" skipped every run (2026-11-23, PR 27).
+    # A missing app now fails loudly instead: a skipped run is a gap, not a pass.
     steps:
+      - name: The verifier app is set up in the verifier environment
+        env:
+          APP_ID: ${{ vars.VERIFIER_APP_ID }}
+        run: |
+          if [ -z "$APP_ID" ]; then
+            echo "::error::VERIFIER_APP_ID is not set in the verifier environment; no verdict was posted."
+            exit 1
+          fi
       - uses: actions/checkout@v4
         with:
           ref: main
