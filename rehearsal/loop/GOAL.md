@@ -8,6 +8,8 @@
 
 Find the smallest real, income-producing asset that makes the structure pay for itself, while every structure check passes on documents, not on design.
 
+The score below says how far off that is. [NEXT-MOVES.md](NEXT-MOVES.md) says which turn to take next: each daily run adds one move toward it (a question for his CPA or lawyer, an asset step, or a structure step), and every move ends as one thing for him to approve or ask.
+
 ## The score
 
 The loop keeps two numbers per scenario and stack version, and writes both to [score-ledger.csv](score-ledger.csv) with the date so runs chain.

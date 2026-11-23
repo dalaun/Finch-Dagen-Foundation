@@ -231,6 +231,10 @@ def selftest() -> int:
                       rules, lv, cv)[0]
 
     ok(lane(["rehearsal/loop/BACKLOG.md"]) == "agent", "backlog only: agent lane")
+    ok(lane(["rehearsal/loop/NEXT-MOVES.md", "rehearsal/loop/score-ledger.csv"], lv=("", "")) == "agent",
+       "next moves and the ledger: agent lane")
+    ok(lane(["rehearsal/loop/NEXT-MOVES.md", "rehearsal/loop/DAILY-RUN.md"]) == "owner",
+       "next moves with the run's own instructions: Dalaun's lane")
     rr = "rehearsal/synthetic/rehearsal_run.py"
     base = "def helper():\n    return 1\n\ndef selftest() -> int:\n    ok(a == 1, 'one')\n    ok(b == 2, 'two')\n\ndef main():\n    pass\n"
     grown = base.replace("    ok(b == 2, 'two')\n", "    ok(b == 2, 'two')\n    ok(c == 3, 'three')\n")

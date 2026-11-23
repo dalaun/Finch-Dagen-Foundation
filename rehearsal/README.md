@@ -52,7 +52,7 @@ A third likely finding: some business-shaped spending (software and AI tools, ho
 | [05-questions-for-attorney-and-cpa.md](05-questions-for-attorney-and-cpa.md) | What to ask, in plain words |
 | [06-handoff-transaction-export.md](06-handoff-transaction-export.md) | The one thing only the founder can supply |
 | [synthetic/](synthetic/README.md) | A seeded, SYNTHETIC twelve-month ledger built from public benchmarks (BLS, HUD, IRS, Illinois), four scenarios, and the runner that flies arm A and arm B on it with the real spend checks |
-| [loop/GOAL.md](loop/GOAL.md), [loop/score-ledger.csv](loop/score-ledger.csv), [loop/BACKLOG.md](loop/BACKLOG.md) | The rehearsal loop's goal and score, its dated scores, and the backlog it works from, each item with a done test |
+| [loop/GOAL.md](loop/GOAL.md), [loop/score-ledger.csv](loop/score-ledger.csv), [loop/BACKLOG.md](loop/BACKLOG.md), [loop/NEXT-MOVES.md](loop/NEXT-MOVES.md), [loop/DAILY-RUN.md](loop/DAILY-RUN.md) | The rehearsal loop's goal and score, its dated scores, the backlog of accuracy fixes (each with a done test), the running list of next moves toward the goal, and the daily run's instructions |
 
 ## How this fits the repository
 
