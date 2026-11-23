@@ -1,0 +1,33 @@
+name: Lane audit
+
+# After the fact: every pull request merged by anyone but Dalaun must have
+# carried a Verifier pass on its merged head commit (.github/lane/verifier_pass.py).
+# A merge made by github-actions (auto-merge) starts no push workflow, so this
+# runs on a schedule as well. Red = open a revert pull request for Dalaun.
+
+on:
+  schedule:
+    - cron: "40 13 * * *"     # 7:40 AM Chicago, after the daily loop
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: read
+
+jobs:
+  lane-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Verifier pass's own cases
+        run: python3 .github/lane/verifier_pass.py --selftest
+      - name: Every merge in the last two days was Dalaun's or carried a valid verifier pass
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 .github/lane/verifier_pass.py --audit-recent --days 2
