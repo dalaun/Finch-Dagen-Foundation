@@ -1,0 +1,20 @@
+# Lane map for this repository. Read by .github/lane/lane_guard.py and shown by GitHub.
+#
+# Every file belongs to Dalaun's lane unless a line below takes it out.
+# A pattern with no owner is the agent lane: a pull request that touches only
+# agent-lane files merges itself once every required check passes.
+# The last matching line wins (GitHub's own CODEOWNERS rule).
+#
+# Patterns the lane guard understands: "*", "/dir/" (a folder), "/path/file".
+# This file is in Dalaun's lane, so no agent pull request can widen the lane.
+
+*                                                   @dalaun
+
+# Agent lane: the rehearsal loop's own work on the synthetic year.
+/rehearsal/loop/BACKLOG.md
+/rehearsal/loop/score-ledger.csv
+/rehearsal/synthetic/
+
+# Back in Dalaun's lane, inside the folder above: the answer-key facts the
+# engine is graded against.
+/rehearsal/synthetic/structure-cases-facts.json     @dalaun

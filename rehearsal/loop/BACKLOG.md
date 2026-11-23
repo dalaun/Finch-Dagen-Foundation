@@ -2,7 +2,7 @@
 
 [Back to the goal](GOAL.md)
 
-The daily loop takes the **top open item**, works it, and opens one draft PR. An item is done only when its done test passes. Move a finished item to the Done list with the date and PR. Add new items at the bottom of their section. Keep this file SYNTHETIC: no real amounts, names or accounts.
+The daily loop takes the **top open item**, works it, and opens one PR: ready if every file is in the agent lane (it then merges itself once checks pass), draft otherwise. An item is done only when its done test passes. Move a finished item to the Done list with the date and PR. Add new items at the bottom of their section. Keep this file SYNTHETIC: no real amounts, names or accounts.
 
 ## Open, in order
 
