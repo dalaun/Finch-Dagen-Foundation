@@ -70,6 +70,10 @@ VERIFIERS = ROOT / ".github" / "lane" / "verifiers"
 GREEN_FIRST = ["lane-guard", "keystone"]
 VERDICTS = {"PASS": "success", "PASS+NOTES": "success", "FAIL": "failure"}
 NEVER = {"copilot", "copilot-pull-request-reviewer[bot]", "copilot-swe-agent[bot]", "github-actions[bot]"}
+# Badges that write pull requests or run errands here. None of them may be a
+# verifier: a listed login can post the status directly, skipping --post's checks.
+WRITER_BADGES = {"dalaun-finchdagen-claude[bot]", "dalaun-northstar-claude[bot]",
+                 "dalaun-northstar-grokbot[bot]", "dalaun-northstar-muse[bot]"}
 
 
 def allowed_verifiers(text: str) -> set:
@@ -254,6 +258,10 @@ def selftest() -> int:
     ok(valid_pass([st("x", ctx="other"), st(g)], head, allowed, wrote)[0], "other contexts are ignored")
     co = [{"author": {"login": g}, "committer": {"login": "web-flow"}}]
     ok(not valid_pass([st(g)], head, allowed, writers(pr, co))[0], "a verifier that wrote a commit: wait")
+    real = allowed_verifiers(VERIFIERS.read_text())
+    ok(bool(real), "the real verifiers list names at least one verifier")
+    ok(not (real & WRITER_BADGES), "no badge that writes pull requests is in the real verifiers list")
+    ok(all(v.endswith("[bot]") for v in real), "every real verifier is an app, not a person's account")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 
