@@ -1,0 +1,13 @@
+# What the model in Keystone.tla describes, and the commit at which it was last
+# confirmed to describe it. Move sync-commit forward only after reading every
+# change to these files since it and confirming the model still matches.
+sync-commit: 9555ad53edb401f2c3fb88d58e33fe5b538afc31
+covered:
+  - decision/spend-decision-shapes.ttl
+  - decision/stewardship-shapes.ttl
+  - decision/planned-giving-shapes.ttl
+  - decision/spend-decision-model.ttl
+  - trust-domain-keystone-shapes.ttl
+  - tests/decision/branch-a.ttl
+  - tests/decision/branch-b.ttl
+  - decide_spend.py

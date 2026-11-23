@@ -1,0 +1,32 @@
+---
+title: "Foundation moves, as the checker walked them"
+---
+stateDiagram-v2
+  state "Legend" as legend {
+    lg0: broken
+    lg1: ok
+    lg2: Breaks Keystone
+    lg3: Path to the Keystone bug
+  }
+  class lg0 orange
+  class lg1 teal
+  class lg2 breaks
+  class lg3 bugPath
+  s0: Foundation holds nothing
+  s1: Foundation holds value
+  s2: Foundation holds nothing, owns the equipment
+  s3: Foundation holds nothing, equipment used by the management company, breaks 4941
+  [*] --> s0
+  s0 --> s1: the founder gives to the foundation
+  s1 --> s2: the foundation buys the equipment
+  s2 --> s3: the foundation leases the equipment to the management company
+  classDef breaks fill:#ffecee,stroke:#e72e3b,stroke-width:2.5px,color:#cd2834
+  class s0 teal
+  class s0 bugPath
+  class s1 teal
+  class s1 bugPath
+  class s2 teal
+  class s2 bugPath
+  class s3 orange
+  class s3 breaks
+  class s3 bugPath
