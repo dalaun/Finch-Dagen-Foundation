@@ -53,7 +53,7 @@ Illinois supports splitting the jobs: 760 ILCS 3/808 lets the document name an i
 - **642(c) set-aside is not available.** For a trust created after October 9, 1969, only amounts the instrument requires to be *paid* from gross income are deductible (642(c)(1)). The set-aside rule in 642(c)(2) is for estates and pre-1969 trusts.
 - **Gift and estate tax.** Powers he keeps can also decide whether his transfer is a completed gift and whether the assets stay in his estate. Those sections are not read or modeled here.
 - **Revocability default.** 760 ILCS 3/602 was not read. The instrument should say "irrevocable" expressly rather than rely on a default.
-- **Support obligations (677(b)).** Trust income actually used to support someone he is legally obliged to support (a minor child, for example) is taxed to him to the extent it is so used, even in a non-grantor trust. A power to use income that way does not by itself make it a grantor trust. The check does not model this; keep distributions for his minor children out of his support duties, or expect that tax.
+- **Support obligations (677(b)).** Trust income actually used to support someone he is legally obliged to support (a minor child, for example) is taxed to him to the extent it is so used, even in a non-grantor trust. A power to use income that way does not by itself make it a grantor trust. The check does not model this; keep distributions for any minor children out of his support duties, or expect that tax.
 - **Who the grantor is.** The check assumes he funds the trust. If someone else funds it, the analysis changes.
 
 ## Questions for counsel

@@ -62,7 +62,7 @@ The run takes the first step below that has no move yet and whose earlier step i
   - Is my power to remove the distribution trustee limited to appointing another independent one (Reg. 1.674(d)-2(a))?
   - If the trust deducts payments to the foundation (642(c)(1)), it becomes a 4947(a)(2) split-interest trust under the self-dealing rules. How do we keep me and my family clear, and should the charitable share be segregated?
   - Do the powers I keep cause gift or estate tax problems for me as the funder?
-  - If the trust pays for things I am legally obliged to provide my minor children, that income is taxed to me (677(b)). How should the document keep distributions to them separate from my support duties?
+  - If the trust pays for things I am legally obliged to provide any minor children, that income is taxed to me (677(b)). How should the document keep distributions to them separate from my support duties?
 - Status: open
 
 ## Closed
