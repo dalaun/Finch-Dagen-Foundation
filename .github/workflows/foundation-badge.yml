@@ -129,11 +129,21 @@ jobs:
           app-id: ${{ vars.NORTHSTAR_CLAUDE_APP_ID }}
           private-key: ${{ secrets.NORTHSTAR_CLAUDE_APP_KEY }}
 
+      # Without the two additions below (GH_TOKEN and claude_args), an ask only
+      # pushes a branch and posts a "Create PR" link, and whoever clicks the link
+      # becomes the author, so the verifier refuses it (issue 30, 2026-11-23).
+      # With them, the badge opens the pull request itself. It may create, view
+      # and list pull requests, never merge or approve them.
       - name: Claude does the job as the badge
         uses: anthropics/claude-code-action@cc98b3ae241b0fcfb6a42a2690751afffecb4452  # v1.0.278
+        env:
+          GH_TOKEN: ${{ steps.badge.outputs.token }}
         with:
           trigger_phrase: "@finchdagen-claude"
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ steps.badge.outputs.token }}
           bot_name: "${{ steps.badge.outputs.app-slug }}[bot]"
           bot_id: ${{ vars.NORTHSTAR_CLAUDE_BOT_ID }}
+          claude_args: >-
+            --allowedTools "Bash(gh pr create:*),Bash(gh pr view:*),Bash(gh pr list:*)"
+            --append-system-prompt "When an ask on an issue changes files: after pushing the branch, open the pull request yourself with gh pr create --base main (ready for review, not a draft), with a Before and After description and 'Closes #<issue>'. Put the pull request's link in your comment instead of a Create PR link. Never merge, approve or close a pull request."
