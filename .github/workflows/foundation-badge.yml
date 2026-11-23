@@ -16,8 +16,7 @@ name: Claude (foundation badge)
 # which entity's work it is, and a leaked key reaches this repo only.
 #
 # Two ways in:
-#   daily   at 12:17 UTC (6:17 AM Chicago), with a catch-up slot at 14:17 UTC
-#           that runs only if the first slot made no branch, or by hand from the Actions tab:
+#   daily   at 12:17 UTC (6:17 AM Chicago), or by hand from the Actions tab:
 #           the rehearsal loop's run, rehearsal/loop/DAILY-RUN.md.
 #   ask     Dalaun writes "@finchdagen-claude" and a job in an issue or a
 #           comment. Only his account can start it.
@@ -36,12 +35,7 @@ name: Claude (foundation badge)
 
 on:
   schedule:
-    # Two slots, in UTC (GitHub ignores time zones): 6:17 AM and 8:17 AM Chicago
-    # (7:17 and 9:17 AM in summer). GitHub's scheduler is best effort and can drop
-    # a slot (it dropped the first one on 2026-11-23), so the second slot is a
-    # catch-up: it does nothing if today's run already opened its branch.
     - cron: "17 12 * * *"
-    - cron: "17 14 * * *"
   workflow_dispatch:
   issue_comment:
     types: [created]
@@ -68,27 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     # The badge's pass lasts one hour, so the run must end inside it.
     timeout-minutes: 55
-    # Never two daily runs at once (a late first slot overlapping the catch-up).
-    concurrency:
-      group: rehearsal-daily
-      cancel-in-progress: false
     steps:
-      - name: Skip the catch-up slot if today's run already happened
-        id: once
-        run: |
-          # A scheduled run that finds today's branch on the remote stops here.
-          # A run started by hand (workflow_dispatch) always goes ahead.
-          branch="claude/rehearsal-loop-$(date -u +%Y%m%d)"
-          if [ "${{ github.event_name }}" = "schedule" ] && \
-             git ls-remote --exit-code --heads "https://github.com/${{ github.repository }}.git" "$branch" >/dev/null 2>&1; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Today's run already opened $branch; nothing to do."
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Buy the badge's hour-long pass
-        if: steps.once.outputs.skip != 'true'
         id: badge
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510  # v3.3.0
         with:
@@ -96,28 +71,23 @@ jobs:
           private-key: ${{ secrets.NORTHSTAR_CLAUDE_APP_KEY }}
 
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
-        if: steps.once.outputs.skip != 'true'
         with:
           ref: main
           fetch-depth: 0
           token: ${{ steps.badge.outputs.token }}
 
       - name: Commit as the badge
-        if: steps.once.outputs.skip != 'true'
         run: |
           git config user.name "${{ steps.badge.outputs.app-slug }}[bot]"
           git config user.email "${{ vars.NORTHSTAR_CLAUDE_BOT_ID }}+${{ steps.badge.outputs.app-slug }}[bot]@users.noreply.github.com"
 
       - uses: actions/setup-python@v5
-        if: steps.once.outputs.skip != 'true'
         with:
           python-version: "3.12"
 
       - run: pip install rdflib pyshacl
-        if: steps.once.outputs.skip != 'true'
 
       - name: Claude runs today's loop as the badge
-        if: steps.once.outputs.skip != 'true'
         uses: anthropics/claude-code-action@cc98b3ae241b0fcfb6a42a2690751afffecb4452  # v1.0.278
         env:
           GH_TOKEN: ${{ steps.badge.outputs.token }}

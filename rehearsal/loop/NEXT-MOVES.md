@@ -51,6 +51,19 @@ The run takes the first step below that has no move yet and whose earlier step i
 - The one thing for Dalaun: ask his lawyer, "Should the Family Trust be written to require distributing its income each year, or leave it to the trustee's discretion, and what does each do to who pays the tax?" Then ask his CPA to confirm the tax result.
 - Status: open
 
+### 3. structure: Keep the Family Trust non-grantor while he stays its steward
+
+- Key: `non-grantor-steward`
+- Opened: 2026-11-23
+- For: lawyer, then CPA
+- Why it matters: the savings with an independent trustee assume the Family Trust is its own taxpayer. If he funds it and, as trustee, decides who gets how much, IRC 674(a) makes it a grantor trust and all its income is taxed to him. `grantor_check.py` now tests the trust's modeled terms against IRC 671-679 on every run. It grades nine design routes in `grantor-routes.json`; [../synthetic/NON-GRANTOR-ROUTES.md](../synthetic/NON-GRANTOR-ROUTES.md) explains them. Two routes keep him as trustee and pass. R2: he runs investments and administration, and an independent special distribution trustee decides who gets what (674(c)). R3: income is paid out every year in fixed shares, and principal goes out only for health, education, support or maintenance (674(b)(5)(A)).
+- The one thing for Dalaun: ask his lawyer, "Can the Family Trust be written so I am trustee for investments and administration, while either an independent co-trustee makes distribution decisions or income is paid in fixed shares with principal limited to health, education, support and maintenance? Which keeps it a non-grantor trust with the least risk?" Then ask these follow-ups:
+  - Does an Illinois distribution trust advisor under 760 ILCS 3/808 who is not a trustee qualify for the 674(c) exception, or should that person be a co-trustee?
+  - Is my power to remove the distribution trustee limited to appointing another independent one (Reg. 1.674(d)-2(a))?
+  - If the trust deducts payments to the foundation (642(c)(1)), it becomes a 4947(a)(2) split-interest trust under the self-dealing rules. How do we keep me and my family clear, and should the charitable share be segregated?
+  - Do the powers I keep cause gift or estate tax problems for me as the funder?
+- Status: open
+
 ## Closed
 
 (none yet)

@@ -551,6 +551,10 @@ def selftest() -> int:
         ok(structure_verdicts(c2["facts"]) == structure_verdicts(c["facts"]), f"{cid} renamed: same verdicts")
     missing = [k for k in expected if k not in cases and k not in ("SK15", "SK16")]
     ok(not missing, f"every structure case has facts ({missing or 'all'})")
+    # Grantor trust rules (IRC 671-679): the check's own cases, and every stack version's
+    # grantor flag must match what its modeled terms derive (grantor_check.py).
+    import grantor_check
+    ok(grantor_check.selftest() == 0, "grantor trust check: its own cases, the stack's flags and the design routes")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 
@@ -595,6 +599,11 @@ def main(argv=None):
     spec = load_json(Path(a.scenarios))
     stack = load_json(Path(a.stack))
     grader = Grader(stack)
+    import grantor_check
+    try:
+        grantor_lines, grantor_errors = grantor_check.check_stack(stack)
+    except grantor_check.MissingTerm as e:
+        sys.exit(f"grantor trust check: missing or unreadable term {e} (fail closed)")
     if not grader.decide:
         print("decide_spend.py could not run: every flow it grades is Insufficient (fail closed)", file=sys.stderr)
     results = []
@@ -612,6 +621,10 @@ def main(argv=None):
         }
         results.append(r)
     print(report(results))
+    print("Grantor trust status of the Family Trust, from its modeled terms (IRC 671-679, grantor_check.py):")
+    print("\n".join(grantor_lines))
+    if grantor_errors:
+        sys.exit("grantor trust check: a version's terms make it a different kind of trust than the engine taxes it as")
     if a.json:
         Path(a.json).write_text(json.dumps({"run_on": date.today().isoformat(), "results": results,
                                             "graders_used": dict(grader.used)}, indent=2))
