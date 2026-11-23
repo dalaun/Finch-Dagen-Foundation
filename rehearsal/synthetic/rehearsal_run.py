@@ -77,9 +77,23 @@ def employee_fica(fica_wages: float) -> float:
     return min(fica_wages, PAY["ss_wage_base"]) * 0.062 + fica_wages * 0.0145
 
 
+def niit_individual(nii: float, magi: float) -> float:
+    """IRC 1411(a)(1): 3.8% of the lesser of net investment income and MAGI over the threshold
+    (1411(b)(3): 200,000 for a single filer). MAGI = AGI here (1411(d), no foreign exclusion)."""
+    n = BM["niit"]
+    return n["rate"] * min(max(nii, 0.0), max(magi - n["threshold_single"], 0.0))
+
+
+def niit_trust(undistributed_nii: float, agi: float) -> float:
+    """IRC 1411(a)(2): 3.8% of the lesser of undistributed net investment income and AGI over the
+    dollar amount where the highest trust bracket begins (the last trust_brackets entry)."""
+    top = FED["trust_brackets"][-1][0]
+    return BM["niit"]["rate"] * min(max(undistributed_nii, 0.0), max(agi - top, 0.0))
+
+
 def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_income=0.0,
                mortgage_interest=0.0, property_tax=0.0, charity=0.0,
-               deferral_401k=0.0, cafeteria_125=0.0) -> dict:
+               deferral_401k=0.0, cafeteria_125=0.0, nii=0.0) -> dict:
     """One single filer's 2026 federal, payroll and Illinois tax. Returns the parts.
     wages is W-2 gross pay. cafeteria_125 leaves income-tax and FICA wages (125(a), 3121(a)(5)(G));
     deferral_401k leaves income-tax wages only (402(e)(3), 3121(v)(1)(A)). benchmarks-tax.json payroll_pretax."""
@@ -100,14 +114,19 @@ def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_inco
     qbi = FED["qbi_rate"] * min(max(qbi_income, 0.0), before_qbi)
     taxable = before_qbi - qbi
     fed = bracket_tax(taxable, FED["single_brackets"])
-    return {"agi": agi, "taxable": taxable, "federal": fed, "se": se_tax, "fica": fica,
+    niit = niit_individual(nii, agi)
+    return {"agi": agi, "taxable": taxable, "federal": fed, "se": se_tax, "fica": fica, "niit": niit,
             "illinois": il_tax, "itemized": itemized > FED["standard_deduction_single"],
-            "total": fed + se_tax + fica + il_tax}
+            "total": fed + se_tax + fica + il_tax + niit}
 
 
-def trust_tax(retained: float) -> float:
+def trust_tax(retained: float, nii: float | None = None) -> float:
+    """Trust tax on retained income, plus NIIT (1411(a)(2)) on the retained part that is net
+    investment income (nii; defaults to all of it, retained income being the trust's AGI here)."""
     retained = max(retained, 0.0)
-    return bracket_tax(retained, FED["trust_brackets"]) + retained * (IL["trust_rate"] + IL["trust_replacement_tax"])
+    n = retained if nii is None else nii
+    return (bracket_tax(retained, FED["trust_brackets"]) + retained * (IL["trust_rate"] + IL["trust_replacement_tax"])
+            + niit_trust(n, retained))
 
 
 # ------------------------------------------------------------------ checks
@@ -325,6 +344,11 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         asset_dep = 0.0
     asset_net = asset_in - s["asset_costs"] - asset_dep + extra_asset_net
     asset_qbi = asset_net if kind == "business" else 0.0
+    # NIIT: rent is net investment income unless earned in a non-passive trade or business (1411(c)(1)(A)(i));
+    # a business is net investment income if passive under 469 (1411(c)(2)(A)). ASSUMPTION (benchmarks-tax.json
+    # niit): the founder rents out and does not materially participate, and the bought business runs under a
+    # hired manager, so both are passive. Consulting is self-employment income, excluded by 1411(c)(6).
+    asset_nii_share = 1.0 if kind in ("rental", "business") else 0.0
     asset_cash = asset_in - s["asset_costs"] - s["asset_principal"] + extra_asset_net
 
     bene_income = resolve(A["beneficiary_other_income"], BM)
@@ -354,7 +378,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
 
     def founder(sched_c, asset_ord, asset_q):
         return person_tax(wages=wages, sched_c=sched_c, sched_e=sched_e_building + asset_ord,
-                          qbi_income=max(sched_c, 0) + asset_q,
+                          qbi_income=max(sched_c, 0) + asset_q, nii=sched_e_building + asset_ord,
                           deferral_401k=pretax["401k"], cafeteria_125=pretax["125"], **itemize)
 
     # Arm A: no structure; business-shaped lines paid personally and not deducted (spec, Arm A)
@@ -406,10 +430,11 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
             # beneficiaries it distributes to (652(a), 662(a)); what it keeps, at trust rates.
             fb = founder(mgmt_rev - routed, 0.0, 0.0)
             dist = asset_net * A["trust_distributes_share_of_dni"]
-            trust_tax_paid = trust_tax(asset_net - dist)
+            trust_tax_paid = trust_tax(asset_net - dist, (asset_net - dist) * asset_nii_share)
             share_each = dist / n_bene
             q_each = asset_qbi * A["trust_distributes_share_of_dni"] / n_bene
-            bene_tax = n_bene * person_tax(wages=bene_income, other_ordinary=share_each, qbi_income=q_each)["total"]
+            bene_tax = n_bene * person_tax(wages=bene_income, other_ordinary=share_each, qbi_income=q_each,
+                                                nii=share_each * asset_nii_share)["total"]
             asset_value = max(asset_net, 0.0) / A["asset_yield_for_value"]
             trustee = (max(fees["independent_trustee_minimum"], fees["independent_trustee_rate_of_assets"] * asset_value)
                        if A.get("trustee_kind", "professional") == "professional" else fees.get("unrelated_individual_trustee", 1000))
@@ -491,6 +516,16 @@ def selftest() -> int:
     ok(round(c["federal"]) == round(w57["federal"]) and round(c["fica"]) == round(w57["fica"]),
        "section 125 amount of 3,000 on 60,000: income tax and FICA as on 57,000")
     ok(round(person_tax(wages=1000, deferral_401k=5000)["agi"]) == 0, "a deferral never exceeds pay")
+    # NIIT (IRC 1411): individual 200,000 single threshold, trust threshold at the top bracket start.
+    ok(round(niit_individual(50000, 190000)) == 0, "NIIT: MAGI under 200,000 owes none")
+    ok(round(niit_individual(50000, 230000)) == round(0.038 * 30000), "NIIT: lesser of NII 50,000 and excess 30,000")
+    ok(round(niit_individual(10000, 300000)) == 380, "NIIT: NII 10,000 under a large excess is 380")
+    top = FED["trust_brackets"][-1][0]
+    ok(round(niit_trust(20000, 20000)) == round(0.038 * (20000 - top)), "NIIT trust: retained 20,000 pays on the excess over the top bracket start")
+    ok(round(niit_trust(20000, top)) == 0, "NIIT trust: retained income at the top bracket start owes none")
+    ok(round(trust_tax(20000) - trust_tax(20000, 0.0)) == round(niit_trust(20000, 20000)) and niit_trust(20000, 20000) > 0,
+       "NIIT trust: retained income that is not investment income adds no NIIT")
+    ok(round(person_tax(wages=250000, nii=40000)["niit"]) == round(0.038 * 40000), "NIIT flows through person_tax")
     # Structure answer key: encode SK1-SK14 as facts and compare with structure-check-cases.ttl
     text = (HERE.parent / "structure-check-cases.ttl").read_text()
     expected = {}
