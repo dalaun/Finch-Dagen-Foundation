@@ -24,6 +24,7 @@
     sh:targetClass :PlannedGift ;
     sh:sparql :PG0_GiftEvidence , :PG1_LeadForm , :PG2_VehicleSelfDealing ,
               :PG3a_ExcessHoldingsPastPeriod , :PG3b_ExcessHoldingsNoPlan ,
+              :PG3c_PlanDateAfterPeriod , :PG3d_PlanDatePassed ,
               :PG4_UnitrustLimits , :PG4b_UnitrustUBTI , :PG5_SStockInRemainderTrust ,
               :PG6_ResidenceTrust , :PG7a_BargainSaleToFoundation , :PG7b_BasisNotAllocated ,
               :PG8_PayoutShortfall , :PG9_FounderBothSides ,
@@ -123,6 +124,55 @@
           BIND ( COALESCE(?x, false) AS ?ext )
           FILTER ( ?y <= 5 || ( ?y <= 10 && ?ext ) )
           FILTER NOT EXISTS { $this dm:writtenDispositionPlan true }
+        }""" .
+
+:PG3c_PlanDateAfterPeriod a sh:SPARQLConstraint ;
+    sh:message "PG3c: the written plan to dispose of excess business holdings sets its date on or after the end of the 4943(c)(6) or (c)(7) period, so it does not cure the excess in time" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          { $this dm:giftVehicle dm:FoundationHolding }
+          UNION
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true .
+            FILTER NOT EXISTS { $this dm:deductionFor dm:RemainderInterest . FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest } }
+            FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest ; dm:charitableIncomeValuePercent ?cv . FILTER ( ?cv <= 60 ) } }
+          $this dm:holderVotingPercent ?h ; dm:disqualifiedVotingPercent ?dq ;
+                dm:acquiredByGiftOrBequest true ; dm:acquiredOn ?acq .
+          FILTER ( ?h + ?dq > 20 )
+          FILTER NOT EXISTS { $this dm:passiveIncomePercent ?p . FILTER ( ?p >= 95 ) }
+          FILTER NOT EXISTS { $this dm:holderValuePercent ?hv . FILTER ( ?h <= 2 && ?hv <= 2 ) }
+          OPTIONAL { $this dm:extensionGranted ?x }
+          BIND ( IF(COALESCE(?x, false), 10, 5) AS ?n )
+          # The period begins on the day of the gift, so it ends the day before the
+          # anniversary: dates compare as YYYY-MM-DD text.
+          BIND ( CONCAT(STR(YEAR(?acq) + ?n), SUBSTR(STR(?acq), 5)) AS ?anniversary )
+          $this dm:writtenDispositionPlan true ; dm:disposeBy ?by .
+          FILTER ( STR(?by) >= ?anniversary )
+        }""" .
+
+:PG3d_PlanDatePassed a sh:SPARQLConstraint ;
+    sh:message "PG3d: still over the 4943 limit after the written plan's own disposal date, or the dates show the gift disposition period has ended" ;
+    sh:prefixes <http://example.org/trust-domain/planned-giving-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          { $this dm:giftVehicle dm:FoundationHolding }
+          UNION
+          { $this dm:giftVehicle ?v ; dm:deductionAllowed true . ?v dm:isSplitInterestTrust true .
+            FILTER NOT EXISTS { $this dm:deductionFor dm:RemainderInterest . FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest } }
+            FILTER NOT EXISTS { $this dm:deductionFor dm:IncomeInterest ; dm:charitableIncomeValuePercent ?cv . FILTER ( ?cv <= 60 ) } }
+          $this dm:holderVotingPercent ?h ; dm:disqualifiedVotingPercent ?dq ;
+                dm:acquiredByGiftOrBequest true ; dm:acquiredOn ?acq .
+          FILTER ( ?h + ?dq > 20 )
+          FILTER NOT EXISTS { $this dm:passiveIncomePercent ?p . FILTER ( ?p >= 95 ) }
+          FILTER NOT EXISTS { $this dm:holderValuePercent ?hv . FILTER ( ?h <= 2 && ?hv <= 2 ) }
+          OPTIONAL { $this dm:extensionGranted ?x }
+          BIND ( IF(COALESCE(?x, false), 10, 5) AS ?n )
+          # The period begins on the day of the gift, so it ends the day before the
+          # anniversary: dates compare as YYYY-MM-DD text.
+          BIND ( CONCAT(STR(YEAR(?acq) + ?n), SUBSTR(STR(?acq), 5)) AS ?anniversary )
+          $this dm:asOf ?now .
+          OPTIONAL { $this dm:writtenDispositionPlan true ; dm:disposeBy ?by }
+          FILTER ( ( BOUND(?by) && ?now > ?by ) || STR(?now) >= ?anniversary )
         }""" .
 
 :PG4_UnitrustLimits a sh:SPARQLConstraint ;

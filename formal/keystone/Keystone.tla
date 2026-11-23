@@ -18,6 +18,9 @@
 (*   NoExcessHolding  26 USC 4943(c)(2), (c)(6): the foundation does not   *)
 (*                    still hold the management company's stock when the   *)
 (*                    gift disposition period ends.                        *)
+(*   AlarmBeforeBreach the checks block the holding (PG3d) before that     *)
+(*                    period ends, so a person is told while a sale can    *)
+(*                    still cure it. The checks cannot sell; a person must. *)
 (*                                                                         *)
 (* How to read it: each action is one move between roles. Its guard is    *)
 (* the repo check that must say Allow before the move can happen; the     *)
@@ -30,8 +33,10 @@ EXTENDS Naturals, FiniteSets
 
 CONSTANTS
     FamilyOver35,   \* settings: 4946(d) family hold > 35% of the family trust (branch A TRUE, branch B FALSE)
-    DeriveScreen,   \* FALSE = the repo today: insider status is a typed setting (dm:substantialContributor,
-                    \*         dm:dqScreened) that someone must update; TRUE = derived from the gift ledger
+    DeriveScreen,   \* TRUE = the repo: substantial contributors derived from the gift ledger (IR10, L1);
+                    \* FALSE = the repo before that fix: a typed setting someone had to update
+    DatedPlan,      \* TRUE = the repo: a disposal plan carries a date before the period ends (PG3c) and
+                    \*        the holding is blocked once that date passes (PG3d); FALSE = before that fix
     Break           \* "none" or the name of one guard removed on purpose: "lease", "excess", "er"
 
 Founder       == "Founder"         \* trustee and foundation manager, 4946(a)(1)(B)
@@ -69,9 +74,12 @@ VARIABLES
     worked,     \* the founder has done one unit of necessary work not yet paid for
     record,     \* a written comparability record for the founder's pay exists (ST1a, H5, ST2)
     loan,       \* loan[p]: principal of an interest-free loan p made to the foundation
-    broke       \* the sections a move has broken so far (written by the law below, not by the guards)
+    broke,      \* the sections a move has broken so far (written by the law below, not by the guards)
+    planDue,    \* TRUE once the disposal plan's own date has passed
+    warned      \* TRUE once a check has blocked the holding while the foundation still held the stock
 
-vars == <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, broke>>
+vars == <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, broke,
+          planDue, warned>>
 
 \* --- Who is disqualified ------------------------------------------------
 \* The law: fixed insiders plus anyone who has become a substantial contributor.
@@ -107,6 +115,8 @@ Init ==
     /\ record = FALSE
     /\ loan = [p \in Parties |-> 0]
     /\ broke = {}
+    /\ planDue = FALSE
+    /\ warned = FALSE
 
 FdnTokens  == {t \in Tokens : owner[t] = Foundation}
 PrivTokens(p) == {t \in Tokens : owner[t] = p /\ ~fdn[t]}
@@ -121,7 +131,7 @@ Gift(p, t) ==
     /\ fdn' = [fdn EXCEPT ![t] = TRUE]
     /\ gave' = gave \cup ({p} \ FixedInsiders)
     /\ Law(Foundation, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, typed, worked, record, loan>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, typed, worked, record, loan, planDue, warned>>
 
 \* The founder gives the management company's stock. Guard PG3b: a written
 \* disposal plan (assumed written with the gift).
@@ -129,7 +139,7 @@ GiftStock ==
     /\ stock = Founder
     /\ stock' = Foundation
     /\ Law(Foundation, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* An interest-free loan to the foundation. Guard AL0: no deal with an insider
 \* (stricter than 4941(d)(2)(B), which allows this one).
@@ -142,7 +152,7 @@ LendToFoundation(p, t) ==
     /\ fdn' = [fdn EXCEPT ![t] = TRUE]
     /\ loan' = [loan EXCEPT ![p] = 1]
     /\ Law(Foundation, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, planDue, warned>>
 
 \* --- Moves out of the foundation -----------------------------------------
 \* The foundation buys goods or rents space from p (P22, P23).
@@ -156,7 +166,7 @@ Buy(p, t) ==
     /\ owner' = [owner EXCEPT ![t] = p]
     /\ fdn' = [fdn EXCEPT ![t] = FALSE]
     /\ Law(p, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The foundation buys the equipment from its owner. Guards R1, H2.
 BuyEquipment(t) ==
@@ -168,7 +178,7 @@ BuyEquipment(t) ==
     /\ fdn' = [fdn EXCEPT ![t] = FALSE]
     /\ eqOwner' = Foundation /\ eqUser' = Foundation
     /\ Law(eqOwner, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<er, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<er, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The foundation leases the equipment out (G36). Guards AL0 and R3 (lessee
 \* not an insider) and PG13 (personal-property rent not tied to real property
@@ -182,7 +192,7 @@ LeaseEquipment(p) ==
           /\ FALSE                                         \* PG13: needs counsel
     /\ eqUser' = p
     /\ Law(p, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The foundation sells the equipment at market. Guard AL0. The buyer's payment
 \* becomes the foundation's value.
@@ -195,7 +205,7 @@ SellEquipment(p, u) ==
     /\ owner' = [owner EXCEPT ![u] = Foundation]
     /\ fdn' = [fdn EXCEPT ![u] = TRUE]
     /\ Law(p, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<er, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<er, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The foundation sells the gifted stock to dispose of it. Guard AL0.
 SellStock(p, u) ==
@@ -207,7 +217,7 @@ SellStock(p, u) ==
     /\ owner' = [owner EXCEPT ![u] = Foundation]
     /\ fdn' = [fdn EXCEPT ![u] = TRUE]
     /\ Law(p, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The founder does a unit of necessary work for a program, and writes the
 \* comparability record. These are his steps, not the foundation's.
@@ -215,13 +225,13 @@ FounderWorks ==
     /\ ~worked
     /\ worked' = TRUE
     /\ Law(Founder, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, record, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, record, loan, planDue, warned>>
 
 WriteRecord ==
     /\ ~record
     /\ record' = TRUE
     /\ Law(Founder, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, loan, planDue, warned>>
 
 \* The foundation pays the founder one unit, the market rate for one unit of work.
 \* Guards ST1a and H5 (a written comparability record), ST2 (decided before money
@@ -235,7 +245,7 @@ Wage(t) ==
     /\ fdn' = [fdn EXCEPT ![t] = FALSE]
     /\ worked' = FALSE
     /\ Law(Founder, TRUE, worked, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, record, loan>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, record, loan, planDue, warned>>
 
 \* The foundation repays an interest-free loan's principal. Guard R1.
 Repay(p, t) ==
@@ -246,7 +256,7 @@ Repay(p, t) ==
     /\ fdn' = [fdn EXCEPT ![t] = FALSE]
     /\ loan' = [loan EXCEPT ![p] = 0]
     /\ Law(p, TRUE, TRUE, FALSE)
-    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record>>
+    /\ UNCHANGED <<er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, planDue, warned>>
 
 \* The foundation lends. Guards R1 and AL0 (insider); R7 (any other loan is a
 \* jeopardy or program-related-investment question for counsel), so no loan out
@@ -258,7 +268,7 @@ LendOut(p, t) ==
     /\ FALSE                                               \* R7: needs counsel
     /\ owner' = [owner EXCEPT ![t] = p]
     /\ Law(p, TRUE, FALSE, FALSE)
-    /\ UNCHANGED <<fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* A grant. Guards R1 and S1 (grantee not an insider), H2 (passes nothing on),
 \* R6 (a grantee that is not a public charity needs expenditure responsibility).
@@ -274,7 +284,7 @@ Grant(g, t) ==
        /\ er' = [er EXCEPT ![t] = withER]
        /\ Law(g, TRUE, FALSE,
                        g \notin {PubCharity} /\ ~withER)
-    /\ UNCHANGED <<eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* The grantee spends a granted token. Under an expenditure responsibility
 \* agreement it spends only on the grant's purpose, buying at market (an
@@ -290,7 +300,7 @@ GranteeSpends(t, q) ==
     /\ fdn' = [fdn EXCEPT ![t] = FALSE]
     /\ er' = [er EXCEPT ![t] = FALSE]
     /\ Law(q, ~er[t], FALSE, FALSE)
-    /\ UNCHANGED <<eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
 \* --- Moves the foundation is not a party to -------------------------------
 \* Private value moves between the other roles along the stack: the business
@@ -305,23 +315,35 @@ PrivateMove(p, q, t) ==
     /\ t \in PrivTokens(p)
     /\ owner' = [owner EXCEPT ![t] = q]
     /\ Law(q, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan, planDue, warned>>
 
-\* Someone updates the insider settings to match the gift ledger. Nothing in the
-\* repo forces this to happen before the next payment.
+\* Before the gift-ledger fix: someone updates the insider settings to match the
+\* gift ledger, and nothing forced it to happen before the next payment.
 Rescreen ==
     /\ ~DeriveScreen
     /\ typed # FixedInsiders \cup (gave \ {PubCharity})
     /\ typed' = FixedInsiders \cup (gave \ {PubCharity})
     /\ Law(Foundation, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, worked, record, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, worked, record, loan, planDue, warned>>
 
-\* Time passes the end of the gift disposition period for the stock.
+\* Time passes the plan's own disposal date (DatedPlan only). PG3d blocks the
+\* holding from that day while the foundation still holds the stock.
+PlanDateHits ==
+    /\ DatedPlan
+    /\ stock = Foundation /\ ~planDue /\ ~deadline
+    /\ planDue' = TRUE
+    /\ warned' = TRUE
+    /\ Law(Foundation, FALSE, FALSE, FALSE)
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, deadline, gave, typed, worked, record, loan>>
+
+\* Time passes the end of the gift disposition period for the stock. With a
+\* dated plan, PG3c has made the plan's date fall before this day.
 PeriodEnds ==
     /\ stock = Foundation /\ ~deadline
+    /\ DatedPlan => planDue
     /\ deadline' = TRUE
     /\ Law(Foundation, FALSE, FALSE, FALSE)
-    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, gave, typed, worked, record, loan>>
+    /\ UNCHANGED <<owner, fdn, er, eqOwner, eqUser, stock, gave, typed, worked, record, loan, planDue, warned>>
 
 Next ==
     \/ \E p \in Parties, t \in Tokens : Gift(p, t)
@@ -341,6 +363,7 @@ Next ==
     \/ \E t \in Tokens, q \in Parties : GranteeSpends(t, q)
     \/ \E pq \in Chain, t \in Tokens : PrivateMove(pq[1], pq[2], t)
     \/ Rescreen
+    \/ PlanDateHits
     \/ PeriodEnds
 
 Spec == Init /\ [][Next]_vars
@@ -356,6 +379,7 @@ TypeOK ==
     /\ worked \in BOOLEAN /\ record \in BOOLEAN /\ deadline \in BOOLEAN
     /\ loan \in [Parties -> {0, 1}]
     /\ broke \subseteq {"4941", "4945"}
+    /\ planDue \in BOOLEAN /\ warned \in BOOLEAN
 
 \* 4941(d)(1)(A)-(E): the move just taken did not carry foundation value to a
 \* disqualified person, unless an exception in 4941(d)(2)(B) or (E) covers it;
@@ -373,5 +397,10 @@ NoTaxableGrant == "4945" \notin broke
 \* foundation's permitted holding is nil, and gifted stock must be gone when
 \* the period ends.
 NoExcessHolding == ~(deadline /\ stock = Foundation)
+
+\* What the checks can promise about 4943: if the period ends with the stock still
+\* held, a check had already blocked the holding while a sale could still cure it.
+\* NoExcessHolding itself also needs a person to sell; the model does not force one.
+AlarmBeforeBreach == (deadline /\ stock = Foundation) => warned
 
 =============================================================================

@@ -321,3 +321,47 @@ td:Founder a :Party .
         BIND ( ?x + IF(?exempt, 0, ?h * ?f / 100) AS ?after )
         BIND ( IF(EXISTS { ?b a td:DisqualifiedPerson }, ?h, ?h * ?d / 100) AS ?dq ) }""" .
 :chainHolder a owl:ObjectProperty ; rdfs:range :Party .
+
+# ---------------------------------------------------------------------
+# Gift ledger: substantial contributors derived, not typed (IR10, L1)
+# ---------------------------------------------------------------------
+# Found by the keystone model (formal/keystone): when insider status was a typed
+# setting, a giver who crossed the 507(d)(2) line stayed "unrelated" until someone
+# updated the setting, and a purchase from it graded Allow. IR10 derives the status
+# from every contribution the foundation's ledger records; L1 makes every spend
+# Insufficient while the ledger is not confirmed complete or holds a gift the rule
+# cannot read. A derived yes is never lowered by a typed no.
+:GiftLedger a owl:Class ; rdfs:label "Gift ledger"@en ;
+    rdfs:comment "The foundation's record of every contribution and bequest it has received."@en .
+:ledgerComplete a owl:DatatypeProperty ; rdfs:domain :GiftLedger ; rdfs:range xsd:boolean ;
+    rdfs:comment "Whoever keeps the books confirms that every contribution received is entered. Without it no spend is Allow (L1): a gift left out could hide a substantial contributor."@en .
+:Contribution a owl:Class ; rdfs:label "Contribution received"@en ;
+    rdfs:comment "One gift or bequest to the foundation, as the gift ledger records it."@en .
+:giver a owl:ObjectProperty ; rdfs:domain :Contribution ; rdfs:range :Party .
+:contributionAmount a owl:DatatypeProperty ; rdfs:domain :Contribution ; rdfs:range xsd:decimal ;
+    rdfs:comment "Value received, in dollars."@en .
+:receivedOn a owl:DatatypeProperty ; rdfs:domain :Contribution ; rdfs:range xsd:date ;
+    rdfs:comment "Date the foundation received it. The foundation's taxable year is taken as the calendar year."@en .
+:ledgerSubstantialContributor a owl:DatatypeProperty ;
+    rdfs:comment "Derived by IR10 from the gift ledger: never typed."@en .
+
+:IR10_LedgerSubstantialContributor a :InsiderRule ; :ruleStage 1 ;
+    :authority "507(d)(2)(A): 'any person who contributed or bequeathed an aggregate amount of more than $5,000 to the private foundation, if such amount is more than 2 percent of the total contributions and bequests received by the private foundation before the close of the taxable year of the private foundation in which a contribution or bequest is received by the foundation from such person'. Tested at the close of each year the person gave, so a later large gift from someone else cannot dilute a status already reached; 507(d)(2)(B)(iv): status, once reached, holds for all later periods. 4946(a)(1)(A) makes a substantial contributor a disqualified person; 53.4946-1(a)(8) excludes a 501(c)(3) organization for 4941, taken here as a public charity. Not modeled: a spouse's gifts counted as the person's own, the creator of a trust, and the 10-year end in 507(d)(2)(C)." ;
+    :construct """CONSTRUCT { ?g a td:DisqualifiedPerson ; dm:ledgerSubstantialContributor true } WHERE {
+        # A gift with no number for its amount or no date is left out of the sums;
+        # L1 then makes every spend Insufficient until it is fixed.
+        { SELECT ?g ?y (SUM(?a) AS ?mine) WHERE {
+            { SELECT DISTINCT ?g ?y WHERE { ?c a dm:Contribution ; dm:giver ?g ; dm:receivedOn ?d . BIND ( YEAR(?d) AS ?y ) } }
+            ?c2 a dm:Contribution ; dm:giver ?g ; dm:contributionAmount ?a ; dm:receivedOn ?d2 .
+            FILTER ( isNumeric(?a) && datatype(?d2) = xsd:date && YEAR(?d2) <= ?y ) } GROUP BY ?g ?y }
+        { SELECT ?y (SUM(?b) AS ?all) WHERE {
+            { SELECT DISTINCT ?y WHERE { ?c a dm:Contribution ; dm:receivedOn ?d . BIND ( YEAR(?d) AS ?y ) } }
+            ?c3 a dm:Contribution ; dm:contributionAmount ?b ; dm:receivedOn ?d3 .
+            FILTER ( isNumeric(?b) && datatype(?d3) = xsd:date && YEAR(?d3) <= ?y ) } GROUP BY ?y }
+        FILTER ( ?mine > 5000 && ?mine > ?all * 0.02 )
+        FILTER NOT EXISTS { ?g a td:PublicCharity }
+        FILTER NOT EXISTS { ?g dm:treatedAs501c3 true } }""" .
+
+:Check_L1 a :DecisionCheck ; :checkConstraint :L1_GiftLedger ; :inStage :Stage0_Evidence ; :onFail :Insufficient ;
+    :enforcedBy :SecurityPressure ;
+    :authority "Design rule: a check never passes on a missing fact. 507(d)(2)(A) counts every contribution, so the insider rule IR10 can only be trusted on a ledger confirmed complete, each gift with a giver, an amount and a date." .
