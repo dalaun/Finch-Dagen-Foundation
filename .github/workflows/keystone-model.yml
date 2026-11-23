@@ -1,0 +1,26 @@
+name: Keystone model
+
+# Runs the TLA+ model of the keystone rule on every order of moves.
+# Not a required check: whether to require it is the owner's setting.
+on:
+  pull_request:
+    paths: ['formal/keystone/**', 'decision/*-shapes.ttl', 'decision/spend-decision-model.ttl',
+            'trust-domain-keystone-shapes.ttl', 'tests/decision/branch-*.ttl', 'decide_spend.py']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Check every config against its expected result
+        run: sh formal/keystone/run.sh
