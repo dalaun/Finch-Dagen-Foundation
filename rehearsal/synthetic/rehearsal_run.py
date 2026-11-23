@@ -73,14 +73,25 @@ def bracket_tax(taxable: float, brackets: list) -> float:
     return tax
 
 
+def employee_fica(fica_wages: float) -> float:
+    return min(fica_wages, PAY["ss_wage_base"]) * 0.062 + fica_wages * 0.0145
+
+
 def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_income=0.0,
-               mortgage_interest=0.0, property_tax=0.0, charity=0.0) -> dict:
-    """One single filer's 2026 federal, payroll and Illinois tax. Returns the parts."""
+               mortgage_interest=0.0, property_tax=0.0, charity=0.0,
+               deferral_401k=0.0, cafeteria_125=0.0) -> dict:
+    """One single filer's 2026 federal, payroll and Illinois tax. Returns the parts.
+    wages is W-2 gross pay. cafeteria_125 leaves income-tax and FICA wages (125(a), 3121(a)(5)(G));
+    deferral_401k leaves income-tax wages only (402(e)(3), 3121(v)(1)(A)). benchmarks-tax.json payroll_pretax."""
+    cafeteria_125 = min(max(cafeteria_125, 0.0), max(wages, 0.0))
+    deferral_401k = min(max(deferral_401k, 0.0), max(wages - cafeteria_125, 0.0))
+    fica_wages = wages - cafeteria_125
+    income_wages = wages - cafeteria_125 - deferral_401k
     se_base = max(sched_c, 0.0) * PAY["se_net_earnings_factor"]
-    oasdi_room = max(PAY["ss_wage_base"] - wages, 0.0)
+    oasdi_room = max(PAY["ss_wage_base"] - fica_wages, 0.0)
     se_tax = min(se_base, oasdi_room) * PAY["se_rate_oasdi"] + se_base * PAY["se_rate_hi"]
-    fica = min(wages, PAY["ss_wage_base"]) * 0.062 + wages * 0.0145
-    agi = wages + sched_c + sched_e + other_ordinary - se_tax / 2
+    fica = employee_fica(fica_wages)
+    agi = income_wages + sched_c + sched_e + other_ordinary - se_tax / 2
     il_tax = max(agi, 0.0) * IL["individual_rate"]
     salt = min(il_tax + property_tax, FED["salt_cap_2026"])  # AGI far below the phase-down threshold
     itemized = mortgage_interest + salt + charity
@@ -323,9 +334,28 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
     itemize = dict(mortgage_interest=s["own_mortgage_interest"], property_tax=s["own_property_tax"],
                    charity=s["charity_acknowledged"])
 
+    # Payroll: pre-tax deductions by section (scenarios.json "payroll" and "pretax").
+    pay = sc.get("payroll") or {}
+    pretax = {"125": 0.0, "401k": 0.0}
+    for d in sc.get("pretax") or []:
+        if str(d["section"]) not in pretax:
+            raise ValueError(f"pretax section {d['section']!r}: only 125 or 401k")
+        pretax[str(d["section"])] += float(d["annual"])
+    listed_401k = pretax["401k"]  # not a ledger line, so it is saving taken out of pay here
+    if pay.get("retirement_line_includes_fica"):
+        # The CE line already holds the employee FICA that person_tax computes (ce_glossary),
+        # so only the rest of the line is saving; it is taxed as its stated section.
+        saving_line = max(s["saving"] - employee_fica(wages - min(pretax["125"], wages)), 0.0)
+        if pay.get("retirement_rest_section", "401k") == "401k":
+            pretax["401k"] += saving_line
+    else:
+        saving_line = s["saving"]
+    saving_out = saving_line + listed_401k
+
     def founder(sched_c, asset_ord, asset_q):
         return person_tax(wages=wages, sched_c=sched_c, sched_e=sched_e_building + asset_ord,
-                          qbi_income=max(sched_c, 0) + asset_q, **itemize)
+                          qbi_income=max(sched_c, 0) + asset_q,
+                          deferral_401k=pretax["401k"], cafeteria_125=pretax["125"], **itemize)
 
     # Arm A: no structure; business-shaped lines paid personally and not deducted (spec, Arm A)
     fa = founder(mgmt_rev, asset_net, asset_qbi)
@@ -345,8 +375,8 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         # The family as one pool: the founder's household plus the adult beneficiaries' share.
         # Their own baseline tax on their own pay (bene_base) is not this money, so it is taken out.
         after = gross_in - property_out - (cost_taxes_fees - bene_base)
-        return {"after_taxes_and_fees": round(after), "left_after_living": round(after - s["living"] - s["saving"]),
-                "saving_payroll": round(s["saving"])}
+        return {"after_taxes_and_fees": round(after), "left_after_living": round(after - s["living"] - saving_out),
+                "saving_payroll": round(saving_out)}
 
     w = stack.get("legacy_weight_w", 0.0)
     out_versions = {}
@@ -403,7 +433,8 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
                                                 ("building_costs", s["building_costs"]), ("asset_income", asset_in),
                                                 ("asset_costs", s["asset_costs"]), ("asset_net_taxable", asset_net),
                                                 ("asset_cash_after_principal", asset_cash),
-                                                ("living", s["living"]), ("payroll_saving", s["saving"])]},
+                                                ("living", s["living"]), ("payroll_saving", saving_out),
+                                                ("pretax_401k", pretax["401k"]), ("pretax_125", pretax["125"])]},
         "A": {"taxes": round(cost_a), "founder": {k: round(v) if isinstance(v, float) else v for k, v in fa.items()},
               "money": money_view(cost_a)},
         "B_ops": {"routed_deductions": round(routed), "taxes_and_fees": round(cost_ops), "score_vs_A": round(score_ops),
@@ -451,6 +482,15 @@ def selftest() -> int:
     t = person_tax(wages=16100)
     ok(round(t["federal"]) == 0, "wages equal to the standard deduction owe no federal income tax")
     ok(round(person_tax(sched_c=10000)["se"]) == round(10000 * 0.9235 * 0.153), "self-employment tax on 10,000")
+    # Pre-tax payroll: 401(k) leaves income-tax wages only; section 125 leaves both (payroll_pretax).
+    d, w55, w60 = person_tax(wages=60000, deferral_401k=5000), person_tax(wages=55000), person_tax(wages=60000)
+    ok(round(d["federal"]) == round(w55["federal"]) and round(d["illinois"]) == round(w55["illinois"])
+       and round(d["fica"]) == round(w60["fica"]),
+       "401(k) deferral of 5,000 on 60,000: income tax as on 55,000, FICA as on 60,000")
+    c, w57 = person_tax(wages=60000, cafeteria_125=3000), person_tax(wages=57000)
+    ok(round(c["federal"]) == round(w57["federal"]) and round(c["fica"]) == round(w57["fica"]),
+       "section 125 amount of 3,000 on 60,000: income tax and FICA as on 57,000")
+    ok(round(person_tax(wages=1000, deferral_401k=5000)["agi"]) == 0, "a deferral never exceeds pay")
     # Structure answer key: encode SK1-SK14 as facts and compare with structure-check-cases.ttl
     text = (HERE.parent / "structure-check-cases.ttl").read_text()
     expected = {}
@@ -524,6 +564,7 @@ def main(argv=None):
         print("decide_spend.py could not run: every flow it grades is Insufficient (fail closed)", file=sys.stderr)
     results = []
     for sc in spec["scenarios"]:
+        sc = dict(sc, payroll=spec.get("payroll", {}))
         p = Path(a.ledgers) / f"ledger-{sc['id']}.csv"
         if not p.exists():
             sys.exit(f"missing ledger {p}: run synthetic_year.py first")

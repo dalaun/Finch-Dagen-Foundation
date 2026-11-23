@@ -28,10 +28,14 @@ A run **moves the score** when any structure gap or break-even changes by more t
 | asset_rental | flat | 5,615 | 10 | none | none | 159,400 |
 | asset_business | flat | 5,615 | 10 | none | none | 198,000 |
 
+Moves since (newest last; every run is in [score-ledger.csv](score-ledger.csv)):
+
+- 2026-11-22, PRETAX: structure gaps and check counts unchanged; break-even with an unrelated individual trustee rose about 3 percent in every scenario (base 178,500, lean 174,200, asset_rental 164,900, asset_business 204,600), because pre-tax payroll lowers the founder's taxable wages and so the bracket gap the trust works on.
+
 What the numbers say, in plain words:
 
 - **With him as trustee the layers never pay on money.** A trust whose income he can direct is his grantor trust (IRC 674(a), 672(c)), so its income is taxed to him exactly as in arm A. The layers only add fees. No asset size changes that; their value there is control, continuity and the asset-to-program pipeline, which w = 0 does not count.
-- **The money case for the trust needs a trustee who is not him** and not related or subordinate to him (674(c)), and adult beneficiaries in lower brackets (a child is taxed at the parent's rate under 1(g)). Even then it needs about 160,000 to 200,000 a year of extra asset income, and a professional trustee at 1 percent of assets never breaks even.
+- **The money case for the trust needs a trustee who is not him** and not related or subordinate to him (674(c)), and adult beneficiaries in lower brackets (a child is taxed at the parent's rate under 1(g)). Even then it needs about 165,000 to 205,000 a year of extra asset income, and a professional trustee at 1 percent of assets never breaks even.
 - **The flat version is the better structure today**: it clears 7 more checks than today's stack and costs 1,200 a year less, by dropping the business trust.
 - **The real gain is B-ops**: documenting business lines through the management company is worth about 550 to 1,100 a year in these years and needs no trust.
 

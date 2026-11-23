@@ -156,5 +156,26 @@
     "source": "26 USC 674(a), (c), (d); 672(c); Treas. Reg. 1.671-4(b); read at law.cornell.edu 2026-11-22",
     "status": "READ",
     "rule": "A trust whose income can be sprinkled by the grantor (or a nonadverse party) is the grantor's for income tax (674(a)). The independent-trustee exception (674(c)) needs trustees none of whom is the grantor and no more than half related or subordinate (672(c): spouse, parents, issue, siblings, employees). A grantor trust with one owner may skip Form 1041 under the optional method (1.671-4(b)(2)(ii)(B)), unless it has a foreign situs or foreign assets (1.671-4(b)(6))."
+  },
+  "payroll_pretax": {
+    "status": "READ",
+    "read_on": "2026-11-22",
+    "cafeteria_125": {
+      "url": "https://www.law.cornell.edu/uscode/text/26/125",
+      "quote": "Except as provided in subsection (b), no amount shall be included in the gross income of a participant ... solely because, under the plan, the participant may choose among the benefits of the plan.",
+      "effect": "A qualified benefit chosen under a cafeteria plan (e.g. health premiums) is left out of income-tax wages."
+    },
+    "cafeteria_fica": {
+      "url": "https://www.law.cornell.edu/uscode/text/26/3121",
+      "quote": "(G) under a cafeteria plan (within the meaning of section 125) if such payment would not be treated as wages ... it is reasonable to believe that (if section 125 applied for purposes of this section) ...",
+      "effect": "The same amount is left out of FICA wages (3121(a)(5)(G))."
+    },
+    "elective_deferral_fica": {
+      "url": "https://www.govinfo.gov/link/uscode/26/3121?link-type=html",
+      "edition": "United States Code, 2024 Edition",
+      "quote": "Nothing in any paragraph of subsection (a) (other than paragraph (1)) shall exclude from the term \"wages\"\u2014 (A) any employer contribution under a qualified cash or deferred arrangement (as defined in section 401(k)) to the extent not included in gross income by reason of section 402(e)(3) ...",
+      "effect": "A 401(k) deferral is left out of income-tax wages (402(e)(3)) but stays in FICA wages (3121(v)(1)(A))."
+    },
+    "not_read": "402(e)(3) itself and the 2026 402(g) deferral limit were not read; the synthetic deferral stays far below any limit."
   }
 }

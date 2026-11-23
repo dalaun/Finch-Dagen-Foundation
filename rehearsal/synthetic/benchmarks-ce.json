@@ -54,5 +54,11 @@
   "not_read": [
     "Standard errors and coefficients of variation (only in BLS XLSX tables the tools could not read). The generator's month-to-month noise is therefore a stated assumption, not a published figure.",
     "Category detail by income quintile (XLSX only)."
-  ]
+  ],
+  "ce_glossary": {
+    "url": "https://www.bls.gov/cex/csxgloss.htm",
+    "status": "READ",
+    "read_on": "2026-11-22",
+    "retirement_pensions_social_security": "Per the BLS CE glossary, this category \"includes all Social Security contributions paid by employees; employee contributions to railroad retirement, government retirement, and private pension programs; and retirement pro[grams]...\" (the fetch cut the sentence there). So it holds the employee's FICA as well as pension saving."
+  }
 }
