@@ -49,15 +49,16 @@ pool of value. That is counsel question 1.
 
 ## What the checker found
 
-Run `sh formal/keystone/run.sh` (about 25 seconds). Every config, its result and
+Run `sh formal/keystone/run.sh` (about 40 seconds). Every config, its result and
 the moves on the shortest path:
 
 | Config | Settings | Result |
 |---|---|---|
-| `pass-branch-b` | family under 35%, insider status from the gift ledger | **holds** on all 103,816 states |
-| `pass-branch-a` | family over 35%, insider status from the gift ledger | **holds** on all 31,828 states |
-| `finding-typed-screen` | insider status typed by hand (the repo today) | **breaks 4941** in 2 moves |
-| `finding-stock-period` | gifted management company stock | **breaks 4943** in 2 moves |
+| `pass-branch-b` | family under 35%, the repo's checks | **holds** on all 147,016 states |
+| `pass-branch-a` | family over 35%, the repo's checks | **holds** on all 44,868 states |
+| `limit-stock-sale` | gifted management company stock, nobody sells | breaks 4943 in 3 moves, **after** the checks block the holding |
+| `break-typed-screen` | insider status typed by hand, as the repo had it | breaks 4941 in 2 moves |
+| `break-undated-plan` | disposal plan with no date, as the repo had it | breaks 4943 with no warning, in 2 moves |
 | `break-lease` | lease guard removed on purpose | breaks 4941 in 3 moves |
 | `break-excess` | "pay only for work done" removed on purpose | breaks 4941 in 3 moves |
 | `break-er` | grant without expenditure responsibility allowed on purpose | breaks 4945 in 2 moves |
@@ -66,50 +67,69 @@ the moves on the shortest path:
 Every move in the model fires somewhere in the passing runs except three that are
 closed on purpose: leasing the equipment out (PG13 sends personal-property rent
 to counsel), lending out (R7 sends it to counsel), and updating the insider
-settings (not needed when status comes from the ledger). So the pass is not
-empty: gifts, sales, wages, grants, loans in, repayments and private payments
-inside the stack all happen, in every order, and none reaches an insider.
+settings by hand (gone since insider status comes from the ledger). So the pass
+is not empty: gifts, sales, wages, grants, loans in, repayments and private
+payments inside the stack all happen, in every order, and none reaches an insider.
 
-### Finding 1: a new big donor is not treated as an insider
+### Finding 1, fixed: a new big donor is now treated as an insider
 
-Path, in the model's words:
+The checker's path, before the fix:
 
 1. An unrelated vendor gives the foundation enough to become a substantial
    contributor (507(d)(2): over $5,000 and over 2% of everything the foundation
-   has received).
+   has received by the end of that year).
 2. The foundation buys program supplies from that vendor at market price.
 
 Step 2 is self-dealing (4941(d)(1)(A), (C)): the vendor became a disqualified
-person at step 1 (4946(a)(1)(A)), and market price does not cure it. Every check
-allows it, because insider status in the repo is a setting someone types
-(`dm:substantialContributor`, `dm:dqScreened`), not something derived from the
-gifts the foundation has received. Nothing makes the setting change before the
-next payment.
+person at step 1 (4946(a)(1)(A)), and market price does not cure it. The checks
+allowed it, because insider status was a setting someone typed.
 
-Replayed on the real checks: a scratch case for that purchase (payee an unrelated
-vendor, screened, at market) grades **Allow** in `decide_spend.py`. The scratch
-case is not committed.
+The fix: insider rule **IR10** derives every substantial contributor from the
+foundation's gift ledger (`tests/decision/gift-ledger.ttl` for the worked cases),
+testing the 2% line at the close of each year the person gave, so a later large
+gift from someone else cannot dilute a status already reached (507(d)(2)(B)(iv)).
+Check **L1** makes every spend Insufficient while the ledger is not confirmed
+complete or holds a gift with no giver, no amount as a number or no date. The
+config that typed status by hand is now `break-typed-screen`: it must keep
+failing, so nobody can bring typed status back without the checker saying so.
 
-The fix the model checks: when insider status is derived from a gift ledger
-(`DeriveScreen = TRUE`), the rule holds on every path. Building that ledger is a
-change to the decision model, so it belongs in its own PR. It is not made here.
+Worked cases: P27 (vendor gave 4.1%: Block, R1), P28 (gave over $5,000 but
+1.2%: Allow), P29 (gave in the first year, now under 2%: still Block, R1). With
+IR10 and L1 switched off, P27 and P29 grade Allow.
 
-### Finding 2: a disposal plan is not a disposal
+### Finding 2, fixed as far as checks can: a plan must have a date
 
-Path: the founder gives the foundation stock in his management company, with a
-written plan to dispose of it (PG3b passes); the disposition period ends with the
-stock still held. Because the company is the founder's, the foundation's
-permitted holding is nil (4943(c)(2)(A)), so on that day the holding is excess.
-The checks grade a holding only when someone asks, and PG3a fires only once the
-period is over, which is after the breach. The stock also cannot simply be sold
-back to an insider: that sale is itself self-dealing (the model shows only an
-unrelated buyer can take it). A dated disposal deadline that a routine watches
-would close this. Counsel question 3.
+Before the fix: the founder gives stock in his management company with a written
+plan to dispose of it (PG3b passes), and the disposition period ends with the
+stock still held. The foundation's permitted holding is nil (4943(c)(2)(A)), so
+on that day the holding is excess, and the first check that noticed (PG3a)
+fired after the breach.
+
+The fix, in `decision/planned-giving-shapes.ttl`:
+
+- A written plan must state when the holding was received, the date it sells by,
+  and the date the case is graded, or the gift is Insufficient (FC0).
+- **PG3c** (needs counsel): the plan's date is on or after the end of the
+  4943(c)(6) period (five years from the gift, ten with a (c)(7) extension).
+- **PG3d** (block): the plan's date has passed and the excess is still held, or
+  the dates show the period is over whatever `yearsSinceAcquired` says.
+
+Worked cases: G46 (on track: Allow), G47 (no date: Insufficient), G48 (dated the
+day the period ends: PG3c), G49 (date passed, still held: PG3d), G50 (years typed
+as 3, dates show year 6: PG3d). With PG3c, PG3d and the date requirement switched
+off, G47 to G50 grade Allow.
+
+What a check cannot do is sell the stock. `limit-stock-sale` shows the honest
+limit: if nobody sells, the period still ends with the stock held. The new
+property **AlarmBeforeBreach** holds on every path: before that day comes, the
+checks have already blocked the holding at the plan's own date, while a sale can
+still cure it. `break-undated-plan` shows the old code broke it. A reminder that
+watches each plan's date turns that block into a message in time.
 
 ### Proof that the check can fail
 
 Each guard below was removed on purpose, one at a time, and the checker found the
-break. All three are restored in the committed model.
+break. All are restored in the committed model.
 
 - **Equipment lease to the management company** (guards AL0, R3, PG13): the
   founder gives; the foundation buys the equipment; the foundation leases it to
@@ -121,6 +141,7 @@ break. All three are restored in the committed model.
 - **Grant without expenditure responsibility** (guard R6): the founder gives;
   the foundation grants to an outside grantee with no agreement (4945 breaks
   here); the grantee pays the founder (4941 breaks here, as an indirect transfer).
+- **Insider status typed by hand** and **an undated plan**: the two findings above.
 
 Charts of each path, drawn with pstack's `/statechart`, are in [`chart/`](chart/).
 
@@ -135,8 +156,8 @@ Charts of each path, drawn with pstack's `/statechart`, are in [`chart/`](chart/
   value at the grantee until the grantee spends it on its purpose.
 - Each move is one action. Its guard is the repo check that must say Allow, and
   the check id is in the comment beside it (`R1`, `AL0`, `H2`, `ST1a`, `K5`,
-  `R6`, `PG3b`, `PG13`, `R7`). Anything a check sends to counsel counts as not
-  allowed.
+  `R6`, `PG3b`, `PG3c`, `PG3d`, `PG13`, `R7`, `IR10`, `L1`). Anything a check sends to
+  counsel counts as not allowed.
 - The rule is written separately, from the statute, in `Law` and the invariants
   at the bottom of [`Keystone.tla`](Keystone.tla). No guard reads it.
 
@@ -152,6 +173,14 @@ Charts of each path, drawn with pstack's `/statechart`, are in [`chart/`](chart/
   must do when one does not (53.4945-5(e)) is not modeled.
 - **Organizations the foundation controls.** Their deals with insiders are
   indirect self-dealing (53.4941(d)-1(b)); the model has none.
+- **Who counts as a substantial contributor, at the edges.** IR10 does not add a
+  spouse's gifts to the person's own, treat a trust's creator as a contributor,
+  or end the status after ten years (507(d)(2)(A), (C)). It treats a giver as an
+  insider for every spend once the line is crossed, even a spend dated before the
+  gift that crossed it, which is stricter than the law may be (counsel question 2).
+  In the model, any gift is big enough.
+- **Selling the stock.** The checks block the holding before the period ends; a
+  person still has to sell it (`limit-stock-sale`).
 - **Amounts.** One token is the market rate. Whether a figure is reasonable is
   the benchmark's job (K4, K5, ST1c) and counsel's.
 - **Exceptions the repo is stricter than.** An insider's interest-free loan or
@@ -172,7 +201,7 @@ sh formal/keystone/run.sh
 
 It prints the commit, the files the model covers ([`COVERAGE`](COVERAGE)), any of
 them changed since the sync commit, and one line per config with `ok` or
-`UNEXPECTED`. It exits 1 if a pass fails, or if a finding or a break stops failing
+`UNEXPECTED`. It exits 1 if a pass fails, or if a limit or a break stops failing
 by the expected path.
 
 To redraw the charts, run pstack's `/statechart` on `Keystone.tla` with a config

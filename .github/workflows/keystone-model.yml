@@ -5,7 +5,9 @@ name: Keystone model
 on:
   pull_request:
     paths: ['formal/keystone/**', 'decision/*-shapes.ttl', 'decision/spend-decision-model.ttl',
-            'trust-domain-keystone-shapes.ttl', 'tests/decision/branch-*.ttl', 'decide_spend.py']
+            'decision/planned-giving-model.ttl', 'decision/required-inputs.ttl',
+            'trust-domain-keystone-shapes.ttl', 'tests/decision/branch-*.ttl',
+            'tests/decision/gift-ledger.ttl', 'decide_spend.py']
   workflow_dispatch:
 
 permissions:

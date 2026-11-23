@@ -27,7 +27,7 @@
 :ProposalShape a sh:NodeShape ;
     rdfs:label "Spend proposal decision checks"@en ;
     sh:targetClass :SpendProposal ;
-    sh:sparql :E1_Evidence ,
+    sh:sparql :E1_Evidence , :L1_GiftLedger ,
               :R1_PaidToDisqualified , :R3_AssetUsedByDisqualified , :R4_PoliticalPurpose ,
               :R5_IndividualGrant , :R6_ExpenditureResponsibility , :R7_JeopardyInvestment ,
               :R8_ExcessBusinessHoldings ,
@@ -45,6 +45,20 @@
                 || NOT EXISTS { $this dm:spendKind ?k }
                 || NOT EXISTS { $this dm:dqScreened true }
                 || ( NOT EXISTS { $this dm:assesses ?n } && NOT EXISTS { $this dm:spendKind dm:Investment } ) )
+        }""" .
+
+# Fail closed on the gift ledger: insider status for a giver is derived from it (IR10),
+# so a missing ledger, one not confirmed complete, or a gift the rule cannot read
+# could hide a substantial contributor.
+:L1_GiftLedger a sh:SPARQLConstraint ;
+    sh:message "L1: insufficient - no gift ledger confirmed complete, or a contribution in it with no giver, no amount as a number or no date, so a substantial contributor (507(d)(2)) could be missed" ;
+    sh:prefixes <http://example.org/trust-domain/decision-shapes> ;
+    sh:select """
+        SELECT $this WHERE {
+          FILTER ( NOT EXISTS { ?l a dm:GiftLedger ; dm:ledgerComplete true }
+                || EXISTS { ?c a dm:Contribution .
+                            FILTER NOT EXISTS { ?c dm:giver ?g ; dm:contributionAmount ?a ; dm:receivedOn ?d .
+                                                FILTER ( isNumeric(?a) && datatype(?d) = <http://www.w3.org/2001/XMLSchema#date> ) } } )
         }""" .
 
 # ---- Stage 2: the letter ---------------------------------------------

@@ -315,6 +315,37 @@ td:ExampleFoundationTrust td:controls :Asset_ProgramVan .
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:beneficiarySelection dm:OpenSelection ; dm:scorerVerdict dm:IntentClean .
 
+# P27-P29 Program supplies bought at market from vendors that also gave. Whether
+# each vendor is a substantial contributor (507(d)(2)) is derived from the gift
+# ledger (tests/decision/gift-ledger.ttl) by rule IR10, not typed on the case.
+# Found by the keystone model: with status typed by hand, P27 graded Allow.
+:Asset_TrainingLaptops a td:TangibleAsset ;
+    td:deployedIn td:Program_AIAgentTraining ;
+    rdfs:label "Laptops for neighborhood training sessions" .
+td:ExampleFoundationTrust td:controls :Asset_TrainingLaptops .
+
+# P27 The supply vendor gave 20,000 of 484,000 (4.1 percent): a substantial contributor.
+:P27_SuppliesFromBigDonor a dm:SpendProposal ; dm:assesses :Asset_TrainingLaptops ;
+    dm:payee :SupplyVendor ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    dm:assetAlsoUsedBy dm:NoOneElse ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
+
+# P28 The printer gave 6,000 of 484,000 (1.2 percent): over 5,000 but under 2 percent.
+:P28_PrintingFromSmallDonor a dm:SpendProposal ; dm:assesses :Asset_TrainingLaptops ;
+    dm:payee :PrinterVendor ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    dm:assetAlsoUsedBy dm:NoOneElse ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
+
+# P29 The early donor gave 8,000 in the foundation's first year, all it received
+# that year. Later gifts bring its share under 2 percent, but the status stays.
+:P29_SuppliesFromEarlyDonor a dm:SpendProposal ; dm:assesses :Asset_TrainingLaptops ;
+    dm:payee :EarlyDonor ; dm:dqScreened true ; dm:spendKind dm:Purchase ;
+    dm:assetAlsoUsedBy dm:NoOneElse ;
+    # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
+    dm:scorerVerdict dm:IntentClean .
+
 # ---------------------------------------------------------------------
 # P1 probe: a check enforced only by conscience
 # ---------------------------------------------------------------------

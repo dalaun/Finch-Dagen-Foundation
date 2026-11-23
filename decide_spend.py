@@ -97,7 +97,7 @@ RULES = sorted(model.subjects(RDF.type, DM.InsiderRule), key=str)
 
 def derive(data):
     """Insider rules: stage 1 to a fixed point, then stage 2 once."""
-    ns = {"dm": DM, "td": TD, "rdf": RDF}
+    ns = {"dm": DM, "td": TD, "rdf": RDF, "xsd": XSD}
     for stage in (1, 2):
         rules = [r for r in RULES if int(model.value(r, DM.ruleStage)) == stage]
         while True:
@@ -116,6 +116,7 @@ def load(b, overrides=None, derived=True):
               HERE / "decision/stewardship-model.ttl", HERE / "decision/irs-instruments.ttl",
               HERE / "decision/planned-giving-model.ttl", HERE / "tests/decision/planned-giving-cases.ttl",
               HERE / "tests/decision/decision-cases.ttl", HERE / "tests/decision/entity-deal-cases.ttl",
+              HERE / "tests/decision/gift-ledger.ttl",
               HERE / BRANCH_FILES[b], *map(Path, extra)]:
         data.parse(f, format="turtle")
     for prop, value in (overrides or {}).items():
@@ -129,6 +130,7 @@ OWL = Namespace("http://www.w3.org/2002/07/owl#")
 GRADED = (DM.SpendProposal, DM.EntityDeal, DM.PlannedGift)
 NUMERIC = {XSD.decimal, XSD.integer, XSD.int, XSD.long, XSD.double, XSD.float,
            XSD.nonNegativeInteger, XSD.positiveInteger}
+DATES = {XSD.date}
 
 
 def graded_cases(data):
@@ -198,8 +200,8 @@ def unknown_terms(data):
     fact on a case or a record it owns: the property must be declared; a value of a
     closed list (owl:oneOf) must be on the list; a value of any other declared range
     must be declared a member of it; any other named value must be declared at all;
-    a named term may not be written as text; a yes/no must be a boolean and an amount
-    a number. Returns ({case: {property, ...}},
+    a named term may not be written as text; a yes/no must be a boolean, an amount
+    a number and a date a date. Returns ({case: {property, ...}},
     {malformed literal facts}); the run sets the malformed ones aside before the checks,
     since a comparison or a sum over text would stop the whole grading."""
     declared_props = {p for t in (OWL.ObjectProperty, OWL.DatatypeProperty, RDF.Property)
@@ -239,7 +241,8 @@ def unknown_terms(data):
                         unknown[case].add(p)
                         malformed.add((node, p, o))
                     elif (XSD.boolean in ranges and (o.datatype != XSD.boolean or o.value not in (True, False))) or \
-                            (ranges & NUMERIC and (o.datatype not in NUMERIC or o.value is None)):
+                            (ranges & NUMERIC and (o.datatype not in NUMERIC or o.value is None)) or \
+                            (ranges & DATES and (o.datatype not in DATES or o.value is None)):
                         unknown[case].add(p)
                         malformed.add((node, p, o))
                     continue

@@ -57,6 +57,8 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:holderVotingPercent "60"^^xsd:decimal ; dm:holderValuePercent "60"^^xsd:decimal ;
     dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
     dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "7"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    # Stated for the dated-plan checks (PG3c, PG3d): consistent with year 7.
+    dm:acquiredOn "2020-03-01"^^xsd:date ; dm:disposeBy "2024-12-31"^^xsd:date ; dm:asOf "2027-03-15"^^xsd:date ;
     # Stated for the fail-closed check (FC0): assumed, consistent with the scenario.
     dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
 
@@ -167,7 +169,59 @@ td:Founder dm:managesFoundation td:ExampleFoundationTrust .
     dm:giftVehicle dm:FoundationHolding ;
     dm:holderVotingPercent "40"^^xsd:decimal ; dm:holderValuePercent "40"^^xsd:decimal ;
     dm:disqualifiedVotingPercent "30"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
-    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "3"^^xsd:decimal ; dm:writtenDispositionPlan true .
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "3"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    # Stated for the dated-plan checks (PG3c, PG3d): the plan sells before the five years run out.
+    dm:acquiredOn "2024-03-01"^^xsd:date ; dm:disposeBy "2028-06-30"^^xsd:date ; dm:asOf "2027-03-15"^^xsd:date .
+
+# G46-G49 The founder gives the foundation 30 percent of his management company;
+# he keeps the other 70, so the foundation's permitted holding is nil
+# (4943(c)(2)(A)) and the whole block must go within five years (4943(c)(6)).
+# Found by the keystone model: a written plan passed PG3b with no date, and
+# nothing caught the period running out with the stock still held.
+# G46 Plan dated before the period ends; graded in year 1.
+:G46_GiftedStockPlanOnTrack a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder ;
+    dm:holderVotingPercent "30"^^xsd:decimal ; dm:holderValuePercent "30"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "70"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "1"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    dm:acquiredOn "2027-01-15"^^xsd:date ; dm:disposeBy "2031-06-30"^^xsd:date ; dm:asOf "2028-01-20"^^xsd:date ;
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G47 The same gift with a written plan that names no date.
+:G47_GiftedStockPlanUndated a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder ;
+    dm:holderVotingPercent "30"^^xsd:decimal ; dm:holderValuePercent "30"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "70"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "1"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    dm:acquiredOn "2027-01-15"^^xsd:date ; dm:asOf "2028-01-20"^^xsd:date ;
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G48 The plan's date is the day the five years end: one day late.
+:G48_GiftedStockPlanTooLate a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder ;
+    dm:holderVotingPercent "30"^^xsd:decimal ; dm:holderValuePercent "30"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "70"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "1"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    dm:acquiredOn "2027-01-15"^^xsd:date ; dm:disposeBy "2032-01-15"^^xsd:date ; dm:asOf "2028-01-20"^^xsd:date ;
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G49 Year 4: the plan's date has passed and the foundation still holds the block.
+:G49_GiftedStockPlanDatePassed a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder ;
+    dm:holderVotingPercent "30"^^xsd:decimal ; dm:holderValuePercent "30"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "70"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "4"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    dm:acquiredOn "2027-01-15"^^xsd:date ; dm:disposeBy "2030-06-30"^^xsd:date ; dm:asOf "2031-02-01"^^xsd:date ;
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
+
+# G50 Years typed as 3, but the dates show year 6 with no extension: the dates decide.
+:G50_GiftedStockYearsDisagree a dm:PlannedGift ;
+    dm:giftVehicle dm:FoundationHolding ; dm:transferor td:Founder ;
+    dm:holderVotingPercent "30"^^xsd:decimal ; dm:holderValuePercent "30"^^xsd:decimal ;
+    dm:disqualifiedVotingPercent "70"^^xsd:decimal ; dm:passiveIncomePercent "10"^^xsd:decimal ;
+    dm:acquiredByGiftOrBequest true ; dm:yearsSinceAcquired "3"^^xsd:decimal ; dm:writtenDispositionPlan true ;
+    dm:acquiredOn "2027-01-15"^^xsd:date ; dm:disposeBy "2031-06-30"^^xsd:date ; dm:asOf "2033-02-01"^^xsd:date ;
+    dm:saleArrangedBeforeGift false ; dm:transferredSubjectToLien false .
 
 # G17 The foundation owns all of a rental holding company: 97 percent passive income.
 :G17_PassiveHoldingCompany a dm:PlannedGift ;

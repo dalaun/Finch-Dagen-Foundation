@@ -30,6 +30,9 @@
 :P22_RentFromFamilyTrust t:expectOutcome dm:Block ;        t:expectChecks "R1" .
 :P23_OperatingCoPurchase t:expectOutcome dm:Block ;        t:expectChecks "R1" .
 :P24_GrantToFamilyTrust  t:expectOutcome dm:Block ;        t:expectChecks "R1 R6" .
+:P27_SuppliesFromBigDonor   t:expectOutcome dm:Block ; t:expectChecks "R1" .
+:P28_PrintingFromSmallDonor t:expectOutcome dm:Allow ; t:expectChecks "" .
+:P29_SuppliesFromEarlyDonor t:expectOutcome dm:Block ; t:expectChecks "R1" .
 
 # Entity deals (tests/decision/entity-deal-cases.ttl) and P25: stewardship, arm's length,
 # what a business may deduct, what an employee may exclude.
@@ -73,7 +76,7 @@
 :G01_LeadAnnuityClean            t:expectOutcome dm:Allow .
 :G02_LeadNetIncome               t:expectOutcome dm:Block ;        t:expectChecks "PG1" .
 :G03_LeadHoldsBusinessNoPlan     t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG3b" .
-:G04_LeadHoldsBusinessPastPeriod t:expectOutcome dm:Block ;        t:expectChecks "PG3a" .
+:G04_LeadHoldsBusinessPastPeriod t:expectOutcome dm:Block ;        t:expectChecks "PG3a PG3d" .
 :G05_LeadAtSixtyHoldsBusiness    t:expectOutcome dm:Allow .
 :G06_FounderTrusteeOfLead        t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG9" .
 :G07_LeadSellsToInsider          t:expectOutcome dm:Block ;        t:expectChecks "PG2" .
@@ -112,6 +115,12 @@
 :G37_UnitrustLifeThenTerm t:expectOutcome dm:Block ; t:expectChecks "PG14" .
 :G38_UnitrustLifeThenShorter t:expectOutcome dm:Allow .
 :G39_UnknownVehicle t:expectOutcome dm:Insufficient ; t:expectChecks "FC0 PG0" .
+# Gifted management company stock, dated disposition plan (found by formal/keystone)
+:G46_GiftedStockPlanOnTrack t:expectOutcome dm:Allow .
+:G47_GiftedStockPlanUndated t:expectOutcome dm:Insufficient ; t:expectChecks "FC0" .
+:G48_GiftedStockPlanTooLate t:expectOutcome dm:NeedsCounsel ; t:expectChecks "PG3c" .
+:G49_GiftedStockPlanDatePassed t:expectOutcome dm:Block ; t:expectChecks "PG3d" .
+:G50_GiftedStockYearsDisagree t:expectOutcome dm:Block ; t:expectChecks "PG3d" .
 :G40_InsiderLeaseLesseeOnly t:expectOutcome dm:Block ; t:expectChecks "PG13 PG2" .
 :G41_PayoutNoDistributionFigure t:expectOutcome dm:Insufficient ; t:expectChecks "FC0 PG0" .
 :G42_FoundationPaysFounderUnderTerms t:expectOutcome dm:Block ; t:expectChecks "PG2" .

@@ -61,8 +61,9 @@ echo
 cases='
 pass-branch-b|pass|
 pass-branch-a|pass|
-finding-typed-screen|Keystone|Gift Buy
-finding-stock-period|NoExcessHolding|GiftStock PeriodEnds
+limit-stock-sale|NoExcessHolding|GiftStock PlanDateHits PeriodEnds
+break-typed-screen|Keystone|Gift Buy
+break-undated-plan|AlarmBeforeBreach|GiftStock PeriodEnds
 break-lease|Keystone|Gift BuyEquipment LeaseEquipment
 break-excess|Keystone|Gift WriteRecord Wage
 break-er|NoTaxableGrant|Gift Grant

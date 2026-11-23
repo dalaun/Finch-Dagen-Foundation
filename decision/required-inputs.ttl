@@ -93,6 +93,12 @@
     :requiresInput :yearsSinceAcquired ;
     :requiredBy "PG3a PG3b" .
 
+:RI_DispositionPlanDates a :InputRequirement ;
+    rdfs:label "A written plan to dispose of excess business holdings must state when the holding was received, the date the plan sells by, and the date the case is graded" ;
+    :appliesWhen "?this a :PlannedGift ; :writtenDispositionPlan true ." ;
+    :requiresInput :acquiredOn , :disposeBy , :asOf ;
+    :requiredBy "PG3c PG3d" .
+
 :RI_PayoutYear a :InputRequirement ;
     rdfs:label "A foundation payout year must state its investment assets and its qualifying distributions" ;
     :appliesWhen "?this a :PlannedGift ; :giftVehicle :FoundationHolding . ?this :investmentAssetsFMV|:qualifyingDistributionsByDeadline|:acquisitionIndebtedness|:taxesForYear ?any ." ;

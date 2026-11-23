@@ -1,0 +1,26 @@
+---
+title: "Foundation moves, as the checker walked them"
+---
+stateDiagram-v2
+  state "Legend" as legend {
+    lg0: ok
+    lg1: Breaks AlarmBeforeBreach
+    lg2: Path to the AlarmBeforeBreach bug
+  }
+  class lg0 teal
+  class lg1 breaks
+  class lg2 bugPath
+  s0: Foundation holds nothing
+  s1: Foundation holds nothing, holds the stock
+  s2: Foundation holds nothing, still holds the stock, period over
+  [*] --> s0
+  s0 --> s1: the founder gives the management company's stock
+  s1 --> s2: the disposition period ends
+  classDef breaks fill:#ffecee,stroke:#e72e3b,stroke-width:2.5px,color:#cd2834
+  class s0 teal
+  class s0 bugPath
+  class s1 teal
+  class s1 bugPath
+  class s2 teal
+  class s2 breaks
+  class s2 bugPath
