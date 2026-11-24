@@ -125,3 +125,27 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): Section 677(b) is read as limiting when trust income used for a grantor's support obligation is taxed to him. Its full text was only partly retrieved; counsel reads it in full.
 - If counsel says otherwise: If distributions to minors count as his support, that income is taxed to him and the retained-income and bracket results shift for those amounts.
 - Status: assumed, awaiting counsel
+
+## Q11. Is a 7 percent yield a fair stand-in for sizing the asset that clears break-even?
+
+- Key: `asset-size-b1`
+- Raised by: NEXT-MOVES.md move 4
+- For: CPA or appraiser
+- Question: Is a yield of about 7 percent a fair stand-in for what an asset of this kind earns after costs, so that about 150,000 a year of net income means an asset of roughly 2.1 million?
+- ASSUMPTION: The rehearsal sizes the asset to clear the unrelated-individual-trustee break-even (149,500 a year in the base case; 146,900 lean, 137,200 asset_rental, 147,700 asset_business) and divides by `asset_yield_for_value` (0.07 in stack.json), giving about 2,135,700 in the base case. The 0.07 is an ASSUMPTION for perspective, not a market rate. With an independent professional trustee there is no break-even up to 1,000,000 a year, so no size is implied.
+- Primary cite: none. No public source was read for this entry.
+- What the text says (as read, not a conclusion): nothing was read. The break-even figures are the engine's own output on main; the yield is the stack.json assumption.
+- If counsel says otherwise: If the right yield is higher or lower, the implied value moves in inverse proportion (for example 149,500 / 0.05 is about 2,990,000; 149,500 / 0.09 is about 1,661,100). The engine's `asset_yield_for_value` would change in stack.json.
+- Status: assumed, awaiting counsel
+
+## Q12. Which classes of asset (rental building, bought business, other) can credibly produce that income?
+
+- Key: `asset-classes-b2`
+- Raised by: NEXT-MOVES.md move 5
+- For: CPA or appraiser
+- Question: Which of a rental building, a bought operating business run by a hired manager, or a small portfolio of rental units can credibly net about 150,000 a year at the size move 4 implies, and what yield, sale multiple or SBA 7(a) loan terms should the rehearsal use for each?
+- ASSUMPTION: The rehearsal runs on the two asset kinds the engine models (a rental building and a bought operating business) at the engine's assumed yields. No market data was read in this run: no cap rates, business sale multiples or SBA 7(a) terms.
+- Primary cite: none. No public source was read for this entry.
+- What the text says (as read, not a conclusion): nothing was read. Data that would settle it: published cap rates for the property type and region, published business sale multiples, and the SBA's published 7(a) program terms.
+- If counsel says otherwise: If real yields or multiples differ from the engine's, the asset size needed, the financing cost and the asset_rental and asset_business scenarios would change, and a third class might replace one of the two.
+- Status: assumed, awaiting counsel
