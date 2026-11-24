@@ -69,6 +69,39 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: see counsel-queue.md Q3
 
+### 4. asset: How big must the income-producing asset be to clear break-even?
+
+- Key: `asset-size-b1`
+- Step: B1
+- Opened: 2026-11-24
+- For: CPA or appraiser
+- Why it matters: the structure only pays for itself if the asset earns more than break-even. The engine's break-even extra yearly net asset income, on main today, for both steward routes and flat_independent:
+
+  | Trustee path | base | lean | asset_rental | asset_business |
+  |---|---|---|---|---|
+  | Unrelated individual trustee | 149,500 | 146,900 | 137,200 | 147,700 |
+  | Independent professional trustee | no break-even up to 1,000,000 | no break-even up to 1,000,000 | no break-even up to 1,000,000 | no break-even up to 1,000,000 |
+
+  With a professional trustee, no asset income up to 1,000,000 a year clears break-even, so no asset size is implied for that path.
+- Rough value, base case with an unrelated individual trustee: 149,500 a year divided by `asset_yield_for_value` (0.07 in stack.json) is 149,500 / 0.07 = about 2,135,700. The same division gives about 2,098,600 (lean), 1,960,000 (asset_rental) and 2,110,000 (asset_business). The 0.07 is itself an ASSUMPTION in stack.json for perspective, not a market rate; no public yield was read for this move.
+- The one thing for Dalaun: ask his CPA or an appraiser, "Is a yield of about 7 percent a fair stand-in for what an asset of this kind earns after costs, so that about 150,000 a year of net income means an asset of roughly 2.1 million?"
+- Status: open
+- Working assumption: the asset is sized to clear the unrelated-individual-trustee break-even (149,500 a year in the base case), worth roughly 2,135,700 at the assumed 0.07 yield; see counsel-queue.md Q11
+
+### 5. asset: Which classes of asset could produce that income?
+
+- Key: `asset-classes-b2`
+- Step: B2
+- Opened: 2026-11-24
+- For: CPA or appraiser
+- Why it matters: B1's income (about 149,500 a year net, in the base case) has to come from something real. Two or three classes could produce it. **No market data was read in this run**: the yields below are not from a public source.
+  - A rental building (an engine asset kind). Public data that would settle it: published cap rates for the property type and region (for example from a brokerage's or appraisal firm's cap-rate survey), and typical operating cost ratios.
+  - A bought operating business run by a hired manager (an engine asset kind). Public data that would settle it: business sale multiples from published sale-transaction databases or survey reports, and SBA 7(a) loan terms (rate, term, down payment, guarantee rules) from the SBA's published program pages.
+  - Optionally a third class, such as a small portfolio of rental units rather than one building, settled by the same cap-rate data plus per-unit cost and vacancy figures.
+- The one thing for Dalaun: ask his CPA or an appraiser, "Which of these classes can credibly net about 150,000 a year at the size B1 implies, and what yield, multiple or loan terms should the rehearsal use for each?"
+- Status: open
+- Working assumption: the two kinds the engine models (a rental building and a bought operating business) at the engine's assumed yields, not yet read from a public source; see counsel-queue.md Q12
+
 ## Closed
 
 (none yet)

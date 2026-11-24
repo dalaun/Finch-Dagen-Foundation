@@ -33,4 +33,12 @@ A missing input file fails the criteria that need it.
 
 Each amber check of the passing version goes here as a list line that names the check and the document, for example `- S5: signed trust deed`. For now:
 
-(none yet)
+- S2: "a decision log showing the trustee applying the instrument, including at least one request declined or modified"
+- S3: (definition names no document)
+- S4: "trustee minutes"
+- S7: "depreciation schedules of every entity"
+- S9: "the contract and invoice" (whose name and taxpayer number are on them)
+- S13: "exemption letter or filed Form 1023"
+- S14: "Forms 3520 and 3520-A filed"
+- S15: "the founder's return and the receiving entity's return" (how each transfer is characterized on both)
+- S16: (definition names no document)
