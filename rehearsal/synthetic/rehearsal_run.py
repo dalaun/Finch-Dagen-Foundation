@@ -619,6 +619,10 @@ def main(argv=None):
             "him as trustee (grantor trust)": break_even(sc, rows, stack, grader, "flat", "professional"),
             "independent professional trustee": break_even(sc, rows, stack, grader, "flat_independent", "professional"),
             "independent unrelated individual trustee": break_even(sc, rows, stack, grader, "flat_independent", "individual"),
+            "route R2 independent distribution trustee, professional": break_even(sc, rows, stack, grader, "steward_r2", "professional"),
+            "route R2 independent distribution trustee, unrelated individual": break_even(sc, rows, stack, grader, "steward_r2", "individual"),
+            "route R3 fixed shares, professional": break_even(sc, rows, stack, grader, "steward_r3", "professional"),
+            "route R3 fixed shares, unrelated individual": break_even(sc, rows, stack, grader, "steward_r3", "individual"),
         }
         results.append(r)
     print(report(results))
@@ -639,7 +643,7 @@ def main(argv=None):
                              "structure_value", "structure_gap", "break_even_grantor",
                              "break_even_professional", "break_even_individual"])
             for r in results:
-                be = list(r["break_even"].values())
+                be = list(r["break_even"].values())[:3]  # the ledger keeps its three original columns
                 for vid, v in r["versions"].items():
                     wr.writerow([date.today().isoformat(), r["scenario"], vid, v["status"], v["checks_pass"],
                                  v["score_vs_A"], v["structure_value"], v["structure_gap"],
