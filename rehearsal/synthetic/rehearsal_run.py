@@ -325,6 +325,8 @@ def business_routes(rows: list, grader: Grader, assumptions: dict) -> tuple:
 def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net: float = 0.0,
              versions: list | None = None) -> dict:
     A = stack["assumptions"]
+    if sc.get("trustee_kind"):  # a scenario may fix its trustee kind (ASSUMPTION stated in the scenario)
+        A = dict(A, trustee_kind=sc["trustee_kind"])
     fees = {k: (resolve(v, BM) if not isinstance(v, str) or "." in v else v)
             for k, v in stack["fees_placeholder"].items() if k != "note"}
     s = summarize(rows)
@@ -489,7 +491,8 @@ def break_even(sc, rows, stack, grader, vid, trustee_kind, cap=1_000_000.0):
     structure value reaches 0. None if it never does up to cap."""
     st = json.loads(json.dumps(stack))
     st["assumptions"]["trustee_kind"] = trustee_kind
-    sc2 = dict(sc, asset=sc.get("asset") or {"kind": "generic"})
+    sc2 = {k: x for k, x in sc.items() if k != "trustee_kind"}
+    sc2["asset"] = sc.get("asset") or {"kind": "generic"}
 
     def value(x):
         return run_year(sc2, rows, st, grader, extra_asset_net=x, versions=[vid])["versions"][vid]["structure_value"]
@@ -592,6 +595,11 @@ def selftest() -> int:
     # so the share moves no income from the trust's retained side: its tax equals the no-share value.
     ok(pipeline(40000.0)["trust_tax"] == run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]["trust_tax"],
        "pipeline: the Foundation's share does not change the trust's retained income or its tax")
+    # A scenario may fix its trustee kind; break_even must still be free to vary it.
+    sc_t = dict(sc_p, trustee_kind="individual")
+    fee_ind = run_year(sc_t, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]
+    fee_pro = run_year(sc_p, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]
+    ok(fee_ind < fee_pro, "scenario trustee_kind individual prices the trustee below the professional default")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 
