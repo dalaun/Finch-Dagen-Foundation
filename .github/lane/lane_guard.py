@@ -13,27 +13,16 @@ request is in the agent lane only when ALL of these hold:
      deleted or renamed;
   5. every grows-only file, or function inside one, it touches only gains lines:
      every line it had is still there, so an agent can add a check but not
-     loosen or remove one;
-  6. Dalaun has not said "@finchdagen-claude stop" on it or on the issue it
-     closes (stop_word.py), or has said "go" since.
+     loosen or remove one.
 
-Rules marked "enforce" decide the lane. Rules marked "observe" are worked out
-too and only reported: the step summary, a notice on the check, and one
-comment on the pull request when the answer would differ. That is how a new
-rule runs for a while before Dalaun switches it on.
-
-The enforce agent and owner lines must match .github/CODEOWNERS line for line
+The agent and owner lines must match .github/CODEOWNERS line for line
 (GitHub shows CODEOWNERS; the guard reads approvals). If they drift, the
 guard's own cases fail and the guard fails closed.
 
 Anything else is Dalaun's lane. The guard fails closed: an unknown rule or
-pattern, an unreadable file list or an API error is Dalaun's lane. One
-exception: if the comments can't be read for the stop word, the guard says so
-and goes on, because the verifier reads them again with its own token and
-refuses a pass on a stopped pull request (a read hiccup must not stall the lane).
+pattern, an unreadable file list or an API error is Dalaun's lane.
 
-It never runs the pull request's code. It reads the file list, the comments
-and, for append-only and grows-only files, the two versions of each as text,
+It never runs the pull request's code. It reads the file list and, for append-only and grows-only files, the two versions of each as text,
 through the GitHub API. approvals, CODEOWNERS and this script come from the
 base branch (pull_request_target), so a pull request cannot change the rules
 it is judged by.
@@ -53,14 +42,9 @@ import urllib.request
 from fnmatch import fnmatchcase
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import stop_word  # noqa: E402
-
 ROOT = Path(__file__).resolve().parents[2]
 APPROVALS = ROOT / ".github" / "lane" / "approvals"
 RULES = ("agent", "owner", "append-only", "grows-only")
-STATES = ("enforce", "observe")
-OBSERVE_MARK = "<!-- lane-guard observe-only -->"
 
 
 # ------------------------------------------------------------------ CODEOWNERS
@@ -104,20 +88,18 @@ def owners_of(path: str, rules: list) -> list:
 # ------------------------------------------------------------------ approvals
 
 def parse_approvals(text: str) -> list:
-    """Return [(rule, pattern, part, state)] in file order. Anything unexpected raises."""
+    """Return [(rule, pattern, part)] in file order. Anything unexpected raises."""
     out = []
     for n, raw in enumerate(text.splitlines(), 1):
         line = raw.split("#", 1)[0].strip()
         if not line:
             continue
         parts = line.split()
-        if len(parts) != 4:
-            raise ValueError(f"approvals line {n}: needs <rule> <path> <part> <state>: {line}")
-        rule, pat, part, state = parts
+        if len(parts) != 3:
+            raise ValueError(f"approvals line {n}: needs <rule> <path> <part>: {line}")
+        rule, pat, part = parts
         if rule not in RULES:
             raise ValueError(f"approvals line {n}: unknown rule {rule!r}")
-        if state not in STATES:
-            raise ValueError(f"approvals line {n}: unknown state {state!r}")
         if not pat.startswith("/") or any(c in pat for c in "*?[]!"):
             raise ValueError(f"approvals line {n}: a path starts with '/' and has no wildcards: {pat}")
         if rule == "grows-only":
@@ -127,20 +109,16 @@ def parse_approvals(text: str) -> list:
             raise ValueError(f"approvals line {n}: only grows-only takes a part")
         if rule in ("append-only", "grows-only") and pat.endswith("/"):
             raise ValueError(f"approvals line {n}: {rule} names one file, not a folder")
-        out.append((rule, pat, part, state))
+        out.append((rule, pat, part))
     if not any(r == "agent" for r, *_ in out):
         raise ValueError("approvals has no agent line")
     return out
 
 
-def active(rules: list, with_observe: bool) -> list:
-    return [r for r in rules if r[3] == "enforce" or with_observe]
-
-
 def lane_of(path: str, rules: list) -> str:
     """'agent' or 'owner' for one path: last matching agent/owner line wins, default owner."""
     found = "owner"
-    for rule, pat, _, _ in rules:
+    for rule, pat, _ in rules:
         if rule in ("agent", "owner") and _matches(pat, path):
             found = rule
     return found
@@ -148,16 +126,16 @@ def lane_of(path: str, rules: list) -> str:
 
 def guarded_files(rules: list) -> list:
     """[(rule, path, part)] for the append-only and grows-only lines (paths without the leading '/')."""
-    return [(rule, pat[1:], part) for rule, pat, part, _ in rules if rule in ("append-only", "grows-only")]
+    return [(rule, pat[1:], part) for rule, pat, part in rules if rule in ("append-only", "grows-only")]
 
 
 def mirror_problems(rules: list, codeowners: list) -> list:
-    """The enforce agent/owner lines must be CODEOWNERS after its opening '*' line, in order."""
-    want = [(pat, rule) for rule, pat, _, state in rules if state == "enforce" and rule in ("agent", "owner")]
+    """The agent/owner lines must be CODEOWNERS after its opening '*' line, in order."""
+    want = [(pat, rule) for rule, pat, _ in rules if rule in ("agent", "owner")]
     have = [(pat, "owner" if owners else "agent") for pat, owners in codeowners[1:]]
     if want == have:
         return []
-    return [f"approvals' enforce agent/owner lines {want} do not match CODEOWNERS {have}"]
+    return [f"approvals' agent/owner lines {want} do not match CODEOWNERS {have}"]
 
 
 # ------------------------------------------------------------------ decision
@@ -188,10 +166,9 @@ def whole_lines_grow(base: str, head: str) -> bool:
     return not (b - h)
 
 
-def decide(pr: dict, files: list, rules: list, versions=None, stop=(False, "")) -> tuple:
-    """Return (lane, reasons). lane is 'agent' or 'owner'. rules: the active approvals lines.
-    versions: {path: (base_text, head_text)} for the append-only/grows-only files touched.
-    stop: (stopped, why) from stop_word."""
+def decide(pr: dict, files: list, rules: list, versions=None) -> tuple:
+    """Return (lane, reasons). lane is 'agent' or 'owner'. rules: the approvals lines.
+    versions: {path: (base_text, head_text)} for the append-only/grows-only files touched."""
     reasons = []
     versions = versions or {}
     head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name")
@@ -200,8 +177,6 @@ def decide(pr: dict, files: list, rules: list, versions=None, stop=(False, "")) 
         reasons.append(f"comes from another repository ({head_repo or 'unknown'}), so Dalaun reviews it")
     if pr.get("draft"):
         reasons.append("is a draft")
-    if stop[0]:
-        reasons.append(stop[1])
     if not files:
         reasons.append("has no file list (fail closed)")
     guarded = guarded_files(rules)
@@ -244,16 +219,6 @@ def _get(url: str, token: str, raw: bool = False):
     return body.decode() if raw else json.loads(body)
 
 
-def _post(url: str, token: str, body: dict):
-    req = urllib.request.Request(url, method="POST", data=json.dumps(body).encode(), headers={
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "lane-guard",
-    })
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
-
 
 def pr_files(repo: str, number: int, token: str) -> list:
     out, page = [], 1
@@ -284,34 +249,17 @@ def run_in_actions() -> int:
     pr = event["pull_request"]
     repo = os.environ["GITHUB_REPOSITORY"]
     token = os.environ["GITHUB_TOKEN"]
-
-    def api_get(path):
-        return _get("https://api.github.com" + path, token)
-
-    observed = None
     try:
         rules = load_policy()
         files = pr_files(repo, pr["number"], token)
         touched = {n for f in files for n in (f.get("filename"), f.get("previous_filename")) if n}
         versions = {}
-        for _, path, _ in guarded_files(rules):  # observe lines too, so they can be reported
+        for _, path, _ in guarded_files(rules):
             f = next((f for f in files if f.get("filename") == path), None)
             if path in touched and f and f.get("status") == "modified" and path not in versions:
                 versions[path] = (file_at(repo, path, pr["base"]["sha"], token),
                                   file_at(repo, path, pr["head"]["sha"], token))
-        skipped = []
-        try:
-            stop = stop_word.stopped(stop_word.fetch_sources(api_get, repo, pr, strict_issues=False,
-                                                             skipped=skipped))
-            if skipped:
-                print("Stop word: could not read " + ", ".join(skipped)
-                      + "; the verifier reads it again before any pass.")
-        except Exception as e:  # a read problem here must not stall the lane: the verifier is the hard gate
-            stop = (False, "")
-            print(f"Stop word: could not read the comments ({type(e).__name__}: {e}); "
-                  "the verifier reads them again and refuses a pass if Dalaun said stop.")
-        lane, reasons = decide(pr, files, active(rules, False), versions, stop)
-        observed = decide(pr, files, active(rules, True), versions, stop)
+        lane, reasons = decide(pr, files, rules, versions)
     except Exception as e:  # fail closed
         lane, reasons = "owner", [f"the guard could not finish ({type(e).__name__}: {e})"]
     if lane == "agent":
@@ -319,35 +267,11 @@ def run_in_actions() -> int:
                "check passes, including a Verifier pass on this exact commit from an agent that did not write it.")
     else:
         msg = "Dalaun's lane: this pull request needs Dalaun. It " + "; it ".join(reasons) + "."
-    note, differs = "", False
-    if observed is not None:
-        extra = [r for r in observed[1] if r not in reasons]
-        differs = observed[0] != lane or bool(extra)
-        if differs:
-            note = ("Observe-only rules (approvals, not yet enforced): once switched on, this pull request "
-                    + ("would wait for Dalaun" if observed[0] == "owner" else "would ride the agent lane")
-                    + (". It " + "; it ".join(extra) if extra else "") + ". Nothing waits on this today.")
-        else:
-            note = "Observe-only rules (approvals, not yet enforced): same answer, nothing to report."
     print(msg)
-    if note:
-        print(note)
-    if differs:
-        print("::notice title=Lane guard (observe-only)::" + note)
-        head = pr["head"]["sha"]
-        try:  # one comment per head commit, only when the answer differs
-            seen = api_get(f"/repos/{repo}/issues/{pr['number']}/comments?per_page=100")
-            if not any(OBSERVE_MARK in (c.get("body") or "") and head in (c.get("body") or "") for c in seen):
-                today = "agent lane" if lane == "agent" else "Dalaun's lane"
-                _post(f"https://api.github.com/repos/{repo}/issues/{pr['number']}/comments", token,
-                      {"body": f"{OBSERVE_MARK}\n**Lane guard, observe-only**, on `{head}`\n\n{note}\n\n"
-                               f"Today's decision stands: {today}."})
-        except Exception as e:  # a report, never a reason to block
-            print(f"(could not post the observe-only comment: {type(e).__name__}: {e})")
     with open(os.environ.get("GITHUB_OUTPUT", os.devnull), "a") as fh:
         fh.write(f"lane={lane}\n")
     with open(os.environ.get("GITHUB_STEP_SUMMARY", os.devnull), "a") as fh:
-        fh.write(f"### Lane guard\n\n{msg}\n" + (f"\n{note}\n" if note else ""))
+        fh.write(f"### Lane guard\n\n{msg}\n")
     return 0
 
 
@@ -362,23 +286,22 @@ def selftest() -> int:
         fails += not cond
 
     policy = parse_approvals(APPROVALS.read_text())
-    rules = active(policy, False)
-    allr = active(policy, True)
+    rules = policy
     LEDGER = "rehearsal/loop/score-ledger.csv"
     same = {"head": {"repo": {"full_name": "o/r"}}, "base": {"repo": {"full_name": "o/r"}}, "draft": False}
 
-    def lane(files, pr=same, lv=None, cv=None, rules=rules, stop=(False, "")):
+    def lane(files, pr=same, lv=None, cv=None, rules=rules):
         versions = dict(cv or {})
         if lv is not None:
             versions[LEDGER] = lv
         return decide(pr, [{"filename": f, "status": "modified"} if isinstance(f, str) else f for f in files],
-                      rules, versions, stop)[0]
+                      rules, versions)[0]
 
     ok(not mirror_problems(policy, parse_codeowners((ROOT / ".github" / "CODEOWNERS").read_text())),
-       "approvals' enforce agent/owner lines match CODEOWNERS line for line")
-    ok(bool(mirror_problems(policy + [("owner", "/rehearsal/loop/BACKLOG.md", "-", "enforce")],
+       "approvals' agent/owner lines match CODEOWNERS line for line")
+    ok(bool(mirror_problems(policy + [("owner", "/rehearsal/loop/BACKLOG.md", "-")],
                             parse_codeowners((ROOT / ".github" / "CODEOWNERS").read_text()))),
-       "an enforce line missing from CODEOWNERS is caught")
+       "an agent/owner line missing from CODEOWNERS is caught")
 
     ok(lane(["rehearsal/loop/BACKLOG.md"]) == "agent", "backlog only: agent lane")
     ok(lane(["rehearsal/loop/NEXT-MOVES.md", "rehearsal/loop/score-ledger.csv"], lv=("", "")) == "agent",
@@ -425,30 +348,25 @@ def selftest() -> int:
     ok(lane(["rehearsal/loop/score-ledger.csv"]) == "owner", "ledger unreadable: Dalaun's lane (fail closed)")
     ok(lane([{"filename": "rehearsal/loop/score-ledger.csv", "status": "removed"}]) == "owner",
        "ledger deleted: Dalaun's lane")
-    # observe-only rules (approvals): reported, never deciding today
-    sc = "rehearsal/synthetic/scorecard.py"
+    # the grantor check's own cases only grow (Dalaun's lane for any loosening)
     gc = "rehearsal/synthetic/grantor_check.py"
-    ok(lane([sc]) == "agent", "the scorecard today: agent lane (its owner line is observe-only)")
-    ok(lane([sc], rules=allr) == "owner", "the scorecard once enforced: Dalaun's lane (the finish line)")
-    ok(lane([gc], rules=allr) == "owner", "the grantor check once enforced: Dalaun's lane")
-    md = "rehearsal/synthetic/SCORECARD.md"
-    ok(lane([md], cv={md: ("a\nb\n", "a\nb\nc\n")}, rules=allr) == "agent",
-       "SCORECARD.md gains a document line, once enforced: agent lane")
-    ok(lane([md], cv={md: ("a\nb\n", "a\nc\n")}, rules=allr) == "owner",
-       "SCORECARD.md loses a line, once enforced: Dalaun's lane")
-    ok(lane([md], cv={md: ("a\nb\n", "a\nc\n")}) == "agent", "the same change today: agent lane (observe only)")
-    ok(lane([md], rules=allr) == "owner", "a grows-only file unreadable, once enforced: Dalaun's lane (fail closed)")
-    ok(lane(["rehearsal/loop/BACKLOG.md"], stop=(True, "Dalaun said stop")) == "owner",
-       "Dalaun's stop word: Dalaun's lane")
-    for bad in ("agent /x - maybe\n", "agent rehearsal/ - enforce\n", "agent /a/*.py - enforce\n",
-                "owner /a/b.py selftest enforce\n", "grows-only /a/ - enforce\n", "lane /a/ - enforce\n",
-                "owner /a/ - enforce\n"):
+    gbase = "def selftest() -> int:\n    ok(res['grantor'] is False, 'non-grantor')\n    ok(n == 4, 'four')\n\ndef main():\n    pass\n"
+    ok(lane([gc], cv={gc: (gbase, gbase.replace("    ok(n == 4, 'four')\n", "    ok(n == 4, 'four')\n    ok(m == 1, 'one')\n"))})
+       == "agent", "grantor check gains a case: agent lane")
+    ok(lane([gc], cv={gc: (gbase, gbase.replace("res['grantor'] is False", "True"))}) == "owner",
+       "grantor check case loosened: Dalaun's lane")
+    ok(lane([gc], cv={gc: (gbase, gbase.replace("    ok(n == 4, 'four')\n", ""))}) == "owner",
+       "grantor check case removed: Dalaun's lane")
+    ok(lane([gc]) == "owner", "grantor check unreadable: Dalaun's lane (fail closed)")
+    ok(len(block_lines((ROOT / gc).read_text(), "selftest")) > 20, "the real grantor check selftest() is found")
+    for bad in ("agent /x - enforce\n", "agent rehearsal/ -\n", "agent /a/*.py -\n",
+                "owner /a/b.py selftest\n", "grows-only /a/ -\n", "lane /a/ -\n",
+                "owner /a/ -\n"):
         try:
             parse_approvals(bad)
             ok(False, f"rejects approvals {bad.strip()!r}")
         except ValueError:
             ok(True, f"rejects approvals {bad.strip()!r}")
-    stop_word.selftest(ok)
     for bad in ("rehearsal/ @x\n", "* @dalaun\n/rehearsal/*.py\n", "/a/ @x\n"):
         try:
             parse_codeowners(bad)

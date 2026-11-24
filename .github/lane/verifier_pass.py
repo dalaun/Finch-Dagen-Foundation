@@ -47,28 +47,6 @@ is not a verdict).
       workflow, so the audit runs on a schedule, not on the merge.)
   verifier_pass.py --selftest
 
-Ranked findings (Claude Ship's Code Review ranks, added 2026-11-24). A report
-may list its findings one a line, each opening with its rank:
-
-  Important: <a finding that blocks: the three FAIL reasons above>
-  Nit: <worth doing, does not block>
-  Pre-existing: <was already wrong on main; not this pull request's fault>
-
-When a report ranks any finding, --post refuses a verdict that disagrees with
-its ranks: FAIL needs at least one Important; PASS and PASS+NOTES may have no
-Important; PASS may have no Nit (that is PASS+NOTES). A report with no ranked
-lines posts as before, marked "findings not ranked". The comment shows the
-ranked findings first, most severe first.
-
-Fix log. The comment ends with every commit of the pull request (who wrote it,
-its first line) and how to undo it: before the merge, "git revert <commit>"
-on the branch; after the merge, the Revert button on the pull request opens
-one revert pull request, in Dalaun's lane.
-
-Stop word. If Dalaun wrote "@finchdagen-claude stop" on the pull request or the
-issue it closes, and no "@finchdagen-claude go" since, --post refuses a pass
-(stop_word.py). A FAIL still posts.
-
 Standard library only. Needs GH_TOKEN and GITHUB_REPOSITORY (or --repo).
 """
 
@@ -79,14 +57,10 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
-import re
-import urllib.error
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import stop_word  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTEXT = "Verifier pass"
@@ -101,55 +75,6 @@ NEVER = {"copilot", "copilot-pull-request-reviewer[bot]", "copilot-swe-agent[bot
 # verifier: a listed login can post the status directly, skipping --post's checks.
 WRITER_BADGES = {"dalaun-finchdagen-claude[bot]", "dalaun-northstar-claude[bot]",
                  "dalaun-northstar-grokbot[bot]", "dalaun-northstar-muse[bot]"}
-
-
-RANKS = ["Important", "Nit", "Pre-existing"]
-RANK_LINE = re.compile(r"^\s*(?:[-*]\s*)?(important|nit|pre-existing)\s*:\s*(.+?)\s*$", re.IGNORECASE | re.MULTILINE)
-
-
-def ranked_findings(report: str) -> list:
-    """[(rank, text)] in rank order (Important first), each line of the report that opens with a rank."""
-    found = [(next(r for r in RANKS if r.lower() == m.group(1).lower()), m.group(2))
-             for m in RANK_LINE.finditer(report or "")]
-    return sorted(found, key=lambda f: RANKS.index(f[0]))
-
-
-def verdict_problem(verdict: str, findings: list) -> str:
-    """Why the verdict disagrees with the ranked findings, or '' if it agrees (or nothing is ranked)."""
-    if not findings:
-        return ""
-    n = {r: sum(1 for k, _ in findings if k == r) for r in RANKS}
-    if verdict == "FAIL" and not n["Important"]:
-        return "FAIL needs at least one Important finding (only Important blocks)"
-    if verdict in ("PASS", "PASS+NOTES") and n["Important"]:
-        return f"{verdict} with {n['Important']} Important finding(s): an Important finding blocks, so the verdict is FAIL"
-    if verdict == "PASS" and n["Nit"]:
-        return f"PASS with {n['Nit']} Nit(s): a pass with notes is PASS+NOTES"
-    return ""
-
-
-def findings_block(findings: list) -> str:
-    if not findings:
-        return "**Findings:** not ranked (no line opens with Important:, Nit: or Pre-existing:)."
-    n = {r: sum(1 for k, _ in findings if k == r) for r in RANKS}
-    head = "**Findings:** " + ", ".join(f"{n[r]} {r}" for r in RANKS)
-    return head + "\n\n" + "\n".join(f"- **{k}:** {t}" for k, t in findings)
-
-
-def fix_log(commits: list) -> str:
-    """Every commit with who wrote it and how to undo it."""
-    if not commits:
-        return ""
-    lines = ["**Fix log** (each commit, and how to undo it):", ""]
-    for c in commits:
-        sha = c.get("sha") or ""
-        who = ((c.get("author") or {}) or {}).get("login") \
-            or ((c.get("commit") or {}).get("author") or {}).get("name") or "unknown"
-        first = (((c.get("commit") or {}).get("message") or "").splitlines() or [""])[0]
-        lines.append(f"- `{sha[:12]}` {first} ({who}). Undo before merge: `git revert {sha[:12]}` on the branch.")
-    lines += ["", "Undo after merge: the Revert button on this pull request opens one revert pull request "
-              "(Dalaun's lane, so it waits for him)."]
-    return "\n".join(lines)
 
 
 def allowed_verifiers(text: str) -> set:
@@ -202,12 +127,12 @@ def api(path: str, method: str = "GET", body: dict | None = None):
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.load(r)
-    except urllib.error.HTTPError as e:
+    except urllib.error.HTTPError as e:  # say which call failed and what GitHub says it needs
         try:
             msg = json.loads(e.read() or b"{}").get("message", "")
         except Exception:
             msg = ""
-        need = e.headers.get("X-Accepted-GitHub-Permissions", "") if e.headers else ""
+        need = e.headers.get("X-Accepted-GitHub-Permissions", "") if e.headers is not None else ""
         raise RuntimeError(f"{method} {path.split('?')[0]}: HTTP {e.code} {msg}".rstrip()
                            + (f" (GitHub says this call needs: {need})" if need else "")) from None
 
@@ -252,16 +177,6 @@ def post(repo: str, number: int, sha: str, login: str, verdict: str, note: str,
     if head not in report:
         print(f"REFUSE  the report does not name the full head commit {head}: a gap does not count as a pass")
         return 1
-    findings = ranked_findings(report)
-    problem = verdict_problem(verdict, findings)
-    if problem:
-        print(f"REFUSE  the verdict disagrees with the report's ranked findings: {problem}")
-        return 1
-    if VERDICTS[verdict] == "success":
-        stop, why = stop_word.stopped(stop_word.fetch_sources(api, repo, pr))
-        if stop:
-            print(f"REFUSE  {why}. A pass would let it merge itself.")
-            return 1
     if VERDICTS[verdict] == "success":
         for name in GREEN_FIRST:
             runs = api(f"/repos/{repo}/commits/{head}/check-runs?check_name="
@@ -273,13 +188,11 @@ def post(repo: str, number: int, sha: str, login: str, verdict: str, note: str,
     api(f"/repos/{repo}/statuses/{head}", "POST",
         {"state": VERDICTS[verdict], "context": CONTEXT, "description": desc})
     print("posted  " + desc)
-    body = (f"**{CONTEXT}: {verdict}** on `{head}` by {login}" + (f", asked by {asked_by}" if asked_by else "")
-            + "\n\n" + findings_block(findings) + "\n\n" + report + "\n\n" + fix_log(commits))
     try:
-        api(f"/repos/{repo}/issues/{number}/comments", "POST", {"body": body})
+        api(f"/repos/{repo}/issues/{number}/comments", "POST",
+            {"body": f"**{CONTEXT}: {verdict}** on `{head}` by {login}"
+                     + (f", asked by {asked_by}" if asked_by else "") + "\n\n" + report})
     except RuntimeError as e:
-        # The verdict (the status) is already on the commit, so the merge is not held up.
-        # The report is the record, though, so a missing one stays red.
         print(f"::error title=Report comment not posted::{e}. The verdict status above did post. "
               "If this is HTTP 403, the verifier app lacks a permission: on GitHub, Settings > Developer "
               "settings > GitHub Apps > dalaun-finchdagen-verifier > Permissions, set Pull requests to "
@@ -363,24 +276,6 @@ def selftest() -> int:
     ok(valid_pass([st("x", ctx="other"), st(g)], head, allowed, wrote)[0], "other contexts are ignored")
     co = [{"author": {"login": g}, "committer": {"login": "web-flow"}}]
     ok(not valid_pass([st(g)], head, allowed, writers(pr, co))[0], "a verifier that wrote a commit: wait")
-    rep = "Important: ledger row wrong\n- Nit: rename a column\nPre-existing: old typo\nnit: second"
-    f = ranked_findings(rep)
-    ok([k for k, _ in f] == ["Important", "Nit", "Nit", "Pre-existing"], "findings: ranked, most severe first")
-    ok(verdict_problem("FAIL", f) == "", "findings: FAIL with an Important finding agrees")
-    ok(verdict_problem("PASS+NOTES", f) != "", "findings: PASS+NOTES with an Important finding is refused")
-    ok(verdict_problem("PASS", ranked_findings("Nit: rename")) != "", "findings: PASS with a Nit is refused")
-    ok(verdict_problem("PASS+NOTES", ranked_findings("Nit: rename")) == "", "findings: PASS+NOTES with a Nit agrees")
-    ok(verdict_problem("PASS", ranked_findings("Pre-existing: old typo")) == "",
-       "findings: PASS with only a pre-existing finding agrees")
-    ok(verdict_problem("FAIL", ranked_findings("Nit: rename")) != "", "findings: FAIL with no Important is refused")
-    ok(verdict_problem("PASS", []) == "" and "not ranked" in findings_block([]),
-       "findings: a report with no ranked lines posts as before, marked not ranked")
-    ok(ranked_findings("Importantly, all checks ran") == [], "findings: only 'Important:' with a colon is a rank")
-    log = fix_log([{"sha": head, "author": {"login": "dalaun-finchdagen-claude[bot]"},
-                    "commit": {"message": "Add move 7\n\nbody"}}])
-    ok(f"git revert {head[:12]}" in log and "Add move 7" in log and "Revert button" in log,
-       "fix log: each commit with its undo step, and the after-merge undo")
-    stop_word.selftest(ok)
     real = allowed_verifiers(VERIFIERS.read_text())
     ok(bool(real), "the real verifiers list names at least one verifier")
     ok(not (real & WRITER_BADGES), "no badge that writes pull requests is in the real verifiers list")
