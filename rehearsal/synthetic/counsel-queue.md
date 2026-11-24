@@ -149,3 +149,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read. Data that would settle it: published cap rates for the property type and region, published business sale multiples, and the SBA's published 7(a) program terms.
 - If counsel says otherwise: If real yields or multiples differ from the engine's, the asset size needed, the financing cost and the asset_rental and asset_business scenarios would change, and a third class might replace one of the two.
 - Status: assumed, awaiting counsel
+
+## Q13. What must the Family Trust have before it can hold title to an asset?
+
+- Key: `trust-title-c1`
+- Raised by: NEXT-MOVES.md move 6
+- For: lawyer
+- Question: For a non-grantor Family Trust under route R2 or R3, what must exist before it can take title to an income-producing asset: instrument terms, trustee acceptance, EIN, Illinois situs, bank account, and who signs for the trust?
+- ASSUMPTION: The trust is written under Illinois law with the trustee named per Q3 and Q11, gets its own EIN and its own bank account, and takes title only after those exist.
+- Primary cite: IRS, Employer ID Numbers, https://www.irs.gov/businesses/small-businesses-self-employed/employer-id-numbers (read: trusts need an EIN except certain grantor-owned revocable trusts). Illinois Trust Code 760 ILCS 3 not read (page failed to load).
+- What the text says (as read, not a conclusion): only the IRS EIN statement above. The page does not say how grantor status affects the exception.
+- If counsel says otherwise: extra setup steps and fees (placeholders in stack.json) could be added to the structure cost, raising break-even.
+- Status: assumed, awaiting counsel
