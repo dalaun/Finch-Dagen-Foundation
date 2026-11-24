@@ -157,6 +157,17 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the asset nets 350,000 a year, the base-case break-even of the pipeline version rounded up; see counsel-queue.md Q17
 
+### 10. structure: What do lenders, title and insurance need if the Family Trust's LLC buys the asset?
+
+- Key: `financing-title-c3`
+- Step: C3
+- Opened: 2026-11-24
+- For: lawyer
+- Why it matters: the asset that clears break-even (about 150,000 a year net, `asset_sized`; about 350,000 with a 10 percent Foundation share, `asset_sized_pipeline`) would likely be bought with a loan, and a loan can put the founder's own guarantee, or the lender's consent, between the trust and the asset. Read in this run: the SBA 7(a) page, https://www.sba.gov/funding-programs/loans/7a-loans, which lists "Be an operating business" and "Operate for profit" as eligibility terms and says nothing about trusts, personal guarantees or down payments. Not read: SBA's lender rules (SOP 50 10) and any lender's terms. Questions for counsel: (1) Will a lender lend to an LLC owned by a non-grantor trust, and what consent does it want from the trustee? (2) If the founder must guarantee the loan, does that change the checks S1 to S17 or the non-grantor result (IRC 671-679)? (3) Who is named on title and on the property or liability insurance: the LLC, the trust, or both? (4) What if the lender wants the founder to hold the LLC directly?
+- The one thing for Dalaun: ask his lawyer, "If the Family Trust's LLC buys the asset with a loan, will lenders accept that ownership, must I guarantee it personally, and does a guarantee put the trust or the checks at risk?"
+- Status: open
+- Working assumption: the lender consents to trust ownership and the founder's guarantee, if asked, is accepted as not breaking the non-grantor result; see counsel-queue.md Q18
+
 ## Closed
 
 (none yet)
