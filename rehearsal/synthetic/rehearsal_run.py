@@ -582,6 +582,8 @@ def report(results: list) -> str:
         be = r.get("break_even", {})
         for k, x in be.items():
             out.append(f"   break-even asset income, {k}: {money(x)}")
+        for k, x in r.get("route_break_even", {}).items():
+            out.append(f"   break-even asset income, {k}: {money(x)}")
         out.append("")
     return "\n".join(out)
 
@@ -619,6 +621,12 @@ def main(argv=None):
             "him as trustee (grantor trust)": break_even(sc, rows, stack, grader, "flat", "professional"),
             "independent professional trustee": break_even(sc, rows, stack, grader, "flat_independent", "professional"),
             "independent unrelated individual trustee": break_even(sc, rows, stack, grader, "flat_independent", "individual"),
+        }
+        r["route_break_even"] = {
+            "route R2 independent distribution trustee, professional": break_even(sc, rows, stack, grader, "steward_r2", "professional"),
+            "route R2 independent distribution trustee, unrelated individual": break_even(sc, rows, stack, grader, "steward_r2", "individual"),
+            "route R3 fixed shares, professional": break_even(sc, rows, stack, grader, "steward_r3", "professional"),
+            "route R3 fixed shares, unrelated individual": break_even(sc, rows, stack, grader, "steward_r3", "individual"),
         }
         results.append(r)
     print(report(results))
