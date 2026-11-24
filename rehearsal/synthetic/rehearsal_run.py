@@ -404,7 +404,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
 
     w = stack.get("legacy_weight_w", 0.0)
     out_versions = {}
-    for vid in versions or [sc.get("stack_version", "today"), "flat", "flat_independent"]:
+    for vid in versions or [sc.get("stack_version", "today"), "flat", "flat_independent", "steward_r2", "steward_r3"]:
         if vid in out_versions:
             continue
         v = stack["versions"][vid]

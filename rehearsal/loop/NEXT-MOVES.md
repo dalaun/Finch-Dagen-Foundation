@@ -102,6 +102,23 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the two kinds the engine models (a rental building and a bought operating business) at the engine's assumed yields, not yet read from a public source; see counsel-queue.md Q12
 
+### 6. structure: What must the Family Trust have before it can hold title to an asset?
+
+- Key: `trust-title-c1`
+- Step: C1
+- Opened: 2026-11-24
+- For: lawyer
+- Why it matters: on today's synthetic numbers the structure costs 6,015 a year in the base case and only an asset earning about 149,500 a year (an unrelated individual trustee) clears it, so the Family Trust must be able to hold that asset. Checklist of what it needs (read: IRS employer ID page, https://www.irs.gov/businesses/small-businesses-self-employed/employer-id-numbers, which lists trusts as needing an EIN "except certain grantor-owned revocable trusts"; not read: the Illinois Trust Code, 760 ILCS 3, whose page would not load in this run):
+  1. A signed written instrument with the terms of the chosen route (move 3: R2 or R3), naming the trustee(s) and, for R2, the independent distribution trustee.
+  2. A trustee who accepts the office, with an unrelated individual or professional named as in moves 3 and 4.
+  3. Its own tax ID (EIN), because under the rehearsal's route the trust is a non-grantor taxpayer.
+  4. A governing-law and situs choice (Illinois assumed in the engine).
+  5. A bank account in the trust's name, opened by the trustee, never mixed with the founder's.
+  6. Title and any lender consent for the asset taken in the trust's name or its LLC's (decided in C2).
+- The one thing for Dalaun: ask his lawyer, "For a non-grantor Family Trust under route R2 or R3, what must exist before it can take title to an income-producing asset: instrument terms, trustee acceptance, EIN, Illinois situs, bank account, and who signs for the trust?"
+- Status: open
+- Working assumption: the trust is written under Illinois law with the trustee named per move 3, gets its own EIN and its own account, and the asset is bought only after those exist; see counsel-queue.md Q13
+
 ## Closed
 
 (none yet)
