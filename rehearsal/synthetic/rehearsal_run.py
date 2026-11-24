@@ -416,11 +416,11 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         if f["exists"]:
             fee += fees["form_990pf_prep"] + fees["il_ag_charity_annual_fee"] + fees["bookkeeping_each_entity"]
             excise = f["net_investment_income"] * 0.0139
-            program = 0.05 * f["assets"]
             fee += excise
         fee += fees["bookkeeping_each_entity"]  # the Family Trust's own books, grantor or not
         ft = v["family_trust"]
         trust_tax_paid = 0.0
+        to_foundation = 0.0
         bene_tax = bene_base
         held_in_trust = bool(kind) or extra_asset_net > 0
         if ft["grantor"] or not held_in_trust:
@@ -430,8 +430,16 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
             # beneficiaries it distributes to (652(a), 662(a)); what it keeps, at trust rates.
             fb = founder(mgmt_rev - routed, 0.0, 0.0)
             dist = asset_net * A["trust_distributes_share_of_dni"]
-            trust_tax_paid = trust_tax(asset_net - dist, (asset_net - dist) * asset_nii_share)
-            share_each = dist / n_bene
+            share = ft.get("foundation_share_of_distribution", 0.0)
+            if f["exists"] and share > 0:
+                # ASSUMPTION (counsel-queue.md Q9): the trust pays this share of its distribution to the Foundation
+                # as a 642(c)(1) charitable set-aside paid from gross income, deducted from retained income; the
+                # beneficiaries are taxed on the rest. It makes the trust a 4947(a)(2) split-interest trust.
+                to_foundation = max(dist * share, 0.0)
+            dist_taxed = dist - to_foundation
+            retained = asset_net - dist - to_foundation
+            trust_tax_paid = trust_tax(retained, retained * asset_nii_share)
+            share_each = dist_taxed / n_bene
             q_each = asset_qbi * A["trust_distributes_share_of_dni"] / n_bene
             bene_tax = n_bene * person_tax(wages=bene_income, other_ordinary=share_each, qbi_income=q_each,
                                                 nii=share_each * asset_nii_share)["total"]
@@ -439,6 +447,12 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
             trustee = (max(fees["independent_trustee_minimum"], fees["independent_trustee_rate_of_assets"] * asset_value)
                        if A.get("trustee_kind", "professional") == "professional" else fees.get("unrelated_individual_trustee", 1000))
             fee += trustee + fees["form_709_prep_once"]
+        # Program output: what the trust sends the Foundation when it does; else the fixed 5 percent figure.
+        if to_foundation > 0:
+            program, program_source = to_foundation, "asset_income"
+        else:
+            program = 0.05 * f["assets"] if f["exists"] else 0.0
+            program_source = "fixed_assets"
         cost_b = fb["total"] + bene_tax + trust_tax_paid + fee
         score = cost_a - cost_b + w * program
         value = score - score_ops
@@ -446,6 +460,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         amber = [k for k, x in checks.items() if x == "amber"]
         out_versions[vid] = {
             "label": v["label"], "fees": round(fee), "taxes": round(cost_b - fee), "program_output": round(program),
+            "program_source": program_source, "to_foundation": round(to_foundation),
             "score_vs_A": round(score), "structure_value": round(value), "structure_gap": round(max(0.0, -value)),
             "checks_pass": sum(1 for x in checks.values() if x == "pass"), "checks_amber": amber, "checks_red": red,
             "status": "out (red check)" if red else ("provisional (amber checks)" if amber else "scored"),
@@ -556,6 +571,23 @@ def selftest() -> int:
     import grantor_check
     ok(grantor_check.selftest() == 0, "grantor trust check: its own cases, the stack's flags and the design routes")
     ok(__import__("scorecard").selftest() == 0, "goal scorecard: a passing and a failing fixture for each criterion")
+    # Pipeline: a steward_r2 copy that sends 25 percent of the trust's distribution to the Foundation
+    # takes program output from the asset's income, and more income gives more program output.
+    st_p = json.loads(json.dumps(load_json(HERE / "stack.json")))
+    st_p["versions"]["pipeline_test"] = json.loads(json.dumps(st_p["versions"]["steward_r2"]))
+    st_p["versions"]["pipeline_test"]["family_trust"]["foundation_share_of_distribution"] = 0.25
+    sc_p = {"id": "pipeline", "label": "pipeline test", "payroll": {}, "asset": {"kind": "generic"}}
+    grader_p = Grader(st_p)
+
+    def pipeline(x):
+        return run_year(sc_p, [], st_p, grader_p, extra_asset_net=x, versions=["pipeline_test"])["versions"]["pipeline_test"]
+
+    lo_p, hi_p = pipeline(40000.0), pipeline(80000.0)
+    ok(lo_p["program_output"] > 0 and lo_p["program_source"] == "asset_income",
+       "pipeline: a share of the trust's distribution to the Foundation makes program output come from asset income")
+    ok(hi_p["program_output"] > lo_p["program_output"], "pipeline: a larger asset income gives a larger program output")
+    ok(run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]["program_source"] == "fixed_assets",
+       "pipeline: with no share the program output stays the fixed 5 percent of Foundation assets")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 

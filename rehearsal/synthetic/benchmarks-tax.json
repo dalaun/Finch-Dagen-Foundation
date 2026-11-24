@@ -189,5 +189,20 @@
     "individual_rule": "1411(a)(1): '3.8 percent of the lesser of (A) net investment income for such taxable year, or (B) the excess (if any) of (i) the modified adjusted gross income for such taxable year, over (ii) the threshold amount.'",
     "nii_definition": "1411(c)(1)(A): gross income from interest, dividends, annuities, royalties and rents not derived in the ordinary course of a trade or business not described in (c)(2); (c)(2): a passive activity under 469, or trading in financial instruments or commodities. (c)(6): items taken into account in self-employment income are excluded.",
     "assumption": "ASSUMPTION: the founder's rentals and the bought business (hired manager, no material participation) are passive, so their net income is net investment income; consulting is self-employment income and is not. A real-estate-professional or material-participation election would remove it; a counsel/CPA question. Trust AGI is approximated by retained income (distribution deduction taken first); deductions allocable to NII are netted in asset_net."
+  },
+  "foundation_pipeline": {
+    "irc_4942": {
+      "source": "26 USC 4942(e), minimum distribution of a private non-operating foundation: 5 percent of the Foundation's non-charitable-use assets",
+      "url": "https://www.law.cornell.edu/uscode/text/26/4942",
+      "read": false,
+      "rate": 0.05,
+      "note": "Page not read in this run (no web read); cited from the backlog item. The engine's fixed 5 percent program figure and the fixed_assets program_source use this rate."
+    },
+    "irc_642_c_1": {
+      "source": "26 USC 642(c)(1), deduction for amounts of gross income paid to a charity under the governing instrument",
+      "url": "https://www.law.cornell.edu/uscode/text/26/642",
+      "read": false,
+      "note": "Page not read in this run. ASSUMPTION (counsel-queue.md Q9): the trust's payment to the Foundation is a charitable set-aside paid from gross income; it makes the trust a 4947(a)(2) split-interest trust."
+    }
   }
 }
