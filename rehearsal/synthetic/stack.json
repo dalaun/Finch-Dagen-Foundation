@@ -569,6 +569,118 @@
         "trustee_decision_log_with_declines": null
       },
       "facts_basis": "AS DESIGNED, copied from flat_independent; only the trustee terms differ. Here the founder is sole trustee with no discretion over income shares and principal limited to a fixed standard."
+    },
+    "steward_r2_pipeline": {
+      "label": "steward_r2 with a pipeline to the Foundation: the Family Trust sends 10 percent of its distribution to the Foundation (ASSUMPTION, a placeholder for Dalaun's own choice of share)",
+      "llcs": [
+        "management_company",
+        "operating_company",
+        "transport_company"
+      ],
+      "trusts_filing_1041": [
+        "family_trust"
+      ],
+      "family_trust": {
+        "trustee": "founder_and_independent",
+        "route": "R2",
+        "grantor": false,
+        "terms": {
+          "domestic": {
+            "us_court_primary_supervision": true,
+            "us_persons_control_substantial_decisions": true
+          },
+          "revocation": {
+            "revocable": false,
+            "revoke_power_holders": []
+          },
+          "reversion_value_share_at_inception": 0.0,
+          "benefit_to_grantor": {
+            "income_may_go_to_founder_or_spouse": false,
+            "income_may_pay_premiums_on_founder_or_spouse": false
+          },
+          "admin": {
+            "deal_for_less_than_adequate_consideration": false,
+            "founder_may_borrow_without_adequate_interest_or_security": false,
+            "founder_loan_unrepaid": false,
+            "vote_closely_held_stock_nonfiduciary": false,
+            "direct_investments_in_closely_held_stock_nonfiduciary": false,
+            "swap_power_nonfiduciary": false
+          },
+          "trustees": [
+            "founder",
+            "independent"
+          ],
+          "powers": [
+            {
+              "name": "income_sprinkle",
+              "over": "income",
+              "kind": "discretionary",
+              "holders": [
+                "independent"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            },
+            {
+              "name": "principal",
+              "over": "corpus",
+              "kind": "discretionary",
+              "holders": [
+                "independent"
+              ],
+              "standard": "none",
+              "needs_adverse_consent": false
+            }
+          ],
+          "anyone_may_add_beneficiaries": false,
+          "founder_power_to_remove_replace_trustee": "only_to_appoint_another_independent",
+          "beneficiary_sole_power_to_vest_in_self": false
+        },
+        "terms_note": "The founder is a trustee for administration; an independent special distribution trustee holds every distribution decision (674(c)). His power to remove it is limited to naming another independent trustee (Reg. 1.674(d)-2(a)). Terms match route R2 in grantor-routes.json; grantor_check.py derives non-grantor, matching grantor false. The independent trustee's fee is the flat_independent fee (PLACEHOLDER).",
+        "foundation_share_of_distribution": 0.1,
+        "foundation_share_note": "ASSUMPTION: 10 percent is a placeholder for Dalaun's own choice. The trust pays it as a 642(c)(1) set-aside; counsel-queue.md Q15 asks a CPA how that is taxed and whether it makes the trust a 4947(a)(2) split-interest trust (see also Q9). Everything else is steward_r2."
+      },
+      "foundation": {
+        "exists": true,
+        "assets": 0,
+        "net_investment_income": 0
+      },
+      "management_fee_flow": "contract_benchmark_records_paid",
+      "facts": {
+        "personal_lines_deducted": 0,
+        "residence_or_furnishings_depreciated": false,
+        "stepped_up_basis_claimed_on_transfer": null,
+        "se_or_payroll_tax_reduction_claimed": false,
+        "purpose_includes_irs_false_claim": false,
+        "has_trust": true,
+        "founder_controls_trust": false,
+        "trust_reported_as": "separate",
+        "trust_payment_tools_outside_trustee": null,
+        "trust_transactions_follow_terms": null,
+        "founder_relationship_to_trust_property_unchanged": false,
+        "founder_runs_trust_owned_business_day_to_day": false,
+        "related_party_flows": [
+          {
+            "at_market": true,
+            "documented": true,
+            "service_or_use_real": true,
+            "paid": true
+          }
+        ],
+        "income_lands_with_who_earned_it": null,
+        "chain_layers_without_own_activity": 0,
+        "business_run_by_entity_filing_as_trust": false,
+        "has_charity": true,
+        "charity_exempt_or_application_filed": null,
+        "charity_pays_family_costs": false,
+        "foreign_trust_unreported": null,
+        "transfers_reported_inconsistently": null,
+        "retained_use_assumed_outside_estate": null,
+        "trustee_related_or_subordinate": null,
+        "trustee_signs_whatever_founder_sends": null,
+        "trustee_decision_log_with_declines": null
+      },
+      "facts_basis": "AS DESIGNED, copied from flat_independent; only the trustee terms differ. Here the founder is a trustee for administration, but the distribution decisions sit with an independent trustee who is not him and not related or subordinate (IRC 672(c), 674(c))."
     }
   },
   "spend_check_map": {

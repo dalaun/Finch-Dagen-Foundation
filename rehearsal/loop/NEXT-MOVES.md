@@ -129,6 +129,23 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the beneficiaries have the BLS second-fifth average other income (46,080) and file single; see counsel-queue.md Q14
 
+### 8. structure: How would the Family Trust hold the asset, and which checks does that need on documents?
+
+- Key: `asset-holding-c2`
+- Step: C2
+- Opened: 2026-11-24
+- For: lawyer, then CPA
+- Why it matters: on today's synthetic numbers the base-case structure costs 6,015 a year, and the `asset_sized` scenario (a generic asset netting 150,000 a year, ASSUMPTION per move 4) is the first where `steward_r2` and `steward_r3` beat the status quo (structure value +66 a year, score vs A +1,592; 8 of 17 checks pass, none red). The other 9 are amber until documents exist. Holding design the rehearsal assumes: the Family Trust owns an LLC, and the LLC owns the asset (a rental building, or a bought business with a hired manager), as `07-structure-integrity-checks.md` already recommends (its case SK2 against SK1, where a trust running the business fails S1, S5 and S12). Checks this design needs on documents, taken from the definitions in `07-structure-integrity-checks.md` and the amber list in `SCORECARD.md`:
+  - S5 and S12: the asset sits in an LLC that files as a business, not as a trust, and anyone who works in it is paid market wages. Documents: the LLC's operating agreement and its tax classification, wage records.
+  - S9: each contract, lease or invoice is in the LLC's name. Documents: the leases or customer contracts and invoices.
+  - S6 and S7: the LLC deducts no personal or family cost and depreciates no family residence. Documents: the LLC's books and depreciation schedule.
+  - S3 and S4: payment tools on the trust's and LLC's accounts are in the trustee's hands only, and trust transactions follow the instrument. Documents: bank signer cards, trustee minutes.
+  - S2: the trustee applies the instrument. Documents: a decision log showing at least one request declined or modified.
+  - Not read in this run: any primary source on single-member LLC tax classification (Treas. Reg. 301.7701-3) or on LLC ownership by a trust; the design above is the repo's own, not a cited legal reading.
+- The one thing for Dalaun: ask his lawyer, "If the Family Trust owns an LLC and the LLC owns the income-producing asset, what must be in the trust instrument, the operating agreement and the trustee's records so that checks S2 to S9 and S12 pass on documents, and does the founder as an R2 or R3 trustee being the LLC's manager cause a problem?"
+- Status: open
+- Working assumption: the Family Trust owns 100 percent of one LLC per asset, the LLC is the contracting and banking entity, and the founder is its manager paid market wages as an employee; see counsel-queue.md Q16
+
 ## Closed
 
 (none yet)

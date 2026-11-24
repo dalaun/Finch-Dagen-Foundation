@@ -406,7 +406,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
 
     w = stack.get("legacy_weight_w", 0.0)
     out_versions = {}
-    for vid in versions or [sc.get("stack_version", "today"), "flat", "flat_independent", "steward_r2", "steward_r3"]:
+    for vid in versions or [sc.get("stack_version", "today"), "flat", "flat_independent", "steward_r2", "steward_r3", "steward_r2_pipeline"]:
         if vid in out_versions:
             continue
         v = stack["versions"][vid]
@@ -455,13 +455,14 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         else:
             program = 0.05 * f["assets"] if f["exists"] else 0.0
             program_source = "fixed_assets"
-        cost_b = fb["total"] + bene_tax + trust_tax_paid + fee
+        # The set-aside leaves the family's money (w, not this line, values what it does at the Foundation).
+        cost_b = fb["total"] + bene_tax + trust_tax_paid + fee + to_foundation
         score = cost_a - cost_b + w * program
         value = score - score_ops
         red = [k for k, x in checks.items() if x == "fail"]
         amber = [k for k, x in checks.items() if x == "amber"]
         out_versions[vid] = {
-            "label": v["label"], "fees": round(fee), "taxes": round(cost_b - fee), "program_output": round(program),
+            "label": v["label"], "fees": round(fee), "taxes": round(cost_b - fee - to_foundation), "program_output": round(program),
             "program_source": program_source, "to_foundation": round(to_foundation),
             "score_vs_A": round(score), "structure_value": round(value), "structure_gap": round(max(0.0, -value)),
             "checks_pass": sum(1 for x in checks.values() if x == "pass"), "checks_amber": amber, "checks_red": red,
@@ -595,6 +596,10 @@ def selftest() -> int:
     # so the share moves no income from the trust's retained side: its tax equals the no-share value.
     ok(pipeline(40000.0)["trust_tax"] == run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]["trust_tax"],
        "pipeline: the Foundation's share does not change the trust's retained income or its tax")
+    # R7: money sent to the Foundation is paid out of the family's pocket, so it lowers the score by that amount (w = 0).
+    base_p = run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]
+    ok(lo_p["score_vs_A"] < base_p["score_vs_A"] and base_p["score_vs_A"] - lo_p["score_vs_A"] <= lo_p["to_foundation"],
+       "pipeline: the set-aside costs the family money, so the score falls, by no more than the gift (the beneficiaries' tax falls a little)")
     # A scenario may fix its trustee kind; break_even must still be free to vary it.
     sc_t = dict(sc_p, trustee_kind="individual")
     fee_ind = run_year(sc_t, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]

@@ -173,3 +173,27 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own figures. In a scratch run with 78,584 (third-fifth average) break-even with an unrelated individual trustee, base year, went from 149,500 to 198,000.
 - If counsel says otherwise: break-even, and so the asset size, moves with the beneficiaries' brackets (about 32 percent for the third-fifth figure). A beneficiary in a high bracket could make the trust's retained-income bracket compare differently.
 - Status: assumed, awaiting counsel
+
+## Q15. How is a 10 percent set-aside to the foundation taxed, and does it make the trust a split-interest trust?
+
+- Key: `pipeline-set-aside`
+- Raised by: backlog item R7; stack version `steward_r2_pipeline`
+- For: CPA, then lawyer
+- Question: If the Family Trust pays 10 percent of its distribution to the foundation as a set-aside deduction under 642(c)(1), how is that taxed to the trust and the beneficiaries, and does it make the trust a 4947(a)(2) split-interest trust? (See Q9 for the self-dealing side.)
+- ASSUMPTION: The 10 percent share is a placeholder for Dalaun's own choice. The trust pays it from gross income and deducts it in full; the beneficiaries are taxed only on the other 90 percent of the distribution; the trust is treated as split-interest (Q9). The rehearsal's engine does not apply the 642(c) percentage limits or the 4942 distribution rules to this flow.
+- Primary cite: IRC 642(c)(1), https://www.law.cornell.edu/uscode/text/26/642 and IRC 4947(a)(2), https://www.law.cornell.edu/uscode/text/26/4947 (neither read by the run that wrote this entry).
+- What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own notes.
+- If counsel says otherwise: if the set-aside is not deductible as modeled, or the share must be a different amount, the program output and the trust's and beneficiaries' tax change, and the split-interest rules may require a separate charitable trust.
+- Status: assumed, awaiting counsel
+
+## Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?
+
+- Key: `asset-holding-c2`
+- Raised by: NEXT-MOVES.md move 8
+- For: lawyer, then CPA
+- Question: If the Family Trust owns an LLC and the LLC owns the income-producing asset, what must be in the trust instrument, the operating agreement and the trustee's records so checks S2 to S9 and S12 pass on documents, and does the founder, as an R2 or R3 trustee, also managing the LLC cause a problem?
+- ASSUMPTION: The Family Trust owns 100 percent of one LLC per asset; the LLC contracts, banks and files as a business; the founder is its manager paid market wages as an employee. This follows `07-structure-integrity-checks.md` (SK2 against SK1).
+- Primary cite: none. No primary source was read for this entry (Treas. Reg. 301.7701-3 on LLC classification would be the first to read).
+- What the text says (as read, not a conclusion): nothing was read. The repo's own check definitions are the only basis.
+- If counsel says otherwise: the holding design, the fees in stack.json and which checks stay amber would change; break-even could rise if extra entities or filings are needed.
+- Status: assumed, awaiting counsel
