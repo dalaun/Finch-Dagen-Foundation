@@ -146,6 +146,17 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the Family Trust owns 100 percent of one LLC per asset, the LLC is the contracting and banking entity, and the founder is its manager paid market wages as an employee; see counsel-queue.md Q16
 
+### 9. asset: How big must the asset be if 10 percent of the trust's income goes to the Foundation?
+
+- Key: `asset-size-pipeline`
+- Step: B1
+- Opened: 2026-11-24
+- For: CPA or appraiser
+- Why it matters: the Foundation's program money must come from the asset's income (scorecard SC5), and with w = 0 that 10 percent share is money out of the family. In the `asset_sized` scenario (150,000 a year of asset income) `steward_r2_pipeline` loses 10,891 a year against doing nothing. The engine's break-even for route R2 with a 10 percent Foundation share and an unrelated individual trustee, on the base year, is 343,600 a year of net asset income (337,300 lean). Rounded up to the next 10,000 that is 350,000, and the new scenario `asset_sized_pipeline` holds exactly that. There the pipeline version's structure value is +395 a year (score vs A +2,029), so SC5 passes by construction at break-even, not because anything was tuned. Compared with `asset_sized`: 200,000 more yearly asset income, and at the assumed 0.07 yield (stack.json, an ASSUMPTION, no public yield read) an asset of about 5,000,000 against about 2,142,900, roughly 2,857,100 more. Caution: the engine's search assumes the value rises steadily with income, and for this version it wobbles (in the base year it is +812 at 500,000 a year and -2,421 at 700,000), so 343,600 is the first crossing, not a guaranteed floor. The same search run on `asset_sized`, which already holds 150,000, gives 727,300 extra, which is that wobble and should not be read as a size. With the other two trustee paths (professional trustee) no break-even exists up to 1,000,000.
+- The one thing for Dalaun: decide whether a 10 percent Foundation share is worth an asset of roughly 5 million instead of 2.1 million, or ask his CPA, "What share of the trust's income should go to the foundation, given that each 10 percent needs this much more asset?"
+- Status: open
+- Working assumption: the asset nets 350,000 a year, the base-case break-even of the pipeline version rounded up; see counsel-queue.md Q17
+
 ## Closed
 
 (none yet)

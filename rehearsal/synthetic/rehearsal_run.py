@@ -676,6 +676,7 @@ def main(argv=None):
             "route R2 independent distribution trustee, unrelated individual": break_even(sc, rows, stack, grader, "steward_r2", "individual"),
             "route R3 fixed shares, professional": break_even(sc, rows, stack, grader, "steward_r3", "professional"),
             "route R3 fixed shares, unrelated individual": break_even(sc, rows, stack, grader, "steward_r3", "individual"),
+            "route R2 with a 10 percent Foundation share, unrelated individual": break_even(sc, rows, stack, grader, "steward_r2_pipeline", "individual"),
         }
         results.append(r)
     print(report(results))
