@@ -119,6 +119,16 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the trust is written under Illinois law with the trustee named per move 3, gets its own EIN and its own account, and the asset is bought only after those exist; see counsel-queue.md Q13
 
+### 7. question: What other income will the two adult beneficiaries have, so their own tax brackets are known?
+
+- Key: `beneficiary-income`
+- Opened: 2026-11-24
+- For: Dalaun (his own family facts), then CPA
+- Why it matters: the engine taxes the Family Trust's distributions to the two adult beneficiaries at their own rates (IRC 652(a), 662(a)) on top of "other income" it assumes for each: 46,080 a year, the BLS second-income-fifth average (stack.json `beneficiary_other_income`). In a scratch run (not committed) that assumed 78,584 instead (the BLS third-fifth average), break-even with an unrelated individual trustee on the base year rose from 149,500 to 198,000 a year, about 32 percent, because the beneficiaries' higher brackets eat more of the trust's income. The tax-rule side was not re-read in this run; the two income figures are from benchmarks-ce.json (BLS CE, https://www.bls.gov/news.release/cesan.nr0.htm, not re-fetched in this run).
+- The one thing for Dalaun: say roughly what range of other yearly income the two adult beneficiaries are likely to have (under about 50,000, about 50,000 to 80,000, or over 80,000), or ask his CPA, "At what income level do the beneficiaries' own brackets make a trust distribution cost more tax than it saves?" Answer with a range only, never real pay in this public repo.
+- Status: open
+- Working assumption: the beneficiaries have the BLS second-fifth average other income (46,080) and file single; see counsel-queue.md Q14
+
 ## Closed
 
 (none yet)
