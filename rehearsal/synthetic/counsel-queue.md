@@ -161,3 +161,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): only the IRS EIN statement above. The page does not say how grantor status affects the exception.
 - If counsel says otherwise: extra setup steps and fees (placeholders in stack.json) could be added to the structure cost, raising break-even.
 - Status: assumed, awaiting counsel
+
+## Q14. What other income will the two adult beneficiaries have, so their own tax brackets are known?
+
+- Key: `beneficiary-income`
+- Raised by: NEXT-MOVES.md move 7
+- For: Dalaun, then CPA
+- Question: Roughly what other yearly income will the two adult beneficiaries have, and at what level does a trust distribution to them cost more tax than it saves?
+- ASSUMPTION: Each adult beneficiary has 46,080 a year of other income (BLS CE second-income-fifth average, `ce_us_quintiles_2025.second_quintile_income` in benchmarks-ce.json) and files single (`beneficiary_filing_status`).
+- Primary cite: BLS Consumer Expenditures, https://www.bls.gov/news.release/cesan.nr0.htm (figure taken from benchmarks-ce.json; not re-fetched in this run). IRC 652(a) and 662(a) (beneficiaries taxed on distributed income) are the rules the engine applies; not re-read in this run.
+- What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own figures. In a scratch run with 78,584 (third-fifth average) break-even with an unrelated individual trustee, base year, went from 149,500 to 198,000.
+- If counsel says otherwise: break-even, and so the asset size, moves with the beneficiaries' brackets (about 32 percent for the third-fifth figure). A beneficiary in a high bracket could make the trust's retained-income bracket compare differently.
+- Status: assumed, awaiting counsel

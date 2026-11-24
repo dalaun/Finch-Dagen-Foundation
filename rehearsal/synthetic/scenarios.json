@@ -91,6 +91,19 @@
         {"id": "biz_interest", "label": "loan interest, SBA 7(a) on 90% of the median price at 10.5% (first-year interest, placeholder rate)", "domain": "A1", "annual": 24424, "scaled": false, "per_month": 1, "cv": 0.0, "day": 5, "payer": "asset", "payee": "lender"},
         {"id": "biz_principal", "label": "loan principal, first year (not deductible)", "domain": "A2", "annual": 14280, "scaled": false, "per_month": 1, "cv": 0.0, "day": 5, "payer": "asset", "payee": "lender"}
       ]
+    },
+    {
+      "id": "asset_sized",
+      "label": "Asset, sized: base, plus a generic held asset netting 150,000 a year (ASSUMPTION: NEXT-MOVES move 4 working assumption, the base-case unrelated-individual-trustee break-even 149,500 rounded up; see counsel-queue.md Q11 and backlog item 14), held by the Family Trust in Arm B, with an unrelated individual as trustee (ASSUMPTION, same pointers)",
+      "seed": 20261126,
+      "spending_scale": 1.0,
+      "evidence_rate": 0.8,
+      "stack_version": "flat",
+      "asset": {"kind": "generic", "holder_in_b": "family_trust"},
+      "trustee_kind": "individual",
+      "extra_lines": [
+        {"id": "asset_net_income", "label": "net income of the generic held asset (ASSUMPTION: 150,000 from move 4, counsel-queue.md Q11; set from move 4 only, never adjusted to make a version pass)", "domain": "I4", "direction": "credit", "annual": 150000, "scaled": false, "per_month": 1, "cv": 0.0, "day": 1, "payer": "customers", "payee": "asset"}
+      ]
     }
   ]
 }
