@@ -57,6 +57,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -123,8 +124,17 @@ def api(path: str, method: str = "GET", body: dict | None = None):
         "X-GitHub-Api-Version": "2022-11-28",
         "User-Agent": "verifier-pass",
     })
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:  # say which call failed and what GitHub says it needs
+        try:
+            msg = json.loads(e.read() or b"{}").get("message", "")
+        except Exception:
+            msg = ""
+        need = e.headers.get("X-Accepted-GitHub-Permissions", "") if e.headers is not None else ""
+        raise RuntimeError(f"{method} {path.split('?')[0]}: HTTP {e.code} {msg}".rstrip()
+                           + (f" (GitHub says this call needs: {need})" if need else "")) from None
 
 
 def pr_state(repo: str, number: int) -> tuple:
@@ -177,10 +187,18 @@ def post(repo: str, number: int, sha: str, login: str, verdict: str, note: str,
     desc = f"{verdict} {head[:12]} by {login}: {note or 'reran the checks, ran it, read the diff'}"[:140]
     api(f"/repos/{repo}/statuses/{head}", "POST",
         {"state": VERDICTS[verdict], "context": CONTEXT, "description": desc})
-    api(f"/repos/{repo}/issues/{number}/comments", "POST",
-        {"body": f"**{CONTEXT}: {verdict}** on `{head}` by {login}"
-                 + (f", asked by {asked_by}" if asked_by else "") + "\n\n" + report})
     print("posted  " + desc)
+    try:
+        api(f"/repos/{repo}/issues/{number}/comments", "POST",
+            {"body": f"**{CONTEXT}: {verdict}** on `{head}` by {login}"
+                     + (f", asked by {asked_by}" if asked_by else "") + "\n\n" + report})
+    except RuntimeError as e:
+        print(f"::error title=Report comment not posted::{e}. The verdict status above did post. "
+              "If this is HTTP 403, the verifier app lacks a permission: on GitHub, Settings > Developer "
+              "settings > GitHub Apps > dalaun-finchdagen-verifier > Permissions, set Pull requests to "
+              "Read and write, save, then accept the update on the app's installation page.")
+        return 1
+    print("report  posted on the pull request")
     return 0
 
 

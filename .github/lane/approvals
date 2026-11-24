@@ -1,0 +1,37 @@
+# Approvals policy: who approves what in this repository (read by lane_guard.py).
+# Dalaun's lane: only he changes this file, so no agent pull request can widen it.
+#
+# Analogy: CODEOWNERS says whose desk a file sits on. This file is the office
+# rulebook: which desks the staff may finish work on by themselves (agent lane:
+# merges itself once lane-guard, keystone and a Verifier pass are green), which
+# need the owner's signature (owner: waits for Dalaun), and which pages may only
+# ever get longer (append-only, grows-only).
+#
+# One rule a line:   <rule>  <path>  <part>
+#
+#   rule   agent        the path is in the agent lane
+#          owner        the path is in Dalaun's lane (every path is, unless an agent line takes it out)
+#          append-only  the file may only gain lines at its end (history is never rewritten)
+#          grows-only   the file, or one top-level function of it (<part>), may only gain lines:
+#                       an agent may add a check, never change or remove one
+#   path   "/dir/" for a folder, "/path/file" for one file (no wildcards)
+#   part   a function name for grows-only, "-" otherwise
+#
+# For agent and owner lines the last matching line wins (GitHub's CODEOWNERS rule).
+# append-only and grows-only lines add a condition to an agent-lane file; they
+# never move a file into the agent lane.
+#
+# The agent and owner lines must match .github/CODEOWNERS line for line, or the
+# lane guard's own cases fail and every pull request waits for Dalaun.
+
+agent        /rehearsal/loop/BACKLOG.md                         -
+agent        /rehearsal/loop/score-ledger.csv                   -
+agent        /rehearsal/loop/NEXT-MOVES.md                      -
+agent        /rehearsal/synthetic/                              -
+owner        /rehearsal/synthetic/structure-cases-facts.json    -
+append-only  /rehearsal/loop/score-ledger.csv                   -
+grows-only   /rehearsal/synthetic/rehearsal_run.py              selftest
+grows-only   /rehearsal/synthetic/synthetic_year.py             main
+# Added 2026-11-24: the non-grantor check's own cases. An agent may add a case,
+# never loosen or remove one (that change waits for Dalaun).
+grows-only   /rehearsal/synthetic/grantor_check.py              selftest

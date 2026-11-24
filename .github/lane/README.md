@@ -1,6 +1,8 @@
 # Two lanes into main
 
-**Agent lane** (merges itself): a pull request whose every file has no owner in [../CODEOWNERS](../CODEOWNERS). Today that is the rehearsal loop's own work: `rehearsal/loop/BACKLOG.md`, `rehearsal/loop/score-ledger.csv` and `rehearsal/synthetic/` (the seeded synthetic year, its public benchmarks and the engine), except the answer-key facts.
+**The rulebook** is one file, [approvals](approvals) (his lane): which paths ride the agent lane, which wait for him, and which may only grow. Its agent and owner lines must match [../CODEOWNERS](../CODEOWNERS) line for line, or the lane guard's own cases fail and everything waits for him.
+
+**Agent lane** (merges itself): a pull request whose every file is an agent path in [approvals](approvals). Today that is the rehearsal loop's own work: `rehearsal/loop/BACKLOG.md`, `rehearsal/loop/score-ledger.csv` and `rehearsal/synthetic/` (the seeded synthetic year, its public benchmarks and the engine), except the answer-key facts.
 
 **Dalaun's lane** (waits for him): every other file. That includes every check (validators, `tests/`, the pinned rehearsal checks, the lane guard), `rehearsal/loop/GOAL.md`, the ontology and shapes, `.github/` (workflows, CODEOWNERS), docs, and anything about real entities or trust documents. A new file anywhere is his lane until CODEOWNERS says otherwise.
 
@@ -29,7 +31,7 @@ Green checks and a bot review are not a verdict (Lauren Tan's rule, from the not
 
 An agent that could edit its own checks could make anything pass. So the agent lane holds the work and Dalaun's lane holds everything that judges the work:
 
-- **Checks inside agent files only grow:** `selftest()` in `rehearsal_run.py` and `main()` (with `--check`) in `synthetic_year.py` are check code inside the agent lane. The lane guard lets an agent add lines there, but changing or removing any existing line is his lane. Adding a stricter check rides the lane; loosening one waits for him.
+- **Checks inside agent files only grow:** `selftest()` in `rehearsal_run.py`, `main()` (with `--check`) in `synthetic_year.py` and `selftest()` in `grantor_check.py` (the non-grantor check's own cases, added 2026-11-24) are check code inside the agent lane, each a `grows-only` line in [approvals](approvals). The lane guard lets an agent add lines there, but changing or removing any existing line is his lane. Adding a stricter check rides the lane; loosening one waits for him.
 - **The pinned checks** (`tests/rehearsal/pinned_checks.py`) are the floor: 2026 tax figures from Rev. Proc. 2025-32, the structure answer key SK1-SK14, name invariance, and w = 0. The engine's own selftest can grow; the floor moves only with his review.
 - **The ledger check** (`tests/rehearsal/check_ledger.py`): the newest ledger rows must be exactly what this commit's engine computes, so a score cannot be typed in. The lane guard adds that earlier rows are never rewritten.
 - **The guard runs from main**, so a pull request cannot change the rules it is judged by.
@@ -43,6 +45,6 @@ Agent sessions that push as Dalaun's GitHub account are admins, so GitHub cannot
 
 1. **Settings → General → Pull Requests:** tick **Allow auto-merge**.
 2. **Settings → Rules → Rulesets → main: owner merges:** untick **Restrict updates**; tick **Require status checks to pass** and add `lane-guard`, `keystone` and `Verifier pass`. For `Verifier pass`, set its source to the `dalaun-finchdagen-verifier` app, so a status from any other login can't satisfy it. Keep the Repository admin bypass.
-3. **Settings → Environments → New environment `verifier`:** limit deployment branches to `main`; add variable `VERIFIER_APP_ID` and secret `VERIFIER_APP_KEY` for the verifier app `dalaun-finchdagen-verifier` (not the foundation badge), installed on this repository only, with **Commit statuses**, **Pull requests** and **Issues: read and write** and nothing else (GitHub posts a pull request comment through its issues API, so the report comment needs Issues). Its bot login, `dalaun-finchdagen-verifier[bot]`, is the one line in [verifiers](verifiers).
+3. **Settings → Environments → New environment `verifier`:** limit deployment branches to `main`; add variable `VERIFIER_APP_ID` and secret `VERIFIER_APP_KEY` for the verifier app `dalaun-finchdagen-verifier` (not the foundation badge), installed on this repository only, with **Commit statuses**, **Pull requests** and **Issues: read and write** and nothing else (GitHub posts a pull request comment through its issues API, so the report comment needs Issues; on runs of 2026-11-24 the comment still failed with HTTP 403 while the status posted, which points to Pull requests missing from the installation. The script now prints the permission GitHub asks for. After changing a permission, accept the update on the app's installation page). Its bot login, `dalaun-finchdagen-verifier[bot]`, is the one line in [verifiers](verifiers).
 
 Undo: reverse either step. With auto-merge off, nothing merges itself and every pull request waits for him again.
