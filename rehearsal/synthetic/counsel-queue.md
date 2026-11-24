@@ -197,3 +197,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read. The repo's own check definitions are the only basis.
 - If counsel says otherwise: the holding design, the fees in stack.json and which checks stay amber would change; break-even could rise if extra entities or filings are needed.
 - Status: assumed, awaiting counsel
+
+## Q17. How big must the asset be to fund a 10 percent Foundation share and still beat doing nothing?
+
+- Key: `asset-size-pipeline`
+- Raised by: NEXT-MOVES.md move 9; backlog item R8
+- For: CPA or appraiser
+- Question: If 10 percent of the Family Trust's distribution goes to the foundation (see Q15), what yearly net asset income, and so what asset size, makes the structure pay for itself, and is the share worth that size?
+- ASSUMPTION: The asset nets 350,000 a year, the engine's base-case break-even for `steward_r2_pipeline` with an unrelated individual trustee (343,600) rounded up to the next 10,000. At the assumed 0.07 yield (stack.json, not a market rate) that is an asset of about 5,000,000. Set from the break-even only, never adjusted to make a version pass.
+- Primary cite: none new. The tax rules are those of Q15 (IRC 642(c)(1), 4947(a)(2)), not read in this run.
+- What the text says (as read, not a conclusion): nothing was read in this run.
+- If counsel says otherwise: a different share, a different set-aside treatment (Q15) or different beneficiary brackets (Q14) moves the break-even, and the engine's search for it is not monotone for this version, so its figure is a first crossing.
+- Status: assumed, awaiting counsel
