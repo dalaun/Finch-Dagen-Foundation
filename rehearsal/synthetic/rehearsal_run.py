@@ -437,7 +437,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
                 # beneficiaries are taxed on the rest. It makes the trust a 4947(a)(2) split-interest trust.
                 to_foundation = max(dist * share, 0.0)
             dist_taxed = dist - to_foundation
-            retained = asset_net - dist - to_foundation
+            retained = asset_net - dist
             trust_tax_paid = trust_tax(retained, retained * asset_nii_share)
             share_each = dist_taxed / n_bene
             q_each = asset_qbi * A["trust_distributes_share_of_dni"] / n_bene
@@ -588,6 +588,10 @@ def selftest() -> int:
     ok(hi_p["program_output"] > lo_p["program_output"], "pipeline: a larger asset income gives a larger program output")
     ok(run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]["program_source"] == "fixed_assets",
        "pipeline: with no share the program output stays the fixed 5 percent of Foundation assets")
+    # The trust's deduction is the whole distribution (661 for the beneficiaries, 642(c)(1) for the Foundation),
+    # so the share moves no income from the trust's retained side: its tax equals the no-share value.
+    ok(pipeline(40000.0)["trust_tax"] == run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]["trust_tax"],
+       "pipeline: the Foundation's share does not change the trust's retained income or its tax")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 
