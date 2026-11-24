@@ -1,6 +1,8 @@
 # Two lanes into main
 
-**Agent lane** (merges itself): a pull request whose every file has no owner in [../CODEOWNERS](../CODEOWNERS). Today that is the rehearsal loop's own work: `rehearsal/loop/BACKLOG.md`, `rehearsal/loop/score-ledger.csv` and `rehearsal/synthetic/` (the seeded synthetic year, its public benchmarks and the engine), except the answer-key facts.
+**The rulebook:** [approvals](approvals) (his lane) is the one file that says who approves what: which paths are the agent lane, which are his, which files may only gain lines, and whether each rule is enforced or only observed. [../CODEOWNERS](../CODEOWNERS) shows the same lane to GitHub; the guard checks the two match.
+
+**Agent lane** (merges itself): a pull request whose every file is an agent path in [approvals](approvals). Today that is the rehearsal loop's own work: `rehearsal/loop/BACKLOG.md`, `rehearsal/loop/score-ledger.csv` and `rehearsal/synthetic/` (the seeded synthetic year, its public benchmarks and the engine), except the answer-key facts.
 
 **Dalaun's lane** (waits for him): every other file. That includes every check (validators, `tests/`, the pinned rehearsal checks, the lane guard), `rehearsal/loop/GOAL.md`, the ontology and shapes, `.github/` (workflows, CODEOWNERS), docs, and anything about real entities or trust documents. A new file anywhere is his lane until CODEOWNERS says otherwise.
 
@@ -25,6 +27,20 @@ Green checks and a bot review are not a verdict (Lauren Tan's rule, from the not
 - **After the fact:** [lane-audit](../workflows/lane-audit.yml) runs daily (a github-actions merge starts no push workflow) and goes red if any merge not made by Dalaun lacked a valid pass. Red means: open a revert pull request for him.
 - **Who verifies whom:** the foundation badge (`dalaun-finchdagen-claude[bot]`) writes the rehearsal loop's pull requests; the verifier app (`dalaun-finchdagen-verifier`, a different GitHub App) only posts verdicts and never writes code. One cheap pass per head is enough; a fresh full run only for new behavior.
 
+## Observe first, then enforce
+
+A new rule goes into [approvals](approvals) as `observe`. The lane guard works it out on every pull request and only reports: a line in the step summary, a notice on the check, and one comment on the pull request ("Lane guard, observe-only") when the answer would differ from today's. Nothing waits on an observe rule. Once the comments show the rule catches what it should and nothing it shouldn't, Dalaun switches it on: `observe` becomes `enforce` in approvals and the same path goes into CODEOWNERS, in one pull request that he merges.
+
+Observed since 2026-11-24: the goal scorecard (`scorecard.py`) and the grantor check (`grantor_check.py`) to his lane, and `SCORECARD.md` and `grantor-routes.json` to grows-only. Replayed on the merged pull requests, they would have sent #26, #39 and #47 to him.
+
+## The stop word
+
+A line that is only `@finchdagen-claude stop`, in Dalaun's comment on a pull request or on the issue it closes, halts that pull request: the lane guard puts it in his lane on its next run (every push), the verifier refuses a pass, and the badge answers "Stopped" ([CLAUDE.md](../../CLAUDE.md)). `@finchdagen-claude go` lifts it; his newest word wins; nobody else's counts. Limit: a pull request that already holds a pass merges seconds after its last check, so a stop after that is too late for it (use the Revert button). Cancelling a run that is already working, and turning auto-merge off the moment the stop is written, need a workflow that listens to comments, which only Dalaun can add (the badge cannot edit workflows, by design).
+
+## Ranked findings and the fix log
+
+A verifier report may rank each finding on its own line: `Important:` (blocks; the three FAIL reasons), `Nit:` (worth doing, doesn't block) or `Pre-existing:` (already wrong on main). The verifier script refuses a verdict that disagrees with the ranks (FAIL with no Important, a pass with an Important, PASS with a Nit). The report comment shows the ranked findings first, then the report, then a fix log: every commit, who wrote it and how to undo it. The badge also writes each fix commit with What changed, Why and Rollback lines ([CLAUDE.md](../../CLAUDE.md)).
+
 ## Why the line sits where it does
 
 An agent that could edit its own checks could make anything pass. So the agent lane holds the work and Dalaun's lane holds everything that judges the work:
@@ -43,6 +59,6 @@ Agent sessions that push as Dalaun's GitHub account are admins, so GitHub cannot
 
 1. **Settings → General → Pull Requests:** tick **Allow auto-merge**.
 2. **Settings → Rules → Rulesets → main: owner merges:** untick **Restrict updates**; tick **Require status checks to pass** and add `lane-guard`, `keystone` and `Verifier pass`. For `Verifier pass`, set its source to the `dalaun-finchdagen-verifier` app, so a status from any other login can't satisfy it. Keep the Repository admin bypass.
-3. **Settings → Environments → New environment `verifier`:** limit deployment branches to `main`; add variable `VERIFIER_APP_ID` and secret `VERIFIER_APP_KEY` for the verifier app `dalaun-finchdagen-verifier` (not the foundation badge), installed on this repository only, with **Commit statuses**, **Pull requests** and **Issues: read and write** and nothing else (GitHub posts a pull request comment through its issues API, so the report comment needs Issues). Its bot login, `dalaun-finchdagen-verifier[bot]`, is the one line in [verifiers](verifiers).
+3. **Settings → Environments → New environment `verifier`:** limit deployment branches to `main`; add variable `VERIFIER_APP_ID` and secret `VERIFIER_APP_KEY` for the verifier app `dalaun-finchdagen-verifier` (not the foundation badge), installed on this repository only, with **Commit statuses**, **Pull requests** and **Issues: read and write** and nothing else. The report comment goes through the issues API, and every report comment got HTTP 403 (runs 11 to 15, 2026-11-24) while the installation held Issues but, as far as we know, not Pull requests; the script now prints the permission GitHub asks for, so the next failure names its own cause. After changing a permission, accept the update on the app's installation page, or it doesn't take effect. Its bot login, `dalaun-finchdagen-verifier[bot]`, is the one line in [verifiers](verifiers).
 
 Undo: reverse either step. With auto-merge off, nothing merges itself and every pull request waits for him again.
