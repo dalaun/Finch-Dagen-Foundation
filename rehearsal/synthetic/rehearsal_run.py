@@ -555,6 +555,7 @@ def selftest() -> int:
     # grantor flag must match what its modeled terms derive (grantor_check.py).
     import grantor_check
     ok(grantor_check.selftest() == 0, "grantor trust check: its own cases, the stack's flags and the design routes")
+    ok(__import__("scorecard").selftest() == 0, "goal scorecard: a passing and a failing fixture for each criterion")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 
