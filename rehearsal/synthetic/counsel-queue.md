@@ -1,0 +1,127 @@
+# Counsel queue
+
+[Back to the rehearsal](README.md)
+
+**SYNTHETIC.** Questions the rehearsal could not answer on its own. Each runs on a stated assumption so the loop never waits. Nothing here is a legal conclusion; it is design and education, not legal or tax advice. Every status is `assumed, awaiting counsel` until Dalaun records an answer.
+
+Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../loop/NEXT-MOVES.md) point here with a `Working assumption:` line, and `scorecard.py` (SC2, SC7) finds an entry by its question text or by the move's key. Ids are never reused.
+
+## Q1. Do the rentals, and a bought business run by a hired manager, count as passive?
+
+- Key: `passive-469`
+- Raised by: NEXT-MOVES.md move 1
+- For: CPA
+- Question: Would my rental income, and a business I buy and run through a hired manager, be passive activities for me under section 469, and could I qualify as a real estate professional?
+- ASSUMPTION: The rehearsal treats the rentals and a business run by a hired manager as passive activities under IRC 469, so the 3.8 percent net investment income tax (IRC 1411) applies to that income.
+- Primary cite: IRC 469(c)(7)(B) and 469(h)(1), https://www.law.cornell.edu/uscode/text/26/469 (read).
+- What the text says (as read, not a conclusion): Section 469(h)(1) is read as asking whether the taxpayer is involved in the operations of the activity on a regular, continuous and substantial basis; 469(c)(7)(B) is read as asking for more than half of personal services in real property trades or businesses in which he materially participates and more than 750 hours in the year. Whether his facts meet either is for the CPA.
+- If counsel says otherwise: If counsel says the income is nonpassive, the 3.8 percent tax comes off that income and break-even with an unrelated individual trustee rises from about 149,500 back toward about 178,500 a year (move 1's figures). The engine's passive flag would change in scenarios.json and benchmarks-tax.json.
+- Status: assumed, awaiting counsel
+
+## Q2. Will the Family Trust pay out all of its income each year, or keep part of it?
+
+- Key: `trust-distributes-dni`
+- Raised by: NEXT-MOVES.md move 2
+- For: lawyer, then CPA
+- Question: Should the Family Trust be written to require distributing its income each year, or leave it to the trustee's discretion, and what does each do to who pays the tax?
+- ASSUMPTION: The rehearsal runs on the trust distributing 100 percent of its distributable net income to the two adult beneficiaries, who are taxed at their own brackets.
+- Primary cite: IRC 643(a) (distributable net income), https://www.law.cornell.edu/uscode/text/26/643 (read).
+- What the text says (as read, not a conclusion): Section 643(a) is read as defining distributable net income as the trust's taxable income with listed modifications; how much of it goes out each year is set by the instrument (mandatory or discretionary), which is for the lawyer, and the tax result is for the CPA.
+- If counsel says otherwise: If the instrument leaves payout to discretion and the trustee keeps part, retained income is taxed at trust brackets. A scratch run at 50 percent distributed roughly doubled break-even, from about 148,000 to about 313,000 a year. The engine's distribution share would change.
+- Status: assumed, awaiting counsel
+
+## Q3. Keep the Family Trust non-grantor while he stays its steward
+
+- Key: `non-grantor-steward`
+- Raised by: NEXT-MOVES.md move 3
+- For: lawyer, then CPA
+- Question: Can the Family Trust be written so I am trustee for investments and administration, while either an independent co-trustee makes distribution decisions or income is paid in fixed shares with principal limited to health, education, support and maintenance? Which keeps it a non-grantor trust with the least risk?
+- ASSUMPTION: The rehearsal runs on route R2 or R3 in grantor-routes.json passing grantor_check.py, so the Family Trust is its own taxpayer. Sole-trustee discretion (R1) is treated as a grantor trust under 674(a).
+- Primary cite: IRC 674(a), 674(b)(5)(A) and 674(c), https://www.law.cornell.edu/uscode/text/26/674 (read).
+- What the text says (as read, not a conclusion): Section 674(a) is read as treating the grantor as owner where he or a nonadverse party can decide who benefits; 674(c) as excepting a power solely exercisable by trustees none of whom is the grantor and no more than half of whom are related or subordinate; 674(b)(5)(A) as excepting principal distributions limited by a reasonably definite standard in the instrument. Whether the drafted terms fit is for counsel.
+- If counsel says otherwise: If counsel says neither route holds, the Family Trust is a grantor trust, its income is taxed to him, and the independent-trustee savings in flat_independent disappear; the stack version would revert to the grantor treatment already used in today and flat.
+- Status: assumed, awaiting counsel
+
+## Q4. Can the instrument split the trusteeship (administrative trustee and special distribution trustee) and who serves as independent distribution trustee?
+
+- Key: `route-r2-split-trusteeship`
+- Raised by: grantor-routes.json R2
+- For: lawyer
+- Question: Can the instrument split the trusteeship this way (administrative trustee and special distribution trustee) under the Illinois Trust Code, and who is a good independent distribution trustee at a fee the structure can carry?
+- ASSUMPTION: The rehearsal runs on the split being allowed and on an unrelated individual distribution trustee at the modeled fee. Illinois law was not read for this entry.
+- Primary cite: IRC 674(c), https://www.law.cornell.edu/uscode/text/26/674 (read).
+- What the text says (as read, not a conclusion): Section 674(c) is read as requiring that the distribution power be solely exercisable by trustees who are not the grantor and are not mostly related or subordinate. Illinois trust law on splitting duties is for the lawyer.
+- If counsel says otherwise: If Illinois law or the available trustees do not allow it, R2 fails and the fee line changes; the structure falls back to R3 or loses its non-grantor status.
+- Status: assumed, awaiting counsel
+
+## Q5. Is his power to remove the distribution trustee limited to appointing an independent one?
+
+- Key: `route-r2-removal-power`
+- Raised by: grantor-routes.json R2; NEXT-MOVES.md move 3
+- For: lawyer
+- Question: Confirm my power to remove the distribution trustee is limited to appointing another independent trustee (Reg. 1.674(d)-2(a)).
+- ASSUMPTION: The rehearsal runs on his removal power being limited to naming another independent trustee, as in route R2.
+- Primary cite: Treas. Reg. 1.674(d)-2(a), https://www.law.cornell.edu/cfr/text/26/1.674(d)-2 (read).
+- What the text says (as read, not a conclusion): Paragraph (a) is read as saying a power to remove, substitute or add trustees may prevent the trust from qualifying under 674(c) or (d), and does not disqualify it if its exercise could not change the trust in a disqualifying way. Counsel reads the drafted power.
+- If counsel says otherwise: If the power is wider, route R6 applies: the trust is a grantor trust and the non-grantor savings are lost.
+- Status: assumed, awaiting counsel
+
+## Q6. Should income be mandatory in fixed shares, and how do shares adjust for a death or after-born child?
+
+- Key: `route-r3-fixed-shares`
+- Raised by: grantor-routes.json R3
+- For: lawyer
+- Question: Should income be mandatory in fixed shares, and how do the shares adjust when a beneficiary dies or a new child is born (after-born children are the one addition the rules allow)?
+- ASSUMPTION: The rehearsal runs on income paid out each year in fixed shares, with changes only for after-born or after-adopted children.
+- Primary cite: Treas. Reg. 1.674(d)-2(b), https://www.law.cornell.edu/cfr/text/26/1.674(d)-2 (read).
+- What the text says (as read, not a conclusion): Paragraph (b) is read as making the listed exceptions unavailable if any person can add beneficiaries, except after-born or after-adopted children. How shares adjust on a death is for counsel.
+- If counsel says otherwise: If shares need a flexible adjustment, route R7 applies and the trust may be a grantor trust; the fixed-share route would then need an independent trustee (R2).
+- Status: assumed, awaiting counsel
+
+## Q7. Do the powers he keeps cause gift or estate tax problems for the funder?
+
+- Key: `route-r3-gift-estate`
+- Raised by: grantor-routes.json R3; NEXT-MOVES.md move 3
+- For: lawyer, then CPA
+- Question: Does my holding a principal power under a health, education, support or maintenance standard cause estate or gift tax problems for me as the funder (sections not modeled here)?
+- ASSUMPTION: The rehearsal runs on no gift or estate tax effect, which is not modeled. This is an assumption, not a finding.
+- Primary cite: IRC 2036(a), https://www.law.cornell.edu/uscode/text/26/2036 (read).
+- What the text says (as read, not a conclusion): Section 2036(a) is read as including in the gross estate property transferred in trust where he retained the income or the right, alone or with another, to designate who enjoys the property or income. Gift-tax sections were not read here.
+- If counsel says otherwise: If counsel finds an estate or gift effect, the assets could stay in his estate or the transfer be an incomplete gift, and the structure value would need a new line.
+- Status: assumed, awaiting counsel
+
+## Q8. Does a non-trustee distribution trust advisor satisfy the independent-trustee exception?
+
+- Key: `route-r4-advisor`
+- Raised by: grantor-routes.json R4; NEXT-MOVES.md move 3
+- For: lawyer
+- Question: Does a distribution trust advisor under 760 ILCS 3/808 who is not a trustee qualify for the 674(c) independent-trustee exception, or should the advisor be a co-trustee?
+- ASSUMPTION: The rehearsal treats R4 as unsettled and does not rely on it; the advisor is assumed to be a co-trustee (R2). 760 ILCS 3/808 was not read for this entry.
+- Primary cite: IRC 674(c), https://www.law.cornell.edu/uscode/text/26/674 (read).
+- What the text says (as read, not a conclusion): Section 674(c) is read as speaking of trustees; whether a non-trustee advisor counts is for counsel.
+- If counsel says otherwise: If an advisor qualifies, R4 becomes usable and the founder keeps the trustee role without a co-trustee; if not, only the co-trustee form (R2) stands.
+- Status: assumed, awaiting counsel
+
+## Q9. How do we keep him and his family clear of self-dealing if the trust deducts payments to the foundation?
+
+- Key: `route-r9-split-interest`
+- Raised by: grantor-routes.json R9; NEXT-MOVES.md move 3
+- For: lawyer
+- Question: If the Family Trust deducts payments to the foundation under 642(c)(1), it becomes a 4947(a)(2) split-interest trust. How do we keep me and my family clear of self-dealing (4941) with that trust, and should the charitable share be segregated (4947(a)(2)(B))?
+- ASSUMPTION: The rehearsal runs on the trust being treated as a split-interest trust under the private foundation rules if it deducts payments to the foundation, and on segregation being an open design choice.
+- Primary cite: IRC 4947(a)(2), https://www.law.cornell.edu/uscode/text/26/4947 (read).
+- What the text says (as read, not a conclusion): Section 4947(a)(2) is read as reaching a trust with amounts for which a deduction was allowed; (a)(2)(B) as excluding amounts segregated from those for which no deduction was allowable. 4941 and 642(c) were not read for this entry.
+- If counsel says otherwise: If counsel says it applies, every transaction between the trust and him or his family becomes a self-dealing question, and the charitable share would need to sit in a separate trust.
+- Status: assumed, awaiting counsel
+
+## Q10. How do distributions for minor children stay separate from his support duties?
+
+- Key: `trust-support-677b`
+- Raised by: NEXT-MOVES.md move 3
+- For: lawyer, then CPA
+- Question: If the trust pays for things I am legally obliged to provide any minor children, that income is taxed to me (677(b)). How should the document keep distributions to them separate from my support duties?
+- ASSUMPTION: The rehearsal runs on no trust income being used for his legal support duties. The synthetic beneficiaries are the two adults.
+- Primary cite: IRC 677(b), https://www.law.cornell.edu/uscode/text/26/677 (read).
+- What the text says (as read, not a conclusion): Section 677(b) is read as limiting when trust income used for a grantor's support obligation is taxed to him. Its full text was only partly retrieved; counsel reads it in full.
+- If counsel says otherwise: If distributions to minors count as his support, that income is taxed to him and the retained-income and bracket results shift for those amounts.
+- Status: assumed, awaiting counsel
