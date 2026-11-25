@@ -223,3 +223,42 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): the page says nothing about trusts, personal guarantees or down payments. Those rules were not read.
 - If counsel says otherwise: a lender that refuses a trust-owned LLC, or a guarantee that counts as the founder's own power or benefit, would change C2's holding design.
 - Status: assumed, awaiting counsel
+
+## Q22. Which state's law should govern the Family Trust, and where should it be administered?
+
+- Key: `trust-governing-state`
+- Raised by: BACKLOG.md R13; follow-on of Q4
+- For: lawyer
+- Question: Should the Family Trust be governed by and administered under Illinois, Wyoming or Delaware law, given the directed-trust statutes, state income tax on a non-grantor trust (including whether an Illinois-resident grantor makes it an Illinois resident trust) and in-state trustee rules?
+- Changes decision: which state's law governs the Family Trust and where it is administered.
+- ASSUMPTION: The rehearsal runs on Illinois situs and Illinois law for the Family Trust; the engine's state tax is Illinois'. Wyoming and Delaware were compared in packet/research/Q22.md; no state is picked.
+- Primary cite: 12 Del. C. 3313, https://delcode.delaware.gov/title12/c033/index.html (read 2026-11-25); Illinois Department of Revenue, https://tax.illinois.gov/research/taxinformation/income/fiduciary.html (read 2026-11-25). Illinois and Wyoming statutes were not reachable (NEEDS-DALAUN.md).
+- What the text says (as read, not a conclusion): Delaware treats a person with power to direct distributions as an adviser and fiduciary and relieves a directed trustee of loss from following the direction; Delaware taxes trusts, with a deduction only for income set aside for nonresident beneficiaries. Illinois taxes resident trusts; what makes a trust resident is not yet read.
+- If counsel says otherwise: a different state changes the trustee-split and advisor answers (Q4, Q8), the state tax line, and any in-state trustee fee.
+- Status: assumed, awaiting counsel
+
+## Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?
+
+- Key: `il-attorney-general-registration`
+- Raised by: BACKLOG.md R13; follow-on of Q22
+- For: lawyer
+- Question: If the Foundation is organized in Illinois and the Family Trust names it as a beneficiary, must the Family Trust itself register or report to the Illinois Attorney General, even if the trust is sited in Wyoming or Delaware?
+- Changes decision: whether the Family Trust must register or report to the Illinois Attorney General.
+- ASSUMPTION: The Foundation registers with the Illinois Attorney General; the Family Trust does not, because it is not itself a charitable organization. Not confirmed.
+- Primary cite: Illinois Attorney General, https://illinoisattorneygeneral.gov/consumer-protection/charities/ (read 2026-11-25), which says charitable organizations that solicit donations or hold charitable assets in Illinois must register. 760 ILCS 55 was not reachable.
+- What the text says (as read, not a conclusion): the page covers organizations that solicit or hold charitable assets in Illinois; it does not address a non-charitable trust naming a charity.
+- If counsel says otherwise: a registration or annual report duty for the Family Trust adds a filing and a fee line, and may bear on where the set-aside is held.
+- Status: assumed, awaiting counsel
+
+## Q24. Which public rental-building listings fit the size that clears break-even?
+
+- Key: `shortlist-b3-rental`
+- Raised by: NEXT-MOVES.md move 11
+- For: Dalaun
+- Question: Is the rental building the class to shortlist, and which public multifamily listings at about 1.5 to 2.5 million fit?
+- ASSUMPTION: The class is the rental building because `asset_rental` has the lower break-even (137,200 against 147,700 for `asset_business`); the price band comes from the engine's 0.07 yield, not a market rate.
+- Primary cite: none new. Listing sites returned HTTP 403 to the runner on 2026-11-25, so no listing was read.
+- What the text says (as read, not a conclusion): nothing was read in this run.
+- If counsel says otherwise: a different class or a different market yield changes the price band and the shortlist.
+- Status: assumed, awaiting counsel
+

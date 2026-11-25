@@ -17,6 +17,8 @@ Packet A's trustee terms rest on packet B's answers to Q3 and Q8. Whether the Fa
 
 If packet B answers Q3 or Q8 differently, these A terms are redrafted. They are not settled by packet A alone.
 
+Illinois situs for the Family Trust is the research's working assumption, not a finding. Q4, Q8 and Q13 each carry `- Assumes: Illinois situs for the Family Trust (see Q22)`; if Q22 picks Wyoming or Delaware, those answers are redrafted under that state's law.
+
 ## Synthetic figures
 
 All figures come from the seeded synthetic year (`rehearsal/synthetic`), not anyone's real money. Every scenario figure here is an engine output on assumptions listed in `counsel-queue.md`. Run on 2026-11-25, 7 of 7 scorecard checks pass, 8 of 17 structure checks pass for the steward versions (the other 9 are amber until documents exist, none red).
@@ -62,6 +64,9 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - **Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?** Confidence: open.
   - Lawyer decides: Whether a lender will accept a trust-owned LLC, whether the founder must guarantee, and how a guarantee bears on the non-grantor result; insurance naming was not researched.
   - Trace file: [research/Q18.md](../research/Q18.md)
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Illinois, Wyoming and 35 ILCS 5/1501 claims pending, needs Dalaun (3 claims).
+  - Lawyer decides: Which state governs and where the trust is administered, whether the founder's Illinois residence makes it an Illinois resident trust whatever its state, and what an in-state trustee or agent is required.
+  - Trace file: [research/Q22.md](../research/Q22.md)
 
 ## Pending Illinois text
 

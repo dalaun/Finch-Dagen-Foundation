@@ -168,6 +168,17 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the lender consents to trust ownership and the founder's guarantee, if asked, is accepted as not breaking the non-grantor result; see counsel-queue.md Q18
 
+### 11. asset: Which public rental-building listings fit the size that clears break-even?
+
+- Key: `shortlist-b3-rental`
+- Step: B3
+- Opened: 2026-11-25
+- For: Dalaun
+- Why it matters: B2's two classes (move 5) are a rental building and a bought business. On today's synthetic numbers the rental needs the lower income to clear break-even with an unrelated individual trustee (`asset_rental` 137,200 a year against `asset_business` 147,700; base 149,500), so the scorecard favors the rental. ASSUMPTION: the pick is the rental building; he can override it with an `Answer:` line. At the engine's assumed 0.07 yield (not a market rate) 150,000 a year is an asset of about 2.1 million. **No listing was read in this run:** the three public listing sites tried (LoopNet, Crexi, Redfin) refused the runner with HTTP 403, so the shortlist is empty. The search to run by hand: multifamily, Chicago area, asking price about 1.5 to 2.5 million, with the stated net operating income or cap rate.
+- The one thing for Dalaun: confirm the rental building as the class to shortlist, then open a public multifamily search yourself at about 1.5 to 2.5 million and send back the links, or tell me to wait for a source the runner can read.
+- Status: open
+- Working assumption: the class is the rental building at the 0.07 yield; no listing, seller or broker is contacted; see counsel-queue.md Q24
+
 ## Closed
 
 (none yet)

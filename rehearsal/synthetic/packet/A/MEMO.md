@@ -28,6 +28,8 @@ Packet A's trustee terms rest on packet B's answers to Q3 and Q8. Whether the Fa
 
 If packet B answers Q3 or Q8 differently, these A terms are redrafted. They are not settled by packet A alone.
 
+Illinois situs for the Family Trust is the research's working assumption, not a finding. Q4, Q8 and Q13 each carry `- Assumes: Illinois situs for the Family Trust (see Q22)`; if Q22 picks Wyoming or Delaware, those answers are redrafted under that state's law.
+
 ## Synthetic figures
 
 All figures come from the seeded synthetic year (`rehearsal/synthetic`), not anyone's real money. Every scenario figure here is an engine output on assumptions listed in `counsel-queue.md`. Run on 2026-11-25, 7 of 7 scorecard checks pass, 8 of 17 structure checks pass for the steward versions (the other 9 are amber until documents exist, none red).
@@ -61,6 +63,9 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim).
   - Lawyer decides: What the Illinois instrument, trustee acceptance and signing authority must contain; the federal EIN step is traced below.
   - Trace file: [research/Q13.md](../research/Q13.md)
+- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim). Coverage flag: none
+  - Lawyer decides: Whether naming the Foundation as a beneficiary makes the Family Trust (or its set-aside) a charitable trust holding assets for a charitable purpose in Illinois, and so registrable.
+  - Trace file: [research/Q23.md](../research/Q23.md)
 
 ## Pending Illinois text
 

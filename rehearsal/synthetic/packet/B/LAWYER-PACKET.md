@@ -39,3 +39,6 @@ Every question below is `likely` or `open`; a question marked `settled` would no
   - Trace file: [research/Q18.md](../research/Q18.md)
 
 Q3 and Q8 decide the trustee terms packet A relies on.
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Illinois, Wyoming and 35 ILCS 5/1501 claims pending, needs Dalaun (3 claims).
+  - Lawyer decides: Which state governs and where the trust is administered, whether the founder's Illinois residence makes it an Illinois resident trust whatever its state, and what an in-state trustee or agent is required.
+  - Trace file: [research/Q22.md](../research/Q22.md)
