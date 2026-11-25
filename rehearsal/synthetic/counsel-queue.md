@@ -275,3 +275,29 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing new was read.
 - If counsel says otherwise: with joint brackets, a scratch run (not committed, beneficiaries still single, NIIT threshold approximated) put base-case break-even with an unrelated individual trustee at 361,300 a year instead of 149,500.
 - Status: assumed, awaiting counsel
+
+## Q26. Which class of asset should the shortlist cover, and where does Dalaun look for public listings?
+
+- Key: `shortlist-b3-rental`
+- Raised by: NEXT-MOVES.md move 11
+- For: Dalaun (his own search), not a counsel question
+- Question: Is the rental building the class to shortlist, and can the runner read any public listing source?
+- Changes decision: which class of asset the search covers and at what price band.
+- ASSUMPTION: The class is the rental building, because `asset_rental` needs the lowest break-even income with an unrelated individual trustee (137,200 a year against `asset_business` 147,700; base 149,500). Not confirmed.
+- Primary cite: none. Three public listing sites (LoopNet, Crexi, Redfin) refused the runner with HTTP 403 on 2026-11-25, so no listing was read.
+- What the text says (as read, not a conclusion): nothing was read.
+- If counsel says otherwise: if the pick is the bought business, the size to search for is about 147,700 a year of net income instead of 137,200.
+- Status: assumed, awaiting Dalaun
+
+## Q27. How many adult beneficiaries will the Family Trust have?
+
+- Key: `adult-beneficiary-count`
+- Raised by: NEXT-MOVES.md move 13
+- For: Dalaun (his own family fact), then lawyer
+- Question: How many adult beneficiaries should the rehearsal assume share the Family Trust's distributions, each taxed at their own brackets (IRC 652(a), 662(a))?
+- Changes decision: how large the income-producing asset must be, and so how many beneficiaries the trust names.
+- ASSUMPTION: Two adult beneficiaries (`adult_beneficiaries` in stack.json, with no source). Not confirmed.
+- Primary cite: IRC 652(a) and 662(a), https://www.law.cornell.edu/uscode/text/26/662 (not read in this run); the count itself is a family fact, not a legal one.
+- What the text says (as read, not a conclusion): nothing new was read.
+- If counsel says otherwise: scratch runs (not committed) put base-case break-even with an unrelated individual trustee at 203,300 a year with one adult beneficiary and 132,800 with three, against 149,500 with two.
+- Status: assumed, awaiting Dalaun
