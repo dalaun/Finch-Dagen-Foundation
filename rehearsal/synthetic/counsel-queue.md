@@ -15,7 +15,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - ASSUMPTION: The rehearsal treats the rentals and a business run by a hired manager as passive activities under IRC 469, so the 3.8 percent net investment income tax (IRC 1411) applies to that income.
 - Primary cite: IRC 469(c)(2), 469(c)(7)(B), 469(h)(1) and 1411(a)(1), https://www.law.cornell.edu/uscode/text/26/469 (read 2026-11-25; traced in packet/research/Q1.md).
 - What the text says (as read, not a conclusion): Section 469(h)(1) is read as asking whether the taxpayer is involved in the operations of the activity on a regular, continuous and substantial basis; 469(c)(7)(B) is read as asking for more than half of personal services in real property trades or businesses in which he materially participates and more than 750 hours in the year. Whether his facts meet either is for the CPA.
-- If counsel says otherwise: If counsel says the income is nonpassive, the 3.8 percent tax comes off that income and break-even with an unrelated individual trustee rises from about 149,500 back toward about 178,500 a year (move 1's figures). The engine's passive flag would change in scenarios.json and benchmarks-tax.json.
+- If counsel says otherwise: If counsel says the income is nonpassive, the 3.8 percent tax comes off that income and break-even with an unrelated individual trustee rises from 170,300 (today's engine, after the PR 94 NII fix; 149,500 before it) toward about 178,500 a year (move 1's pre-fix figure). The engine's passive flag would change in scenarios.json and benchmarks-tax.json.
 - Status: assumed, awaiting counsel
 
 ## Q2. Will the Family Trust pay out all of its income each year, or keep part of it?
@@ -133,10 +133,10 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Raised by: NEXT-MOVES.md move 4
 - For: CPA or appraiser
 - Question: Is a yield of about 7 percent a fair stand-in for what an asset of this kind earns after costs, so that about 150,000 a year of net income means an asset of roughly 2.1 million?
-- ASSUMPTION: The rehearsal sizes the asset to clear the unrelated-individual-trustee break-even (149,500 a year in the base case; 146,900 lean, 137,200 asset_rental, 147,700 asset_business) and divides by `asset_yield_for_value` (0.07 in stack.json), giving about 2,135,700 in the base case. The 0.07 is an ASSUMPTION for perspective, not a market rate. With an independent professional trustee there is no break-even up to 1,000,000 a year, so no size is implied.
+- ASSUMPTION: The rehearsal sizes the asset to clear the unrelated-individual-trustee break-even (170,300 a year in the base case on today's engine; 166,000 lean, 137,200 asset_rental, 147,700 asset_business; 149,500 base before the PR 94 NII fix) and divides by `asset_yield_for_value` (0.07 in stack.json), giving about 2,432,900 in the base case. The 0.07 is an ASSUMPTION for perspective, not a market rate. With an independent professional trustee there is no break-even up to 1,000,000 a year, so no size is implied.
 - Primary cite: none found. Pages searched 2026-11-25 state no yield; see packet/research/Q11.md.
 - What the text says (as read, not a conclusion): nothing was read. The break-even figures are the engine's own output on main; the yield is the stack.json assumption.
-- If counsel says otherwise: If the right yield is higher or lower, the implied value moves in inverse proportion (for example 149,500 / 0.05 is about 2,990,000; 149,500 / 0.09 is about 1,661,100). The engine's `asset_yield_for_value` would change in stack.json.
+- If counsel says otherwise: If the right yield is higher or lower, the implied value moves in inverse proportion (for example 170,300 / 0.05 is about 3,406,000; 170,300 / 0.09 is about 1,892,200). The engine's `asset_yield_for_value` would change in stack.json.
 - Status: assumed, awaiting counsel
 
 ## Q12. Which classes of asset (rental building, bought business, other) can credibly produce that income?
@@ -171,7 +171,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Question: Roughly what other yearly income will the two adult beneficiaries have, and at what level does a trust distribution to them cost more tax than it saves?
 - ASSUMPTION: Each adult beneficiary has 46,080 a year of other income (BLS CE second-income-fifth average, `ce_us_quintiles_2025.second_quintile_income` in benchmarks-ce.json) and files single (`beneficiary_filing_status`).
 - Primary cite: BLS Consumer Expenditures, https://www.bls.gov/news.release/cesan.nr0.htm (figure taken from benchmarks-ce.json; not re-fetched in this run). IRC 652(a) and 662(a) (beneficiaries taxed on distributed income) are the rules the engine applies; not re-read in this run.
-- What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own figures. In a scratch run with 78,584 (third-fifth average) break-even with an unrelated individual trustee, base year, went from 149,500 to 198,000.
+- What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own figures. In a scratch run with 78,584 (third-fifth average) break-even with an unrelated individual trustee, base year, went from 170,300 to 232,600 (R15 rerun on today's engine).
 - If counsel says otherwise: break-even, and so the asset size, moves with the beneficiaries' brackets (about 32 percent for the third-fifth figure). A beneficiary in a high bracket could make the trust's retained-income bracket compare differently.
 - Status: assumed, awaiting counsel
 
@@ -206,7 +206,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Raised by: NEXT-MOVES.md move 9; backlog item R8
 - For: CPA or appraiser
 - Question: If 10 percent of the Family Trust's distribution goes to the foundation (see Q15), what yearly net asset income, and so what asset size, makes the structure pay for itself, and is the share worth that size?
-- ASSUMPTION: The asset nets 350,000 a year, the engine's base-case break-even for `steward_r2_pipeline` with an unrelated individual trustee (343,600) rounded up to the next 10,000. At the assumed 0.07 yield (stack.json, not a market rate) that is an asset of about 5,000,000. Set from the break-even only, never adjusted to make a version pass.
+- ASSUMPTION: The asset nets 350,000 a year, the engine's base-case break-even for `steward_r2_pipeline` with an unrelated individual trustee when it was set (343,600, rounded up to the next 10,000; on today's engine, after the PR 94 NII fix, there is none up to 1,000,000, and the scenario is not resized). At the assumed 0.07 yield (stack.json, not a market rate) that is an asset of about 5,000,000. Set from the break-even only, never adjusted to make a version pass.
 - Primary cite: none new. The tax rules are those of Q15 (IRC 642(c)(1), 4947(a)(2)), not read in this run.
 - What the text says (as read, not a conclusion): nothing was read in this run.
 - If counsel says otherwise: a different share, a different set-aside treatment (Q15) or different beneficiary brackets (Q14) moves the break-even, and the engine's search for it is not monotone for this version, so its figure is a first crossing.
@@ -273,7 +273,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - ASSUMPTION: The founder files single, as `person_tax` in rehearsal_run.py does today (2026 single brackets and standard deduction, Rev. Proc. 2025-32, benchmarks-tax.json `federal_2026`). Not confirmed.
 - Primary cite: benchmarks-tax.json `federal_2026` (single and mfj brackets, standard deductions, read in an earlier run from Rev. Proc. 2025-32); no new text read in this run.
 - What the text says (as read, not a conclusion): nothing new was read.
-- If counsel says otherwise: with joint brackets, a scratch run (not committed, beneficiaries still single, NIIT threshold approximated) put base-case break-even with an unrelated individual trustee at 361,300 a year instead of 149,500.
+- If counsel says otherwise: with joint brackets, a scratch run (not committed, beneficiaries still single, NIIT threshold approximated) put base-case break-even with an unrelated individual trustee at 361,300 a year instead of 149,500 (both pre-PR 94 scratch figures, not rerun; today's base is 170,300).
 - Status: assumed, awaiting counsel
 
 ## Q26. Which class of asset should the shortlist cover, and where does Dalaun look for public listings?
@@ -283,7 +283,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - For: Dalaun (his own search), not a counsel question
 - Question: Is the rental building the class to shortlist, and can the runner read any public listing source?
 - Changes decision: which class of asset the search covers and at what price band.
-- ASSUMPTION: The class is the rental building, because `asset_rental` needs the lowest break-even income with an unrelated individual trustee (137,200 a year against `asset_business` 147,700; base 149,500). Not confirmed.
+- ASSUMPTION: The class is the rental building, because `asset_rental` needs the lowest break-even income with an unrelated individual trustee (137,200 a year against `asset_business` 147,700; base 170,300). Not confirmed.
 - Primary cite: none. Three public listing sites (LoopNet, Crexi, Redfin) refused the runner with HTTP 403 on 2026-11-25, so no listing was read.
 - What the text says (as read, not a conclusion): nothing was read.
 - If counsel says otherwise: if the pick is the bought business, the size to search for is about 147,700 a year of net income instead of 137,200.
@@ -299,7 +299,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - ASSUMPTION: Two adult beneficiaries (`adult_beneficiaries` in stack.json, with no source). Not confirmed.
 - Primary cite: IRC 652(a) and 662(a), https://www.law.cornell.edu/uscode/text/26/662 (not read in this run); the count itself is a family fact, not a legal one.
 - What the text says (as read, not a conclusion): nothing new was read.
-- If counsel says otherwise: scratch runs (not committed) put base-case break-even with an unrelated individual trustee at 203,300 a year with one adult beneficiary and 132,800 with three, against 149,500 with two.
+- If counsel says otherwise: scratch runs (not committed) put base-case break-even with an unrelated individual trustee at none up to 1,000,000 with one adult beneficiary and 141,600 with three, against 170,300 with two (R15 rerun on today's engine).
 - Status: assumed, awaiting Dalaun
 
 ## Q28. What would an unrelated individual trustee really charge, and will one serve?
@@ -312,7 +312,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - ASSUMPTION: an unrelated individual serves for 1,000 a year, the stack.json placeholder `unrelated_individual_trustee`. Not a quote. (Backlog item 14 COUNSEL-QS already asks whether this is realistic.)
 - Primary cite: none; no fee schedule or statute was read for this move.
 - What the text says (as read, not a conclusion): nothing was read.
-- If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 187,400 a year instead of 149,500.
+- If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 217,700 a year instead of 170,300 (R15 rerun on today's engine).
 - Status: assumed, awaiting counsel
 
 ## Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?
@@ -373,4 +373,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Primary cite: none; no price page or quote was read for this move.
 - What the text says (as read, not a conclusion): nothing was read.
 - If counsel says otherwise: scratch runs (not committed), one placeholder tripled at a time (exactly three times), put base-case route R2 break-even with an unrelated individual trustee at 217,700 (990-PF 6,000), 239,300 (bookkeeping 1,800), 191,800 (709 2,400) and 200,400 (1041 3,600), against 170,300.
+- Status: assumed, awaiting CPA
+
+## Q33. Is 10 percent the right share of the trust's income for the Foundation, when a 2 percent share still has a break-even and 10 percent has none?
+
+- Key: `foundation-share-pct`
+- Raised by: NEXT-MOVES.md move 18 (follow-on of Q15, Q17)
+- For: CPA
+- Question: If the Foundation is funded from the Family Trust's income, what yearly share or fixed amount is sensible, and can the 642(c)(1) set-aside be set each year so it stays small while the structure is young?
+- Changes decision: how large the income-producing asset must be, and whether the Foundation is funded by the trust's income, by a one-off gift, or later.
+- ASSUMPTION: the share stays 10 percent in the engine (`foundation_share_of_distribution`, steward_r2_pipeline). Scratch runs (not committed) of 2 percent and 5 percent are a reading of where the engine's break-even exists, never a recommended share.
+- Primary cite: none new. The tax rules are those of Q15 (IRC 642(c)(1), 4947(a)(2)), not read in this run.
+- What the text says (as read, not a conclusion): nothing was read in this run. Scratch results on the base year: 2 percent, break-even 206,100 a year; 5 percent and 10 percent, none up to 1,000,000; scorecard 7 of 7 at 2 and 5 percent.
+- If counsel says otherwise: a different share moves the break-even from none to 206,100 across 10 to 2 percent; a fixed dollar amount or a later start would change the engine's `foundation_share_of_distribution` into a dollar term.
 - Status: assumed, awaiting CPA
