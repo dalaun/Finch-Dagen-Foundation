@@ -134,6 +134,11 @@ def queue(p) -> dict[int, str]:
     text = read(p["queue"])
     out = {}
     for m in re.finditer(r"^## Q(\d+)\.(.*?)(?=^## Q\d+\.|\Z)", text, re.M | re.S):
+        # A move the loop files for Dalaun's own search or choice says so in its For line
+        # (DAILY-RUN step 5.2 files every open move here); no lawyer answers it, so it
+        # needs no research file.
+        if re.search(r"not a counsel question", field(m.group(2), "For"), re.I):
+            continue
         out[int(m.group(1))] = m.group(2)
     return out
 
@@ -653,6 +658,10 @@ def selftest() -> int:
         def orphan(p):
             p["queue"].write_text(p["queue"].read_text() + "\n## Q20. Orphan?\n\n- Changes decision: nothing named\n")
         check(not variant("orphan", orphan)[0], "PK1 fails a new question no research file names as a follow-on")
+
+        def ownsearch(p):
+            p["queue"].write_text(p["queue"].read_text() + "\n## Q21. Which listings?\n\n- For: Dalaun (his own search), not a counsel question\n")
+        check(variant("ownsearch", ownsearch)[0], "PK1 skips a queue entry marked not a counsel question")
 
         def nodecision(p):
             p["queue"].write_text(p["queue"].read_text().replace("- Changes decision: whether the advisor can serve\n", ""))

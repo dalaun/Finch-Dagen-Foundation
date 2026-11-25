@@ -22,7 +22,7 @@ The grader is `tests/rehearsal/packet_scorecard.py`, in Dalaun's lane. The packe
 
 | Id | Name | Passes when |
 |---|---|---|
-| PK1 | traced | Every question in `rehearsal/synthetic/counsel-queue.md` has `packet/research/Q<n>.md` with a confidence label and numbered claims, and every claim has a trace. Follow-on questions: at most 2 per answer, each in the queue with a `Changes decision:` line; a question added after Q18 must be named as some answer's follow-on. |
+| PK1 | traced | Every question in `rehearsal/synthetic/counsel-queue.md` (except an entry whose `For:` line says `not a counsel question`, such as a move for Dalaun's own search) has `packet/research/Q<n>.md` with a confidence label and numbered claims, and every claim has a trace. Follow-on questions: at most 2 per answer, each in the queue with a `Changes decision:` line; a question added after Q18 must be named as some answer's follow-on. |
 | PK2 | framed | Every question labelled `likely` or `open` has a `Lawyer decides:` line. |
 | PK3 | verified | Every quote was re-read on its page and matches (needs `--verify-quotes`). |
 | PK4 | labelled | Every packet file carries the line `Research for counsel review, not legal advice.` |
