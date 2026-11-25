@@ -362,3 +362,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: if the sibling is a trustee or officer of the Foundation, the sibling is a disqualified person and the 4941(d)(2)(E) exception must be met; if the sibling's pay is above market, the excess is not deductible at the operating company and may be self-dealing at the Foundation. The engine does not model sibling pay.
 - Status: assumed, awaiting counsel
 
+## Q32. What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
+
+- Key: `yearly-filing-fees`
+- Raised by: NEXT-MOVES.md move 17
+- For: CPA
+- Question: What would a CPA charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the bookkeeping for each entity, and what would the first Form 709 cost?
+- Changes decision: how large the income-producing asset must be.
+- ASSUMPTION: the stack.json placeholders: 990-PF 2,000, 1041 1,200 for each filing trust, bookkeeping 600 for each entity, 709 800 once. Not quotes. (Backlog item FEE-QUOTES asks for sources.)
+- Primary cite: none; no price page or quote was read for this move.
+- What the text says (as read, not a conclusion): nothing was read.
+- If counsel says otherwise: scratch runs (not committed), one placeholder tripled at a time (exactly three times), put base-case route R2 break-even with an unrelated individual trustee at 217,700 (990-PF 6,000), 239,300 (bookkeeping 1,800), 191,800 (709 2,400) and 200,400 (1041 3,600), against 170,300.
+- Status: assumed, awaiting CPA
