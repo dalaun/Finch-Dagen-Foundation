@@ -22,7 +22,10 @@
     ],
     "adult_beneficiaries": 2,
     "minor_beneficiaries": 0,
-    "trustee_kind": "professional"
+    "trustee_kind": "professional",
+    "management_company_tax": "pass_through",
+    "mgmt_founder_salary": 12000,
+    "mgmt_fringe_flags": {"106": true, "105b_insured": true, "127": false, "129": false, "check_lines": ["105(h)", "79(d)", "132(j)(1)"]}
   },
   "fees_placeholder": {
     "llc_annual_report": "fees.il_llc_annual_report",

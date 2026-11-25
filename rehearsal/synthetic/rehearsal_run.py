@@ -93,7 +93,7 @@ def niit_trust(undistributed_nii: float, agi: float) -> float:
 
 def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_income=0.0,
                mortgage_interest=0.0, property_tax=0.0, charity=0.0,
-               deferral_401k=0.0, cafeteria_125=0.0, nii=0.0) -> dict:
+               deferral_401k=0.0, cafeteria_125=0.0, nii=0.0, qual_div=0.0) -> dict:
     """One single filer's 2026 federal, payroll and Illinois tax. Returns the parts.
     wages is W-2 gross pay. cafeteria_125 leaves income-tax and FICA wages (125(a), 3121(a)(5)(G));
     deferral_401k leaves income-tax wages only (402(e)(3), 3121(v)(1)(A)). benchmarks-tax.json payroll_pretax."""
@@ -105,7 +105,7 @@ def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_inco
     oasdi_room = max(PAY["ss_wage_base"] - fica_wages, 0.0)
     se_tax = min(se_base, oasdi_room) * PAY["se_rate_oasdi"] + se_base * PAY["se_rate_hi"]
     fica = employee_fica(fica_wages)
-    agi = income_wages + sched_c + sched_e + other_ordinary - se_tax / 2
+    agi = income_wages + sched_c + sched_e + other_ordinary + qual_div - se_tax / 2
     il_tax = max(agi, 0.0) * IL["individual_rate"]
     salt = min(il_tax + property_tax, FED["salt_cap_2026"])  # AGI far below the phase-down threshold
     itemized = mortgage_interest + salt + charity
@@ -113,7 +113,12 @@ def person_tax(wages=0.0, sched_c=0.0, sched_e=0.0, other_ordinary=0.0, qbi_inco
     before_qbi = max(agi - deduction, 0.0)
     qbi = FED["qbi_rate"] * min(max(qbi_income, 0.0), before_qbi)
     taxable = before_qbi - qbi
-    fed = bracket_tax(taxable, FED["single_brackets"])
+    qd_in = min(max(qual_div, 0.0), taxable)  # qualified dividends sit on top of ordinary income at the 1(h) rates
+    ordinary_taxable = taxable - qd_in
+    fed = bracket_tax(ordinary_taxable, FED["single_brackets"])
+    if qd_in:
+        qd_brackets = BM["mgmt_c_corp"]["qualified_dividend_single"]
+        fed += bracket_tax(ordinary_taxable + qd_in, qd_brackets) - bracket_tax(ordinary_taxable, qd_brackets)
     niit = niit_individual(nii, agi)
     return {"agi": agi, "taxable": taxable, "federal": fed, "se": se_tax, "fica": fica, "niit": niit,
             "illinois": il_tax, "itemized": itemized > FED["standard_deduction_single"],
@@ -416,12 +421,32 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         saving_line = s["saving"]
     saving_out = saving_line + listed_401k
 
+    mgmt_tax = sc.get("management_company_tax", A.get("management_company_tax", "pass_through"))
+    if mgmt_tax not in ("pass_through", "c_corp"):
+        raise ValueError(f"management_company_tax {mgmt_tax!r}: only pass_through or c_corp")
+    mgmt_salary = float(sc.get("mgmt_founder_salary", A.get("mgmt_founder_salary", 0.0)))
+    mc = BM["mgmt_c_corp"]
+
     def founder(sched_c, asset_ord, asset_q, extra_ordinary=0.0):
         # The asset's income is net investment income only by kind (asset_nii_share), the same share the beneficiary arm uses.
-        return person_tax(wages=wages, sched_c=sched_c, sched_e=sched_e_building + asset_ord,
-                          other_ordinary=extra_ordinary,
-                          qbi_income=max(sched_c, 0) + asset_q, nii=sched_e_building + asset_ord * asset_nii_share,
-                          deferral_401k=pretax["401k"], cafeteria_125=pretax["125"], **itemize)
+        # sched_c is the management company's revenue less its deductible lines. pass_through: it is the founder's Schedule C.
+        # c_corp (backlog R16): the company pays 21 percent (11(b)) after the founder's salary and its employer FICA, and pays
+        # the rest out as a qualified dividend (1(h)(11)); no Illinois corporate tax (benchmarks-tax.json mgmt_c_corp).
+        corp_tax = 0.0
+        salary = div = 0.0
+        if mgmt_tax == "c_corp":
+            salary = min(mgmt_salary, max(sched_c, 0.0))
+            profit = sched_c - salary - employee_fica(salary)
+            corp_tax = mc["corporate_rate"] * max(profit, 0.0)
+            div = max(profit - corp_tax, 0.0)
+            sched_c = 0.0
+        r = person_tax(wages=wages + salary, sched_c=sched_c, sched_e=sched_e_building + asset_ord,
+                       other_ordinary=extra_ordinary, qual_div=div,
+                       qbi_income=max(sched_c, 0) + asset_q, nii=sched_e_building + asset_ord * asset_nii_share + div,
+                       deferral_401k=pretax["401k"], cafeteria_125=pretax["125"], **itemize)
+        if mgmt_tax == "c_corp":
+            r = dict(r, corp_tax=corp_tax, employer_fica=employee_fica(salary), total=r["total"] + corp_tax + employee_fica(salary))
+        return r
 
     # Arm A: no structure; business-shaped lines paid personally and not deducted (spec, Arm A)
     fa = founder(mgmt_rev, asset_net, asset_qbi)
@@ -686,6 +711,24 @@ def selftest() -> int:
     fa_r = run_year({"id": "r", "label": "r", "payroll": {}, "asset": {"kind": "rental"}}, [], st_m, grader_m, extra_asset_net=300000.0,
                     versions=["today"])["A"]["founder"]["niit"]
     ok(fa_g == 0 and fa_r > 0, "founder's NIIT: a generic asset's income is not investment income, a rental's is (same asset_nii_share as the beneficiary arm)")
+    # R16 management company taxed as a C corporation (benchmarks-tax.json mgmt_c_corp).
+    mrow = [{"domain": "I3", "direction": "credit", "amount": 24000.0, "payer_role": "client", "payee_role": "management_company",
+             "description": "consulting revenue", "evidence": []}]
+    sc_c = {"id": "cc", "label": "c corp test", "payroll": {}, "asset": None}
+    pt = run_year(sc_c, mrow, st_m, grader_m, versions=["today"])["A"]["founder"]
+    cc = run_year(dict(sc_c, management_company_tax="c_corp", mgmt_founder_salary=12000), mrow, st_m, grader_m, versions=["today"])["A"]["founder"]
+    ok("corp_tax" not in pt, "management company: pass_through is the default and adds no corporate line")
+    prof_c = 24000.0 - 12000.0 - employee_fica(12000.0)
+    ok(round(cc["corp_tax"]) == round(0.21 * prof_c), "management company c_corp: 21 percent of revenue less salary and employer FICA (11(b))")
+    ok(cc["niit"] == 0.0 and person_tax(wages=0.0, qual_div=300000.0, nii=300000.0)["niit"] > 0,
+       "management company c_corp: a dividend is net investment income (1411(c)(1)(A)(i)), small ones are under the 200,000 threshold")
+    ok(round(person_tax(wages=0.0, qual_div=40000.0)["federal"]) == 0 and person_tax(wages=0.0, qual_div=100000.0)["federal"] > 0,
+       "qualified dividends: 0 percent up to 49,450 of taxable income (Rev. Proc. 2025-32), 15 percent above")
+    try:
+        run_year(dict(sc_c, management_company_tax="s_corp"), mrow, st_m, grader_m, versions=["today"])
+        ok(False, "management company: an unknown tax form is refused")
+    except ValueError:
+        ok(True, "management company: an unknown tax form is refused")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 

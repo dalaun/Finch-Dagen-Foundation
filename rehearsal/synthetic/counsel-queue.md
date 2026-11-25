@@ -427,3 +427,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): see Q34. The figure is a scenario input, not a rule.
 - If counsel says otherwise: scratch runs on the base year (not committed): 12,000 gives a break-even of 181,200 a year with an unrelated individual trustee, 48,000 gives 148,400, against 170,300 at 24,000.
 - Status: assumed, awaiting CPA
+
+## Q37. Roughly how much W-2 pay does the founder have besides the management company?
+
+- Key: `founder-wage-range`
+- Raised by: NEXT-MOVES.md move 20
+- For: Dalaun (his own figure, as a range only), then CPA
+- Question: Is the founder's other yearly W-2 pay nearer 40,000, 73,000 or 120,000, so the rehearsal's tax bracket for him is the right one?
+- Changes decision: how large the income-producing asset must be, because the founder's own bracket sets how much tax a trust-held asset saves.
+- ASSUMPTION: the founder's W-2 pay is the BLS Chicago all-occupations mean (73,382 in the seeded year; benchmarks-tax.json `wages`, a public average used as a stand-in, not his pay). Not confirmed.
+- Primary cite: none for the amount; brackets are Rev. Proc. 2025-32 (https://www.irs.gov/pub/irs-drop/rp-25-32.pdf, read 2026-11-25).
+- What the text says (as read, not a conclusion): the figure is a scenario input, not a rule.
+- If counsel says otherwise: scratch runs on the base year (not committed): 40,000 gives a break-even of 224,500 a year with an unrelated individual trustee (route R2), 120,000 gives 116,800, against 170,300 at 73,382.
+- Status: assumed, awaiting Dalaun
+
