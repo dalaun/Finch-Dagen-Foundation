@@ -249,3 +249,29 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): the page covers organizations that solicit or hold charitable assets in Illinois; it does not address a non-charitable trust naming a charity.
 - If counsel says otherwise: a registration or annual report duty for the Family Trust adds a filing and a fee line, and may bear on where the set-aside is held.
 - Status: assumed, awaiting counsel
+
+## Q19. Can any operating-company or business-trust equity go to the Foundation, and how much?
+
+- Key: `business-equity-4943`
+- Raised by: BACKLOG.md R12 item 1; follow-on of Q9
+- For: lawyer
+- Question: If the founder or the Family Trust wants the Foundation to hold equity in an operating company or a business trust, how much can it hold under IRC 4943, counting the family's holdings as a disqualified person's?
+- Changes decision: whether any operating-company or business-trust equity can go to the Foundation, and how much.
+- ASSUMPTION: No business equity goes to the Foundation; the Foundation holds cash and passive investments only, and the asset stays in the Family Trust's LLC. Not confirmed.
+- Primary cite: IRC 4943(a), (c)(2), (c)(6), (d)(3), (g) and 4946(a)(1), https://www.law.cornell.edu/uscode/text/26/4943 and https://www.law.cornell.edu/uscode/text/26/4946 (read 2026-11-25).
+- What the text says (as read, not a conclusion): the Foundation's permitted holding in a corporation is 20 percent of the voting stock less what all disqualified persons hold (35 percent if an outsider controls), with a 2 percent de minimis rule, a 5-year window for gifts and bequests, an exception for passive businesses, and an exception for a 100 percent independently operated holding. Excess is taxed 10 percent, then 200 percent.
+- If counsel says otherwise: any business equity sent to the Foundation would need a share limit and a disposal plan; the engine's Foundation arm would then carry business income (4940 or unrelated business income) instead of cash only.
+- Status: assumed, awaiting counsel
+
+## Q25. Does the founder file as single or as married filing jointly, and how does that change what the structure saves?
+
+- Key: `founder-filing-status`
+- Raised by: NEXT-MOVES.md move 12
+- For: Dalaun (his own family fact), then CPA
+- Question: Should the rehearsal treat the founder as a single filer or a joint filer, given that joint brackets are wider and the structure's savings come from moving income out of the founder's top brackets?
+- Changes decision: how large the income-producing asset must be, and so whether the structure is worth setting up at all.
+- ASSUMPTION: The founder files single, as `person_tax` in rehearsal_run.py does today (2026 single brackets and standard deduction, Rev. Proc. 2025-32, benchmarks-tax.json `federal_2026`). Not confirmed.
+- Primary cite: benchmarks-tax.json `federal_2026` (single and mfj brackets, standard deductions, read in an earlier run from Rev. Proc. 2025-32); no new text read in this run.
+- What the text says (as read, not a conclusion): nothing new was read.
+- If counsel says otherwise: with joint brackets, a scratch run (not committed, beneficiaries still single, NIIT threshold approximated) put base-case break-even with an unrelated individual trustee at 361,300 a year instead of 149,500.
+- Status: assumed, awaiting counsel
