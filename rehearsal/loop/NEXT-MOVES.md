@@ -209,15 +209,39 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: an unrelated individual trustee serves for 1,000 a year (placeholder, not a quote); see counsel-queue.md Q28
 
-### 15. question: What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
+### 15. question: Does a minor-only household change the answer? (No: the tax case fails.)
+
+- Key: `minor-beneficiary-kiddie`
+- Opened: 2026-11-25
+- For: lawyer, then CPA
+- Result in one line: with one minor beneficiary and no other income, income splitting saves nothing (the kiddie tax, IRC 1(g), puts the child's income above 2,700 at the founder's rate), the only federal saving left is the child's own 200,000 NIIT threshold (at most 3.8 percent of 200,000, 7,600 a year), against about 9,400 a year of added trust costs even with the 1,000 individual-trustee placeholder, so `base_minor_only` and `asset_rental_minor_only` have no break-even at any asset income up to 1,000,000, with an unrelated individual or a professional trustee.
+- Why it matters: a private scratch run had said the same; this move confirms it with the traced rule. Traced (benchmarks-tax.json `kiddie_tax`, READ 2026-11-25): 1(g)(2)(A) covers a child under 18 at year end, or 18 (or a full-time student 19 to 23, by 152(c)(3)) whose earned income is not over half of support, with a parent alive; 1(g)(1), (3), (4) tax net unearned income at the parent's rate; Rev. Proc. 2025-32 sets the 2026 step at 1,350 (the dependent standard deduction and the 1(g)(4)(A)(ii)(I) amount), so the first 1,350 is free, the next 1,350 is at the child's rate, the rest at the parent's. The Form 8615 instructions say the child's NIIT is 3.8 percent of the lesser of net investment income or the excess of "the child's modified adjusted gross income (MAGI)" over the threshold: the child's own MAGI, not the parent's. The engine's rental figures: at 200,000 and 300,000 of extra asset income the structure value is -4,035 a year both times (the NIIT saving has hit its cap), while the same rental with an adult beneficiary breaks even at 137,200. For the base case the scratch figure of about 306,000 was real but came from founder-side NIIT charged on a generic asset's income in arm A (item 3 of backlog R14); with the engine fixed it is 304,600 under the old rule and none after. Earlier moves (13, 14 and the break-even figures in 4, 9 and 10) were written before that fix: base-case break-even with an unrelated individual trustee is now 170,300 a year, not 149,500 (lean 166,000, not 146,900).
+- What is left, as separate unscored lines (not dollars): (a) control and creditor protection of assets for a minor; (b) succession if the founder dies or is disabled; (c) the Foundation route (Q15, Q17); (d) the age at which the kiddie tax stops (19, or 24 for a full-time student, or when earned income is over half of support) and the adult-beneficiary math of move 13 applies again.
+- Not modeled: the 1(g)(7) parental election, a minor's earned income or QBI, the Illinois exemption.
+- The one thing for Dalaun: ask his lawyer, "If the beneficiaries are minors, is there any reason beyond control, creditor protection and succession to hold the asset in the Family Trust, given that income splitting is gone until they are adults?" Do not write family details in the answer line.
+- Status: open
+- Working assumption: one minor beneficiary under 18 with no other income and a living parent (a scenario, not a fact about anyone); the kiddie tax applies as traced; see counsel-queue.md Q29
+
+### 16. question: Who is the independent co-trustee, and what does a professional or corporate one cost?
+
+- Key: `independent-cotrustee`
+- Opened: 2026-11-25
+- For: lawyer
+- Why it matters: route R2 needs an independent distribution trustee who is not related or subordinate under 672(c), and family cannot fill it. Published fee schedules of two trust companies (benchmarks-tax.json `fees.corporate_trustee_note`, READ 2026-11-25): Members Trust Company, 3,000 minimum for an irrevocable trust and 1.25 percent of the first million; BOKF, NA, Directed Personal Trust 5,000 minimum and 0.50 percent of the first million, closely held assets 4,000 minimum and 1.25 percent. The engine's placeholders (2,500 and 1 percent) are replaced by 3,000 and 1.25 percent (the lowest minimum read, and the rate both schedules show for assets that are not marketable securities). At the engine's 0.07 yield that fee is 17.9 percent of the asset's net income, so with a professional or corporate co-trustee there is no break-even at any asset income up to 1,000,000 in any scenario, including the minor-only ones (before the change: also none). With an unrelated individual at 1,000 a year the base-case figure is 170,300. A schedule is a list price for a managed trust; a trustee who only decides distributions may quote less, or may not serve at all (Citi and Schwab pages did not load).
+- The one thing for Dalaun: ask his lawyer, "Who can serve as the independent distribution trustee of the Family Trust (not a relative, not an employee), would a trust company or a lawyer accept a distribution-only role for a flat fee, and what would they charge?"
+- Status: open
+- Working assumption: an unrelated individual serves for 1,000 a year; a corporate co-trustee is priced at the published schedules and kills the money case; see counsel-queue.md Q30
+- Note: paid services by an adult sibling of the founder are ordinary income to that sibling at market pay, separate from the trust's beneficiary math; a sibling cannot be the independent co-trustee (672(c)(2), 674(c)); see counsel-queue.md Q31
+
+### 17. question: What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
 
 - Key: `yearly-filing-fees`
 - Opened: 2026-11-25
 - For: CPA
-- Why it matters: the engine's yearly filing costs are PLACEHOLDERS with no quote behind them (stack.json `fees_placeholder`: Form 990-PF preparation 2,000, Form 1041 preparation 1,200 for each filing trust, bookkeeping 600 for each entity, Form 709 once 800). In scratch runs (not committed) that tripled one placeholder at a time, break-even with an unrelated individual trustee on the base year (route R2, today 149,500 a year) went to 187,400 with 990-PF at 6,000 (about 25 percent more), to 202,700 with bookkeeping at 1,800 for each entity (about 36 percent more), to 170,700 with the 709 at 3,000 (about 14 percent more) and to 166,800 with the 1041 at 3,000 (about 12 percent more). Under each of those changes the 10 percent Foundation share (today 343,600) finds no break-even up to 1,000,000. Tripling is a stress test, not a forecast; the point is that the asset size in moves 4 and 9 moves by more than 10 percent with fees nobody has quoted.
+- Why it matters: the engine's yearly filing costs are PLACEHOLDERS with no quote behind them (stack.json `fees_placeholder`: Form 990-PF preparation 2,000, Form 1041 preparation 1,200 for each filing trust, bookkeeping 600 for each entity, Form 709 once 800). In scratch runs (not committed) that tripled one placeholder at a time, break-even with an unrelated individual trustee on the base year (route R2, today 170,300 a year) went to 217,700 with 990-PF at 6,000 (about 28 percent more), to 239,300 with bookkeeping at 1,800 for each entity (about 41 percent more), to 191,800 with the 709 at 2,400 (about 13 percent more) and to 200,400 with the 1041 at 3,600 (about 18 percent more). The 10 percent Foundation share finds no break-even up to 1,000,000 even at today's placeholders. Tripling is a stress test, not a forecast; the point is that the asset size in moves 4 and 9 moves by more than 10 percent with fees nobody has quoted.
 - The one thing for Dalaun: ask his CPA, "What would you charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the trust's bookkeeping, and what would the first Form 709 cost?"
 - Status: open
-- Working assumption: the placeholders stand (990-PF 2,000, 1041 1,200, bookkeeping 600 for each entity, 709 800), not quotes; see counsel-queue.md Q29
+- Working assumption: the placeholders stand (990-PF 2,000, 1041 1,200, bookkeeping 600 for each entity, 709 800), not quotes; see counsel-queue.md Q32
 
 ## Closed
 

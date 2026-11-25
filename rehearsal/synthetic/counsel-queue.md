@@ -315,15 +315,54 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 187,400 a year instead of 149,500.
 - Status: assumed, awaiting counsel
 
-## Q29. What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
+## Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?
+
+- Key: `minor-beneficiary-kiddie`
+- Raised by: NEXT-MOVES.md move 15
+- For: lawyer, then CPA
+- Question: With minor beneficiaries, income above the kiddie-tax steps is taxed at the founder's rate (IRC 1(g)), so the trust saves no income tax by splitting. Is there a reason beyond control and creditor protection of a minor's assets, succession if the founder dies or is disabled, and the Foundation route to use the trust, and how should the instrument handle the age at which the kiddie tax stops (19, or 24 for a full-time student)?
+- Changes decision: whether the Family Trust is worth its costs while the beneficiaries are minors (the engine says not on tax alone: `base_minor_only` and `asset_rental_minor_only` have no break-even up to 1,000,000).
+- ASSUMPTION: One minor beneficiary under 18 with no other income and a living parent; a scenario, not a description of anyone. The kiddie tax and the child's own NIIT are applied as traced.
+- Primary cite: IRC 1(g), https://www.law.cornell.edu/uscode/text/26/1; IRC 152(c)(3), https://www.law.cornell.edu/uscode/text/26/152; Rev. Proc. 2025-32 sec. 3.02 and 3.14(2), https://www.irs.gov/pub/irs-drop/rp-25-32.pdf; Instructions for Form 8615 (2025), https://www.irs.gov/pub/irs-prior/i8615--2025.pdf (read 2026-11-25).
+- What the text says (as read, not a conclusion): 1(g)(1) taxes a covered child at the greater of the ordinary tax or the tax on income reduced by net unearned income plus the child's share of the "allocable parental tax"; 2026 step 1,350 (Rev. Proc. 2025-32); the Form 8615 instructions say a child's NIIT is figured on "the child's modified adjusted gross income (MAGI)".
+- If counsel says otherwise: if a different rule applies (for example the parental election of 1(g)(7), or a trust-law reason to prefer another vehicle), the minor-only break-even changes; the engine does not model them.
+- Status: assumed, awaiting counsel
+
+## Q30. Who is the independent co-trustee, and what does a professional or corporate one cost?
+
+- Key: `independent-cotrustee`
+- Raised by: NEXT-MOVES.md move 16
+- For: lawyer
+- Question: Route R2 needs an independent distribution trustee who is not related or subordinate under 672(c), and family cannot fill it. Who serves, and what does a professional or corporate co-trustee cost?
+- Changes decision: whether any asset size makes the money case work (with a corporate co-trustee at the published schedules it does not, up to 1,000,000 a year of asset income).
+- ASSUMPTION: Corporate co-trustee fee 3,000 minimum and 1.25 percent of assets (stack.json `independent_trustee_minimum`, `independent_trustee_rate_of_assets`, from benchmarks-tax.json `fees`); an unrelated individual at 1,000 a year (Q28). Neither is a quote.
+- Primary cite: Members Trust Company, Trust Services Fee Schedule (April 2024), https://www.ncsecu.org/content/dam/ncsecu/pdfs/planning-insurance/estate-planning-and-trust-services/TrustServicesFeeSchedule.pdf ("$3,000 for Irrevocable Trusts"; "First $1 million 1.25%"); BOKF, NA, Advisor Trust Services fee schedule (revised 01.2027), https://edge.sitecorecloud.io/bokfna15473-bokf40a9-prode209-f913/media/Files/PDF/Advisor_Trust/ATS-Fee-Schedule.pdf (Directed Personal Trust "Minimum Annual Account fee $5,000", "First $1MM 0.50%"; closely held assets "Minimum Annual Account fee $4,000", "First $1MM 1.250%"); read 2026-11-25. Citi and Schwab pages did not load.
+- What the text says (as read, not a conclusion): both schedules price a managed trust as a minimum plus a percent of assets, with hourly rates and out-of-pocket costs extra (BOKF: "$200 per hour"). Neither prices a distribution-only co-trustee.
+- If counsel says otherwise: a flat fee for a distribution-only role could be far below the percent-of-assets figure; at 5,000 a year the base-case break-even with an unrelated individual would be about 187,400 before the item 3 fix (Q28).
+- Status: assumed, awaiting counsel
+
+## Q31. Can an adult sibling of the founder, paid for services, be a co-trustee or be paid by the Foundation or the operating company?
+
+- Key: `sibling-paid-services`
+- Raised by: NEXT-MOVES.md move 16 (follow-on of Q16, with Q30)
+- For: lawyer, then CPA
+- Question: Can an adult sibling of the founder, paid for services, serve as the independent trustee route R2 counts on; can the Foundation or the operating company pay that sibling; and does naming the sibling a beneficiary move tax? Synthetic: no names or family details.
+- Changes decision: who can be the independent co-trustee (not a sibling, so Q30 stands), and whether a sibling may do paid work for the Foundation or the operating company, and under what checks.
+- ASSUMPTION: the sibling is an adult, not a substantial contributor, not an officer, director or trustee of the Foundation, and not a trustee of the Family Trust; paid at market rates for real, documented services. A scenario, not a description of anyone.
+- Primary cite: IRC 672(c)(2), https://www.law.cornell.edu/uscode/text/26/672; IRC 674(c), https://www.law.cornell.edu/uscode/text/26/674; IRC 4946(a)(1), (b)(1), (d), https://www.law.cornell.edu/uscode/text/26/4946; IRC 4941(d)(1)(D), (E) and (d)(2)(E), https://www.law.cornell.edu/uscode/text/26/4941; IRC 4945(d)(5), https://www.law.cornell.edu/uscode/text/26/4945; 26 CFR 1.162-7(a), (b)(3), https://www.law.cornell.edu/cfr/text/26/1.162-7; IRC 652(a), 662(a) (read 2026-11-25).
+- What the text says (as read, not a conclusion): 672(c)(2) lists "The grantor’s father, mother, issue, brother or sister" as a related or subordinate party, presumed subservient for 674 and 675; 674(c) allows "no more than half" related or subordinate trustees, none the grantor, acting without anyone's approval; 4946(d) family is "only his spouse, ancestors, children, grandchildren, great grandchildren, and the spouses of" those, so a sibling is a disqualified person only as a substantial contributor, a foundation manager or through a 35 percent entity; 4941(d)(2)(E) excepts pay for services "reasonable and necessary to carrying out the exempt purpose" if "not excessive"; 4941(d)(1)(E) and 4945(d)(5) check indirect benefit and purpose; 1.162-7(b)(3) tests pay against what "like enterprises under like circumstances" pay.
+- If counsel says otherwise: if the sibling is a trustee or officer of the Foundation, the sibling is a disqualified person and the 4941(d)(2)(E) exception must be met; if the sibling's pay is above market, the excess is not deductible at the operating company and may be self-dealing at the Foundation. The engine does not model sibling pay.
+- Status: assumed, awaiting counsel
+
+## Q32. What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
 
 - Key: `yearly-filing-fees`
-- Raised by: NEXT-MOVES.md move 15
+- Raised by: NEXT-MOVES.md move 17
 - For: CPA
 - Question: What would a CPA charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the bookkeeping for each entity, and what would the first Form 709 cost?
 - Changes decision: how large the income-producing asset must be.
 - ASSUMPTION: the stack.json placeholders: 990-PF 2,000, 1041 1,200 for each filing trust, bookkeeping 600 for each entity, 709 800 once. Not quotes. (Backlog item FEE-QUOTES asks for sources.)
 - Primary cite: none; no price page or quote was read for this move.
 - What the text says (as read, not a conclusion): nothing was read.
-- If counsel says otherwise: scratch runs (not committed), one placeholder tripled at a time, put base-case route R2 break-even with an unrelated individual trustee at 187,400 (990-PF 6,000), 202,700 (bookkeeping 1,800), 170,700 (709 3,000) and 166,800 (1041 3,000), against 149,500.
+- If counsel says otherwise: scratch runs (not committed), one placeholder tripled at a time (exactly three times), put base-case route R2 break-even with an unrelated individual trustee at 217,700 (990-PF 6,000), 239,300 (bookkeeping 1,800), 191,800 (709 2,400) and 200,400 (1041 3,600), against 170,300.
 - Status: assumed, awaiting CPA
