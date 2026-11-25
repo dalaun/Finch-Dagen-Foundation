@@ -73,6 +73,8 @@ TOP_TIER = (2, 3, 4, 5, 7, 8, 9, 10, 15, 18)
 PRIMARY_HOSTS = (
     "law.cornell.edu", "ecfr.gov", "uscode.house.gov", "govinfo.gov", "federalregister.gov",
     "irs.gov", "ilga.gov", "illinoiscourts.gov", "supremecourt.gov", "sba.gov", "treasury.gov",
+    # Official state codes and agencies for the governing-state question (Q22, Q23), 2026-11-25.
+    "wyoleg.gov", "delcode.delaware.gov", "tax.illinois.gov", "illinoisattorneygeneral.gov",
 )
 # Packet A: the Family Trust as a personal estate plan (instrument terms, trusteeship,
 # beneficiaries, funding and title paperwork). Packet B: grantor and non-grantor tax
