@@ -265,6 +265,18 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Last checked: 2026-11-25
 - Status: open
 - Working assumption: 24,000 a year stands, not a quote; the reasonable-compensation limit is read in counsel-queue.md Q34; see counsel-queue.md Q36
+- Note (backlog R16, 2026-11-25): the engine now has `management_company_tax` (`pass_through`, the default, or `c_corp`). With the company a C corporation (21 percent, 11(b); a 12,000 founder salary; the rest a qualified dividend with NIIT; no Illinois corporate tax modeled, because the Illinois rates are still pending, needs Dalaun), the base-year break-even with an unrelated individual trustee moves from 170,300 to 169,900 a year, less than 1 percent; scenario `base_mgmt_c_corp`. Not a reason for a question; the form of the company barely changes what the asset must earn.
+
+### 20. question: Roughly how much W-2 pay does the founder have besides the management company?
+
+- Key: `founder-wage-range`
+- Opened: 2026-11-25
+- For: Dalaun (his own figure, as a range only), then CPA
+- Why it matters: the engine's W-2 pay for the founder is the BLS Chicago all-occupations mean, 73,382 in the seeded year (benchmarks-tax.json `wages`), a public stand-in with no tie to his pay. His own bracket sets how much tax a trust-held asset saves. In scratch runs (not committed) that changed only that line, break-even with an unrelated individual trustee on the base year (route R2, today 170,300 a year) went to 224,500 at 40,000 (about 32 percent more) and to 116,800 at 120,000 (about 31 percent less). So the asset size in moves 4 and 9 moves by more than 10 percent with a figure that is not his.
+- The one thing for Dalaun: tell your assistant privately which range your other yearly W-2 pay is in (under about 50,000, about 50,000 to 100,000, or over 100,000), and write only the range in an `Answer:` line, never the pay itself, because the repo is public.
+- Last checked: 2026-11-25
+- Status: open
+- Working assumption: the BLS mean of 73,382 stands, a stand-in and not his pay; see counsel-queue.md Q37
 
 ## Closed
 
