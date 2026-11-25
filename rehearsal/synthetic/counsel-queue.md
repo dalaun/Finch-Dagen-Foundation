@@ -209,3 +209,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read in this run.
 - If counsel says otherwise: a different share, a different set-aside treatment (Q15) or different beneficiary brackets (Q14) moves the break-even, and the engine's search for it is not monotone for this version, so its figure is a first crossing.
 - Status: assumed, awaiting counsel
+
+## Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?
+
+- Key: `financing-title-c3`
+- Raised by: NEXT-MOVES.md move 10
+- For: lawyer
+- Question: If the Family Trust owns an LLC that buys a rental building or an operating business with a loan, will a lender lend to a trust-owned LLC, who must guarantee the loan, and what insurance must name whom?
+- ASSUMPTION: The founder, as the LLC's manager, may be asked to guarantee personally, and the lender must consent to the trust's ownership. A guarantee by the founder is a fact the checks (S1 to S17) and the grantor test must be re-run on; the rehearsal does not model it.
+- Primary cite: SBA 7(a) program page, https://www.sba.gov/funding-programs/loans/7a-loans (read 2026-11-24). It lists "Be an operating business" and "Operate for profit" and links a list of ineligible business types.
+- What the text says (as read, not a conclusion): the page says nothing about trusts, personal guarantees or down payments. Those rules were not read.
+- If counsel says otherwise: a lender that refuses a trust-owned LLC, or a guarantee that counts as the founder's own power or benefit, would change C2's holding design.
+- Status: assumed, awaiting counsel
