@@ -333,7 +333,15 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Key: `independent-cotrustee`
 - Raised by: NEXT-MOVES.md move 16
 - For: lawyer
-- Question: Route R2 needs an independent distribution trustee who is not related or subordinate under 672(c), and family cannot fill it. Who serves, and what does a professional or corporate co-trustee cost?
+- Question: Is this friend independent under 672(c), and what does the trust document need so the friend stays independent?
+- Question (cost): Who serves if the friend does not, and what does a professional or corporate co-trustee cost?
+- Synthetic: the person is "an unrelated friend of the founder, serving as co-trustee"; no names.
+- Claim: an unrelated friend who is none of the 672(c) related or subordinate parties is not one, so the friend can be the independent trustee 674(c) needs (see packet/research/Q30.md).
+- Standing check: The friend is not an employee of the founder, and not an employee of any company in the stack in which the founder and the trust hold significant voting control, and not a subordinate employee of any company where the founder is an executive. If the friend is ever hired or put on payroll by the management company, the operating company or the transport company, this check fails and route R2 needs a new independent trustee.
+- Fiduciary check: the friend actually decides distributions (no rubber stamp, no side agreement to follow the founder). No authority read.
+- Fiduciary check: the friend receives the trust's records and statements. No authority read.
+- Fiduciary check: a successor independent trustee is named in the document. No authority read.
+- Fallback: a professional or corporate co-trustee (3,000 minimum and 1.25 percent), priced below.
 - Changes decision: whether any asset size makes the money case work (with a corporate co-trustee at the published schedules it does not, up to 1,000,000 a year of asset income).
 - ASSUMPTION: Corporate co-trustee fee 3,000 minimum and 1.25 percent of assets (stack.json `independent_trustee_minimum`, `independent_trustee_rate_of_assets`, from benchmarks-tax.json `fees`); an unrelated individual at 1,000 a year (Q28). Neither is a quote.
 - Primary cite: Members Trust Company, Trust Services Fee Schedule (April 2024), https://www.ncsecu.org/content/dam/ncsecu/pdfs/planning-insurance/estate-planning-and-trust-services/TrustServicesFeeSchedule.pdf ("$3,000 for Irrevocable Trusts"; "First $1 million 1.25%"); BOKF, NA, Advisor Trust Services fee schedule (revised 01.2027), https://edge.sitecorecloud.io/bokfna15473-bokf40a9-prode209-f913/media/Files/PDF/Advisor_Trust/ATS-Fee-Schedule.pdf (Directed Personal Trust "Minimum Annual Account fee $5,000", "First $1MM 0.50%"; closely held assets "Minimum Annual Account fee $4,000", "First $1MM 1.250%"); read 2026-11-25. Citi and Schwab pages did not load.
