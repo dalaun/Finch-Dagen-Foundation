@@ -31,8 +31,16 @@ Criteria:
   PK4 labelled   every packet file says it is research for counsel review, not legal advice
   PK5 sized      both break-even scenarios re-run as a family of sizes (0.75x to 1.5x), a
                  realistic case named with a cited basis, table rows matching the engine
-  PK6 memo       one structure memo: four sections, the layers, every likely or open question
-  PK7 packet     one packet file linking every part, about an hour's reading (15,000 words)
+  PK6 memo       one memo per packet: Packet A (the Family Trust as a personal irrevocable trust,
+                 for an attorney under a prepaid personal legal plan, with every part that could
+                 read as a business or investment interest flagged) and Packet B (the business,
+                 tax and foundation questions, for hired counsel); each memo lists its own likely
+                 or open questions
+  PK7 packet     two packet files, A and B, each linking its own parts and readable in an hour
+                 (15,000 words each)
+
+Every research file names its packet (A or B). For Q1 to Q18 the packet is fixed
+below (PACKET_OF, Dalaun's lane); a follow-on question names its own.
 
 The relay's first stop is the top tier (TOP_TIER below) fully traced and verified.
 
@@ -66,11 +74,23 @@ PRIMARY_HOSTS = (
     "law.cornell.edu", "ecfr.gov", "uscode.house.gov", "govinfo.gov", "federalregister.gov",
     "irs.gov", "ilga.gov", "illinoiscourts.gov", "supremecourt.gov", "sba.gov", "treasury.gov",
 )
+# Packet A: the Family Trust as a personal estate plan (instrument terms, trusteeship,
+# beneficiaries, funding and title paperwork). Packet B: grantor and non-grantor tax
+# status, the business trust, operating and management companies, the Foundation's
+# tax rules, the asset and its financing. Set 2026-11-25.
+PACKET_OF = {1: "B", 2: "A", 3: "B", 4: "A", 5: "A", 6: "A", 7: "A", 8: "B", 9: "B", 10: "A",
+             11: "B", 12: "B", 13: "A", 14: "B", 15: "B", 16: "B", 17: "B", 18: "B"}
 MAX_FOLLOW_ON = 2
 MIN_QUOTE_WORDS = 5
 BREAK_EVEN_FAMILIES = ("asset_sized", "asset_sized_pipeline")
-MEMO_SECTIONS = ("## the structure", "## decisions only dalaun makes", "## risks", "## what a lawyer must decide")
-MEMO_LAYERS = ("business trust", "family trust", "foundation", "non-grantor")
+MEMO_SECTIONS = {
+    "A": ("## the trust", "## decisions only dalaun makes", "## coverage flags", "## risks", "## what the lawyer must decide"),
+    "B": ("## the structure", "## decisions only dalaun makes", "## risks", "## what the lawyer must decide"),
+}
+MEMO_TERMS = {
+    "A": ("irrevocable", "trustee", "co-trustee", "beneficiar", "foundation", "certification of trust"),
+    "B": ("business trust", "family trust", "foundation", "non-grantor", "operating company", "management company"),
+}
 MAX_WORDS = 15000
 MEMO_MAX_WORDS = 3000
 READ_RE = re.compile(r"\(read (\d{4}-\d{2}-\d{2})\)")
@@ -82,8 +102,9 @@ def paths(root: Path) -> dict:
     syn = root / "rehearsal" / "synthetic"
     pk = syn / "packet"
     return {"queue": syn / "counsel-queue.md", "scenarios": syn / "scenarios.json", "packet": pk,
-            "research": pk / "research", "memo": pk / "STRUCTURE-MEMO.md",
-            "sens": pk / "SENSITIVITY.md", "main": pk / "LAWYER-PACKET.md"}
+            "research": pk / "research", "sens": pk / "B" / "SENSITIVITY.md",
+            "memo": {k: pk / k / "MEMO.md" for k in "AB"},
+            "main": {k: pk / k / "LAWYER-PACKET.md" for k in "AB"}}
 
 
 def read(p: Path) -> str:
@@ -171,8 +192,9 @@ def research(p) -> dict[int, dict]:
     for n in queue(p):
         text = read(p["research"] / f"Q{n}.md")
         out[n] = {"text": text, "confidence": field(text, "Confidence").lower().strip(" ."),
+                  "packet": field(text, "Packet").upper().strip(" ."), "flag": field(text, "Coverage flag"),
                   "decides": field(text, "Lawyer decides"), "claims": claims(text),
-                  "follow": follow_ons(text)}
+                  "follow": follow_ons(text), "n": n}
     return out
 
 
@@ -181,6 +203,12 @@ def research_problem(r: dict, q: dict[int, str]) -> str:
         return "no research file"
     if r["confidence"] not in CONFIDENCE:
         return "confidence is not settled, likely or open"
+    if r["packet"] not in ("A", "B"):
+        return "no '- Packet: A' or '- Packet: B' line"
+    if r.get("n") in PACKET_OF and r["packet"] != PACKET_OF[r["n"]]:
+        return f"filed in packet {r['packet']}, but Q{r['n']} belongs in packet {PACKET_OF[r['n']]}"
+    if r["packet"] == "A" and words(r["flag"]) < 1:
+        return "packet A question without a '- Coverage flag:' line (none, or what could read as a business or investment interest)"
     if not r["claims"]:
         return "no numbered claims under '- Claims:'"
     for i, c in enumerate(r["claims"], 1):
@@ -301,7 +329,13 @@ def pk3(p, ctx):
 
 
 def packet_files(p) -> list[Path]:
-    return [p["memo"], p["sens"], p["main"]] + [p["research"] / f"Q{n}.md" for n in queue(p)]
+    return [p["memo"]["A"], p["memo"]["B"], p["main"]["A"], p["main"]["B"], p["sens"]] + \
+        [p["research"] / f"Q{n}.md" for n in queue(p)]
+
+
+def in_packet(p, k: str) -> list[int]:
+    rs = research(p)
+    return [n for n in queue(p) if (PACKET_OF.get(n) or rs[n]["packet"]) == k]
 
 
 def pk4(p, ctx):
@@ -366,42 +400,54 @@ def pk5(p, ctx):
 
 
 def pk6(p, ctx):
-    memo = read(p["memo"])
-    if not memo:
-        return False, "no STRUCTURE-MEMO.md"
-    low = memo.lower()
-    for s in MEMO_SECTIONS:
-        if s not in low:
-            return False, f"memo lacks the section '{s[3:]}'"
-    for layer in MEMO_LAYERS:
-        if layer not in low:
-            return False, f"memo never names '{layer}'"
-    if words(memo) > MEMO_MAX_WORDS:
-        return False, f"memo is {words(memo)} words, cap {MEMO_MAX_WORDS}"
-    section = low.split("## what a lawyer must decide", 1)[1].split("\n## ", 1)[0]
     rs = research(p)
-    need = [n for n, r in rs.items() if r["confidence"] in ("likely", "open")]
-    miss = [n for n in need if not re.search(rf"\bq{n}\b", section)]
-    if miss:
-        return False, f"'What a lawyer must decide' does not list Q{miss[0]}"
-    return True, "memo has the four sections, the layers and every open question"
+    for k in "AB":
+        memo = read(p["memo"][k])
+        if not memo:
+            return False, f"no packet {k} memo ({k}/MEMO.md)"
+        low = memo.lower()
+        for sec in MEMO_SECTIONS[k]:
+            if sec not in low:
+                return False, f"packet {k} memo lacks the section '{sec[3:]}'"
+        for term in MEMO_TERMS[k]:
+            if term not in low:
+                return False, f"packet {k} memo never names '{term}'"
+        if words(memo) > MEMO_MAX_WORDS:
+            return False, f"packet {k} memo is {words(memo)} words, cap {MEMO_MAX_WORDS}"
+        section = low.split("## what the lawyer must decide", 1)[1].split("\n## ", 1)[0]
+        need = [n for n in in_packet(p, k) if rs[n]["confidence"] in ("likely", "open")]
+        miss = [n for n in need if not re.search(rf"\bq{n}\b", section)]
+        if miss:
+            return False, f"packet {k} memo's 'What the lawyer must decide' does not list Q{miss[0]}"
+        if k == "A":
+            flags = low.split("## coverage flags", 1)[1].split("\n## ", 1)[0]
+            flagged = [n for n in in_packet(p, "A") if rs[n]["flag"] and rs[n]["flag"].lower().strip(" .") != "none"]
+            miss = [n for n in flagged if not re.search(rf"\bq{n}\b", flags)]
+            if miss:
+                return False, f"packet A memo's 'Coverage flags' does not list Q{miss[0]}"
+    return True, "both memos have their sections, terms and every open question; packet A's coverage flags listed"
 
 
 def pk7(p, ctx):
-    main = read(p["main"])
-    if not main:
-        return False, "no LAWYER-PACKET.md"
-    if "SYNTHETIC" not in main:
-        return False, "packet does not say its numbers are synthetic"
-    links = set(re.findall(r"\]\(([^)#\s]+)", main))
-    need = ["STRUCTURE-MEMO.md", "SENSITIVITY.md"] + [f"research/Q{n}.md" for n in queue(p)]
-    miss = [n for n in need if n not in links and f"./{n}" not in links]
-    if miss:
-        return False, f"packet does not link {miss[0]}"
-    total = sum(words(read(f)) for f in packet_files(p))
-    if total > MAX_WORDS:
-        return False, f"packet is {total:,} words in all, cap {MAX_WORDS:,} (about an hour's reading)"
-    return True, f"one packet, {total:,} words, links every part"
+    sizes = []
+    for k in "AB":
+        main = read(p["main"][k])
+        if not main:
+            return False, f"no packet {k} cover ({k}/LAWYER-PACKET.md)"
+        if "SYNTHETIC" not in main:
+            return False, f"packet {k} does not say its numbers are synthetic"
+        links = set(re.findall(r"\]\(([^)#\s]+)", main))
+        need = ["MEMO.md"] + (["SENSITIVITY.md"] if k == "B" else []) + [f"../research/Q{n}.md" for n in in_packet(p, k)]
+        miss = [n for n in need if n not in links and f"./{n}" not in links]
+        if miss:
+            return False, f"packet {k} does not link {miss[0]}"
+        files = [p["main"][k], p["memo"][k]] + ([p["sens"]] if k == "B" else []) + \
+            [p["research"] / f"Q{n}.md" for n in in_packet(p, k)]
+        total = sum(words(read(f)) for f in files)
+        if total > MAX_WORDS:
+            return False, f"packet {k} is {total:,} words, cap {MAX_WORDS:,} (about an hour's reading)"
+        sizes.append(f"{k} {total:,} words")
+    return True, "two packets, each links its parts: " + ", ".join(sizes)
 
 
 CHECKS = {"PK1": pk1, "PK2": pk2, "PK3": pk3, "PK4": pk4, "PK5": pk5, "PK6": pk6, "PK7": pk7}
@@ -449,18 +495,21 @@ PAGE1 = "<html><body><p>(c) The term <b>&ldquo;related or subordinate party&rdqu
 def _fixture(tmp: Path):
     p = paths(tmp)
     p["research"].mkdir(parents=True)
+    for k in "AB":
+        (p["packet"] / k).mkdir(parents=True, exist_ok=True)
     p["queue"].write_text("# Counsel queue\n\n## Q1. One?\n\n- Key: `a`\n\n## Q2. Two?\n\n- Key: `b`\n\n"
                           "## Q19. Three?\n\n- Key: `c`\n- Changes decision: whether the advisor can serve\n")
     auth = f'  - Trace: IRC 672(c) | "{QUOTE1}" | https://uscode.house.gov/view.xhtml?req=26+USC+672 (read 2026-11-25)\n'
     none = "  - Trace: no authority found | searched: IRC 671-679; Treas. Reg. 1.674(d)-2 (read 2026-11-25)\n"
     p["research"].joinpath("Q1.md").write_text(
-        f"# Q1\n\n{LABEL}\n\n- Confidence: settled\n- Claims:\n  1. The test is related or subordinate.\n{auth}")
+        f"# Q1\n\n{LABEL}\n\n- Packet: B\n- Confidence: settled\n- Claims:\n  1. The test is related or subordinate.\n{auth}")
     p["research"].joinpath("Q2.md").write_text(
-        f"# Q2\n\n{LABEL}\n\n- Confidence: open\n- Lawyer decides: whether the advisor counts as a trustee\n"
+        f"# Q2\n\n{LABEL}\n\n- Packet: A\n- Confidence: open\n- Lawyer decides: whether the advisor counts as a trustee\n"
+        "- Coverage flag: the trust would hold LLC interests, which a plan could read as a business interest\n"
         f"- Claims:\n  1. The code defines the party.\n{auth}  2. Nothing addresses advisors.\n{none}"
         "- Follow-on:\n  - Q19: changes whether the advisor can serve\n")
     p["research"].joinpath("Q19.md").write_text(
-        f"# Q19\n\n{LABEL}\n\n- Confidence: open\n- Lawyer decides: whether Illinois law lets the advisor serve\n"
+        f"# Q19\n\n{LABEL}\n\n- Packet: B\n- Confidence: open\n- Lawyer decides: whether Illinois law lets the advisor serve\n"
         f"- Claims:\n  1. Nothing found.\n{none}")
     fam = []
     for base, b in (("asset_sized", 150000), ("asset_sized_pipeline", 350000)):
@@ -476,12 +525,21 @@ def _fixture(tmp: Path):
         f"# Sensitivity\n\n{LABEL}\n\n| scenario | version | asset net income | B minus A |\n|---|---|---|---|\n{rows}\n\n"
         "- Realistic case (asset_sized): asset_sized_lo, cap rates https://example.com/caps (read 2026-11-25)\n"
         "- Realistic case (asset_sized_pipeline): asset_sized_pipeline_hi, SDE https://example.com/sde (read 2026-11-25)\n")
-    p["memo"].write_text(
-        f"# Memo\n\n{LABEL}\n\n## The structure\n\nbusiness trust, Family Trust, Foundation, non-grantor.\n\n"
-        "## Decisions only Dalaun makes\n\nx\n\n## Risks\n\nx\n\n## What a lawyer must decide\n\n- Q2: the advisor.\n- Q19: Illinois.\n")
-    p["main"].write_text(
-        f"# Packet\n\nSYNTHETIC.\n\n{LABEL}\n\n[memo](STRUCTURE-MEMO.md) [table](SENSITIVITY.md) "
-        "[Q1](research/Q1.md) [Q2](research/Q2.md) [Q19](research/Q19.md)\n")
+    for k in "AB":
+        p["memo"][k].parent.mkdir(parents=True, exist_ok=True)
+    p["memo"]["A"].write_text(
+        f"# Packet A memo\n\n{LABEL}\n\n## The trust\n\nAn irrevocable trust; the founder is trustee with an independent "
+        "co-trustee; beneficiaries are family members and the Foundation; a certification of trust goes to the bank.\n\n"
+        "## Decisions only Dalaun makes\n\nx\n\n## Coverage flags\n\n- Q2: LLC interests.\n\n## Risks\n\nx\n\n"
+        "## What the lawyer must decide\n\n- Q2: the advisor.\n")
+    p["memo"]["B"].write_text(
+        f"# Packet B memo\n\n{LABEL}\n\n## The structure\n\nbusiness trust, operating company, management company, "
+        "Family Trust, Foundation, non-grantor.\n\n## Decisions only Dalaun makes\n\nx\n\n## Risks\n\nx\n\n"
+        "## What the lawyer must decide\n\n- Q19: Illinois.\n")
+    p["main"]["A"].write_text(f"# Packet A\n\nSYNTHETIC.\n\n{LABEL}\n\n[memo](MEMO.md) [Q2](../research/Q2.md)\n")
+    p["main"]["B"].write_text(
+        f"# Packet B\n\nSYNTHETIC.\n\n{LABEL}\n\n[memo](MEMO.md) [table](SENSITIVITY.md) "
+        "[Q1](../research/Q1.md) [Q19](../research/Q19.md)\n")
     return p, res
 
 
@@ -499,13 +557,13 @@ def _break(cid: str, p):
     elif cid == "PK3":
         page = PAGE1.replace("nonadverse", "adverse")
     elif cid == "PK4":
-        p["memo"].write_text(p["memo"].read_text().replace(LABEL, ""))
+        p["memo"]["A"].write_text(p["memo"]["A"].read_text().replace(LABEL, ""))
     elif cid == "PK5":
         p["sens"].write_text(p["sens"].read_text().replace("| 101 |", "| 9999 |"))
     elif cid == "PK6":
-        p["memo"].write_text(p["memo"].read_text().replace("- Q2: the advisor.", "- the advisor."))
+        p["memo"]["A"].write_text(p["memo"]["A"].read_text().replace("- Q2: LLC interests.", "- LLC interests."))
     elif cid == "PK7":
-        p["main"].write_text(p["main"].read_text().replace("[Q2](research/Q2.md)", ""))
+        p["main"]["B"].write_text(p["main"]["B"].read_text().replace("[Q19](../research/Q19.md)", ""))
     return page
 
 
@@ -569,6 +627,23 @@ def selftest() -> int:
         def nodecision(p):
             p["queue"].write_text(p["queue"].read_text().replace("- Changes decision: whether the advisor can serve\n", ""))
         check(not variant("nodecision", nodecision)[0], "PK1 fails a follow-on that changes no named decision")
+
+        def misfiled(p):
+            f = p["research"] / "Q1.md"
+            f.write_text(f.read_text().replace("- Packet: B", "- Packet: A\n- Coverage flag: none"))
+        check(not variant("misfiled", misfiled)[0], "PK1 fails a question filed in the wrong packet")
+
+        def noflag(p):
+            f = p["research"] / "Q2.md"
+            f.write_text(re.sub(r"- Coverage flag:.*\n", "", f.read_text()))
+        check(not variant("noflag", noflag)[0], "PK1 fails a packet A question with no coverage flag")
+
+        def bmemo(p):
+            p["memo"]["B"].write_text(p["memo"]["B"].read_text().replace("- Q19: Illinois.", "- Illinois."))
+        vb = Path(d) / "bmemo"
+        shutil.copytree(root, vb)
+        bmemo(paths(vb))
+        check(not grade(vb, _ctx(vb, res))["PK6"][0], "PK6 fails when packet B's memo omits an open B question")
 
         unread = grade(root, {"results": res, "verified": verify(all_quotes(paths(root)), fetcher=lambda _u: None)})
         check(not unread["PK3"][0], "PK3 fails when the page cannot be read")

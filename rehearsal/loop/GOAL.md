@@ -12,7 +12,7 @@ The score below says how far off that is. [NEXT-MOVES.md](NEXT-MOVES.md) says wh
 
 ## The finish line (from 2026-11-25)
 
-The relay now runs until the **lawyer-ready packet** is done: every claim in every counsel answer traced to its source with the exact quoted text (or "no authority found" and where the run searched), with the quotes re-read by machine, the money case re-run at realistic sizes, and one plain memo of the structure, readable in an hour. The seven criteria, the top tier and the packet rules are in [PACKET-SCORECARD.md](PACKET-SCORECARD.md); the grader is in Dalaun's lane. The goal scorecard (SC1 to SC7) went 7 of 7 on 2026-11-24 and stays as a floor.
+The relay now runs until the **lawyer-ready packet** is done: every claim in every counsel answer traced to its source with the exact quoted text (or "no authority found" and where the run searched), with the quotes re-read by machine, the money case re-run at realistic sizes, split into two packets, each with its own memo and readable in an hour: Packet A, the Family Trust as a personal estate plan for an attorney under a prepaid personal legal plan, and Packet B, the business, tax and foundation questions for hired counsel. The seven criteria, the top tier and the packet rules are in [PACKET-SCORECARD.md](PACKET-SCORECARD.md); the grader is in Dalaun's lane. The goal scorecard (SC1 to SC7) went 7 of 7 on 2026-11-24 and stays as a floor.
 
 ## The score
 
