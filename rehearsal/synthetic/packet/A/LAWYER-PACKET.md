@@ -27,3 +27,6 @@ Every question below is `likely` or `open`; a question marked `settled` would no
   - Trace file: [research/Q13.md](../research/Q13.md)
 
 Packet A's trustee terms rest on packet B's answers to Q3 and Q8; see the section of that name in MEMO.md.
+- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim). Coverage flag: none
+  - Lawyer decides: Whether naming the Foundation as a beneficiary makes the Family Trust (or its set-aside) a charitable trust holding assets for a charitable purpose in Illinois, and so registrable.
+  - Trace file: [research/Q23.md](../research/Q23.md)
