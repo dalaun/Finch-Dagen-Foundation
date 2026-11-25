@@ -300,6 +300,23 @@ def fetch(url: str) -> str | None:
     return None
 
 
+ELLIPSIS_RE = re.compile(r"[\"”]\s*(?:\.\.\.|…)\s*[\"“]")
+
+
+def quote_found(quote: str, text: str) -> bool:
+    """A quote may be fragments joined by an ellipsis: "a" ... "b". Each fragment must be on the page, in order."""
+    pos = 0
+    for frag in ELLIPSIS_RE.split(quote):
+        f = norm(frag)
+        if not f:
+            continue
+        i = text.find(f, pos)
+        if i < 0:
+            return False
+        pos = i + len(f)
+    return True
+
+
 def verify(quotes: list[dict], fetcher=fetch) -> list[dict]:
     cache: dict[str, str | None] = {}
     out = []
@@ -310,7 +327,7 @@ def verify(quotes: list[dict], fetcher=fetch) -> list[dict]:
         text = cache[qd["url"]]
         if text is None:
             out.append({**qd, "result": "could not read the page"})
-        elif norm(qd["quote"]) in text:
+        elif quote_found(qd["quote"], text):
             out.append({**qd, "result": "match"})
         else:
             out.append({**qd, "result": "quote not found on the page"})
@@ -612,6 +629,12 @@ def selftest() -> int:
 
     check(URL_RE.findall("| https://www.law.cornell.edu/cfr/text/26/1.674(d)-2 (read 2026-11-25)")
           == ["https://www.law.cornell.edu/cfr/text/26/1.674(d)-2"], "a URL with parentheses is read whole")
+    check(quote_found('one two" ... "five six', norm("zero one two three four five six")),
+          "an ellipsis quote matches when each part is on the page in order")
+    check(not quote_found('five six" ... "one two', norm("zero one two three four five six")),
+          "an ellipsis quote fails when its parts are out of order")
+    check(not quote_found("one two five six", norm("zero one two three four five six")),
+          "a quote without an ellipsis must appear whole")
     check(URL_RE.findall("(https://a.gov/x) here") == ["https://a.gov/x"], "a URL inside parentheses stops before the closing one")
 
     with tempfile.TemporaryDirectory() as d:
