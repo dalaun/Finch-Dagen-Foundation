@@ -112,6 +112,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Primary cite: IRC 4947(a)(2), https://www.law.cornell.edu/uscode/text/26/4947 (not read by the run that wrote this entry).
 - What the text says (as read, not a conclusion): Section 4947(a)(2) is read as reaching a trust with amounts for which a deduction was allowed; (a)(2)(B) as excluding amounts segregated from those for which no deduction was allowable. 4941 and 642(c) were not read for this entry.
 - If counsel says otherwise: If counsel says it applies, every transaction between the trust and him or his family becomes a self-dealing question, and the charitable share would need to sit in a separate trust.
+- Changes decision: Q15 (from Q9's trace): whether the set-aside to the foundation is made at all, since 4947(a)(2) lists 642(c) deductions and 4941 among the sections that then apply.
 - Status: assumed, awaiting counsel
 
 ## Q10. How do distributions for minor children stay separate from his support duties?
@@ -184,6 +185,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Primary cite: IRC 642(c)(1), https://www.law.cornell.edu/uscode/text/26/642 and IRC 4947(a)(2), https://www.law.cornell.edu/uscode/text/26/4947 (neither read by the run that wrote this entry).
 - What the text says (as read, not a conclusion): nothing was read in this run beyond the repo's own notes.
 - If counsel says otherwise: if the set-aside is not deductible as modeled, or the share must be a different amount, the program output and the trust's and beneficiaries' tax change, and the split-interest rules may require a separate charitable trust.
+- Changes decision: Q9 (from Q15's trace): whether the charitable share is segregated into a separate trust, since 4947(a)(2)(B) turns on segregation.
 - Status: assumed, awaiting counsel
 
 ## Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?
