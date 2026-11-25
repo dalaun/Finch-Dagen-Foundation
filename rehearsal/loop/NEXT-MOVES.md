@@ -40,7 +40,7 @@ The run takes the first step below that has no move yet and whose earlier step i
 - For: CPA
 - Why it matters: the engine assumes both are passive under IRC 469, so the 3.8 percent net investment income tax (IRC 1411) applies to them. On the synthetic base year that assumption lowers break-even with an unrelated individual trustee from 178,500 to 149,500 a year, about 16 percent. Material participation, or real estate professional status under 469(c)(7), would take the tax off and push break-even back up.
 - The one thing for Dalaun: ask his CPA, "Would my rental income, and a business I buy and run through a hired manager, be passive activities for me under section 469, and could I qualify as a real estate professional?"
-- Last checked: 2026-11-24
+- Last checked: 2026-11-25
 - Status: open
 - Working assumption: see counsel-queue.md Q1
 

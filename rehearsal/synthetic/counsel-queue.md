@@ -85,7 +85,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - For: lawyer, then CPA
 - Question: Does my holding a principal power under a health, education, support or maintenance standard cause estate or gift tax problems for me as the funder (sections not modeled here)?
 - ASSUMPTION: The rehearsal runs on no gift or estate tax effect, which is not modeled. This is an assumption, not a finding.
-- Primary cite: IRC 2036(a), https://www.law.cornell.edu/uscode/text/26/2036 (not read by the run that wrote this entry).
+- Primary cite: IRC 2036(a), https://www.law.cornell.edu/uscode/text/26/2036 (read 2026-11-25; traced in packet/research/Q7.md, with 2038 and 2511).
 - What the text says (as read, not a conclusion): Section 2036(a) is read as including in the gross estate property transferred in trust where he retained the income or the right, alone or with another, to designate who enjoys the property or income. Gift-tax sections were not read here.
 - If counsel says otherwise: If counsel finds an estate or gift effect, the assets could stay in his estate or the transfer be an incomplete gift, and the structure value would need a new line.
 - Status: assumed, awaiting counsel
