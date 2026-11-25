@@ -340,3 +340,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): both schedules price a managed trust as a minimum plus a percent of assets, with hourly rates and out-of-pocket costs extra (BOKF: "$200 per hour"). Neither prices a distribution-only co-trustee.
 - If counsel says otherwise: a flat fee for a distribution-only role could be far below the percent-of-assets figure; at 5,000 a year the base-case break-even with an unrelated individual would be about 187,400 before the item 3 fix (Q28).
 - Status: assumed, awaiting counsel
+
+## Q31. Can an adult sibling of the founder, paid for services, be a co-trustee or be paid by the Foundation or the operating company?
+
+- Key: `sibling-paid-services`
+- Raised by: NEXT-MOVES.md move 16 (follow-on of Q16, with Q30)
+- For: lawyer, then CPA
+- Question: Can an adult sibling of the founder, paid for services, serve as the independent trustee route R2 counts on; can the Foundation or the operating company pay that sibling; and does naming the sibling a beneficiary move tax? Synthetic: no names or family details.
+- Changes decision: who can be the independent co-trustee (not a sibling, so Q30 stands), and whether a sibling may do paid work for the Foundation or the operating company, and under what checks.
+- ASSUMPTION: the sibling is an adult, not a substantial contributor, not an officer, director or trustee of the Foundation, and not a trustee of the Family Trust; paid at market rates for real, documented services. A scenario, not a description of anyone.
+- Primary cite: IRC 672(c)(2), https://www.law.cornell.edu/uscode/text/26/672; IRC 674(c), https://www.law.cornell.edu/uscode/text/26/674; IRC 4946(a)(1), (b)(1), (d), https://www.law.cornell.edu/uscode/text/26/4946; IRC 4941(d)(1)(D), (E) and (d)(2)(E), https://www.law.cornell.edu/uscode/text/26/4941; IRC 4945(d)(5), https://www.law.cornell.edu/uscode/text/26/4945; 26 CFR 1.162-7(a), (b)(3), https://www.law.cornell.edu/cfr/text/26/1.162-7; IRC 652(a), 662(a) (read 2026-11-25).
+- What the text says (as read, not a conclusion): 672(c)(2) lists "The grantor’s father, mother, issue, brother or sister" as a related or subordinate party, presumed subservient for 674 and 675; 674(c) allows "no more than half" related or subordinate trustees, none the grantor, acting without anyone's approval; 4946(d) family is "only his spouse, ancestors, children, grandchildren, great grandchildren, and the spouses of" those, so a sibling is a disqualified person only as a substantial contributor, a foundation manager or through a 35 percent entity; 4941(d)(2)(E) excepts pay for services "reasonable and necessary to carrying out the exempt purpose" if "not excessive"; 4941(d)(1)(E) and 4945(d)(5) check indirect benefit and purpose; 1.162-7(b)(3) tests pay against what "like enterprises under like circumstances" pay.
+- If counsel says otherwise: if the sibling is a trustee or officer of the Foundation, the sibling is a disqualified person and the 4941(d)(2)(E) exception must be met; if the sibling's pay is above market, the excess is not deductible at the operating company and may be self-dealing at the Foundation. The engine does not model sibling pay.
+- Status: assumed, awaiting counsel
+

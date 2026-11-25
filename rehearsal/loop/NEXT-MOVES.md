@@ -231,6 +231,7 @@ The run takes the first step below that has no move yet and whose earlier step i
 - The one thing for Dalaun: ask his lawyer, "Who can serve as the independent distribution trustee of the Family Trust (not a relative, not an employee), would a trust company or a lawyer accept a distribution-only role for a flat fee, and what would they charge?"
 - Status: open
 - Working assumption: an unrelated individual serves for 1,000 a year; a corporate co-trustee is priced at the published schedules and kills the money case; see counsel-queue.md Q30
+- Note: paid services by an adult sibling of the founder are ordinary income to that sibling at market pay, separate from the trust's beneficiary math; a sibling cannot be the independent co-trustee (672(c)(2), 674(c)); see counsel-queue.md Q31
 
 ## Closed
 
