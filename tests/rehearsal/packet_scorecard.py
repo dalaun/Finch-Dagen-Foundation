@@ -94,6 +94,11 @@ MEMO_TERMS = {
 MAX_WORDS = 15000
 MEMO_MAX_WORDS = 3000
 READ_RE = re.compile(r"\(read (\d{4}-\d{2}-\d{2})\)")
+# A page the runs cannot open goes to packet/NEEDS-DALAUN.md (his direction, 2026-11-25). He opens
+# it himself and copies the text back; that trace says "(copied by Dalaun <date>)" and is counted
+# apart from the machine re-read, so the lawyer can see which quotes a person copied.
+COPIED_RE = re.compile(r"\(copied by Dalaun (\d{4}-\d{2}-\d{2})\)", re.I)
+PENDING_RE = re.compile(r"^pending,?\s*needs Dalaun\b", re.I)
 URL_RE = re.compile(r"https://[^\s)>\]|]+")
 QUOTE_RE = re.compile(r"^[\"“](.+)[\"”]$", re.S)
 
@@ -157,6 +162,8 @@ def claims(text: str) -> list[dict]:
 
 def parse_trace(t: str) -> dict:
     parts = [x.strip() for x in t.split(" | ")]
+    if parts and PENDING_RE.match(parts[0]):
+        return {"kind": "pending"}
     if parts and parts[0].lower().startswith("no authority found"):
         rest = " | ".join(parts[1:])
         if not re.match(r"searched:\s*\S", rest, re.I) or not READ_RE.search(rest):
@@ -171,11 +178,12 @@ def parse_trace(t: str) -> dict:
     if words(q.group(1)) < MIN_QUOTE_WORDS:
         return {"error": f"quote under {MIN_QUOTE_WORDS} words: {t[:60]}"}
     urls = URL_RE.findall(src)
-    if not urls or not READ_RE.search(src) or "not read" in src.lower():
+    copied = bool(COPIED_RE.search(src))
+    if not urls or not (READ_RE.search(src) or copied) or "not read" in src.lower():
         return {"error": f"trace without a URL and a read date: {t[:60]}"}
     if not host_ok(urls[0]):
         return {"error": f"not a primary source: {urls[0][:60]}"}
-    return {"kind": "authority", "authority": auth, "quote": q.group(1), "url": urls[0]}
+    return {"kind": "authority", "authority": auth, "quote": q.group(1), "url": urls[0], "copied": copied}
 
 
 def follow_ons(text: str) -> list[tuple[int, str]]:
@@ -218,6 +226,8 @@ def research_problem(r: dict, q: dict[int, str]) -> str:
             pt = parse_trace(t)
             if "error" in pt:
                 return f"claim {i}: {pt['error']}"
+            if pt.get("kind") == "pending":
+                return f"claim {i} waits on a page Dalaun opens (NEEDS-DALAUN.md)"
     if len(r["follow"]) > MAX_FOLLOW_ON:
         return f"{len(r['follow'])} follow-on questions, cap {MAX_FOLLOW_ON}"
     for n, why in r["follow"]:
@@ -234,9 +244,23 @@ def all_quotes(p) -> list[dict]:
         for c in r["claims"]:
             for t in c["traces"]:
                 pt = parse_trace(t)
-                if pt.get("kind") == "authority":
+                if pt.get("kind") == "authority" and not pt.get("copied"):
                     out.append({"q": n, **pt})
     return out
+
+
+def trace_counts(p) -> dict:
+    """Quotes Dalaun copied by hand, and claims still waiting on a page he opens."""
+    c = {"copied": 0, "pending": 0}
+    for r in research(p).values():
+        for cl in r["claims"]:
+            for t in cl["traces"]:
+                pt = parse_trace(t)
+                if pt.get("kind") == "pending":
+                    c["pending"] += 1
+                elif pt.get("kind") == "authority" and pt.get("copied"):
+                    c["copied"] += 1
+    return c
 
 
 # ------------------------------------------------------------------ quote check
@@ -470,7 +494,7 @@ def progress(root: Path, ctx: dict) -> dict:
             "top": len(top), "open": sum(rs[n]["confidence"] == "open" for n in done),
             "quotes": None if checked is None else len(checked),
             "quotes_ok": None if checked is None else sum(c["result"] == "match" for c in checked),
-            "top_tier_done": bool(top_verified)}
+            "top_tier_done": bool(top_verified), **trace_counts(p)}
 
 
 def report(out: dict, root: Path, ctx: dict) -> int:
@@ -479,6 +503,10 @@ def report(out: dict, root: Path, ctx: dict) -> int:
         print(f"{'PASS' if ok else 'FAIL'} {cid} {NAMES[cid]}: {why}")
     g = progress(root, ctx)
     qv = "quotes not re-read" if g["quotes"] is None else f"quotes verified {g['quotes_ok']} of {g['quotes']}"
+    if g["copied"]:
+        qv += f", {g['copied']} copied by Dalaun"
+    if g["pending"]:
+        qv += f"; {g['pending']} claims wait on a page Dalaun opens"
     n = sum(ok for ok, _ in out.values())
     print(f"Top tier: {'done' if g['top_tier_done'] else 'not done'} ({g['top_traced']} of {g['top']} traced)")
     print(f"Packet: {n} of {len(IDS)} pass; traced {g['traced']} of {g['questions']} "
@@ -637,6 +665,28 @@ def selftest() -> int:
             f = p["research"] / "Q2.md"
             f.write_text(re.sub(r"- Coverage flag:.*\n", "", f.read_text()))
         check(not variant("noflag", noflag)[0], "PK1 fails a packet A question with no coverage flag")
+
+        def pending(p):
+            f = p["research"] / "Q2.md"
+            f.write_text(f.read_text().replace("  - Trace: no authority found | searched: IRC 671-679; Treas. Reg. 1.674(d)-2 (read 2026-11-25)",
+                                               "  - Trace: pending, needs Dalaun | https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4006 (tried 2026-11-25)"))
+        vp = Path(d) / "pending"
+        shutil.copytree(root, vp)
+        pending(paths(vp))
+        check(not grade(vp, _ctx(vp, res))["PK1"][0], "PK1 fails a claim still waiting on a page Dalaun opens")
+        check(progress(vp, _ctx(vp, res))["pending"] == 1, "progress counts a claim waiting on Dalaun")
+
+        def copied(p):
+            f = p["research"] / "Q2.md"
+            f.write_text(f.read_text().replace("  - Trace: no authority found | searched: IRC 671-679; Treas. Reg. 1.674(d)-2 (read 2026-11-25)",
+                                               '  - Trace: 760 ILCS 3/808 | "a trust instrument may provide for the appointment" | https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4006 (copied by Dalaun 2026-11-26)'))
+        vc = Path(d) / "copied"
+        shutil.copytree(root, vc)
+        copied(paths(vc))
+        cctx = {"results": res, "verified": verify(all_quotes(paths(vc)), fetcher=lambda _u: PAGE1)}
+        check(grade(vc, cctx)["PK1"][0], "PK1 counts a quote Dalaun copied by hand as traced")
+        check(grade(vc, cctx)["PK3"][0] and progress(vc, cctx)["copied"] == 1,
+              "a copied quote skips the machine re-read and is counted apart")
 
         def bmemo(p):
             p["memo"]["B"].write_text(p["memo"]["B"].read_text().replace("- Q19: Illinois.", "- Illinois."))
