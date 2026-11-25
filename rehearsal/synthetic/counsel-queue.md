@@ -314,3 +314,29 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read.
 - If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 187,400 a year instead of 149,500.
 - Status: assumed, awaiting counsel
+
+## Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?
+
+- Key: `minor-beneficiary-kiddie`
+- Raised by: NEXT-MOVES.md move 15
+- For: lawyer, then CPA
+- Question: With minor beneficiaries, income above the kiddie-tax steps is taxed at the founder's rate (IRC 1(g)), so the trust saves no income tax by splitting. Is there a reason beyond control and creditor protection of a minor's assets, succession if the founder dies or is disabled, and the Foundation route to use the trust, and how should the instrument handle the age at which the kiddie tax stops (19, or 24 for a full-time student)?
+- Changes decision: whether the Family Trust is worth its costs while the beneficiaries are minors (the engine says not on tax alone: `base_minor_only` and `asset_rental_minor_only` have no break-even up to 1,000,000).
+- ASSUMPTION: One minor beneficiary under 18 with no other income and a living parent; a scenario, not a description of anyone. The kiddie tax and the child's own NIIT are applied as traced.
+- Primary cite: IRC 1(g), https://www.law.cornell.edu/uscode/text/26/1; IRC 152(c)(3), https://www.law.cornell.edu/uscode/text/26/152; Rev. Proc. 2025-32 sec. 3.02 and 3.14(2), https://www.irs.gov/pub/irs-drop/rp-25-32.pdf; Instructions for Form 8615 (2025), https://www.irs.gov/pub/irs-prior/i8615--2025.pdf (read 2026-11-25).
+- What the text says (as read, not a conclusion): 1(g)(1) taxes a covered child at the greater of the ordinary tax or the tax on income reduced by net unearned income plus the child's share of the "allocable parental tax"; 2026 step 1,350 (Rev. Proc. 2025-32); the Form 8615 instructions say a child's NIIT is figured on "the child's modified adjusted gross income (MAGI)".
+- If counsel says otherwise: if a different rule applies (for example the parental election of 1(g)(7), or a trust-law reason to prefer another vehicle), the minor-only break-even changes; the engine does not model them.
+- Status: assumed, awaiting counsel
+
+## Q30. Who is the independent co-trustee, and what does a professional or corporate one cost?
+
+- Key: `independent-cotrustee`
+- Raised by: NEXT-MOVES.md move 16
+- For: lawyer
+- Question: Route R2 needs an independent distribution trustee who is not related or subordinate under 672(c), and family cannot fill it. Who serves, and what does a professional or corporate co-trustee cost?
+- Changes decision: whether any asset size makes the money case work (with a corporate co-trustee at the published schedules it does not, up to 1,000,000 a year of asset income).
+- ASSUMPTION: Corporate co-trustee fee 3,000 minimum and 1.25 percent of assets (stack.json `independent_trustee_minimum`, `independent_trustee_rate_of_assets`, from benchmarks-tax.json `fees`); an unrelated individual at 1,000 a year (Q28). Neither is a quote.
+- Primary cite: Members Trust Company, Trust Services Fee Schedule (April 2024), https://www.ncsecu.org/content/dam/ncsecu/pdfs/planning-insurance/estate-planning-and-trust-services/TrustServicesFeeSchedule.pdf ("$3,000 for Irrevocable Trusts"; "First $1 million 1.25%"); BOKF, NA, Advisor Trust Services fee schedule (revised 01.2027), https://edge.sitecorecloud.io/bokfna15473-bokf40a9-prode209-f913/media/Files/PDF/Advisor_Trust/ATS-Fee-Schedule.pdf (Directed Personal Trust "Minimum Annual Account fee $5,000", "First $1MM 0.50%"; closely held assets "Minimum Annual Account fee $4,000", "First $1MM 1.250%"); read 2026-11-25. Citi and Schwab pages did not load.
+- What the text says (as read, not a conclusion): both schedules price a managed trust as a minimum plus a percent of assets, with hourly rates and out-of-pocket costs extra (BOKF: "$200 per hour"). Neither prices a distribution-only co-trustee.
+- If counsel says otherwise: a flat fee for a distribution-only role could be far below the percent-of-assets figure; at 5,000 a year the base-case break-even with an unrelated individual would be about 187,400 before the item 3 fix (Q28).
+- Status: assumed, awaiting counsel

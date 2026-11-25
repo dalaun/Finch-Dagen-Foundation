@@ -118,7 +118,10 @@
     "url": "https://ilga.gov/legislation/ilcs/documents/080501800K50-10.htm ; https://illinoisattorneygeneral.gov/Page-Attachments/FormAG990ILFilingInstuctions.pdf",
     "status": "READ",
     "il_llc_annual_report": 75,
-    "il_ag_charity_annual_report": 15
+    "il_ag_charity_annual_report": 15,
+    "corporate_trustee_minimum": 3000,
+    "corporate_trustee_rate_of_assets": 0.0125,
+    "corporate_trustee_note": "Two trust companies' own published schedules, read 2026-11-25. Members Trust Company (NCSECU Trust Services Fee Schedule, April 2024, https://www.ncsecu.org/content/dam/ncsecu/pdfs/planning-insurance/estate-planning-and-trust-services/TrustServicesFeeSchedule.pdf): 'Minimum annual fees: ... $3,000 for Irrevocable Trusts', market value fee 'First $1 million 1.25%'. BOKF, NA (Advisor Trust Services fee schedule, revised 01.2027, https://edge.sitecorecloud.io/bokfna15473-bokf40a9-prode209-f913/media/Files/PDF/Advisor_Trust/ATS-Fee-Schedule.pdf): Directed Personal Trust 'First $1MM 0.50%', 'Minimum Annual Account fee $5,000'; 'Trust Management for Closely Held Assets, Tangible Assets & Collectibles' 'First $1MM 1.250%', 'Total balance less than $1MM 1.500%', 'Minimum Annual Account fee $4,000'. The engine takes the lowest minimum read for an irrevocable trust (3,000) and the 1.25 percent first-million rate that both schedules show for assets that are not marketable securities. A schedule is a list price for a managed trust, not a quote for a co-trustee who only decides distributions; hourly rates and out-of-pocket costs are extra (BOKF: '$200 per hour'). Citi and Schwab pages did not load (error page, HTTP refusal)."
   },
   "wages": {
     "source": "BLS Occupational Employment and Wage Statistics, Chicago-Naperville-Elgin IL-IN, May 2025, release 26-848-CHI, Jul 23 2026",
@@ -149,7 +152,6 @@
   },
   "not_read": [
     "26 USC 170(p) statute text: IRS IR-2026-135 says non-itemizers may deduct up to 1,000 (2,000 joint) of cash gifts from 2026, and gifts to supporting organizations and donor-advised funds do not qualify. Whether gifts to a private non-operating foundation qualify is NOT confirmed; the model gives them no deduction.",
-    "26 USC 152(c)(3) age test behind the kiddie tax (1(g)(2)).",
     "Illinois exemption allowance."
   ],
   "grantor_trust": {
@@ -212,5 +214,17 @@
       "read": false,
       "note": "Page not read in this run. ASSUMPTION (counsel-queue.md Q9): the trust's payment to the Foundation is a charitable set-aside paid from gross income; it makes the trust a 4947(a)(2) split-interest trust."
     }
+  },
+  "kiddie_tax": {
+    "source": "26 USC 1(g), 152(c)(3), IRS Rev. Proc. 2025-32 sec. 3.02 and 3.14(2), IRS Instructions for Form 8615 (2025); read 2026-11-25",
+    "url": "https://www.law.cornell.edu/uscode/text/26/1 ; https://www.law.cornell.edu/uscode/text/26/152 ; https://www.irs.gov/pub/irs-drop/rp-25-32.pdf ; https://www.irs.gov/pub/irs-prior/i8615--2025.pdf",
+    "status": "READ",
+    "step": 1350,
+    "who_it_covers": "1(g)(2)(A): '(i) has not attained age 18 before the close of the taxable year' (the page's text for (ii): a child who has reached 18, meets the 152(c)(3) age requirements applied without regard to its subparagraph (B), and whose earned income does not exceed one-half of the individual's support); 1(g)(2)(B): a parent is alive at year end. 152(c)(3)(A): the individual '(i) has not attained the age of 19 as of the close of the calendar year' or '(ii) is a student who has not attained the age of 24 as of the close of such calendar year'. The Form 8615 instructions state it in plain words: under 18 at year end; 18 and 'didn't have earned income that was more than half of the child's support'; or 'a full-time student at least age 19 and under age 24' with the same support test.",
+    "how_taxed": "1(g)(1): the tax is 'the greater of' (A) 'the tax imposed by this section without regard to this subsection' or (B) the tax on the child's taxable income reduced by the net unearned income, plus the child's share of the 'allocable parental tax'. 1(g)(3): the allocable parental tax is 'the tax which would be imposed by this section on the parent's taxable income if such income included' the net unearned income of the children, less 'the tax imposed by this section on the parent without regard to this subsection.' 1(g)(4)(A): net unearned income is the excess of (i) 'the portion of the adjusted gross income for the taxable year which is not attributable to earned income' over (ii) the sum of (I) the 63(c)(5)(A) amount plus (II) the greater of that amount or directly connected itemized deductions. 1(g)(4)(B): 'shall not exceed the individual's taxable income'.",
+    "dollar_amounts_2026": "Rev. Proc. 2025-32 sec. 3.02: 'the amount in 1(g)(4)(A)(ii)(I) ... is $1,350. This $1,350 amount is the same as the amount provided in 63(c)(5)(A)'. Sec. 3.14(2), dependent standard deduction: 'cannot exceed the greater of (1) $1,350, or (2) the sum of $450 and the individual's earned income.' So the first 1,350 of unearned income is covered by the dependent standard deduction, the next 1,350 is taxed at the child's rate, and the rest (net unearned income) at the parent's rate; the engine's `step` is 1,350.",
+    "niit_for_a_child": "Instructions for Form 8615 (2025): 'A child whose tax is figured on Form 8615 may be subject to the NIIT. NIIT is a 3.8% tax on the lesser of net investment income or the excess of the child's modified adjusted gross income (MAGI) over the threshold amount. Use Form 8960 ... to figure this tax.' So the child's own MAGI is tested against the 200,000 threshold (1411(b)(3)), not the parent's. The 2025 instructions are the latest version read; the statute 1411 has no kiddie-tax rule. Exception read: a parent who elects Form 8814 puts the child's income on the parent's own Form 8960 (Instructions for Form 8960, line 7).",
+    "engine": "rehearsal_run.py kiddie_split and minor_tax. Not modeled: the 1(g)(7) parental election, a minor's earned income, a minor's QBI, the Illinois exemption.",
+    "assumption": "ASSUMPTION: a minor beneficiary has no other income, is under 18, and a parent is living; the household's minors are scenario facts only (`minor_beneficiaries`), never a description of anyone."
   }
 }

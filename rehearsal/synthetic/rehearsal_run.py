@@ -129,6 +129,35 @@ def trust_tax(retained: float, nii: float | None = None) -> float:
             + niit_trust(n, retained))
 
 
+def kiddie_split(unearned: float) -> tuple:
+    """IRC 1(g)(4)(A): net unearned income is unearned income over the sum of (I) the 63(c)(5)(A)
+    amount and (II) the greater of that amount or directly connected itemized deductions (none here,
+    so the same amount again). Returns (free step, child-rate step, parent-rate step). 2026: 1,350 each
+    (Rev. Proc. 2025-32 sec. 3.02, benchmarks-tax.json kiddie_tax)."""
+    step = BM["kiddie_tax"]["step"]
+    u = max(unearned, 0.0)
+    free = min(u, step)
+    child_rate = min(max(u - step, 0.0), step)
+    parent_rate = max(u - 2 * step, 0.0)  # 1(g)(4)(B): never more than taxable income (u - step), always true here
+    return free, child_rate, parent_rate
+
+
+def minor_tax(unearned: float, nii: float, parent_extra_federal: float) -> dict:
+    """One minor's 2026 tax on a trust distribution that is all unearned income (IRC 1(g)). parent_extra_federal is this
+    child's share of the allocable parental tax (1(g)(3)): the founder's federal tax with the child's net unearned
+    income added, minus without. The child's tax is the greater of (A) the regular tax on the child's own taxable
+    income and (B) the child-rate step plus the allocable parental tax (1(g)(1)); Illinois at the individual rate
+    on the whole amount (exemption not modeled, as for adults); NIIT on the child's own MAGI (1411(b)(3);
+    Instructions for Form 8615, benchmarks-tax.json kiddie_tax). Child QBI and earned income are not modeled."""
+    free, mid, top = kiddie_split(unearned)
+    regular = bracket_tax(max(unearned - BM["kiddie_tax"]["step"], 0.0), FED["single_brackets"])
+    fed_b = bracket_tax(mid, FED["single_brackets"]) + parent_extra_federal
+    fed = max(regular, fed_b)
+    il = max(unearned, 0.0) * IL["individual_rate"]
+    niit = niit_individual(nii, unearned)
+    return {"federal": fed, "illinois": il, "niit": niit, "total": fed + il + niit}
+
+
 # ------------------------------------------------------------------ checks
 
 def decide_outcomes() -> dict:
@@ -353,9 +382,18 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
     asset_nii_share = 1.0 if kind in ("rental", "business") else 0.0
     asset_cash = asset_in - s["asset_costs"] - s["asset_principal"] + extra_asset_net
 
+    if sc.get("beneficiary_other_income") is not None:  # a scenario may fix it (ASSUMPTION stated in the scenario)
+        A = dict(A, beneficiary_other_income=sc["beneficiary_other_income"])
+    for key in ("adult_beneficiaries", "minor_beneficiaries"):
+        if sc.get(key) is not None:
+            A = dict(A, **{key: sc[key]})
     bene_income = resolve(A["beneficiary_other_income"], BM)
-    n_bene = A.get("adult_beneficiaries", 2)
-    bene_base = person_tax(wages=bene_income)["total"] * n_bene
+    n_adult = A.get("adult_beneficiaries", 2)
+    n_minor = A.get("minor_beneficiaries", 0)  # distributions to minors are taxed under IRC 1(g) (kiddie_tax in benchmarks-tax.json)
+    n_bene = n_adult + n_minor
+    if n_bene < 1:
+        raise ValueError("a household needs at least one beneficiary")
+    bene_base = person_tax(wages=bene_income)["total"] * n_adult  # a minor's own other income is not modeled
 
     itemize = dict(mortgage_interest=s["own_mortgage_interest"], property_tax=s["own_property_tax"],
                    charity=s["charity_acknowledged"])
@@ -378,9 +416,11 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         saving_line = s["saving"]
     saving_out = saving_line + listed_401k
 
-    def founder(sched_c, asset_ord, asset_q):
+    def founder(sched_c, asset_ord, asset_q, extra_ordinary=0.0):
+        # The asset's income is net investment income only by kind (asset_nii_share), the same share the beneficiary arm uses.
         return person_tax(wages=wages, sched_c=sched_c, sched_e=sched_e_building + asset_ord,
-                          qbi_income=max(sched_c, 0) + asset_q, nii=sched_e_building + asset_ord,
+                          other_ordinary=extra_ordinary,
+                          qbi_income=max(sched_c, 0) + asset_q, nii=sched_e_building + asset_ord * asset_nii_share,
                           deferral_401k=pretax["401k"], cafeteria_125=pretax["125"], **itemize)
 
     # Arm A: no structure; business-shaped lines paid personally and not deducted (spec, Arm A)
@@ -444,8 +484,15 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
             trust_tax_paid = trust_tax(retained, retained * asset_nii_share)
             share_each = dist_taxed / n_bene
             q_each = asset_qbi * A["trust_distributes_share_of_dni"] / n_bene
-            bene_tax = n_bene * person_tax(wages=bene_income, other_ordinary=share_each, qbi_income=q_each,
-                                                nii=share_each * asset_nii_share)["total"]
+            bene_tax = n_adult * person_tax(wages=bene_income, other_ordinary=share_each, qbi_income=q_each,
+                                            nii=share_each * asset_nii_share)["total"]
+            if n_minor:
+                # 1(g)(1), (3), (4): the part of each minor's income above the two steps is taxed at the founder's rate:
+                # his federal tax with all the minors' net unearned income added, minus without, shared by minor.
+                nui_each = kiddie_split(share_each)[2]
+                f_with = founder(mgmt_rev - routed, 0.0, 0.0, extra_ordinary=nui_each * n_minor)["federal"]
+                parent_extra_each = (f_with - fb["federal"]) / n_minor
+                bene_tax += n_minor * minor_tax(share_each, share_each * asset_nii_share, parent_extra_each)["total"]
             asset_value = max(asset_net, 0.0) / A["asset_yield_for_value"]
             trustee = (max(fees["independent_trustee_minimum"], fees["independent_trustee_rate_of_assets"] * asset_value)
                        if A.get("trustee_kind", "professional") == "professional" else fees.get("unrelated_individual_trustee", 1000))
@@ -606,6 +653,35 @@ def selftest() -> int:
     fee_ind = run_year(sc_t, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]
     fee_pro = run_year(sc_p, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]
     ok(fee_ind < fee_pro, "scenario trustee_kind individual prices the trustee below the professional default")
+    # R14 kiddie tax (IRC 1(g), benchmarks-tax.json kiddie_tax): steps of 1,350, 1,350, then the parent's rate.
+    ok(kiddie_split(1000.0) == (1000.0, 0.0, 0.0), "kiddie: 1,000 of unearned income is all inside the free step")
+    ok(kiddie_split(2000.0) == (1350.0, 650.0, 0.0), "kiddie: 2,000 is 1,350 free and 650 at the child's rate")
+    ok(kiddie_split(5000.0) == (1350.0, 1350.0, 2300.0), "kiddie: 5,000 is 1,350 free, 1,350 at the child's rate, 2,300 at the parent's")
+    ok(round(minor_tax(2700.0, 0.0, 0.0)["federal"]) == 135, "kiddie: 2,700 owes 135 federal (10 percent of the 1,350 step)")
+    mt = minor_tax(5000.0, 5000.0, 506.0)
+    ok(round(mt["federal"]) == round(0.10 * 1350 + 506) and round(mt["illinois"]) == round(5000 * IL["individual_rate"]) and mt["niit"] == 0,
+       "kiddie: 5,000 owes the child-rate step plus the parent's extra federal tax, Illinois at the individual rate, no NIIT")
+    ok(round(minor_tax(300000.0, 300000.0, 0.0)["niit"]) == round(0.038 * 100000),
+       "kiddie: the child's NIIT uses the child's own MAGI against 200,000 (Form 8615 instructions)")
+    ok(minor_tax(300000.0, 300000.0, 0.0)["federal"] == bracket_tax(300000.0 - 1350, FED["single_brackets"]),
+       "kiddie: the child's regular tax applies when it exceeds the parent-rate computation (1(g)(1) 'greater of')")
+    # Minor-only household: the engine option runs, and taxes the minor above the free steps.
+    st_m = json.loads(json.dumps(load_json(HERE / "stack.json")))
+    sc_m = {"id": "minor", "label": "minor test", "payroll": {}, "asset": {"kind": "generic"},
+            "adult_beneficiaries": 0, "minor_beneficiaries": 1, "beneficiary_other_income": 0, "trustee_kind": "individual"}
+    sc_a = dict(sc_m, adult_beneficiaries=1, minor_beneficiaries=0)
+    grader_m = Grader(st_m)
+    rm = run_year(sc_m, [], st_m, grader_m, extra_asset_net=50000.0, versions=["steward_r2"])["versions"]["steward_r2"]
+    ra = run_year(sc_a, [], st_m, grader_m, extra_asset_net=50000.0, versions=["steward_r2"])["versions"]["steward_r2"]
+    ok(rm["taxes"] > ra["taxes"], "minor-only household pays more tax on 50,000 than one adult with no other income (income splitting is lost)")
+    ok(run_year(dict(sc_m, minor_beneficiaries=0, adult_beneficiaries=1), [], st_m, grader_m, extra_asset_net=50000.0,
+                versions=["steward_r2"])["versions"]["steward_r2"] == ra, "minor_beneficiaries 0 is the adult-only path")
+    # Item 3 (R14): a generic asset's income is not net investment income for the founder either, a rental's is.
+    fa_g = run_year({"id": "g", "label": "g", "payroll": {}, "asset": {"kind": "generic"}}, [], st_m, grader_m, extra_asset_net=300000.0,
+                    versions=["today"])["A"]["founder"]["niit"]
+    fa_r = run_year({"id": "r", "label": "r", "payroll": {}, "asset": {"kind": "rental"}}, [], st_m, grader_m, extra_asset_net=300000.0,
+                    versions=["today"])["A"]["founder"]["niit"]
+    ok(fa_g == 0 and fa_r > 0, "founder's NIIT: a generic asset's income is not investment income, a rental's is (same asset_nii_share as the beneficiary arm)")
     print(f"\n{fails} failed")
     return 1 if fails else 0
 

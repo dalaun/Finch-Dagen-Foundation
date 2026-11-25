@@ -21,6 +21,7 @@
       "asset_yield_for_value turns a break-even income into a rough asset value. It is an ASSUMPTION for perspective, not a market cap rate."
     ],
     "adult_beneficiaries": 2,
+    "minor_beneficiaries": 0,
     "trustee_kind": "professional"
   },
   "fees_placeholder": {
@@ -30,8 +31,8 @@
     "form_1041_prep_each": 1200,
     "form_990pf_prep": 2000,
     "il_ag_charity_annual_fee": "fees.il_ag_charity_annual_report",
-    "independent_trustee_minimum": 2500,
-    "independent_trustee_rate_of_assets": 0.01,
+    "independent_trustee_minimum": "fees.corporate_trustee_minimum",
+    "independent_trustee_rate_of_assets": "fees.corporate_trustee_rate_of_assets",
     "form_709_prep_once": 800,
     "note": "All PLACEHOLDERS except the two state fees, which point at benchmarks-tax.json. Replace with quotes (backlog item FEE-QUOTES).",
     "unrelated_individual_trustee": 1000
