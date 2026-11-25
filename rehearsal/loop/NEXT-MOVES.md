@@ -199,6 +199,16 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: two adult beneficiaries; see counsel-queue.md Q27
 
+### 14. question: What would an unrelated individual trustee really charge, and will one serve?
+
+- Key: `individual-trustee-fee`
+- Opened: 2026-11-25
+- For: lawyer
+- Why it matters: every break-even above that uses an unrelated individual trustee rests on a 1,000 a year fee (stack.json `fees_placeholder.unrelated_individual_trustee`, a PLACEHOLDER with no source). With an independent professional trustee (2,500 minimum or 1 percent of assets) no asset income up to 1,000,000 clears break-even. In a scratch run (not committed) that set the individual's fee to 5,000, break-even on the base year rose from 149,500 to 187,400 a year, about 25 percent (lean 146,900 to 184,500; asset_rental 137,200 to 175,000; asset_business 147,700 to 192,000). So the size of asset in moves 4 and 9 depends on a number nobody has quoted.
+- The one thing for Dalaun: ask his lawyer, "Would an unrelated individual (not a family member, not a company) serve as trustee or distribution trustee of the Family Trust, what yearly fee is realistic, and what duties and liability would they carry?"
+- Status: open
+- Working assumption: an unrelated individual trustee serves for 1,000 a year (placeholder, not a quote); see counsel-queue.md Q28
+
 ## Closed
 
 (none yet)

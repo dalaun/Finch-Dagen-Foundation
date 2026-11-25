@@ -417,6 +417,7 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         program = 0.0
         if f["exists"]:
             fee += fees["form_990pf_prep"] + fees["il_ag_charity_annual_fee"] + fees["bookkeeping_each_entity"]
+            # 4940(a) rate 1.39 percent; base is 4940(c) net investment income (interest, dividends, rents, royalties), not contributions: benchmarks-tax.json excise_4940
             excise = f["net_investment_income"] * 0.0139
             fee += excise
         fee += fees["bookkeeping_each_entity"]  # the Family Trust's own books, grantor or not
