@@ -401,3 +401,28 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: a lower salary would raise the entities' profit taxed elsewhere and move the founder's own tax; the engine's wage lines would become an input.
 - Status: assumed, awaiting CPA
 
+## Q35. Can the Foundation meet its payout through grants to other foundations or collaboratives?
+
+- Key: `foundation-to-foundation`
+- Raised by: BACKLOG.md R12 item 5; follow-on of Q17
+- For: lawyer
+- Question: When does a grant from the Foundation to another private foundation or a collaborative count toward its yearly payout, and when would an exchange of grants between foundations be self-dealing or a step transaction?
+- Changes decision: whether the Foundation meets its payout through grants to other foundations or collaboratives, or only to public charities.
+- ASSUMPTION: the engine models no grants to other foundations; the Foundation's program output is its own. Not confirmed.
+- Primary cite: IRC 4942(g)(1) and (g)(3), https://www.law.cornell.edu/uscode/text/26/4942; IRC 4945(d)(4) and (h), https://www.law.cornell.edu/uscode/text/26/4945; IRC 4941(d)(1), https://www.law.cornell.edu/uscode/text/26/4941 (all read 2026-11-25).
+- What the text says (as read, not a conclusion): a contribution to a private foundation that is not an operating foundation, or to an organization controlled by the foundation or its disqualified persons, is outside 4942(g)(1)(A) unless 4942(g)(3) applies: the grantee pays out an equal amount by the close of its next taxable year, as a distribution out of corpus, and the giver holds adequate records; a grant to an organization is a taxable expenditure unless the grantee is a public charity or exempt operating foundation or the giver exercises expenditure responsibility (4945(d)(4), (h)); self-dealing reaches any direct or indirect transfer to or use by a disqualified person (4941(d)(1)(E)). Regulations, the 4942(g)(4) supporting-organization limit and the step-transaction doctrine were not read.
+- If counsel says otherwise: no engine number changes; a route through other foundations would add a payout channel, and a prearranged exchange would be a self-dealing finding.
+- Status: assumed, awaiting lawyer
+
+## Q36. How much will the management company really pay the founder in consulting revenue each year?
+
+- Key: `consulting-revenue`
+- Raised by: NEXT-MOVES.md move 19
+- For: CPA
+- Question: What yearly amount can the management company lawfully pay the founder for services actually done, and how is it supported?
+- Changes decision: how large the income-producing asset must be, because the founder's own tax bracket sets how much a trust-held asset saves.
+- ASSUMPTION: 24,000 a year (scenarios.json line `mgmt_revenue`, labelled ASSUMPTION), no source behind it. Not confirmed.
+- Primary cite: none for the amount; the reasonable-compensation limit is traced in Q34 (IRS S corporation compensation page; IRC 1372; 4941(d)(2)(E)).
+- What the text says (as read, not a conclusion): see Q34. The figure is a scenario input, not a rule.
+- If counsel says otherwise: scratch runs on the base year (not committed): 12,000 gives a break-even of 181,200 a year with an unrelated individual trustee, 48,000 gives 148,400, against 170,300 at 24,000.
+- Status: assumed, awaiting CPA
