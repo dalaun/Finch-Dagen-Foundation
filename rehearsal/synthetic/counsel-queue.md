@@ -13,7 +13,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - For: CPA
 - Question: Would my rental income, and a business I buy and run through a hired manager, be passive activities for me under section 469, and could I qualify as a real estate professional?
 - ASSUMPTION: The rehearsal treats the rentals and a business run by a hired manager as passive activities under IRC 469, so the 3.8 percent net investment income tax (IRC 1411) applies to that income.
-- Primary cite: IRC 469(c)(7)(B) and 469(h)(1), https://www.law.cornell.edu/uscode/text/26/469 (not read by the run that wrote this entry).
+- Primary cite: IRC 469(c)(2), 469(c)(7)(B), 469(h)(1) and 1411(a)(1), https://www.law.cornell.edu/uscode/text/26/469 (read 2026-11-25; traced in packet/research/Q1.md).
 - What the text says (as read, not a conclusion): Section 469(h)(1) is read as asking whether the taxpayer is involved in the operations of the activity on a regular, continuous and substantial basis; 469(c)(7)(B) is read as asking for more than half of personal services in real property trades or businesses in which he materially participates and more than 750 hours in the year. Whether his facts meet either is for the CPA.
 - If counsel says otherwise: If counsel says the income is nonpassive, the 3.8 percent tax comes off that income and break-even with an unrelated individual trustee rises from about 149,500 back toward about 178,500 a year (move 1's figures). The engine's passive flag would change in scenarios.json and benchmarks-tax.json.
 - Status: assumed, awaiting counsel
@@ -134,7 +134,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - For: CPA or appraiser
 - Question: Is a yield of about 7 percent a fair stand-in for what an asset of this kind earns after costs, so that about 150,000 a year of net income means an asset of roughly 2.1 million?
 - ASSUMPTION: The rehearsal sizes the asset to clear the unrelated-individual-trustee break-even (149,500 a year in the base case; 146,900 lean, 137,200 asset_rental, 147,700 asset_business) and divides by `asset_yield_for_value` (0.07 in stack.json), giving about 2,135,700 in the base case. The 0.07 is an ASSUMPTION for perspective, not a market rate. With an independent professional trustee there is no break-even up to 1,000,000 a year, so no size is implied.
-- Primary cite: none. No public source was read for this entry.
+- Primary cite: none found. Pages searched 2026-11-25 state no yield; see packet/research/Q11.md.
 - What the text says (as read, not a conclusion): nothing was read. The break-even figures are the engine's own output on main; the yield is the stack.json assumption.
 - If counsel says otherwise: If the right yield is higher or lower, the implied value moves in inverse proportion (for example 149,500 / 0.05 is about 2,990,000; 149,500 / 0.09 is about 1,661,100). The engine's `asset_yield_for_value` would change in stack.json.
 - Status: assumed, awaiting counsel
@@ -146,7 +146,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - For: CPA or appraiser
 - Question: Which of a rental building, a bought operating business run by a hired manager, or a small portfolio of rental units can credibly net about 150,000 a year at the size move 4 implies, and what yield, sale multiple or SBA 7(a) loan terms should the rehearsal use for each?
 - ASSUMPTION: The rehearsal runs on the two asset kinds the engine models (a rental building and a bought operating business) at the engine's assumed yields. No market data was read in this run: no cap rates, business sale multiples or SBA 7(a) terms.
-- Primary cite: none. No public source was read for this entry.
+- Primary cite: SBA 7(a) page, https://www.sba.gov/funding-programs/loans/7a-loans (read 2026-11-25; loan cap and operating-business rule only, no yields or multiples; packet/research/Q12.md).
 - What the text says (as read, not a conclusion): nothing was read. Data that would settle it: published cap rates for the property type and region, published business sale multiples, and the SBA's published 7(a) program terms.
 - If counsel says otherwise: If real yields or multiples differ from the engine's, the asset size needed, the financing cost and the asset_rental and asset_business scenarios would change, and a third class might replace one of the two.
 - Status: assumed, awaiting counsel
