@@ -310,8 +310,8 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Question: Will an unrelated individual agree to act as trustee or independent distribution trustee of the Family Trust, at what yearly fee, and with what duties and liability?
 - Changes decision: how large the income-producing asset must be (and whether a professional trustee is needed instead, for which no break-even exists up to 1,000,000 a year).
 - ASSUMPTION: an unrelated individual serves for 1,000 a year, the stack.json placeholder `unrelated_individual_trustee`. Not a quote. (Backlog item 14 COUNSEL-QS already asks whether this is realistic.)
-- Primary cite: none; no fee schedule or statute was read for this move.
-- What the text says (as read, not a conclusion): nothing was read.
+- Primary cite: IRC 672(c), https://www.law.cornell.edu/uscode/text/26/672; Treas. Reg. 1.674(c)-1, https://www.law.cornell.edu/cfr/text/26/1.674(c)-1 (read 2026-11-25; traced in packet/research/Q28.md). No fee authority found.
+- What the text says (as read, not a conclusion): 672(c) presumes a related or subordinate party subservient to the grantor, and lists his relatives and employees; neither page mentions trustee compensation.
 - If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 217,700 a year instead of 170,300 (R15 rerun on today's engine).
 - Status: assumed, awaiting counsel
 
