@@ -387,3 +387,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): 642(c)(1) allows as a deduction "any amount of the gross income, without limitation, which pursuant to the terms of the governing instrument is, during the taxable year, paid for a purpose specified in section 170(c)". 642(c)(2), the permanent set-aside, covers a trust "created on or before October 9, 1969" (the page was read in fragments; the further conditions under (A) and (B) were not read in full). A trust created after that date, as the Family Trust would be, is read as limited to amounts paid under (c)(1). Whether an instrument that lets the trustee choose each year's amount still meets "pursuant to the terms of the governing instrument" was not read and is for the CPA. Scratch results on the base year: 2 percent, break-even 206,100 a year; 5 percent and 10 percent, none up to 1,000,000; scorecard 7 of 7 at 2 and 5 percent.
 - If counsel says otherwise: a different share moves the break-even from none to 206,100 across 10 to 2 percent; a fixed dollar amount or a later start would change the engine's `foundation_share_of_distribution` into a dollar term.
 - Status: assumed, awaiting CPA
+
+## Q34. Can the founder be paid a one-dollar salary plus fringe benefits by the operating and management companies?
+
+- Key: `token-salary-fringe`
+- Raised by: BACKLOG.md R12 item 4; follow-on of Q16
+- For: CPA
+- Question: If the founder takes a token salary from the operating and management companies plus fringe benefits, when is that lawful and when would the IRS recharacterize it?
+- Changes decision: how the founder is paid by the operating and management companies.
+- ASSUMPTION: the founder is paid a market wage (the engine's wage lines); no token salary. Not confirmed.
+- Primary cite: IRS S corporation compensation page, https://www.irs.gov/businesses/small-businesses-self-employed/s-corporation-compensation-and-medical-insurance-issues; IRC 1372, 132, 106, 119, 4941(d)(1)(E) and (d)(2)(E), law.cornell.edu (read 2026-11-25).
+- What the text says (as read, not a conclusion): an S corporation must pay a shareholder-employee reasonable compensation and the IRS may reclassify distributions as wages; for fringe benefits a more-than-2-percent shareholder is treated as a partner (1372); the excludable fringes are a closed list (132(a)); nothing may be paid or provided from the Foundation or the split-interest trust (4941(d)(1)(E)). C corporation treatment and section 105 were not read.
+- If counsel says otherwise: a lower salary would raise the entities' profit taxed elsewhere and move the founder's own tax; the engine's wage lines would become an input.
+- Status: assumed, awaiting CPA
+
