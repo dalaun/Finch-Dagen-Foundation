@@ -178,6 +178,14 @@
     },
     "not_read": "402(e)(3) itself and the 2026 402(g) deferral limit were not read; the synthetic deferral stays far below any limit."
   },
+  "excise_4940": {
+    "source": "26 USC 4940(a) and (c), read at https://www.law.cornell.edu/uscode/text/26/4940 (READ 2026-11-25)",
+    "url": "https://www.law.cornell.edu/uscode/text/26/4940",
+    "status": "READ",
+    "rate": 0.0139,
+    "rate_rule": "4940(a): 'a tax equal to 1.39 percent of the net investment income of such foundation for the taxable year.' The engine's 0.0139 matches.",
+    "base_rule": "4940(c)(2): gross investment income 'means the gross amount of income from interest, dividends, rents, payments with respect to securities loans (as defined in section 512(a)(5)), and royalties'. A contribution or the trust's 642(c) set-aside paid to the Foundation is not on that list, so it is not investment income; the engine's net_investment_income stays 0 until the Foundation holds assets that earn some. Not read: Treas. Reg. 53.4940-1 on whether a contribution can ever be gross investment income, and 4940(e) (the reduced-rate rule, which the 2019 flat rate replaced)."
+  },
   "niit": {
     "source": "26 USC 1411, read at https://www.law.cornell.edu/uscode/text/26/1411 (READ 2026-11-23)",
     "url": "https://www.law.cornell.edu/uscode/text/26/1411",

@@ -301,3 +301,16 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing new was read.
 - If counsel says otherwise: scratch runs (not committed) put base-case break-even with an unrelated individual trustee at 203,300 a year with one adult beneficiary and 132,800 with three, against 149,500 with two.
 - Status: assumed, awaiting Dalaun
+
+## Q28. What would an unrelated individual trustee really charge, and will one serve?
+
+- Key: `individual-trustee-fee`
+- Raised by: NEXT-MOVES.md move 14
+- For: lawyer
+- Question: Will an unrelated individual agree to act as trustee or independent distribution trustee of the Family Trust, at what yearly fee, and with what duties and liability?
+- Changes decision: how large the income-producing asset must be (and whether a professional trustee is needed instead, for which no break-even exists up to 1,000,000 a year).
+- ASSUMPTION: an unrelated individual serves for 1,000 a year, the stack.json placeholder `unrelated_individual_trustee`. Not a quote. (Backlog item 14 COUNSEL-QS already asks whether this is realistic.)
+- Primary cite: none; no fee schedule or statute was read for this move.
+- What the text says (as read, not a conclusion): nothing was read.
+- If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 187,400 a year instead of 149,500.
+- Status: assumed, awaiting counsel
