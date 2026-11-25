@@ -240,6 +240,7 @@ The run takes the first step below that has no move yet and whose earlier step i
 - For: CPA
 - Why it matters: the engine's yearly filing costs are PLACEHOLDERS with no quote behind them (stack.json `fees_placeholder`: Form 990-PF preparation 2,000, Form 1041 preparation 1,200 for each filing trust, bookkeeping 600 for each entity, Form 709 once 800). In scratch runs (not committed) that tripled one placeholder at a time, break-even with an unrelated individual trustee on the base year (route R2, today 170,300 a year) went to 217,700 with 990-PF at 6,000 (about 28 percent more), to 239,300 with bookkeeping at 1,800 for each entity (about 41 percent more), to 191,800 with the 709 at 2,400 (about 13 percent more) and to 200,400 with the 1041 at 3,600 (about 18 percent more). The 10 percent Foundation share finds no break-even up to 1,000,000 even at today's placeholders. Tripling is a stress test, not a forecast; the point is that the asset size in moves 4 and 9 moves by more than 10 percent with fees nobody has quoted.
 - The one thing for Dalaun: ask his CPA, "What would you charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the trust's bookkeeping, and what would the first Form 709 cost?"
+- Last checked: 2026-11-25
 - Status: open
 - Working assumption: the placeholders stand (990-PF 2,000, 1041 1,200, bookkeeping 600 for each entity, 709 800), not quotes; see counsel-queue.md Q32
 
