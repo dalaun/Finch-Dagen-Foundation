@@ -10,6 +10,10 @@ Find the smallest real, income-producing asset that makes the structure pay for 
 
 The score below says how far off that is. [NEXT-MOVES.md](NEXT-MOVES.md) says which turn to take next: each daily run adds one move toward it (a question for his CPA or lawyer, an asset step, or a structure step), and every move ends as one thing for him to approve or ask.
 
+## The finish line (from 2026-11-25)
+
+The relay now runs until the **lawyer-ready packet** is done: every counsel question researched against primary sources with a draft answer and a confidence label, the money case re-run at realistic sizes, and one plain memo of the structure, readable in an hour. The six criteria and the packet rules are in [PACKET-SCORECARD.md](PACKET-SCORECARD.md); the grader is in Dalaun's lane. The goal scorecard (SC1 to SC7) went 7 of 7 on 2026-11-24 and stays as a floor.
+
 ## The score
 
 The loop keeps two numbers per scenario and stack version, and writes both to [score-ledger.csv](score-ledger.csv) with the date so runs chain.

@@ -70,5 +70,11 @@ for cid, c in facts.items():
 stack = json.loads((SYN / "stack.json").read_text())
 ok(stack.get("legacy_weight_w", 0.0) == 0.0, "legacy weight w is 0 (his setting)")
 
+# The relay's finish line is graded by a file in Dalaun's lane; its own cases must hold.
+import subprocess  # noqa: E402
+pk = subprocess.run([sys.executable, str(REPO / "tests" / "rehearsal" / "packet_scorecard.py"), "--selftest"],
+                    capture_output=True, text=True)
+ok(pk.returncode == 0, "packet scorecard's own cases pass (tests/rehearsal/packet_scorecard.py --selftest)")
+
 print(f"\n{fails} failed")
 sys.exit(1 if fails else 0)
