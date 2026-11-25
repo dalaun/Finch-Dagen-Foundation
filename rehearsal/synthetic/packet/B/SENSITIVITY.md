@@ -6,25 +6,27 @@ Each row is an engine output on the synthetic year (run 2026-11-25). The scenari
 
 Versions: `flat` (the founder as trustee, grantor trust), `steward_r2` (independent distribution trustee, non-grantor), `steward_r2_pipeline` (the same with 10 percent of the trust's distribution to the Foundation).
 
-| scenario id | version | asset net income | B minus A |
-|---|---|---|---|
-| asset_sized_x075 | flat | 112,500 | -4,377 |
-| asset_sized_x075 | steward_r2 | 112,500 | -2,202 |
-| asset_sized_x075 | steward_r2_pipeline | 112,500 | -10,420 |
-| asset_sized_x100 | flat | 150,000 | -4,089 |
-| asset_sized_x100 | steward_r2 | 150,000 | +1,592 |
-| asset_sized_x100 | steward_r2_pipeline | 150,000 | -9,365 |
-| asset_sized_x150 | flat | 225,000 | -3,981 |
-| asset_sized_x150 | steward_r2 | 225,000 | +10,562 |
-| asset_sized_x150 | steward_r2_pipeline | 225,000 | -5,424 |
-| asset_sized_pipeline_x075 | flat | 262,500 | -3,981 |
-| asset_sized_pipeline_x075 | steward_r2 | 262,500 | +15,462 |
-| asset_sized_pipeline_x075 | steward_r2_pipeline | 262,500 | -3,188 |
-| asset_sized_pipeline_x100 | flat | 350,000 | -3,981 |
-| asset_sized_pipeline_x100 | steward_r2 | 350,000 | +26,384 |
-| asset_sized_pipeline_x100 | steward_r2_pipeline | 350,000 | +2,029 |
-| asset_sized_pipeline_x150 | flat | 525,000 | -3,981 |
-| asset_sized_pipeline_x150 | steward_r2 | 525,000 | +33,076 |
-| asset_sized_pipeline_x150 | steward_r2_pipeline | 525,000 | +1,550 |
+| scenario id | version | asset net income | B minus A | B minus A, stewarded |
+|---|---|---|---|---|
+| asset_sized_x075 | flat | 112,500 | -4,377 | -4,377 |
+| asset_sized_x075 | steward_r2 | 112,500 | -2,202 | -2,202 |
+| asset_sized_x075 | steward_r2_pipeline | 112,500 | -10,420 | +830 |
+| asset_sized_x100 | flat | 150,000 | -4,089 | -4,089 |
+| asset_sized_x100 | steward_r2 | 150,000 | +1,592 | +1,592 |
+| asset_sized_x100 | steward_r2_pipeline | 150,000 | -9,365 | +5,635 |
+| asset_sized_x150 | flat | 225,000 | -3,981 | -3,981 |
+| asset_sized_x150 | steward_r2 | 225,000 | +10,562 | +10,562 |
+| asset_sized_x150 | steward_r2_pipeline | 225,000 | -5,424 | +17,076 |
+| asset_sized_pipeline_x075 | flat | 262,500 | -3,981 | -3,981 |
+| asset_sized_pipeline_x075 | steward_r2 | 262,500 | +15,462 | +15,462 |
+| asset_sized_pipeline_x075 | steward_r2_pipeline | 262,500 | -3,188 | +23,062 |
+| asset_sized_pipeline_x100 | flat | 350,000 | -3,981 | -3,981 |
+| asset_sized_pipeline_x100 | steward_r2 | 350,000 | +26,384 | +26,384 |
+| asset_sized_pipeline_x100 | steward_r2_pipeline | 350,000 | +2,029 | +37,029 |
+| asset_sized_pipeline_x150 | flat | 525,000 | -3,981 | -3,981 |
+| asset_sized_pipeline_x150 | steward_r2 | 525,000 | +33,076 | +33,076 |
+| asset_sized_pipeline_x150 | steward_r2_pipeline | 525,000 | +1,550 | +54,050 |
+
+"B minus A, stewarded" adds back the money the family steward still directs at the Foundation (`stewarded_vs_A` = the family-only score plus `to_foundation`). It is a view, never a goal: no check or move is tuned to raise it, and the family-only column is unchanged. It differs from the first only for the Foundation share version.
 
 What the table shows: the route R2 versions turn positive only once asset income passes about 150,000 a year, and the Foundation share version only once it passes about 350,000. `flat` stays negative at every size. That matches the break-evens in MEMO.md (149,500 and 343,600).

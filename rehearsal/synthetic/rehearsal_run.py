@@ -465,7 +465,8 @@ def run_year(sc: dict, rows: list, stack: dict, grader: Grader, extra_asset_net:
         out_versions[vid] = {
             "label": v["label"], "fees": round(fee), "taxes": round(cost_b - fee - to_foundation), "program_output": round(program),
             "program_source": program_source, "to_foundation": round(to_foundation),
-            "score_vs_A": round(score), "structure_value": round(value), "structure_gap": round(max(0.0, -value)),
+            "score_vs_A": round(score), "stewarded_vs_A": round(score + to_foundation),
+            "structure_value": round(value), "structure_gap": round(max(0.0, -value)),
             "checks_pass": sum(1 for x in checks.values() if x == "pass"), "checks_amber": amber, "checks_red": red,
             "status": "out (red check)" if red else ("provisional (amber checks)" if amber else "scored"),
             "facts_basis": v["facts_basis"], "money": money_view(cost_b), "trust_tax": round(trust_tax_paid),
@@ -601,6 +602,9 @@ def selftest() -> int:
     base_p = run_year(sc_p, [], st_p, grader_p, extra_asset_net=40000.0, versions=["steward_r2"])["versions"]["steward_r2"]
     ok(lo_p["score_vs_A"] < base_p["score_vs_A"] and base_p["score_vs_A"] - lo_p["score_vs_A"] <= lo_p["to_foundation"],
        "pipeline: the set-aside costs the family money, so the score falls, by no more than the gift (the beneficiaries' tax falls a little)")
+    # R12 item 3: stewarded_vs_A is a view (family-only score plus the money the steward still directs at the Foundation).
+    ok(lo_p["stewarded_vs_A"] == lo_p["score_vs_A"] + lo_p["to_foundation"] and base_p["stewarded_vs_A"] == base_p["score_vs_A"],
+       "stewarded_vs_A is the family-only score plus to_foundation, and equals it when nothing goes to the Foundation")
     # A scenario may fix its trustee kind; break_even must still be free to vary it.
     sc_t = dict(sc_p, trustee_kind="individual")
     fee_ind = run_year(sc_t, [], st_p, grader_p, extra_asset_net=80000.0, versions=["steward_r2"])["versions"]["steward_r2"]["fees"]
@@ -628,7 +632,7 @@ def report(results: list) -> str:
                    f"score vs A {r['B_ops']['score_vs_A']:+,}")
         for vid, v in r["versions"].items():
             out.append(f"   B:{vid:<17} fees {money(v['fees'])}, score vs A {v['score_vs_A']:+,}, "
-                       f"structure value {v['structure_value']:+,}/yr, checks pass {v['checks_pass']}/17, {v['status']}")
+                       f"stewarded vs A {v['stewarded_vs_A']:+,}, structure value {v['structure_value']:+,}/yr, checks pass {v['checks_pass']}/17, {v['status']}")
         be = r.get("break_even", {})
         for k, x in be.items():
             out.append(f"   break-even asset income, {k}: {money(x)}")

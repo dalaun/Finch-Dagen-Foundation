@@ -314,3 +314,16 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): nothing was read.
 - If counsel says otherwise: at 5,000 a year, a scratch run (not committed) put base-case break-even with an unrelated individual trustee at 187,400 a year instead of 149,500.
 - Status: assumed, awaiting counsel
+
+## Q29. What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
+
+- Key: `yearly-filing-fees`
+- Raised by: NEXT-MOVES.md move 15
+- For: CPA
+- Question: What would a CPA charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the bookkeeping for each entity, and what would the first Form 709 cost?
+- Changes decision: how large the income-producing asset must be.
+- ASSUMPTION: the stack.json placeholders: 990-PF 2,000, 1041 1,200 for each filing trust, bookkeeping 600 for each entity, 709 800 once. Not quotes. (Backlog item FEE-QUOTES asks for sources.)
+- Primary cite: none; no price page or quote was read for this move.
+- What the text says (as read, not a conclusion): nothing was read.
+- If counsel says otherwise: scratch runs (not committed), one placeholder tripled at a time, put base-case route R2 break-even with an unrelated individual trustee at 187,400 (990-PF 6,000), 202,700 (bookkeeping 1,800), 170,700 (709 3,000) and 166,800 (1041 3,000), against 149,500.
+- Status: assumed, awaiting CPA

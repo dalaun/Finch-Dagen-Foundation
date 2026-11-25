@@ -209,6 +209,16 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: an unrelated individual trustee serves for 1,000 a year (placeholder, not a quote); see counsel-queue.md Q28
 
+### 15. question: What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?
+
+- Key: `yearly-filing-fees`
+- Opened: 2026-11-25
+- For: CPA
+- Why it matters: the engine's yearly filing costs are PLACEHOLDERS with no quote behind them (stack.json `fees_placeholder`: Form 990-PF preparation 2,000, Form 1041 preparation 1,200 for each filing trust, bookkeeping 600 for each entity, Form 709 once 800). In scratch runs (not committed) that tripled one placeholder at a time, break-even with an unrelated individual trustee on the base year (route R2, today 149,500 a year) went to 187,400 with 990-PF at 6,000 (about 25 percent more), to 202,700 with bookkeeping at 1,800 for each entity (about 36 percent more), to 170,700 with the 709 at 3,000 (about 14 percent more) and to 166,800 with the 1041 at 3,000 (about 12 percent more). Under each of those changes the 10 percent Foundation share (today 343,600) finds no break-even up to 1,000,000. Tripling is a stress test, not a forecast; the point is that the asset size in moves 4 and 9 moves by more than 10 percent with fees nobody has quoted.
+- The one thing for Dalaun: ask his CPA, "What would you charge each year to prepare Form 990-PF for a small private foundation, Form 1041 for a non-grantor trust with two beneficiaries, and the trust's bookkeeping, and what would the first Form 709 cost?"
+- Status: open
+- Working assumption: the placeholders stand (990-PF 2,000, 1041 1,200, bookkeeping 600 for each entity, 709 800), not quotes; see counsel-queue.md Q29
+
 ## Closed
 
 (none yet)
