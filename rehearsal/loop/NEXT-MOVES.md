@@ -179,6 +179,16 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the class is the rental building at the 0.07 yield; no listing, seller or broker is contacted; it is Dalaun's own search, not a counsel question
 
+### 12. question: Does the founder file as single or as married filing jointly?
+
+- Key: `founder-filing-status`
+- Opened: 2026-11-25
+- For: Dalaun (his own family fact), then CPA
+- Why it matters: the engine taxes the founder as a single filer (`person_tax` uses the single brackets, the single standard deduction and the 200,000 NIIT threshold). In a scratch run (not committed) that gave the founder's own return the 2026 married-filing-jointly brackets and standard deduction (both already in benchmarks-tax.json `federal_2026`, Rev. Proc. 2025-32) and a rough 250,000 NIIT threshold, break-even with an unrelated individual trustee on the base year rose from 149,500 to 361,300 a year, about 142 percent (lean 146,900 to 345,600; asset_rental 137,200 to 805,700; asset_business 147,700 to 887,300). The scratch change was crude: the beneficiaries stayed single, Illinois personal exemptions were not touched, and the NIIT threshold was approximated; read it as the direction and rough size, not a result. Wider joint brackets leave less top-bracket income for the trust to move, so the structure needs a much larger asset.
+- The one thing for Dalaun: tell your assistant privately whether the rehearsal should treat the founder as filing single or jointly (the repo is public, so write only "single-like" or "joint-like" in an `Answer:` line, never family details), or ask the CPA, "At what income does filing jointly versus single change how much tax the trust's split saves?"
+- Status: open
+- Working assumption: the founder files single (2026 single brackets, Rev. Proc. 2025-32); see counsel-queue.md Q25
+
 ## Closed
 
 (none yet)
