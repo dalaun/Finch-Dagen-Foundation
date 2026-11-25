@@ -35,9 +35,9 @@ Illinois situs for the Family Trust is the research's working assumption, not a 
 All figures come from the seeded synthetic year (`rehearsal/synthetic`), not anyone's real money. Every scenario figure here is an engine output on assumptions listed in `counsel-queue.md`. Run on 2026-11-25, 7 of 7 scorecard checks pass, 8 of 17 structure checks pass for the steward versions (the other 9 are amber until documents exist, none red).
 
 - Base year, doing nothing versus the structure: the structure costs 6,015 a year (structure gap).
-- Break-even extra asset income, unrelated individual trustee: 149,500 a year (route R2 or R3); with a professional trustee none up to 1,000,000.
-- With a 10 percent Foundation share (route R2): break-even 343,600 a year.
-- `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 beats doing nothing by 1,592 a year.
+- Break-even extra asset income, unrelated individual trustee: 170,300 a year (route R2 or R3; 149,500 before the PR 94 founder NII fix); with a professional trustee none up to 1,000,000.
+- With a 10 percent Foundation share (route R2): none up to 1,000,000 a year (343,600 before the PR 94 fix; the 10 percent gift is a family cost at w = 0).
+- `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 is about even with doing nothing (+13 a year; +1,592 before the PR 94 fix), consistent with the 20,200 extra the engine now needs on top of 150,000.
 - `asset_sized_pipeline` (350,000 a year, ASSUMPTION): route R2 beats doing nothing by 26,384 a year; with the 10 percent Foundation share, by 2,029.
 
 ## Questions in packet A
