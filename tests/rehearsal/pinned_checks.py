@@ -75,6 +75,12 @@ import subprocess  # noqa: E402
 pk = subprocess.run([sys.executable, str(REPO / "tests" / "rehearsal" / "packet_scorecard.py"), "--selftest"],
                     capture_output=True, text=True)
 ok(pk.returncode == 0, "packet scorecard's own cases pass (tests/rehearsal/packet_scorecard.py --selftest)")
+# Every quoted trace in the packet is re-read on its page; a quote that does not match, or a page
+# that cannot be read, fails keystone, so a wrong cite never merges.
+qc = subprocess.run([sys.executable, str(REPO / "tests" / "rehearsal" / "packet_scorecard.py"), "--quotes-only"],
+                    capture_output=True, text=True)
+print(qc.stdout.strip())
+ok(qc.returncode == 0, "every packet quote matches its source page (packet_scorecard.py --quotes-only)")
 
 print(f"\n{fails} failed")
 sys.exit(1 if fails else 0)
