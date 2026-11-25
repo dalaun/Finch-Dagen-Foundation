@@ -101,7 +101,7 @@ READ_RE = re.compile(r"\(read (\d{4}-\d{2}-\d{2})\)")
 # apart from the machine re-read, so the lawyer can see which quotes a person copied.
 COPIED_RE = re.compile(r"\(copied by Dalaun (\d{4}-\d{2}-\d{2})\)", re.I)
 PENDING_RE = re.compile(r"^pending,?\s*needs Dalaun\b", re.I)
-URL_RE = re.compile(r"https://[^\s)>\]|]+")
+URL_RE = re.compile(r"https://[^\s>\]|]+?(?:\([^\s()>\]|]*\)[^\s()>\]|]*)*(?=[\s)>\]|]|$)")
 QUOTE_RE = re.compile(r"^[\"“](.+)[\"”]$", re.S)
 
 
@@ -609,6 +609,10 @@ def selftest() -> int:
         nonlocal fails
         print(f"{'ok  ' if ok else 'FAIL'} {msg}")
         fails += not ok
+
+    check(URL_RE.findall("| https://www.law.cornell.edu/cfr/text/26/1.674(d)-2 (read 2026-11-25)")
+          == ["https://www.law.cornell.edu/cfr/text/26/1.674(d)-2"], "a URL with parentheses is read whole")
+    check(URL_RE.findall("(https://a.gov/x) here") == ["https://a.gov/x"], "a URL inside parentheses stops before the closing one")
 
     with tempfile.TemporaryDirectory() as d:
         root = Path(d) / "pass"
