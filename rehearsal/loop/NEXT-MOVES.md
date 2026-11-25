@@ -189,6 +189,16 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the founder files single (2026 single brackets, Rev. Proc. 2025-32); see counsel-queue.md Q25
 
+### 13. question: How many adult beneficiaries will share the Family Trust's distributions?
+
+- Key: `adult-beneficiary-count`
+- Opened: 2026-11-25
+- For: Dalaun (his own family fact), then lawyer
+- Why it matters: the engine splits the trust's distributions across 2 adult beneficiaries (`adult_beneficiaries` in stack.json, no source), each taxed at their own brackets (IRC 652(a), 662(a)). In scratch runs (not committed) that changed only that count, break-even with an unrelated individual trustee on the base year went from 149,500 to 203,300 a year with 1 beneficiary (about 36 percent more) and to 132,800 with 3 (about 11 percent less). With 1 beneficiary the 10 percent Foundation share finds no break-even up to 1,000,000; with 3 it is 284,000 (base 343,600). More beneficiaries means more low brackets to fill, so a smaller asset clears break-even.
+- The one thing for Dalaun: tell your assistant privately whether the rehearsal should count one, two or three adult beneficiaries (write only the number in an `Answer:` line, never names or family details), or ask his lawyer, "Who should be the beneficiaries of the Family Trust, and should the count be fixed in the instrument?"
+- Status: open
+- Working assumption: two adult beneficiaries; see counsel-queue.md Q27
+
 ## Closed
 
 (none yet)
