@@ -255,6 +255,17 @@ The run takes the first step below that has no move yet and whose earlier step i
 - Status: open
 - Working assumption: the share stays 10 percent in the engine (Q15, not changed); a share near 2 percent is the largest one the engine shows still paying for itself, a reading, not advice; see counsel-queue.md Q33
 
+### 19. question: How much will the management company really pay the founder each year?
+
+- Key: `consulting-revenue`
+- Opened: 2026-11-25
+- For: CPA
+- Why it matters: the engine's 24,000 a year of consulting revenue from the management company is labelled ASSUMPTION in scenarios.json (line `mgmt_revenue`) with no source. In scratch runs (not committed) that changed only that line, break-even with an unrelated individual trustee on the base year (route R2, today 170,300 a year) went to 181,200 at 12,000 (about 6 percent more) and to 148,400 at 48,000 (about 13 percent less), because the founder's own tax bracket sets how much an asset held in the trust saves. Doubling is a stress test, not a forecast; the point is that the asset size in moves 4 and 9 moves by more than 10 percent with a figure nobody has sourced.
+- The one thing for Dalaun: ask his CPA, "What yearly amount can my management company lawfully pay me for the services I actually do, and what support should I keep for it?"
+- Last checked: 2026-11-25
+- Status: open
+- Working assumption: 24,000 a year stands, not a quote; the reasonable-compensation limit is read in counsel-queue.md Q34; see counsel-queue.md Q36
+
 ## Closed
 
 (none yet)
