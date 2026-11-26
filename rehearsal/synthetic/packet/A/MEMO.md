@@ -96,7 +96,7 @@ Dalaun's standing check (2026-11-26): a trust named under another state's law ca
 - **Not yet tested:** for this rule a trust counts as irrevocable only while the grantor is not taxed as its owner, so the test runs on the day it stops being a grantor trust. Counsel confirms that timing.
 - **Out branch:** a grantor domiciled outside Illinois on that day leaves it a nonresident; Linn held that Illinois cannot tax a trust with too few Illinois contacts (para. 33 still to be quoted).
 - **Either branch:** a nonresident trust still owes Illinois tax on Illinois-source income, such as an Illinois rental.
-- **Where the founder lands today:** the Illinois branch. He is domiciled in Illinois and would be the Illinois trustee. To land in the out branch, his domicile would have to be outside Illinois on the day the trust stops being a grantor trust, or the trust would need too few Illinois contacts under Linn, which an Illinois trustee rules out.
+- **Where the founder lands today:** the Illinois branch, if he is the grantor; the test runs on the grantor's domicile, so counsel confirms who the grantor is (Q38). He is domiciled in Illinois and would be the Illinois trustee. To land in the out branch, his domicile would have to be outside Illinois on the day the trust stops being a grantor trust, or the trust would need too few Illinois contacts under Linn, which an Illinois trustee rules out.
 - **Fails the check:** any claim that a Wyoming or Delaware situs, a Wyoming trustee, or a protector's move of situs by itself lowers the trust's Illinois income tax. Another state may still buy protection and control.
 
 ## Out-of-state routes without moving
