@@ -218,6 +218,7 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Raised by: NEXT-MOVES.md move 10
 - For: lawyer
 - Question: If the Family Trust owns an LLC that buys a rental building or an operating business with a loan, will a lender lend to a trust-owned LLC, who must guarantee the loan, and what insurance must name whom?
+- Changes decision: how the Family Trust's LLC finances the asset, and whether a guarantee from the founder is allowed.
 - ASSUMPTION: The founder, as the LLC's manager, may be asked to guarantee personally, and the lender must consent to the trust's ownership. A guarantee by the founder is a fact the checks (S1 to S17) and the grantor test must be re-run on; the rehearsal does not model it.
 - Primary cite: SBA 7(a) program page, https://www.sba.gov/funding-programs/loans/7a-loans (read 2026-11-24). It lists "Be an operating business" and "Operate for profit" and links a list of ineligible business types.
 - What the text says (as read, not a conclusion): the page says nothing about trusts, personal guarantees or down payments. Those rules were not read.
@@ -441,3 +442,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: scratch runs on the base year (not committed): 40,000 gives a break-even of 224,500 a year with an unrelated individual trustee (route R2), 120,000 gives 116,800, against 170,300 at 73,382.
 - Status: assumed, awaiting Dalaun
 
+
+## Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?
+
+- Key: `out-of-state-trust-routes`
+- Raised by: Dalaun 2026-11-26 ("we know there are people who live in Illinois and have a Delaware trust and Wyoming trust"); follow-on of Q22
+- For: lawyer, then CPA
+- Question: Which out-of-state structures do Illinois residents use without moving (grantor asset protection or dynasty trusts, non-grantor trusts with few Illinois contacts, incomplete-gift non-grantor trusts, an advisor role, an address or shell company), and which change Illinois income tax rather than only protection and control?
+- Changes decision: which out-of-state route, if any, the Family Trust uses while the founder stays in Illinois, and what the instrument must say for it.
+- ASSUMPTION: the founder stays domiciled in Illinois, serves as a trustee or advisor, and family members in Illinois are beneficiaries. On those facts no route lowers the Family Trust's Illinois income tax; Delaware or Wyoming is weighed only for protection, duration and directed-trust tools.
+- Primary cite: 35 ILCS 5/1501(a)(20)(D) (copied by Dalaun 2026-11-26); 86 Ill. Adm. Code 100.3020(a)(4), (d), (g), https://www.law.cornell.edu/regulations/illinois/Ill-Admin-Code-tit-86-SS-100.3020 (read 2026-11-26); 12 Del. C. 3570(8), (11), https://delcode.delaware.gov/title12/c035/sc06/index.html (read 2026-11-26); 26 CFR 25.2511-2; IRC 672(a).
+- What the text says (as read, not a conclusion): Illinois makes a living trust resident by the grantor's domicile on the day it stops being a grantor trust; domicile is one true, permanent home, lost only by moving with intent to stay and abandoning intent to return, and a mailing address is not among the evidence listed. Delaware requires a Delaware-resident or Delaware-authorized trustee who keeps some property or records there or takes part in running the trust, and lets the founder be investment adviser but not trustee. A reserved power can make a gift incomplete, and a power shared with an adverse party is not the donor's.
+- Open for counsel: whether any Illinois rule, ruling or pending bill (2025 SB0140, HB2368, not read) addresses incomplete-gift non-grantor trusts; whether the IRS still rules on their gift and grantor status; whether a non-grantor Family Trust could ever meet Linn's facts with the founder as an Illinois advisor or protector.
+- If counsel says otherwise: if Linn's limit reaches a trust with an Illinois-resident advisor, route 2 reopens, but only with the founder off the trusteeship, an out-of-state trustee doing the administration, and no Illinois property or beneficiaries; the Illinois rental stays taxable either way.
+- Status: assumed, awaiting counsel

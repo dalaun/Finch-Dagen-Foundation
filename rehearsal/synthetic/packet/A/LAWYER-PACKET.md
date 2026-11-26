@@ -27,6 +27,9 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). Coverage flag: the trust would later hold LLC interests in a business or rental, which could read as a business or investment interest.
   - Lawyer decides: What the Illinois instrument, trustee acceptance and signing authority must contain; the federal EIN step is traced below.
   - Trace file: [research/Q13.md](../research/Q13.md)
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Linn paragraph 33 pending, needs Dalaun (1 claim). Coverage flag: none
+  - Lawyer decides: Which state governs and where the trust is administered; today the founder lands in the Illinois branch of the residence test, so another state buys protection and control, not a lower Illinois tax.
+  - Trace file: [research/Q22.md](../research/Q22.md)
 - **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). Coverage flag: none
   - Lawyer decides: Whether naming the Foundation as a beneficiary makes the Family Trust (or its set-aside) a charitable trust holding assets for a charitable purpose in Illinois, and so registrable.
   - Trace file: [research/Q23.md](../research/Q23.md)
@@ -36,3 +39,6 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. Coverage flag: none
   - Lawyer decides: Whether a named unrelated individual will serve, on what fee and liability terms; only the person and the lawyer can settle that, not a statute.
   - Trace file: [research/Q28.md](../research/Q28.md)
+- **Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?** Confidence: open. Coverage flag: none
+  - Lawyer decides: Which out-of-state route, if any, the Family Trust uses, knowing that on his facts none lowers Illinois income tax and each is weighed for protection, duration and control.
+  - Trace file: [research/Q38.md](../research/Q38.md)
