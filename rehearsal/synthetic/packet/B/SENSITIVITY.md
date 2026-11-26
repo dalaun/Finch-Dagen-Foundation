@@ -8,6 +8,12 @@ Versions: `flat` (the founder as trustee, grantor trust), `steward_r2` (independ
 
 | scenario id | version | asset net income | B minus A | B minus A, stewarded |
 |---|---|---|---|---|
+| asset_sized | flat | 150,000 | -4,275 | -4,275 |
+| asset_sized | steward_r2 | 150,000 | +13 | +13 |
+| asset_sized | steward_r2_pipeline | 150,000 | -10,944 | +4,056 |
+| asset_sized_pipeline | flat | 350,000 | -4,167 | -4,167 |
+| asset_sized_pipeline | steward_r2 | 350,000 | +17,205 | +17,205 |
+| asset_sized_pipeline | steward_r2_pipeline | 350,000 | -7,150 | +27,850 |
 | asset_sized_x075 | flat | 112,500 | -4,531 | -4,531 |
 | asset_sized_x075 | steward_r2 | 112,500 | -2,355 | -2,355 |
 | asset_sized_x075 | steward_r2_pipeline | 112,500 | -10,573 | +677 |
