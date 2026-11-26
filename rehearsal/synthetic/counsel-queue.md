@@ -456,3 +456,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Open for counsel: whether any Illinois rule, ruling or pending bill (2025 SB0140, HB2368, not read) addresses incomplete-gift non-grantor trusts; whether the IRS still rules on their gift and grantor status; whether a non-grantor Family Trust could ever meet Linn's facts with the founder as an Illinois advisor or protector. Also: who the grantor of each trust is, since the residence test runs on the grantor's domicile, not the trustee's (a draft instrument in the founder's own files names another person as grantor, so the founder's own domicile may not be the one tested); whether a trustee power to amend the instrument, including its governing law, works as a power to add beneficiaries (the R7 trap, Reg. 1.674(d)-2(b)) or lets a protector-style move of situs happen without the limits 760 ILCS 3/808 requires; and whether a clause barring the trustee from disclosing the trust's nature can stand beside an Illinois trustee's duty to keep beneficiaries informed (not yet read), or reads as an abusive-trust red flag.
 - If counsel says otherwise: if Linn's limit reaches a trust with an Illinois-resident advisor, route 2 reopens, but only with the founder off the trusteeship, an out-of-state trustee doing the administration, and no Illinois property or beneficiaries; the Illinois rental stays taxable either way.
 - Status: assumed, awaiting counsel
+
+## Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?
+
+- Key: `foreign-trust-status`
+- Raised by: Dalaun 2026-11-26 (his fears "should have just been checks"); follow-on of Q38
+- For: lawyer, then CPA
+- Question: Does each trust pass the court test and the control test, so that it is a domestic trust? For any that fails, is a U.S. founder who funded it its owner under IRC 679, and which IRC 6048 notices and returns are due?
+- Changes decision: whether a trust that names a foreign jurisdiction can be kept, converted, or replaced with a domestic instrument, and whether the Family Trust's non-grantor plan can rest on it.
+- ASSUMPTION: the Family Trust is a new domestic instrument, governed by a U.S. state's law, with U.S. persons holding every substantial decision. Any existing trust that names a foreign jurisdiction is treated as untested until counsel applies both tests.
+- Primary cite: IRC 7701(a)(30)(E), (31)(B); 26 CFR 301.7701-7(a)(2), (d)(1)(iii), (d)(4); IRC 679(a)(1), (c)(1); IRC 6048(a)(3)(A), (b)(1); IRC 6677(a), (b). All on https://www.law.cornell.edu (read 2026-11-26).
+- What the text says (as read, not a conclusion): a trust is domestic only on a day it meets both tests; any other trust is foreign; one foreign person with a substantial decision or veto fails the control test; a U.S. person who funds a foreign trust with a U.S. beneficiary is taxed as its owner; creating or funding a foreign trust triggers notice and yearly-return duties, with penalties of the greater of $10,000 or 35 percent (5 percent for the yearly return).
+- Open for counsel: whether and how a trust that failed a test is cured or converted; what is owed for any year a foreign trust already held money; whether an account opened under a trust's tax number but never funded is a transfer.
+- If counsel says otherwise: if an existing trust passes both tests, it can be weighed as a domestic trust under Q3 and Q22; if not, its non-grantor label does not hold and the founder's reporting duties come first.
+- Status: assumed, awaiting counsel

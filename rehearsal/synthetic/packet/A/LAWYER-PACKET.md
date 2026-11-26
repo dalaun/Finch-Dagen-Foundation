@@ -42,3 +42,6 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?** Confidence: open. Coverage flag: none
   - Lawyer decides: Which out-of-state route, if any, the Family Trust uses, knowing that on his facts none lowers Illinois income tax and each is weighed for protection, duration and control.
   - Trace file: [research/Q38.md](../research/Q38.md)
+- **Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?** Confidence: likely. Coverage flag: none
+  - Lawyer decides: Whether each trust passes the court and control tests, and for any that fails, whether to convert or replace it and what notices and returns are owed.
+  - Trace file: [research/Q39.md](../research/Q39.md)

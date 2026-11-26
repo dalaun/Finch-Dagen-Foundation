@@ -38,6 +38,7 @@ Stated first so the reader can see which A questions could read as a business or
 - Q27: none
 - Q28: none
 - Q38: none
+- Q39: none
 
 ## Risks
 
@@ -45,6 +46,7 @@ Stated first so the reader can see which A questions could read as a business or
 - The founder keeping powers over distributions can make the trust a grantor trust (IRC 674(a)) or pull property into his estate (Q7). Neither is settled.
 - Any part flagged above may be outside a prepaid plan's scope.
 - An Illinois trust protector may be given power to change beneficiaries' interests or to remove and appoint trustees (760 ILCS 3/808(d)(2), (d)(4)); without limits either power makes the trust a grantor trust (Q8). A trustee's acceptance should be signed before the trust takes title, since 120 days of silence is a decline (Q13).
+- A trust that fails the U.S. court test or control test is foreign; if the founder funds it and family in the U.S. benefit, it is his grantor trust and owes foreign-trust notices and returns, with penalties from $10,000 (Q39).
 - A Wyoming or Delaware situs does not move the Family Trust's Illinois income tax while the founder is domiciled in Illinois (Illinois residence test, below).
 
 ## What packet A rests on from packet B
@@ -77,6 +79,7 @@ Each is `likely` or `open`; what the lawyer decides on each is stated in the cov
 - **Q27. How many adult beneficiaries will the Family Trust have?** Confidence: likely. [Q27](../research/Q27.md)
 - **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. [Q28](../research/Q28.md)
 - **Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?** Confidence: open. [Q38](../research/Q38.md)
+- **Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?** Confidence: likely. [Q39](../research/Q39.md)
 
 ## Synthetic figures
 
