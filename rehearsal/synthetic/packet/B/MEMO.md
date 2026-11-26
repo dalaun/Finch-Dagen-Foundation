@@ -85,7 +85,7 @@ Illinois decides a trust's residence by the grantor's domicile on the day it sto
 
 ## Illinois text
 
-Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): the Linn opinion's paragraph 33 (Q22) and Wyoming's perpetuities period and revenue statement (Q22). The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Dalaun also copied the Linn opinion (paragraphs 29 and 33 traced in Q22). Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): Wyoming's perpetuities period and revenue statement (Q22). The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
 
 ## What this memo does not do
 

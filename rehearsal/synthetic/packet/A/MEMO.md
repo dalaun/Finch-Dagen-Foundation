@@ -75,7 +75,7 @@ Each is `likely` or `open`; what the lawyer decides on each is stated in the cov
 - **Q7. Do the powers he keeps cause gift or estate tax problems for the funder?** Confidence: open. [Q7](../research/Q7.md)
 - **Q10. How do distributions for minor children stay separate from his support duties?** Confidence: likely. [Q10](../research/Q10.md)
 - **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. [Q13](../research/Q13.md)
-- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Linn paragraph 33 pending, needs Dalaun (1 claim). [Q22](../research/Q22.md)
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. [Q22](../research/Q22.md)
 - **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. [Q23](../research/Q23.md)
 - **Q27. How many adult beneficiaries will the Family Trust have?** Confidence: likely. [Q27](../research/Q27.md)
 - **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. [Q28](../research/Q28.md)
@@ -99,7 +99,7 @@ Dalaun's standing check (2026-11-26): a trust named under another state's law ca
 
 - **Illinois branch:** a living trust is resident if its grantor was domiciled in Illinois when it became irrevocable; a trust made by will, if the decedent died domiciled in Illinois.
 - **Not yet tested:** for this rule a trust counts as irrevocable only while the grantor is not taxed as its owner, so the test runs on the day it stops being a grantor trust. Counsel confirms that timing.
-- **Out branch:** a grantor domiciled outside Illinois on that day leaves it a nonresident; Linn held that Illinois cannot tax a trust with too few Illinois contacts (para. 33 still to be quoted).
+- **Out branch:** a grantor domiciled outside Illinois on that day leaves it a nonresident; Linn held that Illinois cannot tax a trust whose only Illinois contact is the grantor's residence (para. 29) and that had nothing in and sought nothing from Illinois (para. 33).
 - **Either branch:** a nonresident trust still owes Illinois tax on Illinois-source income, such as an Illinois rental.
 - **Where the founder lands today:** the Illinois branch, if he is the grantor; the test runs on the grantor's domicile, so counsel confirms who the grantor is (Q38). He is domiciled in Illinois and would be the Illinois trustee. To land in the out branch, his domicile would have to be outside Illinois on the day the trust stops being a grantor trust, or the trust would need too few Illinois contacts under Linn, which an Illinois trustee rules out.
 - **Fails the check:** any claim that a Wyoming or Delaware situs, a Wyoming trustee, or a protector's move of situs by itself lowers the trust's Illinois income tax. Another state may still buy protection and control.
@@ -116,7 +116,7 @@ How Illinois residents hold Delaware or Wyoming trusts without moving, each grad
 
 ## Illinois text
 
-Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): the Linn opinion's paragraph 33 (Q22) and Wyoming's perpetuities period and revenue statement (Q22). The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Dalaun also copied the Linn opinion (paragraphs 29 and 33 traced in Q22). Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): Wyoming's perpetuities period and revenue statement (Q22). The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
 
 ## What this memo does not do
 

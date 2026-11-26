@@ -27,7 +27,7 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). Coverage flag: the trust would later hold LLC interests in a business or rental, which could read as a business or investment interest.
   - Lawyer decides: What the Illinois instrument, trustee acceptance and signing authority must contain; the federal EIN step is traced below.
   - Trace file: [research/Q13.md](../research/Q13.md)
-- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Linn paragraph 33 pending, needs Dalaun (1 claim). Coverage flag: none
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Coverage flag: none
   - Lawyer decides: Which state governs and where the trust is administered; today the founder lands in the Illinois branch of the residence test, so another state buys protection and control, not a lower Illinois tax.
   - Trace file: [research/Q22.md](../research/Q22.md)
 - **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). Coverage flag: none
