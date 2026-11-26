@@ -45,3 +45,6 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?** Confidence: likely. Coverage flag: none
   - Lawyer decides: Whether each trust passes the court and control tests, and for any that fails, whether to convert or replace it and what notices and returns are owed.
   - Trace file: [research/Q39.md](../research/Q39.md)
+- **Q40. For each promise in the old trust paperwork, what is the lawful way to deliver it, and who provides it?** Confidence: likely. Coverage flag: the benefits come through an operating or management company, which could read as a business or investment interest.
+  - Lawyer decides: Which routes the instruments and the company's plans adopt, and how the trust's protective terms are drafted; personal benefits come from the company as employer, never from the trust or the Foundation.
+  - Trace file: [research/Q40.md](../research/Q40.md)

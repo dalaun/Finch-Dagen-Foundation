@@ -39,6 +39,7 @@ Stated first so the reader can see which A questions could read as a business or
 - Q28: none
 - Q38: none
 - Q39: none
+- Q40: the benefits come through an operating or management company, which could read as a business or investment interest.
 
 ## Risks
 
@@ -80,6 +81,7 @@ Each is `likely` or `open`; what the lawyer decides on each is stated in the cov
 - **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. [Q28](../research/Q28.md)
 - **Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?** Confidence: open. [Q38](../research/Q38.md)
 - **Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?** Confidence: likely. [Q39](../research/Q39.md)
+- **Q40. For each promise in the old trust paperwork, what is the lawful way to deliver it, and who provides it?** Confidence: likely. [Q40](../research/Q40.md)
 
 ## Synthetic figures
 

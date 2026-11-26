@@ -470,3 +470,17 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - Open for counsel: whether and how a trust that failed a test is cured or converted; what is owed for any year a foreign trust already held money; whether an account opened under a trust's tax number but never funded is a transfer. Also: whether an instrument that carries on a business, or pays the trustee's living costs, is a business entity or a grantor trust rather than a trust (26 CFR 301.7701-4(b); IRS abusive-trust guidance); IRS Notice 97-24 itself, not yet read; and what follows when two draft instruments in the founder's files each name the other trust as beneficiary, and one names a U.S. county as venue while its formation is claimed abroad.
 - If counsel says otherwise: if an existing trust passes both tests, it can be weighed as a domestic trust under Q3 and Q22; if not, its non-grantor label does not hold and the founder's reporting duties come first.
 - Status: assumed, awaiting counsel
+
+## Q40. For each promise in the old trust paperwork, what is the lawful way to deliver it, and who provides it?
+
+- Key: `promise-map`
+- Raised by: Dalaun 2026-11-26 (the old drafts' promises "could be traced to the right language"); follow-on of Q39
+- For: lawyer, then CPA
+- Question: For each benefit the old, unsigned and unfunded drafts promised (housing, meals, vehicles, fuel and travel, food, clothing, education, healthcare, retirement, privacy, creditor protection, courts and venue, untaxed units, setting taxes or money, funding by exchange), what is the lawful mechanism and which entity provides it, or is there none?
+- Changes decision: which company plans the management company adopts, and which protective terms (spendthrift, governing law, place of administration, certification of trust) the Family Trust instrument carries.
+- ASSUMPTION: personal benefits come only from the management company as employer, under the Code's listed exclusions; the trust pays none of the trustee's living costs; the Foundation pays none of them.
+- Primary cite: IRC 62(c), 106(a), 119(a), 127, 132(d), 262(a), 401(a), 2512(b), 4941(d)(1)(E), 6048(a)(3)(A) (law.cornell.edu); 760 ILCS 3/107, 108, 502, 813.1, 1013 (copied by Dalaun 2026-11-26); IRS page on deactivating an EIN (read 2026-11-26).
+- What the text says (as read, not a conclusion): meals and lodging are excluded only on the employer's premises for its convenience; business travel only as a working condition fringe or through an accountable plan; health coverage is excluded; education is capped and limited for owners; retirement runs through a qualified plan for employees; personal living costs are never deductible; a spendthrift clause shields a beneficiary's interest; a certification of trust keeps terms private from third parties, while beneficiaries must be told the trust exists; an EIN is deactivated, never cancelled.
+- Open for counsel: whether the old foreign-trust EINs and accounts should be deactivated and closed now, and what the letter must say; whether creating a foreign trust with no transfer, or with an unsigned instrument, triggered any Form 3520 duty; whether an Illinois land trust suits title privacy for the rental.
+- If counsel says otherwise: rows marked no route stay closed; a route counsel narrows (meals and lodging, education) drops from the company plan.
+- Status: assumed, awaiting counsel
