@@ -20,6 +20,7 @@ taxed (or penalized) as something else.
 
   python3 declared_plan.py                 run every plan in declared-plan-synthetic.json
   python3 declared_plan.py --json out.json also write the results
+  python3 declared_plan.py --as-of 2026-04-02   judge the year as it stood that day
   python3 declared_plan.py --selftest      the check's own cases
 
 Verdicts: pass, fail, amber (a fact is unknown, or the text read does not
@@ -37,8 +38,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -83,8 +85,33 @@ def _need(facts: dict, keys: list, plan_id: str):
 
 # ------------------------------------------------------------ accountable plan
 
-def event_tests(ev: dict, plan: dict) -> dict:
-    t, f = plan["terms"], plan["facts"]
+def terms_in_force(plan: dict, on) -> dict:
+    """Terms that govern a payment made on `on`: the declared terms plus every
+    amendment adopted on or before that day. An amendment counts from the day
+    it was adopted, whatever effective date it claims, so a later amendment can
+    never reach back to cover a payment already made (ASSUMPTION, Q44)."""
+    t = dict(plan["terms"])
+    for a in sorted(plan.get("amendments", []), key=lambda a: a["adopted_on"]):
+        if on is None or _d(a["adopted_on"]) <= on:
+            t.update(a["terms"])
+    return t
+
+
+def deadlines(ev: dict, t: dict) -> dict:
+    """The dates each open item must be closed by, fixed date method (g)(2)(i)."""
+    inc = _d(ev["incurred"])
+    out = {"substantiate_by": inc + timedelta(days=min(t["substantiation_days"], SAFE_SUBSTANTIATE_DAYS))}
+    if max(0.0, ev.get("advance", 0) - ev["amount"]) > 0:
+        out["return_by"] = inc + timedelta(days=min(t["return_excess_days"], SAFE_RETURN_DAYS))
+    return out
+
+
+def event_tests(ev: dict, plan: dict, as_of=None) -> dict:
+    """Each test is True (met), False (broken) or None (open, deadline not yet
+    passed on `as_of`). An open item is not a failure until its deadline passes."""
+    f = plan["facts"]
+    t = terms_in_force(plan, _d(ev["paid"]))
+    dl = deadlines(ev, t)
     out = {}
     # AP1 business connection, 1.62-2(d)(1)
     ok = bool(ev.get("business_purpose")) and ev["line"] in t["covered_lines"]
@@ -92,29 +119,56 @@ def event_tests(ev: dict, plan: dict) -> dict:
         ok = ok and f["home_office_for_convenience_of_employer"] is True and f["home_rented_to_employer"] is False
     out["AP1"] = ok
     # AP2 substantiation, 1.62-2(e)(1), safe harbor (g)(2)(i)
-    inc, sub = _d(ev["incurred"]), _d(ev.get("substantiated"))
+    sub = _d(ev.get("substantiated"))
     has_ev = LINE_EVIDENCE.get(ev["line"], set()) <= set(ev.get("evidence", []))
-    out["AP2"] = bool(sub) and (sub - inc).days <= min(t["substantiation_days"], SAFE_SUBSTANTIATE_DAYS) and has_ev
+    if sub and (as_of is None or sub <= as_of):
+        out["AP2"] = sub <= dl["substantiate_by"] and has_ev
+    else:
+        out["AP2"] = None if (as_of is not None and as_of <= dl["substantiate_by"]) else False
     # AP3 advance timing, (g)(2)(i)
     if ev.get("advance", 0) > 0:
-        out["AP3"] = (inc - _d(ev["paid"])).days <= min(t["advance_max_days_before_expense"], SAFE_ADVANCE_DAYS)
+        out["AP3"] = (_d(ev["incurred"]) - _d(ev["paid"])).days <= min(t["advance_max_days_before_expense"], SAFE_ADVANCE_DAYS)
     else:
         out["AP3"] = True
     # AP4 return of excess, 1.62-2(f)(1), safe harbor (g)(2)(i)
-    excess = max(0.0, ev.get("advance", 0) - ev["amount"])
-    if excess > 0:
+    if "return_by" in dl:
         ret = _d(ev.get("excess_returned"))
-        out["AP4"] = bool(ret) and (ret - inc).days <= min(t["return_excess_days"], SAFE_RETURN_DAYS)
+        if ret and (as_of is None or ret <= as_of):
+            out["AP4"] = ret <= dl["return_by"]
+        else:
+            out["AP4"] = None if (as_of is not None and as_of <= dl["return_by"]) else False
     else:
         out["AP4"] = True
     return out
 
 
-def run_accountable(plan: dict, rates: dict) -> dict:
+def breaches(ev: dict, plan: dict) -> list:
+    """(date, test) for each way this payment broke the plan, dated the day the
+    break became true: the payment day for AP1/AP3, the day after a missed
+    deadline for AP2/AP4."""
+    r = event_tests(ev, plan)
+    t = terms_in_force(plan, _d(ev["paid"]))
+    dl = deadlines(ev, t)
+    paid = _d(ev["paid"])
+    out = []
+    for k in ("AP1", "AP3"):
+        if r[k] is False:
+            out.append((paid, k))
+    if r["AP2"] is False:
+        sub = _d(ev.get("substantiated"))
+        late = dl["substantiate_by"] + timedelta(days=1)
+        out.append((max(paid, late) if (sub is None or sub > dl["substantiate_by"]) else max(paid, sub), "AP2"))
+    if r["AP4"] is False:
+        out.append((max(paid, dl["return_by"] + timedelta(days=1)), "AP4"))
+    return out
+
+
+def run_accountable(plan: dict, rates: dict, as_of=None) -> dict:
     _need(plan["facts"], ["home_office_for_convenience_of_employer", "home_rented_to_employer",
                           "founder_is_employee_not_disregarded_owner"], plan["id"])
+    as_of = as_of or _d(plan.get("as_of"))
     t = plan["terms"]
-    events = plan["events"]
+    events = [e for e in plan["events"] if as_of is None or _d(e["paid"]) <= as_of]
     checks = []
     first_paid = min((_d(e["paid"]) for e in events), default=None)
     declared = _d(plan.get("declared_on"))
@@ -129,10 +183,20 @@ def run_accountable(plan: dict, rates: dict) -> dict:
     checks.append(("DP1", "pass" if inside else "amber",
                    "Declared terms are inside the 30/60/120-day fixed date method (longer can still be reasonable on the facts)",
                    "Reg. 1.62-2(g)(1), (g)(2)(i)"))
+    # DP3 no amendment reaches back to cover a payment already made. ASSUMPTION
+    # (Q44): the text read says nothing about amendments; the rehearsal holds
+    # each payment to the terms in force on the day it was paid.
+    retro = []
+    for am in plan.get("amendments", []):
+        eff, adopted = _d(am.get("effective_on") or am["adopted_on"]), _d(am["adopted_on"])
+        retro += [e["id"] for e in events if eff <= _d(e["paid"]) < adopted]
+    checks.append(("DP3", "fail" if retro else "pass",
+                   "No amendment adopted after a payment claims to cover it; each payment is held to the terms in force when paid"
+                   + (f" (reached back to: {', '.join(retro)})" if retro else ""), "ASSUMPTION, Q44"))
     # AP0 the payee is an employee (register B4: a disregarded owner can't use one)
     checks.append(("AP0", _v(plan["facts"]["founder_is_employee_not_disregarded_owner"]),
                    "The person reimbursed is an employee of the payor", "Reg. 1.62-2(d)(1); register B4"))
-    per = {e["id"]: event_tests(e, plan) for e in events}
+    per = {e["id"]: event_tests(e, plan, as_of) for e in events}
     labels = {
         "AP1": ("Every payment is for a business expense of the employee's job (home office also needs the employer's convenience and no rental to the employer)", "Reg. 1.62-2(d)(1); IRC 280A(c)(1), (c)(6)"),
         "AP2": ("Every expense substantiated to the payor within the declared period, with the records the line needs", "Reg. 1.62-2(e)(1), (g)(2)(i); IRC 274(d)"),
@@ -140,14 +204,43 @@ def run_accountable(plan: dict, rates: dict) -> dict:
         "AP4": ("Every amount above the substantiated expense returned within the declared period", "Reg. 1.62-2(f)(1), (g)(2)(i)"),
     }
     for k, (lab, cite) in labels.items():
-        bad = [i for i, r in per.items() if not r[k]]
-        checks.append((k, "fail" if bad else "pass", lab + (f" (fails: {', '.join(bad)})" if bad else ""), cite))
-    failing = [i for i, r in per.items() if not all(r.values())]
+        bad = [i for i, r in per.items() if r[k] is False]
+        open_ = [i for i, r in per.items() if r[k] is None]
+        note = (f" (fails: {', '.join(bad)})" if bad else "") + (f" (open, not yet due: {', '.join(open_)})" if open_ else "")
+        checks.append((k, "fail" if bad else "pass", lab + note, cite))
+    # DP2 the step invariant: on every day of the year so far, nothing is past
+    # its deadline. Open items inside their window are fine; the invariant is
+    # "nothing overdue", not "everything closed". Read from (g)(2)(i).
+    dated = sorted(br for e in events for br in breaches(e, plan) if as_of is None or br[0] <= as_of)
+    first = dated[0] if dated else None
+    checks.append(("DP2", "fail" if first else "pass",
+                   "On every day so far, nothing was past its deadline (open items still inside their window are allowed)"
+                   + (f" (first broken {first[0].isoformat()}, {first[1]})" if first else ""),
+                   "Reg. 1.62-2(g)(2)(i)"))
+    failing = [i for i, r in per.items() if any(v is False for v in r.values())]
     share = len(failing) / len(events) if events else 0.0
     abuse = share >= ABUSE_SHARE
     checks.append(("AP5", "fail" if abuse else "pass",
                    f"No pattern of abuse: {len(failing)} of {len(events)} payments fail a test (threshold {ABUSE_SHARE:.0%}, ASSUMPTION)",
                    "Reg. 1.62-2(k); ASSUMPTION, Q38"))
+    # DP4 early drift: a pattern under (k) is a plan-level failure, so the first
+    # broken payment is flagged as risk to the whole arrangement, dated, with
+    # the day the running share first reached the threshold if it did.
+    first_break = sorted(min(br[0] for br in bs) for bs in (
+        [br for br in breaches(e, plan) if as_of is None or br[0] <= as_of] for e in events) if bs)
+    crossed = None
+    for n, day in enumerate(first_break, 1):
+        made = [e for e in events if _d(e["paid"]) <= day]
+        if made and n / len(made) >= ABUSE_SHARE:
+            crossed = day
+            break
+    if first:
+        lab = (f"Drift flagged at plan level from {first[0].isoformat()}: {len(failing)} of {len(events)} payments broken"
+               + (f"; share reached {ABUSE_SHARE:.0%} on {crossed.isoformat()}" if crossed else
+                  f"; {max(0, math.ceil(ABUSE_SHARE * len(events)) - len(failing))} more broken payment(s) reach the threshold"))
+    else:
+        lab = "No drift: no payment has broken the plan"
+    checks.append(("DP4", "amber" if first else "pass", lab, "Reg. 1.62-2(k); threshold ASSUMPTION, Q38"))
     # Reconcile: what is wages. Arrangement-level failure (k, or the employee
     # test) makes every payment wages (1.62-2(c)(3)(i), (c)(5), (k)). A single
     # failed payment under a plan that otherwise holds is counted as wages for
@@ -161,9 +254,9 @@ def run_accountable(plan: dict, rates: dict) -> dict:
         wages = 0.0
         for e in events:
             r = per[e["id"]]
-            if not (r["AP1"] and r["AP2"]):
+            if r["AP1"] is False or r["AP2"] is False:
                 wages += max(e["amount"], e.get("advance", 0))
-            elif not r["AP4"]:
+            elif r["AP4"] is False:
                 wages += max(0.0, e.get("advance", 0) - e["amount"])
         basis = "only the failed payments (ASSUMPTION, Q40)" if wages else "nothing; all payments accountable"
     emp = rates["employee_income_tax_marginal"] + rates["state_income_tax"] + rates["employee_fica"]
@@ -234,11 +327,11 @@ RUNNERS = {
 }
 
 
-def run(inputs: dict) -> list:
+def run(inputs: dict, as_of=None) -> list:
     out = []
     for p in inputs["plans"]:
         if p["instance"] == "accountable_plan":
-            out.append(run_accountable(p, inputs["rates"]))
+            out.append(run_accountable(p, inputs["rates"], as_of))
         else:
             out.append(RUNNERS[p["instance"]](p))
     return out
@@ -314,6 +407,26 @@ def selftest() -> int:
     p5["payor_role"], p5["payee_role"] = "x", "y"
     expect("renaming roles changes no verdict",
            [c["verdict"] for c in run_accountable(p5, inputs["rates"])["checks"]] == [c["verdict"] for c in res["AP-mgmt"]["checks"]])
+    # the step invariant: open items inside their window are not failures
+    late = next(x for x in inputs["plans"] if x["id"] == "AP-mgmt-late")
+    mid = run_accountable(late, inputs["rates"], as_of=date(2026, 3, 15))
+    mv = lambda r, cid: next(c["verdict"] for c in r["checks"] if c["id"] == cid)
+    expect("mid-March: f1 receipt still inside 60 days, nothing overdue (DP2 pass)", mv(mid, "DP2") == "pass" and mv(mid, "AP2") == "pass")
+    after = run_accountable(late, inputs["rates"], as_of=date(2026, 4, 2))
+    expect("April 2: f1 receipt now overdue, DP2 fails that day", mv(after, "DP2") == "fail" and "2026-04-02" in
+           next(c["label"] for c in after["checks"] if c["id"] == "DP2"))
+    expect("April 2: one break of three is drift (amber), not yet a pattern", mv(after, "DP4") == "amber" and mv(after, "AP5") == "pass")
+    # amendments: an amendment can't reach back to cover a payment already made
+    p6 = json.loads(json.dumps(late))
+    p6["amendments"] = [{"adopted_on": "2026-05-01", "effective_on": "2026-01-01", "terms": {"substantiation_days": 120}}]
+    r6 = run_accountable(p6, inputs["rates"])
+    expect("amendment backdated to cover earlier payments fails DP3", mv(r6, "DP3") == "fail")
+    expect("backdated amendment doesn't rescue the late receipt", mv(r6, "AP2") == "fail")
+    p7 = json.loads(json.dumps(late))
+    p7["amendments"] = [{"adopted_on": "2026-01-15", "terms": {"substantiation_days": 120}}]
+    r7 = run_accountable(p7, inputs["rates"])
+    expect("amendment adopted before the payment governs it, but the safe harbor still caps it at 60 days",
+           mv(r7, "DP3") == "pass" and mv(r7, "AP2") == "fail" and mv(r7, "DP1") == "pass")
     print(f"\n{bad} failure(s)")
     return 1 if bad else 0
 
@@ -323,11 +436,12 @@ def main(argv=None):
     ap.add_argument("inputs", nargs="?", default=str(DEFAULT))
     ap.add_argument("--json")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--as-of", help="YYYY-MM-DD: judge the accountable plans as they stood that day")
     a = ap.parse_args(argv)
     if a.selftest:
         return selftest()
     inputs = json.loads(Path(a.inputs).read_text())
-    results = run(inputs)
+    results = run(inputs, _d(a.as_of))
     print(summarize(results))
     if a.json:
         Path(a.json).write_text(json.dumps(results, indent=2))

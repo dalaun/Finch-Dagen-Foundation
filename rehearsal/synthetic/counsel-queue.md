@@ -519,3 +519,16 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): 508(a) requires notice on Form 1023; nothing read says what drifting from it costs.
 - If counsel says otherwise: EX2 and EX3 get a traced consequence.
 - Status: assumed, awaiting counsel
+
+## Q44. Can an accountable plan be amended to cover a reimbursement already paid?
+
+- Key: `accountable-plan-no-retro-amendment`
+- Raised by: DECLARED-PLAN.md, check DP3
+- For: CPA
+- Question: If the management company changes its accountable plan (for example, a longer receipt deadline), does the change reach payments made before it was adopted, or only later ones?
+- Changes decision: whether fixing a missed deadline by amending the plan is ever possible, and whether amendments need a dated adoption record.
+- ASSUMPTION: an amendment counts only from the day it is adopted, whatever effective date it claims; each payment is held to the terms in force when it was paid. The 60/120-day fixed date method still caps any declared term.
+- Primary cite: Treas. Reg. 1.62-2(c)(1), (d), (e), (f), (g)(2)(i), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26). No text on amendments was read.
+- What the text says (as read, not a conclusion): the regulation tests the "arrangement" and the time each step took; the parts read do not mention amending a plan.
+- If counsel says otherwise: DP3 loosens, and terms_in_force in declared_plan.py honours a stated effective date.
+- Status: assumed, awaiting counsel

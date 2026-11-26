@@ -42,12 +42,23 @@ Other quotes used are already in [../01-instrument-register.md](../01-instrument
 |---|---|---|
 | DP0 | Plan written and dated before the first payment | ASSUMPTION, Q39 |
 | DP1 | Declared terms inside the 30/60/120-day method (amber if longer) | 1.62-2(g)(1), (g)(2)(i) |
+| DP3 | No amendment reaches back: each payment is held to the terms in force the day it was paid | ASSUMPTION, Q44 |
 | AP0 | The person reimbursed is the payor's employee | 1.62-2(d)(1); register B4 |
 | AP1 | Business connection; home office also needs the employer's convenience and no rental to the employer | 1.62-2(d)(1); 280A(c)(1), (c)(6) |
 | AP2 | Substantiated within the declared period, with the records the line needs | 1.62-2(e)(1), (g)(2)(i); 274(d) |
 | AP3 | Advances no more than 30 days before the expense | 1.62-2(g)(2)(i) |
 | AP4 | Excess returned within the declared period | 1.62-2(f)(1), (g)(2)(i) |
+| DP2 | Step invariant: on every day so far, nothing is past its deadline. Open items inside their window are allowed | 1.62-2(g)(2)(i) |
 | AP5 | No pattern of abuse (half or more of payments failing is a pattern) | 1.62-2(k); ASSUMPTION, Q38 |
+| DP4 | Early drift: the first broken payment is flagged as risk to the whole plan, dated, with the day the share reached the threshold | 1.62-2(k); threshold ASSUMPTION, Q38 |
+
+### True at every step, not only at year end
+
+The plan has to hold the whole way, the same way the keystone constraint is checked at every step rather than only at the finish. Three rules, checked against the 1.62-2 text above:
+
+- **Nothing overdue, not everything closed.** On any day, a receipt or an excess still inside its 60-day or 120-day window is fine. The plan breaks the day after a deadline passes with the item still open (DP2). This is the fixed date method, (g)(2)(i). `--as-of` judges the year as it stood on any day: the badly run plan is clean on March 15 and first breaks on April 2.
+- **Order.** The plan exists before the first payment (DP0) and an amendment counts only from the day it's adopted, so it can't be written later to cover a payment already made (DP3). The regulation read doesn't speak to either point in words, so both are ASSUMPTION (Q39, Q44). Even an amendment adopted in time can't stretch a term past the 60/120-day caps.
+- **Drift is plan-level risk.** Under (k) a pattern makes every payment wages, so the first break is flagged against the whole arrangement (DP4, amber), not only against that payment. In the badly run plan the drift starts April 2 and the share reaches the threshold on June 11.
 
 Reconciling: when AP0 or AP5 fails, every payment is wages ((c)(3)(i), (c)(5), (k)). When one payment fails under a plan that otherwise holds, the rehearsal counts only that payment as wages (ASSUMPTION, Q40). The added tax uses placeholder rates, not anyone's brackets.
 
@@ -61,8 +72,9 @@ Reconciling: when AP0 or AP5 fails, every payment is wages ((c)(3)(i), (c)(5), (
 
 ```
 python3 declared_plan.py              # every plan in declared-plan-synthetic.json
-python3 declared_plan.py --selftest   # 14 cases
+python3 declared_plan.py --selftest   # 20 cases
+python3 declared_plan.py --as-of 2026-04-02   # the year as it stood that day
 python3 declared_plan.py --json out.json
 ```
 
-Run on 2026-11-26: 20 distinct checks (8 on the accountable plan, 12 across the three Foundation instances, ER0 only when the grantee is a public charity); the synthetic plans give 35 verdicts, 25 pass, 3 amber, 7 fail. The fails are all in the two plans built to fail.
+Run on 2026-11-26: 23 distinct checks (11 on the accountable plan, 12 across the three Foundation instances, ER0 only when the grantee is a public charity); the synthetic plans give 44 verdicts, 30 pass, 5 amber, 9 fail. The fails are all in the two plans built to fail.
