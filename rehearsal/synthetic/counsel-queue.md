@@ -532,3 +532,42 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): the regulation tests the "arrangement" and the time each step took; the parts read do not mention amending a plan.
 - If counsel says otherwise: DP3 loosens, and terms_in_force in declared_plan.py honours a stated effective date.
 - Status: assumed, awaiting counsel
+
+## Q45. Is the economic substance doctrine relevant to the routes that use a tool Congress wrote for that purpose?
+
+- Key: `economic-substance-relevance`
+- Raised by: SUBSTANCE.md, check SB0
+- For: lawyer
+- Question: For routes like a company health plan, a 401(k) or a non-grantor trust with independent trustees, is the economic substance doctrine relevant at all, or does using the tool as Congress designed it settle the question?
+- Changes decision: whether SB2 to SB4 can ever deny the benefit on those routes, and how much paper each route needs.
+- ASSUMPTION: every route with a federal tax benefit is treated as relevant, except an individual's personal transaction. This is the cautious reading: a route that passes here passes even if relevance is found.
+- Primary cite: IRC 7701(o)(1), (o)(5)(B), (o)(5)(C); Patel v. Commissioner, 165 T.C. No. 10 (2025) (relevance is a separate question); Liberty Global (D. Colo. 2023) (contrary view); Notice 2010-62 (no list of transactions). Read 2026-11-26, through The Tax Adviser's quotes; the official statute text and the Joint Committee explanation were not read.
+- What the text says (as read, not a conclusion): (o)(5)(C) sends relevance back to the law before 2010; the IRS says it won't publish a list either way.
+- If counsel says otherwise: SB0 marks those routes "not relevant" and SB2 to SB4 become advice for them, not tests.
+- Status: assumed, awaiting counsel
+
+## Q46. Does the non-tax purpose have to be written down before the route starts?
+
+- Key: `substance-purpose-written-first`
+- Raised by: SUBSTANCE.md, check SB1
+- For: lawyer
+- Question: To show a substantial non-tax purpose, does it help, or matter, that the purpose was written and dated before the first step, rather than explained later?
+- Changes decision: whether every route opens with a dated purpose statement.
+- ASSUMPTION: the rehearsal requires a dated written purpose before the first step, as evidence, the same as the accountable plan's DP0 (Q39).
+- Primary cite: IRC 7701(o)(1)(B) (read 2026-11-26). Nothing read says the purpose must be written.
+- What the text says (as read, not a conclusion): (o)(1)(B) asks for a substantial purpose apart from federal income tax; it says nothing about when or how it is recorded.
+- If counsel says otherwise: SB1 becomes good practice rather than a fail.
+- Status: assumed, awaiting counsel
+
+## Q47. Is each step tested on its own, or only the whole series?
+
+- Key: `substance-per-step`
+- Raised by: SUBSTANCE.md, check SB2
+- For: lawyer
+- Question: If one step of a route does nothing apart from tax but the route as a whole has substance, can that step's tax result be denied?
+- Changes decision: whether a route can include a tax-only step at all.
+- ASSUMPTION: every step must change something real apart from tax. This is stricter than the statute, which judges the transaction and lets a series count as one; it is never looser.
+- Primary cite: IRC 7701(o)(5)(D) ("The term "transaction" includes a series of transactions."); Notice 2010-62 Background; Court Holding (register A3). Read 2026-11-26.
+- What the text says (as read, not a conclusion): the statute lets a series be judged together; nothing read says a single step inside a sound series is tested alone.
+- If counsel says otherwise: SB2 turns amber for a tax-only step inside a series that passes SB3.
+- Status: assumed, awaiting counsel

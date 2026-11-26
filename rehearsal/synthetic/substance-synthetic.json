@@ -1,0 +1,900 @@
+{
+  "label": "SYNTHETIC. Roles only, no real names, accounts or amounts. Amounts are placeholders labelled ASSUMPTION. Design and education, not legal or tax advice.",
+  "rates": {
+    "label": "ASSUMPTION placeholder",
+    "federal_marginal": 0.22
+  },
+  "routes": [
+    {
+      "id": "R-62c",
+      "family": "Company tools",
+      "tool": "IRC 62(c), Reg. 1.62-2 (accountable plan)",
+      "label": "Management company reimburses the founder's job costs he fronted",
+      "tool_test": "pass",
+      "tool_note": "runs in declared_plan.py: 11 checks, every day of the year",
+      "tool_trace": "Reg. 1.62-2; DECLARED-PLAN.md",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "repay job costs the employee fronted, so he isn't funding the company",
+        "kind": "business",
+        "effect": "employee_repaid_for_job_cost",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "employer_obligation_in_writing"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-05",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "employee_repaid_for_job_cost"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 574,
+      "disclosed": false
+    },
+    {
+      "id": "R-106",
+      "family": "Company tools",
+      "tool": "IRC 105(b), 106(a) (health plan)",
+      "label": "Company health coverage for the founder as its employee",
+      "tool_test": "pass",
+      "tool_note": "a C corporation employee, not a 2-percent S shareholder",
+      "tool_trace": "IRC 106(a), 105(b); packet/research/Q34.md",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "insure the employee's medical costs",
+        "kind": "business",
+        "effect": "health_risk_moved_to_insurer",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-15",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "plan_document_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "health_risk_moved_to_insurer"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 9000,
+      "disclosed": false
+    },
+    {
+      "id": "R-119",
+      "family": "Company tools",
+      "tool": "IRC 119(a) (lodging and meals)",
+      "label": "Company says it houses and feeds the founder",
+      "tool_test": "fail",
+      "tool_note": "his own home isn't the employer's business premises",
+      "tool_trace": "IRC 119(a); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 1",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "house the founder",
+        "kind": "business",
+        "effect": "founder_housed",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "founder_housed"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": true
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 12000,
+      "disclosed": false
+    },
+    {
+      "id": "R-125",
+      "family": "Company tools",
+      "tool": "IRC 125 (cafeteria plan)",
+      "label": "Company lets the founder choose cash or pre-tax benefits",
+      "tool_test": "not_traced",
+      "tool_note": "section 125 not yet read in primary text",
+      "tool_trace": "NOT TRACED",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "let the employee choose benefits that fit his household",
+        "kind": "business",
+        "effect": "employee_choice_of_benefits",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "plan_document_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-01-15",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "employee_choice_of_benefits"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 3000,
+      "disclosed": false
+    },
+    {
+      "id": "R-127",
+      "family": "Company tools",
+      "tool": "IRC 127 (educational assistance)",
+      "label": "Company pays the founder's courses",
+      "tool_test": "fail",
+      "tool_note": "fails while he is the only employee: no more than 5% may go to 5% owners",
+      "tool_trace": "IRC 127(b)(3); packet/research/Q34.md",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "train the employee for the company's work",
+        "kind": "business",
+        "effect": "employee_trained",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "plan_document_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-03-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "employee_trained"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 5250,
+      "disclosed": false
+    },
+    {
+      "id": "R-129",
+      "family": "Company tools",
+      "tool": "IRC 129 (dependent care)",
+      "label": "Company pays child care so the founder can work",
+      "tool_test": "not_traced",
+      "tool_note": "the owner limit, like 127's, not yet read",
+      "tool_trace": "IRC 129(a)(2)(A) (cap read); owner limit NOT TRACED",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "child care during work hours",
+        "kind": "business",
+        "effect": "care_provided_during_work",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "plan_document_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "care_provided_during_work"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 7500,
+      "disclosed": false
+    },
+    {
+      "id": "R-132",
+      "family": "Company tools",
+      "tool": "IRC 132(d) (working condition fringe)",
+      "label": "Company pays for business use of a vehicle",
+      "tool_test": "pass",
+      "tool_note": "only the business-use share, with a log",
+      "tool_trace": "IRC 132(d); IRC 274(d) (register B5, B6)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "get the employee to client sites",
+        "kind": "business",
+        "effect": "client_sites_reached",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "vehicle_policy_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-10",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "client_sites_reached"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 2400,
+      "disclosed": false
+    },
+    {
+      "id": "R-401k",
+      "family": "Company tools",
+      "tool": "IRC 401(a), 401(k) (qualified plan)",
+      "label": "One-participant 401(k) at the company",
+      "tool_test": "pass",
+      "tool_note": "exclusive benefit of employees",
+      "tool_trace": "IRC 401(a); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 5",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "save for the employee's retirement",
+        "kind": "business",
+        "effect": "retirement_assets_set_aside",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "plan_document_adopted"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-01-31",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "retirement_assets_set_aside"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 23500,
+      "disclosed": false
+    },
+    {
+      "id": "R-spendthrift",
+      "family": "Trust tools",
+      "tool": "760 ILCS 3/502 (spendthrift clause)",
+      "label": "Family Trust's spendthrift clause",
+      "tool_test": "pass",
+      "tool_note": "bars both voluntary and involuntary transfers",
+      "tool_trace": "760 ILCS 3/502(a), (c); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 8",
+      "federal_tax_benefit": false,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "keep beneficiaries' creditors from reaching trust interests",
+        "kind": "business",
+        "effect": "creditor_protection",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-03-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "creditor_protection"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-govlaw",
+      "family": "Trust tools",
+      "tool": "760 ILCS 3/107, 108 (governing law, place of administration)",
+      "label": "Family Trust names its law and where it's run",
+      "tool_test": "pass",
+      "tool_note": "terms naming the place of administration control",
+      "tool_trace": "760 ILCS 3/107(b), 108(a); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 10",
+      "federal_tax_benefit": false,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "know which state's courts and rules apply",
+        "kind": "business",
+        "effect": "governing_law_fixed",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-03-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "governing_law_fixed"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-cert",
+      "family": "Trust tools",
+      "tool": "760 ILCS 3/1013 (certification of trust)",
+      "label": "Family Trust shows banks a certification, not the whole trust",
+      "tool_test": "pass",
+      "tool_note": "privacy from third parties; beneficiaries still told (813.1)",
+      "tool_trace": "760 ILCS 3/1013(a), (d), 813.1(b)(1); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 9",
+      "federal_tax_benefit": false,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "open accounts without handing over the dispositive terms",
+        "kind": "business",
+        "effect": "accounts_opened_privately",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-04-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "accounts_opened_privately"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-674c",
+      "family": "Trust tools",
+      "tool": "IRC 674(c) (independent trustee powers)",
+      "label": "Independent co-trustees hold the distribution power, keeping the trust non-grantor",
+      "tool_test": "pass",
+      "tool_note": "no trustee is the grantor; no more than half related or subordinate",
+      "tool_trace": "IRC 674(c) (register E9)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "put distribution decisions in independent hands, with a named successor",
+        "kind": "business",
+        "effect": "control_shared_with_independent_trustee",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-03-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "control_shared_with_independent_trustee"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-06-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "distribution_decided_by_independent_trustee"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": true
+      },
+      "benefit_placeholder": 4000,
+      "disclosed": false
+    },
+    {
+      "id": "R-4941",
+      "family": "Foundation tools",
+      "tool": "IRC 4941(d)(2)(E) (reasonable compensation)",
+      "label": "Foundation pays a manager for program work at market rate",
+      "tool_test": "pass",
+      "tool_note": "reasonable, necessary to the exempt purpose, not excessive",
+      "tool_trace": "IRC 4941(d)(2)(E); Reg. 53.4941(d)-3(c)(1) (register D2)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "get program work done",
+        "kind": "business",
+        "effect": "program_work_delivered",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "engagement_terms_approved"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-04-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "program_work_delivered"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-4945h",
+      "family": "Foundation tools",
+      "tool": "IRC 4945(h) (expenditure responsibility)",
+      "label": "Foundation grant to a non-public-charity partner",
+      "tool_test": "pass",
+      "tool_note": "purpose in writing, reports obtained, reported to the IRS",
+      "tool_trace": "IRC 4945(h); packet/research/Q35.md",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "fund the partner's curriculum pilot",
+        "kind": "business",
+        "effect": "pilot_delivered",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-02-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "grant_agreement_signed"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-15",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "funds_transferred"
+            ]
+          }
+        },
+        {
+          "id": "s3",
+          "date": "2027-03-31",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "pilot_delivered"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-2503b",
+      "family": "Gift and estate tools",
+      "tool": "IRC 2503(b) (annual exclusion gift)",
+      "label": "Founder gives cash to the Family Trust within the annual exclusion",
+      "tool_test": "amber",
+      "tool_note": "gift to a trust needs a present interest (Crummey power), not yet traced",
+      "tool_trace": "IRC 2503(b) (register C5)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": false,
+      "declared_purpose": {
+        "text": "move ownership to the trust for the family",
+        "kind": "family",
+        "effect": "ownership_moved_to_trust",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-05-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "ownership_moved_to_trust"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": true
+      },
+      "benefit_placeholder": 19000,
+      "disclosed": false
+    },
+    {
+      "id": "R-fairsale",
+      "family": "Gift and estate tools",
+      "tool": "IRC 2512(b) inverse (sale at full value)",
+      "label": "Founder sells an asset to the trust at appraised value",
+      "tool_test": "pass",
+      "tool_note": "full consideration, so no gift",
+      "tool_trace": "IRC 2512(b); packet/research/Q40.md (branch claude/project-thread-hpjad5) claim 11",
+      "federal_tax_benefit": false,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "trust owns the asset; founder holds cash",
+        "kind": "business",
+        "effect": "asset_for_cash",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-06-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "appraisal_obtained"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-06-15",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "asset_for_cash"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": true
+      },
+      "benefit_placeholder": 0,
+      "disclosed": false
+    },
+    {
+      "id": "R-1014",
+      "family": "Gift and estate tools",
+      "tool": "IRC 1014(a) (basis at death)",
+      "label": "Rental building held and run until it passes at death",
+      "tool_test": "pass",
+      "tool_note": "basis becomes value at death",
+      "tool_trace": "IRC 1014(a) (register F1)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "own and run the rental, then pass it on",
+        "kind": "family",
+        "effect": "rent_and_risk_of_ownership",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "rent_and_risk_of_ownership"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2060-01-01",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "ownership_passes_at_death"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": true
+      },
+      "benefit_placeholder": 50000,
+      "disclosed": false
+    },
+    {
+      "id": "R-loop",
+      "family": "Built to fail",
+      "tool": "IRC 163 (interest), circular loans",
+      "label": "Stack entities lend to each other in a circle at interest, each deducting it",
+      "tool_test": "fail",
+      "tool_note": "spec K27",
+      "tool_trace": "IRC 7701(o); Notice 97-24; spec K27",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "",
+        "kind": "business",
+        "effect": "none",
+        "declared_on": null
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-02-01",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-02-02",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        },
+        {
+          "id": "s3",
+          "date": "2026-12-31",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": false,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 10000,
+      "disclosed": false
+    },
+    {
+      "id": "R-giftback",
+      "family": "Built to fail",
+      "tool": "IRC 1014(e) (gift back before death)",
+      "label": "Founder gives appreciated property to a dying relative, who leaves it back to him",
+      "tool_test": "fail",
+      "tool_note": "no basis reset if it returns to the donor within a year",
+      "tool_trace": "IRC 1014(e) (register F1)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": null,
+      "declared_purpose": {
+        "text": "help a relative",
+        "kind": "family",
+        "effect": "relative_supported",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-03-01",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-09-01",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": false,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": false
+      },
+      "benefit_placeholder": 30000,
+      "disclosed": false
+    }
+  ]
+}
