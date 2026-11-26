@@ -19,6 +19,7 @@ The rehearsal (03-ab-rehearsal-spec.md) needs twelve months of transactions to f
 | synthetic_year.py | Seeded generator. Same seed, byte-identical ledger |
 | rehearsal_run.py | Arm A, B-ops and each stack version: 2026 tax engine, structure checks from facts, spend flows graded by a real `decide_spend.py` run or the answer key, break-even asset income |
 | structure-cases-facts.json | Facts for structure cases SK1-SK14, so the selftest proves the fact-based checks match structure-check-cases.ttl |
+| declared_plan.py, declared-plan-synthetic.json | Declared plans ([DECLARED-PLAN.md](DECLARED-PLAN.md)): the accountable plan (Reg. 1.62-2) on the management company, and the same declare-prove-reconcile shape for Foundation reimbursements, expenditure responsibility and the Form 1023 narrative |
 
 ## Run it
 

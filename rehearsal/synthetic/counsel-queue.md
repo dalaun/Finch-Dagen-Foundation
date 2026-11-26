@@ -441,3 +441,81 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: scratch runs on the base year (not committed): 40,000 gives a break-even of 224,500 a year with an unrelated individual trustee (route R2), 120,000 gives 116,800, against 170,300 at 73,382.
 - Status: assumed, awaiting Dalaun
 
+
+## Q38. How many failed reimbursements make a "pattern of abuse" under Reg. 1.62-2(k)?
+
+- Key: `accountable-plan-abuse-threshold`
+- Raised by: DECLARED-PLAN.md, check AP5
+- For: CPA
+- Question: How many late receipts or unreturned advances can the management company's accountable plan have in a year before the IRS could treat every reimbursement under it as wages?
+- Changes decision: whether one bad month costs only that payment or the whole year's reimbursements, and so how strict the monthly close must be.
+- ASSUMPTION: half or more of a year's payments failing a test is a pattern; below that, only the failed payments are wages (see Q40). A flag, not a safe harbor.
+- Primary cite: Treas. Reg. 1.62-2(k), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26, LII reproduction).
+- What the text says (as read, not a conclusion): (k) says a pattern of abuse makes "all payments made under the arrangement" nonaccountable. It gives no number.
+- If counsel says otherwise: a lower threshold turns more synthetic years red; AP5's ABUSE_SHARE changes in declared_plan.py.
+- Status: assumed, awaiting counsel
+
+## Q39. Must the accountable plan be in writing and adopted before the first reimbursement?
+
+- Key: `accountable-plan-written-first`
+- Raised by: DECLARED-PLAN.md, check DP0
+- For: CPA
+- Question: Does the management company need a written accountable plan adopted before it reimburses me, or can an unwritten practice qualify?
+- Changes decision: whether adopting the plan is a step before the first reimbursement or can follow it.
+- ASSUMPTION: the rehearsal requires a written plan dated before the first payment, as the evidence that an arrangement existed.
+- Primary cite: Treas. Reg. 1.62-2(c)(1) and (d)(1), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26).
+- What the text says (as read, not a conclusion): the regulation tests an "arrangement" against (d), (e) and (f); the parts read do not say it must be written.
+- If counsel says otherwise: DP0 becomes advice rather than a test.
+- Status: assumed, awaiting counsel
+
+## Q40. If one reimbursement fails, is only that payment wages?
+
+- Key: `accountable-plan-single-failure`
+- Raised by: DECLARED-PLAN.md, reconcile step
+- For: CPA
+- Question: Under a plan that otherwise meets Reg. 1.62-2, if I miss the deadline on one receipt or one advance, is only that amount wages, or does the whole plan fail?
+- Changes decision: how much one late receipt costs.
+- ASSUMPTION: only the failed payment (or the unreturned excess) is wages, unless AP0 or AP5 fails.
+- Primary cite: Treas. Reg. 1.62-2(c)(3)(i) and (k), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26). The per-payment rule was not read.
+- What the text says (as read, not a conclusion): (c)(3)(i) treats all amounts as nonaccountable when the arrangement does not satisfy (d), (e) or (f); whether one employee's single lapse is an arrangement failure was not settled by the parts read.
+- If counsel says otherwise: one late receipt makes the year's reimbursements wages; the reconcile step in declared_plan.py changes.
+- Status: assumed, awaiting counsel
+
+## Q41. Should the Foundation reimburse a foundation manager only under an accountable-plan-style policy, approved by others?
+
+- Key: `foundation-expense-policy`
+- Raised by: DECLARED-PLAN.md, checks FR3 and FR4
+- For: lawyer
+- Question: When the Foundation reimburses me as a foundation manager, should it use a written expense policy like an accountable plan, approved by people other than me, to show the payment is reasonable, necessary and not excessive?
+- Changes decision: whether FR3 and FR4 are required controls or optional good practice.
+- ASSUMPTION: both are required in the rehearsal.
+- Primary cite: IRC 4941(d)(2)(E); Treas. Reg. 53.4941(d)-3(c)(1) (register D2).
+- What the text says (as read, not a conclusion): the regulation excepts reimbursement that is reasonable, necessary to the exempt purpose and not excessive; it does not name a policy or an approver.
+- If counsel says otherwise: FR3 and FR4 become advice.
+- Status: assumed, awaiting counsel
+
+## Q42. What does Reg. 53.4945-5 require before an expenditure-responsibility grant is paid?
+
+- Key: `expenditure-responsibility-agreement`
+- Raised by: DECLARED-PLAN.md, check ER1
+- For: lawyer
+- Question: Before the Foundation pays a grant to an organization that is not a public charity, what written agreement, pre-grant inquiry and report schedule does the regulation require?
+- Changes decision: what the grant file must hold before money moves.
+- ASSUMPTION: a written agreement stating the purpose, signed before payment.
+- Primary cite: IRC 4945(h) (traced, packet/research/Q35.md). Treas. Reg. 53.4945-5 not traced.
+- What the text says (as read, not a conclusion): 4945(h) names three duties; the regulation that spells them out was not read.
+- If counsel says otherwise: ER1 changes to the regulation's list.
+- Status: assumed, awaiting counsel
+
+## Q43. What happens if the Foundation's activities drift from what it described in Form 1023?
+
+- Key: `form-1023-narrative-drift`
+- Raised by: DECLARED-PLAN.md, checks EX2 and EX3
+- For: lawyer
+- Question: If the Foundation later runs programs different from those described in its Form 1023, what must it report, where, and what is at risk?
+- Changes decision: how tightly the Form 1023 narrative should be written, and whether new programs need a report before they start.
+- ASSUMPTION: activities must stay inside the narrative and material changes must be reported; the consequence is unknown. EX2 and EX3 stay amber.
+- Primary cite: IRC 508(a); Reg. 1.508-1(a)(2)(i) (register D11). No text on drift was read.
+- What the text says (as read, not a conclusion): 508(a) requires notice on Form 1023; nothing read says what drifting from it costs.
+- If counsel says otherwise: EX2 and EX3 get a traced consequence.
+- Status: assumed, awaiting counsel
