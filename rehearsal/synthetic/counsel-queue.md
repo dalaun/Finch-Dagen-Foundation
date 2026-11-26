@@ -571,3 +571,69 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - What the text says (as read, not a conclusion): the statute lets a series be judged together; nothing read says a single step inside a sound series is tested alone.
 - If counsel says otherwise: SB2 turns amber for a tax-only step inside a series that passes SB3.
 - Status: assumed, awaiting counsel
+
+## Q48. Is a board independent when the owner can appoint and remove its members?
+
+- Key: `hiring-board-independence`
+- Raised by: HIRING.md, check HA4
+- For: lawyer
+- Question: If the owner appoints and can remove the directors who approve hires and pay, does their approval still count as independent evidence of reasonable pay?
+- Changes decision: who sits on the approving board, and whether removal needs cause.
+- ASSUMPTION: approvers with no stake who aren't the owner's 318 family count as independent. An independence_unsettled flag turns HA4 amber.
+- Primary cite: IRC 162(a)(1); 4941(d)(2)(E) for the Foundation. Nothing read defines board independence for these purposes.
+- Status: assumed, awaiting counsel
+
+## Q49. What pay band counts as market?
+
+- Key: `hiring-market-band`
+- Raised by: HIRING.md, check HA1
+- For: CPA
+- Question: How far from a market comparable can pay be and still be reasonable compensation?
+- Changes decision: what pay the board can approve.
+- ASSUMPTION: 80% to 110% of a market comparable.
+- Primary cite: IRC 162(a)(1) ("a reasonable allowance for salaries"). The band is not in the statute.
+- Status: assumed, awaiting counsel
+
+## Q50. Are sham hires left out of the owner-limit tests?
+
+- Key: `hiring-disregard-sham`
+- Raised by: HIRING.md, checks HA1 and HA2
+- For: lawyer
+- Question: A hire with no real work, made only so the owner's share falls under 5% or 25%: is that person left out of the 127, 129 and 125 tests?
+- Changes decision: whether the run's choice to disregard such hires is right.
+- ASSUMPTION: disregarded, so they never help the owner pass.
+- Primary cite: IRC 7701(o)(1); substance over form (SUBSTANCE.md).
+- Status: assumed, awaiting counsel
+
+## Q51. Does Lender Management fit a manager whose clients are the founder's own trusts?
+
+- Key: `hiring-lender-family-office`
+- Raised by: HIRING.md, checks FO1 to FO5
+- For: lawyer
+- Question: Lender Management was held to carry on a trade or business under 162. Would Canon Management managing the stack's trusts and Foundation for a fee or profits interest qualify, when the founder is trustee of the clients and owner of the manager? Does an independent co-trustee approving the agreement meet the heightened scrutiny?
+- Changes decision: whether the management company's costs are 162 business expenses or 212 investment expenses.
+- ASSUMPTION: FO5 stays amber until counsel reads it.
+- Primary cite: Lender Management, LLC v. Commissioner, T.C. Memo. 2017-246 (caption read; opinion text not read; facts from The Tax Adviser, Aug. 2018, and EY and Shearman summaries); Higgins v. Commissioner, 312 U.S. 212 (1941). A Foundation paying a disqualified manager is also a 4941 question.
+- Status: assumed, awaiting counsel
+
+## Q52. Are AI tools an ordinary business cost and never employees?
+
+- Key: `hiring-ai-cost`
+- Raised by: HIRING.md, check AI0
+- For: CPA
+- Question: Are AI tool subscriptions a deductible 162 cost, and is it right that they count for nothing in headcount or the owner-limit tests?
+- Changes decision: how the run prices AI and whether it moves any limit.
+- ASSUMPTION: deductible cost; never employees.
+- Primary cite: IRC 162(a); the benefit sections speak of employees, who are people (127(c)(2), 129(e)(3), 125(d)(1)(A)).
+- Status: assumed, awaiting counsel
+
+## Q53. If the company pays household staff, what is the payment to the owner?
+
+- Key: `hiring-household-payment`
+- Raised by: HIRING.md, household case
+- For: CPA
+- Question: When a C corporation pays a maid or butler who serves the owner's home, is it pay to the owner, a dividend, or both, and what does the owner then owe as household employer?
+- Changes decision: how the household case is taxed.
+- ASSUMPTION: not deductible to the company; treated as a payment to the owner; the owner files Schedule H.
+- Primary cite: IRC 262(a); IRS Topic 756; Pub. 926 (2026).
+- Status: assumed, awaiting counsel

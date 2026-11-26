@@ -59,9 +59,9 @@ The accountable plan is one tool. A cafeteria plan is not inside it. They are se
 | Company | Reimburse job costs | 62(c), Reg. 1.62-2 | pass (DECLARED-PLAN.md) | pass |
 | Company | Health coverage | 105(b), 106(a) | pass: C corporation employee | pass |
 | Company | Housing and meals at his home | 119(a) | fail: not the employer's premises | fail: living costs untaxed |
-| Company | Choose cash or benefits | 125 | amber: NOT TRACED | pass |
-| Company | Courses | 127 | fail: sole employee and owner | pass |
-| Company | Child care | 129 | amber: owner limit not read | pass |
+| Company | Choose cash or benefits | 125 | amber: owner limit now traced, needs about 4 unrelated staff (HIRING.md) | pass |
+| Company | Courses | 127 | fail: sole employee and owner; about 67 staff needed (HIRING.md) | pass |
+| Company | Child care | 129 | amber: owner limit now traced, needs about 6 unrelated staff (HIRING.md) | pass |
 | Company | Business vehicle use | 132(d) | pass, with a log | pass |
 | Company | Retirement | 401(a), 401(k) | pass | pass |
 | Trust | Creditor protection | 760 ILCS 3/502 spendthrift | pass | no tax benefit, so it doesn't apply |

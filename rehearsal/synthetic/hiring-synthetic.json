@@ -1,0 +1,660 @@
+{
+  "label": "SYNTHETIC. Roles only, placeholder pay, uptake and rates labelled ASSUMPTION. Design and education, not legal or tax advice.",
+  "rates": {
+    "label": "ASSUMPTION placeholders",
+    "wage_tax_avoided": 0.4225,
+    "employer_payroll_tax": 0.0765
+  },
+  "cases": [
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-family",
+      "label": "Known bad: hire only attributed family (a parent, real job, market pay)",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "office administrator",
+          "relation": "parent",
+          "pay": 45000,
+          "market_pay": 45000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a office administrator",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 2000,
+            "129": 0,
+            "125": 9000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ]
+    },
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-unrelated",
+      "label": "Known good: six unrelated employees in real roles at market pay, with real uptake",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "project coordinator",
+          "relation": "none",
+          "pay": 48000,
+          "market_pay": 48000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a project coordinator",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h2",
+          "role": "operations analyst",
+          "relation": "none",
+          "pay": 55000,
+          "market_pay": 55000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a operations analyst",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h3",
+          "role": "bookkeeper",
+          "relation": "none",
+          "pay": 47000,
+          "market_pay": 47000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a bookkeeper",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h4",
+          "role": "field technician",
+          "relation": "none",
+          "pay": 52000,
+          "market_pay": 52000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a field technician",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h5",
+          "role": "customer support lead",
+          "relation": "none",
+          "pay": 45000,
+          "market_pay": 45000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a customer support lead",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h6",
+          "role": "data specialist",
+          "relation": "none",
+          "pay": 50000,
+          "market_pay": 50000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a data specialist",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 0,
+            "125": 9000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ]
+    },
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-brother",
+      "label": "The founder's brother, real work at market pay (siblings aren't attributed)",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "operations manager",
+          "relation": "sibling",
+          "pay": 48000,
+          "market_pay": 48000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a operations manager",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 2000,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ]
+    },
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-unlock",
+      "label": "Failure case: a hire made only to unlock the benefits, no real work",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "unspecified",
+          "relation": "none",
+          "pay": 30000,
+          "market_pay": 45000,
+          "real_work": false,
+          "unlock_only": true,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "",
+            "declared_on": null
+          },
+          "uptake": {
+            "127": 0,
+            "129": 7500,
+            "125": 7500
+          },
+          "employer_paid_benefits": 0,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ]
+    },
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-household",
+      "label": "Household staff (a maid and a butler) for the founder's home, put on the company payroll",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "maid",
+          "relation": "none",
+          "pay": 40000,
+          "market_pay": 40000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "owner_household",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a maid",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 0,
+            "129": 5000,
+            "125": 9000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h2",
+          "role": "butler",
+          "relation": "none",
+          "pay": 50000,
+          "market_pay": 50000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "owner_household",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a butler",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 0,
+            "129": 5000,
+            "125": 9000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ],
+      "note": "Cost is personal (262). Paid by the company it is a payment to the founder (pay or a dividend, ASSUMPTION Q53), not a company expense; the founder is the household employer and files Schedule H once one worker is paid $3,000 or more in 2026 (Topic 756)."
+    },
+    {
+      "owner_share": 1.0,
+      "owner_benefits": {
+        "127": 5250,
+        "129": 7500,
+        "125": 16500
+      },
+      "salary_reduction": true,
+      "assumed_uptake": {
+        "127": 2000,
+        "129": 5000,
+        "125": 14000
+      },
+      "plan_admin_cost": 1500,
+      "output_per_hire_placeholder": 60000,
+      "ai": {
+        "agents": 3,
+        "cost_per_hire": 3000,
+        "output_lift": 0.3
+      },
+      "id": "H-familyoffice",
+      "label": "The management company runs a real investment management business for clients who don't own it (Lender Management facts)",
+      "hires": [
+        {
+          "id": "h1",
+          "role": "portfolio analyst",
+          "relation": "none",
+          "pay": 70000,
+          "market_pay": 70000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a portfolio analyst",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h2",
+          "role": "operations associate",
+          "relation": "none",
+          "pay": 52000,
+          "market_pay": 52000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a operations associate",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        },
+        {
+          "id": "h3",
+          "role": "compliance associate",
+          "relation": "none",
+          "pay": 58000,
+          "market_pay": 58000,
+          "real_work": true,
+          "unlock_only": false,
+          "work_for": "company",
+          "start": "2027-01-15",
+          "purpose": {
+            "text": "the company needs a compliance associate",
+            "declared_on": "2027-01-05"
+          },
+          "uptake": {
+            "127": 1500,
+            "129": 5000,
+            "125": 14000
+          },
+          "employer_paid_benefits": 4500,
+          "board": {
+            "approvers": [
+              {
+                "role": "independent_director",
+                "relation": "none",
+                "stake": false
+              }
+            ],
+            "approved_on": "2027-01-05",
+            "comparables": [
+              "market pay survey for the role (placeholder)"
+            ],
+            "minutes": true
+          }
+        }
+      ],
+      "tool": "IRC 162 vs 212 (Lender Management)",
+      "family_office": {
+        "clients_mostly_non_owners": true,
+        "paid_for_services_not_capital": true,
+        "salaried_staff": true,
+        "services_beyond_an_investor": true,
+        "bona_fide_under_scrutiny": null
+      },
+      "note": "FO5 stays amber: the founder would be the client trusts' trustee and the manager's owner, so an independent co-trustee approves the management agreement (Q51)."
+    }
+  ]
+}
