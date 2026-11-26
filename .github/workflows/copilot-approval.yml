@@ -1,0 +1,45 @@
+name: Copilot approval
+
+# Posts the commit status "Copilot approval" on a pull request's head commit
+# (.github/lane/copilot_review.py): green when no engine file changed or when
+# Copilot approved that exact commit; pending until then; red if Copilot
+# requested changes. Dalaun makes it count by adding "Copilot approval"
+# (source: GitHub Actions) to the "main: owner merges" ruleset.
+#
+# Both triggers check out main and run the script from main, never the pull
+# request's code. A pull request that edits this file is in Dalaun's lane, so
+# lane-guard keeps it from merging itself.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+  pull_request_review:
+    types: [submitted, dismissed]
+
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: copilot-approval-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  copilot-approval:
+    if: github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main (the rules), not the pull request
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: The script's own cases
+        run: python3 .github/lane/copilot_review.py --selftest
+      - name: Post Copilot approval on the head commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: python3 .github/lane/copilot_review.py --pr "$PR"

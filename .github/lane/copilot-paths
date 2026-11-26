@@ -1,0 +1,10 @@
+# Paths where an agent-lane pull request also needs Copilot's approval on its
+# exact head commit (.github/lane/copilot_review.py), as a second reader from a
+# different model vendor than the agent that wrote it and the agent that verified it.
+# One glob per line, matched against each changed file (old and new name).
+# Dalaun's lane: only he changes this list. Keep it narrow: every match costs a
+# Copilot review from his monthly AI credits.
+rehearsal/synthetic/*.py
+rehearsal/synthetic/stack.json
+rehearsal/synthetic/scenarios.json
+rehearsal/synthetic/benchmarks-*.json
