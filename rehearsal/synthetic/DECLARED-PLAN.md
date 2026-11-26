@@ -72,9 +72,9 @@ Reconciling: when AP0 or AP5 fails, every payment is wages ((c)(3)(i), (c)(5), (
 
 ```
 python3 declared_plan.py              # every plan in declared-plan-synthetic.json
-python3 declared_plan.py --selftest   # 20 cases
+python3 declared_plan.py --selftest   # 23 cases
 python3 declared_plan.py --as-of 2026-04-02   # the year as it stood that day
 python3 declared_plan.py --json out.json
 ```
 
-Run on 2026-11-26: 23 distinct checks (11 on the accountable plan, 12 across the three Foundation instances, ER0 only when the grantee is a public charity); the synthetic plans give 44 verdicts, 30 pass, 5 amber, 9 fail. The fails are all in the two plans built to fail.
+Run on 2026-11-26: 23 distinct checks (11 on the accountable plan, 12 across the three Foundation instances, ER0 only when the grantee is a public charity); the synthetic plans give 55 verdicts, 35 pass, 7 amber, 13 fail. The fails are all in the three plans built to fail. The third, AP-mgmt-windows, declares windows longer than the fixed date method: an advance paid 40 days early and excess returned on day 130 both fail, because the 30-day and 120-day caps apply whatever the plan says. If either cap is loosened, the self-test goes red.

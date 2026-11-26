@@ -373,6 +373,13 @@ def selftest() -> int:
     expect("clean plan: nothing treated as wages", res["AP-mgmt"]["reconcile"]["treated_as_wages"] == 0)
     expect("late receipt fails substantiation (60-day safe harbor)", v("AP-mgmt-late", "AP2") == "fail")
     expect("unreturned excess fails return-of-excess", v("AP-mgmt-late", "AP4") == "fail")
+    # declared windows longer than the fixed date method are capped at 30 and 120 days
+    expect("advance paid 40 days early fails, though the plan allows 45 (30-day cap, (g)(2)(i))", v("AP-mgmt-windows", "AP3") == "fail")
+    expect("excess returned on day 130 fails, though the plan allows 150 (120-day cap, (g)(2)(i))", v("AP-mgmt-windows", "AP4") == "fail")
+    expect("an advance 30 days early, at the cap, passes",
+           event_tests({"incurred": "2026-03-20", "paid": "2026-02-18", "advance": 10, "amount": 10, "substantiated": "2026-03-21",
+                        "line": "mileage", "business_purpose": "x", "evidence": ["log_time_place_purpose"]},
+                       next(x for x in inputs["plans"] if x["id"] == "AP-mgmt-windows"))["AP3"] is True)
     expect("two of three failing is a pattern at the 50 percent threshold", v("AP-mgmt-late", "AP5") == "fail")
     expect("abuse case: every payment becomes wages (1.62-2(k))",
            res["AP-mgmt-abuse"]["reconcile"]["treated_as_wages"] == res["AP-mgmt-abuse"]["reconcile"]["paid_total"])

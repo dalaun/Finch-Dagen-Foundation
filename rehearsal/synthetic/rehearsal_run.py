@@ -729,6 +729,13 @@ def selftest() -> int:
         ok(False, "management company: an unknown tax form is refused")
     except ValueError:
         ok(True, "management company: an unknown tax form is refused")
+    # The declared-plan, substance and hiring checks carry their own self-tests;
+    # CI reaches them through this one, so a loosened rule there turns this red.
+    for mod in ("declared_plan.py", "substance.py", "hiring.py"):
+        r = subprocess.run([sys.executable, str(HERE / mod), "--selftest"], cwd=HERE, capture_output=True, text=True)
+        ok(r.returncode == 0, f"{mod} --selftest passes")
+        if r.returncode:
+            print("\n".join(l for l in r.stdout.splitlines() if l.startswith("FAIL")))
     print(f"\n{fails} failed")
     return 1 if fails else 0
 

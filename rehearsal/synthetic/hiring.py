@@ -293,6 +293,11 @@ def selftest() -> int:
     # 129(c): care paid to a related individual fails 129
     c = json.loads(json.dumps(next(x for x in inputs["cases"] if x["id"] == "H-unrelated")))
     c["care_paid_to_related_individual"] = True
+    expect("owner at about 27% of the cafeteria plan fails 125 (25% key-employee cap)",
+           not res["H-keycap"]["tools"]["125"]["pass"] and res["H-keycap"]["tools"]["129"]["pass"])
+    expect("owner under 25% but staff average below 55% of the owner's fails 129 (129(d)(8)(A))",
+           not res["H-avgtest"]["tools"]["129"]["pass"] and
+           7500 / (7500 + sum(h["uptake"]["129"] for h in next(x for x in inputs["cases"] if x["id"] == "H-avgtest")["hires"])) < LIMIT["129"])
     expect("care paid to the employee's dependent fails 129 (129(c))", not run_case(c, inputs["rates"])["tools"]["129"]["pass"])
     # household staff in the owner's home are personal (262), whatever the board says
     expect("household staff fail arm's length (262; Schedule H)", set(v("H-household", "HA1")) == {"fail"})

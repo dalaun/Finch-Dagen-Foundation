@@ -67,6 +67,15 @@ The economics line in the run says the same thing twice:
 - **If the hires exist only for the benefit:** the net is the tax value minus their whole payroll. That's minus 344,852 for the six-person case.
 - **If the hires earn their pay:** the net is the tax value minus the benefits and plan costs for the staff. That's minus 25,131 for the same case, because the staff's own benefits cost more than the owner saves.
 
+Two more cases are built to fail at the edge of a limit, so a loosened rule shows up:
+
+- **H-keycap:** five unrelated staff pass 129, but the owner takes 27% of the cafeteria plan, over 125(b)(2)'s 25% cap.
+- **H-avgtest:** six unrelated staff keep the owner at 24% of child care, but their average of 4,000 is under 55% of the owner's 7,500 (4,125), so 129(d)(8)(A) fails.
+
+The six-person case above passes the 55% test by only 42 dollars, so one hire taking less child care would fail it.
+
+All three self-tests run inside `rehearsal_run.py --selftest`, which the keystone check runs on every pull request.
+
 ## Household staff
 
 A maid or butler serving the owner's home does personal work. The cost is a personal living expense (262(a)), not the company's. If the company pays them, the payment is to the owner, as pay or a dividend (ASSUMPTION, Q53), and not a deduction. The owner is their household employer and files Schedule H. They don't count toward 127, 129 or 125, and the run gives them HA1 fail whatever the board record says.
@@ -98,7 +107,7 @@ That moves the hiring break-even in one way: each real hire has to bring in less
 ## Run it
 
 ```
-python3 hiring.py              # six cases
+python3 hiring.py              # eight cases
 python3 hiring.py --json out.json
-python3 hiring.py --selftest   # 21 cases
+python3 hiring.py --selftest   # 23 cases
 ```

@@ -164,6 +164,60 @@
       ]
     },
     {
+      "id": "AP-mgmt-windows",
+      "instance": "accountable_plan",
+      "label": "Known bad: declared windows longer than the fixed date method (45-day advance, 150-day return); an advance paid 40 days early and excess returned on day 130",
+      "payor_role": "management_company",
+      "payee_role": "founder_employee",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "substantiation_days": 60,
+        "advance_max_days_before_expense": 45,
+        "return_excess_days": 150,
+        "method": "fixed_date",
+        "covered_lines": [
+          "home_office",
+          "mileage",
+          "phone"
+        ]
+      },
+      "facts": {
+        "home_office_for_convenience_of_employer": true,
+        "home_rented_to_employer": false,
+        "founder_is_employee_not_disregarded_owner": true
+      },
+      "events": [
+        {
+          "id": "e1",
+          "line": "mileage",
+          "business_purpose": "conference travel",
+          "incurred": "2026-03-20",
+          "paid": "2026-02-08",
+          "advance": 300,
+          "amount": 300,
+          "substantiated": "2026-03-25",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "e2",
+          "line": "mileage",
+          "business_purpose": "client site visits",
+          "incurred": "2026-04-10",
+          "paid": "2026-04-01",
+          "advance": 400,
+          "amount": 250,
+          "substantiated": "2026-04-20",
+          "excess_returned": "2026-08-18",
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        }
+      ]
+    },
+    {
       "id": "AP-mgmt-abuse",
       "instance": "accountable_plan",
       "label": "Same plan, with late receipts and unreturned excess as the routine (the pattern-of-abuse case)",
