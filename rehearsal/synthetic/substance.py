@@ -207,7 +207,12 @@ def selftest() -> int:
     expect("gift and back before death: series fails the collapse", v(res["R-giftback"], "SB3") == "fail")
     expect("spendthrift clause: no tax benefit, so the doctrine doesn't apply",
            res["R-spendthrift"]["checks"][0]["label"].startswith("Relevance: does not apply"))
-    expect("cafeteria plan stays amber until 125 is traced", v(res["R-125"], "SB6") == "amber")
+    expect("cafeteria plan fails its own test while he is the only employee", v(res["R-125"], "SB6") == "fail")
+    expect("board meetings at home: real meetings pass every step", v(res["R-280Ag"], "SB2") == "pass")
+    expect("family dinners called board meetings fail at the first step", v(res["R-dinner"], "SB2") == "fail" and v(res["R-dinner"], "SB3") == "fail")
+    expect("tuition paid straight to the school: personal, so the doctrine doesn't apply",
+           res["R-2503e"]["checks"][0]["label"].startswith("Relevance: does not apply"))
+    expect("QSBS stays amber on the consulting exclusion", v(res["R-1202"], "SB6") == "amber")
     expect("education plan fails its own test while he is the only employee", v(res["R-127"], "SB6") == "fail")
     # purpose written after the first step fails SB1
     r = get("R-62c"); r["declared_purpose"]["declared_on"] = "2026-12-31"

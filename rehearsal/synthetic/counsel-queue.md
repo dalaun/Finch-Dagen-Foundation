@@ -637,3 +637,36 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - ASSUMPTION: not deductible to the company; treated as a payment to the owner; the owner files Schedule H.
 - Primary cite: IRC 262(a); IRS Topic 756; Pub. 926 (2026).
 - Status: assumed, awaiting counsel
+
+## Q54. Can the company deduct rent for board meetings at the founder's home?
+
+- Key: `home-board-meeting-rent`
+- Raised by: SUBSTANCE.md, route R-280Ag
+- For: CPA
+- Question: 280A(g) leaves out of the founder's income rent for a home rented under 15 days a year. Can Canon Management deduct that rent under 162 for real board meetings at fair rent, and what records does it need?
+- Changes decision: whether the route is worth running at all.
+- ASSUMPTION: deductible only for real meetings, with minutes, an outside approver and a fair-rent comparable; and the rented space then can't also be claimed as a home office (280A(c)(6)).
+- Primary cite: IRC 280A(g) (read 2026-11-26). It speaks only to the owner's side. The payer's deduction, and any cases on it, were not read.
+- Status: assumed, awaiting counsel
+
+## Q55. Does Canon Management's stock qualify under 1202?
+
+- Key: `qsbs-canon-management`
+- Raised by: SUBSTANCE.md, route R-1202
+- For: lawyer
+- Question: If most of Canon Management's income is consulting, is it outside 1202 under (e)(3)(A)? What mix of software or product income, and what share of assets, would bring it inside?
+- Changes decision: whether to keep consulting and software in one company or split them.
+- ASSUMPTION: amber; likely fails while consulting is most of the business.
+- Primary cite: IRC 1202(c)(1), (e)(1)(A), (e)(3)(A) (read 2026-11-26). Holding period, the gross-assets limit and the exclusion amounts were not read.
+- Status: assumed, awaiting counsel
+
+## Q56. Can notices go to a designated representative instead of a beneficiary?
+
+- Key: `quiet-trust-representative`
+- Raised by: SUBSTANCE.md, promise map, secrecy row
+- For: lawyer
+- Question: Under the Illinois Trust Code, does notice to a designated representative under Section 307 satisfy the trustee's duty to tell a qualified beneficiary (813.1)? And would a Delaware or Wyoming trust allow a longer quiet period?
+- Changes decision: how much the family trust's beneficiaries must be told, and when.
+- ASSUMPTION: the duty stands; a representative helps only for beneficiaries under 30 or not yet born, if Section 301 lets notice go through the representative.
+- Primary cite: 760 ILCS 3/307 (read 2026-11-26; it says "represent and bind" and doesn't mention notices). 760 ILCS 3/301, 105(b) and the Delaware and Wyoming statutes were not read here.
+- Status: assumed, awaiting counsel

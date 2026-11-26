@@ -147,9 +147,9 @@
       "family": "Company tools",
       "tool": "IRC 125 (cafeteria plan)",
       "label": "Company lets the founder choose cash or pre-tax benefits",
-      "tool_test": "not_traced",
-      "tool_note": "section 125 not yet read in primary text",
-      "tool_trace": "NOT TRACED",
+      "tool_test": "fail",
+      "tool_note": "fails while the founder is the only employee (125(b)(2) key-employee 25% limit); passes with about 4 unrelated staff at market pay (HIRING.md)",
+      "tool_trace": "IRC 125(b)(2); 416(i)(1); 318 (HIRING.md, read 2026-11-26)",
       "federal_tax_benefit": true,
       "individual_business_or_income": true,
       "declared_purpose": {
@@ -245,9 +245,9 @@
       "family": "Company tools",
       "tool": "IRC 129 (dependent care)",
       "label": "Company pays child care so the founder can work",
-      "tool_test": "not_traced",
-      "tool_note": "the owner limit, like 127's, not yet read",
-      "tool_trace": "IRC 129(a)(2)(A) (cap read); owner limit NOT TRACED",
+      "tool_test": "fail",
+      "tool_note": "fails while the founder is the only employee (129(d)(4) 25% owner limit, 129(d)(8) 55% test); passes with about 6 unrelated staff (HIRING.md)",
+      "tool_trace": "IRC 129(d)(4), (d)(8), (e)(5)(A); 1563(e) (HIRING.md, read 2026-11-26)",
       "federal_tax_benefit": true,
       "individual_business_or_income": true,
       "declared_purpose": {
@@ -385,6 +385,119 @@
         "relationship_to_property_changed": "n/a"
       },
       "benefit_placeholder": 23500,
+      "disclosed": false
+    },
+    {
+      "id": "R-280Ag",
+      "family": "Company tools",
+      "tool": "IRC 280A(g) (home rented under 15 days)",
+      "label": "Company rents the founder's home for real board meetings, a few days a year, at fair rent",
+      "tool_test": "amber",
+      "tool_note": "rent is left out of the founder's income if the home is rented under 15 days; the company's deduction is a separate 162 question (Q54); renting the space to the employer ends any home office claim for it (280A(c)(6))",
+      "tool_trace": "IRC 280A(g) (read 2026-11-26, counselstack and Justia 2017 text); 280A(c)(6) (register); Q54",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "hold the quarterly board meetings that approve hires, pay and plans",
+        "kind": "business",
+        "effect": "board_meeting_held",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "meeting_schedule_adopted",
+              "fair_rent_comparable_filed"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-03-15",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "board_meeting_held",
+              "minutes_written",
+              "fair_rent_paid"
+            ]
+          }
+        },
+        {
+          "id": "s3",
+          "date": "2026-06-15",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "board_meeting_held",
+              "minutes_written",
+              "fair_rent_paid"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 1500,
+      "disclosed": false
+    },
+    {
+      "id": "R-1202",
+      "family": "Company tools",
+      "tool": "IRC 1202 (qualified small business stock)",
+      "label": "Founder holds Canon Management stock for the gain exclusion on a later sale",
+      "tool_test": "amber",
+      "tool_note": "consulting and businesses whose main asset is an employee's skill are excluded (1202(e)(3)(A)); likely fails unless most of the business is software or products, with 80% of assets in that business (1202(e)(1)(A)) (Q55)",
+      "tool_trace": "IRC 1202(c)(1), (e)(1)(A), (e)(3)(A) (law.cornell.edu, read 2026-11-26); Q55",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "build and own the ontology software business",
+        "kind": "business",
+        "effect": "software_business_built",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-01-02",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "stock_issued_for_cash_or_property"
+            ]
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-07-01",
+          "effects": {
+            "tax": false,
+            "nontax": [
+              "software_business_built"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 0,
       "disclosed": false
     },
     {
@@ -799,6 +912,45 @@
       "disclosed": false
     },
     {
+      "id": "R-2503e",
+      "family": "Gift and estate tools",
+      "tool": "IRC 2503(e) (tuition and medical paid directly)",
+      "label": "Founder pays a relative's tuition straight to the school",
+      "tool_test": "pass",
+      "tool_note": "not a taxable gift when paid straight to the school or the medical provider; books, supplies, room and board aren't covered (Reg. 25.2503-6(b)(2)); on top of the annual exclusion",
+      "tool_trace": "IRC 2503(e)(1), (e)(2) (govinfo 2011 edition); Reg. 25.2503-6(a), (b)(2) (law.cornell.edu, read 2026-11-26)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": false,
+      "declared_purpose": {
+        "text": "pay for a relative's schooling",
+        "kind": "family",
+        "effect": "tuition_paid_to_school",
+        "declared_on": "2026-01-02"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-08-15",
+          "effects": {
+            "tax": true,
+            "nontax": [
+              "tuition_paid_to_school"
+            ]
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": true,
+        "living_costs_paid_untaxed": false
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 12000,
+      "disclosed": false
+    },
+    {
       "id": "R-loop",
       "family": "Built to fail",
       "tool": "IRC 163 (interest), circular loans",
@@ -894,6 +1046,51 @@
         "relationship_to_property_changed": false
       },
       "benefit_placeholder": 30000,
+      "disclosed": false
+    },
+    {
+      "id": "R-dinner",
+      "family": "Built to fail",
+      "tool": "IRC 280A(g) and 274, misused",
+      "label": "Family dinners at home called board meetings, with rent and meals paid by the company",
+      "tool_test": "fail",
+      "tool_note": "no board business, no minutes, no outside approver: rent is a payment to the founder, and the meals are personal (262), not 274 business meals",
+      "tool_trace": "IRC 280A(g); 262(a); Reg. 1.274-12(a)(1)",
+      "federal_tax_benefit": true,
+      "individual_business_or_income": true,
+      "declared_purpose": {
+        "text": "",
+        "kind": "business",
+        "effect": "none",
+        "declared_on": null
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "date": "2026-02-14",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        },
+        {
+          "id": "s2",
+          "date": "2026-05-10",
+          "effects": {
+            "tax": true,
+            "nontax": []
+          }
+        }
+      ],
+      "end_state": {
+        "economic_position_changed": false,
+        "living_costs_paid_untaxed": true
+      },
+      "form": {
+        "terms_followed": true,
+        "relationship_to_property_changed": "n/a"
+      },
+      "benefit_placeholder": 3000,
       "disclosed": false
     }
   ]
