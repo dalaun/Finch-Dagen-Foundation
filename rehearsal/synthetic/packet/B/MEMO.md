@@ -2,8 +2,31 @@
 
 Research for counsel review, not legal advice.
 
-Packet B covers what the trust's terms do to tax, the asset that would pay for the structure, and the foundation share. It is for the CPA and, for Q3, Q8, Q9, Q15 and Q16, the lawyer.
+Packet B covers what the trust's terms do to tax, the asset that would pay for the structure, and the Foundation's rules. It is for the hired trusts-and-estates or tax attorney and the CPA. All figures are SYNTHETIC. Roles, not names.
 
+## The structure
+
+- The Family Trust is meant to be a non-grantor trust, taxed on its own return; the grantor or non-grantor result turns on who decides distributions (IRC 671 to 679; Q3, Q8).
+- The founder's consulting is paid through an operating company and a management company; a business trust is an optional layer for the business (Q19, Q34, Q36, Q37).
+- The Foundation is a private foundation; a set-aside from the Family Trust to it raises 642(c), 4941, 4943, 4947(a)(2) and 4940 questions (Q9, Q15, Q19, Q35).
+- An income-producing asset, held by an LLC the Family Trust owns, pays for the structure; its size, financing and the founder's guarantee are Q11, Q12, Q16 to Q18. Sizes are in [SENSITIVITY.md](SENSITIVITY.md).
+
+## Decisions only Dalaun makes
+
+- Which class of asset to look at (Q12; the shortlist question Q26 is his own search).
+- Whether he files single or jointly (Q25).
+- What the Foundation's share is (Q33) and how much of his pay comes through the companies (Q34, Q36).
+- His real other income and the beneficiaries' (Q14, Q37), which he gives the lawyer outside this repository.
+
+## Risks
+
+- If the Family Trust is a grantor trust, the savings in the synthetic year disappear (Q3, Q8).
+- A trust with a Foundation set-aside may be a split-interest trust, and dealings with the founder's family risk self-dealing (Q9, Q15).
+- A lender may refuse a trust-owned LLC or require the founder's guarantee, which bears on the non-grantor result (Q18).
+- Passive-loss and net investment income tax treatment depends on his own facts (Q1).
+- The yield assumed for sizing the asset has no authority behind it (Q11); a realistic size for the table is not yet cited.
+- A Wyoming or Delaware situs does not move the Family Trust's Illinois income tax while the founder is domiciled in Illinois; only Linn's contacts limit, a counsel question, could (Illinois residence test, below).
+- Illinois makes a distribution trust advisor a fiduciary, not a trustee, so whether an advisor fits 674(c) is still open (Q8).
 
 ## What packet A rests on from packet B
 
@@ -19,6 +42,34 @@ If packet B answers Q3 or Q8 differently, these A terms are redrafted. They are 
 
 Illinois situs for the Family Trust is the research's working assumption, not a finding. Q4, Q8 and Q13 each carry `- Assumes: Illinois situs for the Family Trust (see Q22)`; if Q22 picks Wyoming or Delaware, those answers are redrafted under that state's law.
 
+## What the lawyer must decide
+
+Each is `likely` or `open`; what the lawyer decides on each is stated in the linked file.
+
+- **Q1. Do the rentals, and a bought business run by a hired manager, count as passive?** Confidence: likely. [Q1](../research/Q1.md)
+- **Q3. Keep the Family Trust non-grantor while he stays its steward** Confidence: likely. [Q3](../research/Q3.md)
+- **Q8. Does a non-trustee distribution trust advisor satisfy the independent-trustee exception?** Confidence: open. [Q8](../research/Q8.md)
+- **Q9. How do we keep him and his family clear of self-dealing if the trust deducts payments to the foundation?** Confidence: likely. [Q9](../research/Q9.md)
+- **Q11. Is a 7 percent yield a fair stand-in for sizing the asset that clears break-even?** Confidence: open. [Q11](../research/Q11.md)
+- **Q12. Which classes of asset (rental building, bought business, other) can credibly produce that income?** Confidence: open. [Q12](../research/Q12.md)
+- **Q14. What other income will the two adult beneficiaries have, so their own tax brackets are known?** Confidence: open. [Q14](../research/Q14.md)
+- **Q15. How is a 10 percent set-aside to the foundation taxed, and does it make the trust a split-interest trust?** Confidence: likely. [Q15](../research/Q15.md)
+- **Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?** Confidence: open. [Q16](../research/Q16.md)
+- **Q17. How big must the asset be to fund a 10 percent Foundation share and still beat doing nothing?** Confidence: open. [Q17](../research/Q17.md)
+- **Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?** Confidence: open. [Q18](../research/Q18.md)
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Linn paragraph 33 pending, needs Dalaun (1 claim). [Q22](../research/Q22.md)
+- **Q19. Can any operating-company or business-trust equity go to the Foundation, and how much?** Confidence: likely. [Q19](../research/Q19.md)
+- **Q25. Does the founder file as single or as married filing jointly, and how does that change what the structure saves?** Confidence: open. [Q25](../research/Q25.md)
+- **Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?** Confidence: likely. [Q29](../research/Q29.md)
+- **Q30. Is this friend independent under 672(c), and what does the trust document need so the friend stays independent?** Confidence: likely. [Q30](../research/Q30.md)
+- **Q31. Can an adult sibling of the founder, paid for services, be the independent co-trustee, or be paid by the Foundation or the operating company?** Confidence: likely. [Q31](../research/Q31.md)
+- **Q32. What do the yearly tax filings and bookkeeping for the Family Trust and the Foundation really cost?** Confidence: open. [Q32](../research/Q32.md)
+- **Q33. Is 10 percent the right share of the trust's income for the Foundation, when a 2 percent share still has a break-even and 10 percent has none?** Confidence: open. [Q33](../research/Q33.md)
+- **Q34. Can the founder be paid a one-dollar salary plus fringe benefits by the operating and management companies?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). [Q34](../research/Q34.md)
+- **Q35. Can the Foundation meet its payout through grants to other foundations or collaboratives?** Confidence: open. [Q35](../research/Q35.md)
+- **Q36. How much will the management company really pay the founder in consulting revenue each year?** Confidence: open. [Q36](../research/Q36.md)
+- **Q37. Roughly how much W-2 pay does the founder have besides the management company?** Confidence: open. [Q37](../research/Q37.md)
+
 ## Synthetic figures
 
 All figures come from the seeded synthetic year (`rehearsal/synthetic`), not anyone's real money. Every scenario figure here is an engine output on assumptions listed in `counsel-queue.md`. Run on 2026-11-25, 7 of 7 scorecard checks pass, 8 of 17 structure checks pass for the steward versions (the other 9 are amber until documents exist, none red).
@@ -29,48 +80,13 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 is about even with doing nothing (+13 a year; +1,592 before the PR 94 fix), consistent with the 20,200 extra the engine now needs on top of 150,000.
 - `asset_sized_pipeline` (350,000 a year, ASSUMPTION): route R2 beats doing nothing by 26,384 a year; with the 10 percent Foundation share, by 2,029.
 
-## Questions in packet B
+## Illinois residence test
 
-- **Q1. Do the rentals, and a bought business run by a hired manager, count as passive?** Confidence: likely.
-  - Lawyer decides: Whether his own facts (hours, who runs the business) meet material participation or the real estate professional test; the CPA decides, the statute's tests are traced below.
-  - Trace file: [research/Q1.md](../research/Q1.md)
-- **Q3. Keep the Family Trust non-grantor while he stays its steward** Confidence: likely.
-  - Lawyer decides: Whether the drafted terms, including who counts as related or subordinate, actually fit the 674(c) or 674(b)(5)(A) exception.
-  - Trace file: [research/Q3.md](../research/Q3.md)
-- **Q8. Does a non-trustee distribution trust advisor satisfy the independent-trustee exception?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim).
-  - Lawyer decides: Whether a non-trustee advisor is treated as a trustee for 674(c), and how 760 ILCS 3/808 defines the advisor's role.
-  - Trace file: [research/Q8.md](../research/Q8.md)
-- **Q9. How do we keep him and his family clear of self-dealing if the trust deducts payments to the foundation?** Confidence: likely.
-  - Lawyer decides: Whether the trust is split-interest on its terms, whether to segregate the charitable share into a separate trust, and how each transaction with the founder's family is cleared.
-  - Trace file: [research/Q9.md](../research/Q9.md)
-- **Q11. Is a 7 percent yield a fair stand-in for sizing the asset that clears break-even?** Confidence: open.
-  - Lawyer decides: Not a legal question; the CPA or an appraiser must supply a market yield. Nothing read here gives one.
-  - Trace file: [research/Q11.md](../research/Q11.md)
-- **Q12. Which classes of asset (rental building, bought business, other) can credibly produce that income?** Confidence: open.
-  - Lawyer decides: Which class fits; the CPA or appraiser supplies market yields and multiples, which no authority read here gives. The SBA terms are traced below.
-  - Trace file: [research/Q12.md](../research/Q12.md)
-- **Q14. What other income will the two adult beneficiaries have, so their own tax brackets are known?** Confidence: open.
-  - Lawyer decides: The beneficiaries' real other income is a fact for Dalaun and the CPA; the rules below only say that distributed income is taxed to them.
-  - Trace file: [research/Q14.md](../research/Q14.md)
-- **Q15. How is a 10 percent set-aside to the foundation taxed, and does it make the trust a split-interest trust?** Confidence: likely.
-  - Lawyer decides: Whether the instrument's wording meets 642(c)(1) (paid under the governing instrument, from gross income), and whether the trust is split-interest.
-  - Trace file: [research/Q15.md](../research/Q15.md)
-- **Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?** Confidence: open.
-  - Lawyer decides: Whether the founder as trustee and paid LLC manager is acceptable, and what the operating agreement must say.
-  - Trace file: [research/Q16.md](../research/Q16.md)
-- **Q17. How big must the asset be to fund a 10 percent Foundation share and still beat doing nothing?** Confidence: open.
-  - Lawyer decides: Whether the 10 percent share is worth its cost; the size itself is an engine output and a yield assumption, which no authority read here gives.
-  - Trace file: [research/Q17.md](../research/Q17.md)
-- **Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?** Confidence: open.
-  - Lawyer decides: Whether a lender will accept a trust-owned LLC, whether the founder must guarantee, and how a guarantee bears on the non-grantor result; insurance naming was not researched.
-  - Trace file: [research/Q18.md](../research/Q18.md)
-- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Illinois, Wyoming and 35 ILCS 5/1501 claims pending, needs Dalaun (3 claims).
-  - Lawyer decides: Which state governs and where the trust is administered, whether the founder's Illinois residence makes it an Illinois resident trust whatever its state, and what an in-state trustee or agent is required.
-  - Trace file: [research/Q22.md](../research/Q22.md)
+Illinois decides a trust's residence by the grantor's domicile on the day it stops being a grantor trust (or a decedent's at death), not by the state the instrument names (35 ILCS 5/1501(a)(20); [Q22](../research/Q22.md) claims 6, 9 and 17 to 19). Today the founder lands in the Illinois branch: he is domiciled in Illinois and would be the Illinois trustee. The out branch would need his domicile outside Illinois on that day, or too few Illinois contacts under Linn. Illinois-source income stays taxable either way. Any claim that a Wyoming or Delaware situs by itself lowers the trust's Illinois income tax fails this check.
 
-## Pending Illinois text
+## Illinois text
 
-The Illinois Trust Code pages (760 ILCS 3, Articles 4, 5, 8 and 12) would not load for the research runs. Claims that rest on them are marked `pending, needs Dalaun` in the research files and listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md). Q4, Q8 and Q13 are affected. Nothing here treats them as traced.
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): the Linn opinion's paragraph 33 (Q22), Wyoming's perpetuities period and revenue statement (Q22), and 35 ILCS 5/201(b) and (c) (Q34).
 
 ## What this memo does not do
 

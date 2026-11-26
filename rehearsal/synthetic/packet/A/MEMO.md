@@ -2,11 +2,29 @@
 
 Research for counsel review, not legal advice.
 
-Packet A covers the terms of the Family Trust itself: who the trustees are, how income is paid out, and what powers the founder keeps. It is for the lawyer who drafts the instrument.
+Packet A covers the terms of the Family Trust as a personal irrevocable trust: who the trustee and the independent co-trustee are, who the beneficiaries are (the Foundation and family members), how income is paid out, what powers the founder keeps, and the paperwork to fund it (a certification of trust, deeds and title). It is for the lawyer who drafts the instrument. All figures are SYNTHETIC. Roles, not names.
 
-## Coverage flags, every A question
+## The trust
 
-Stated first so the reader can see which A questions could read as a business or investment interest:
+- An irrevocable trust, the Family Trust, funded by the founder's gift (Q7).
+- Trustee: the founder serves as the administrative trustee; an independent co-trustee or distribution trustee decides distributions (Q4, Q5, Q8). Who that is, and the cost, is Q28 to Q31.
+- Beneficiaries: the Foundation (a set-aside share, Q15, Q33) and family members, adult and minor (Q10, Q27, Q29).
+- Income terms: mandatory fixed shares or discretionary payout (Q2, Q6).
+- To hold an asset it needs an employer identification number, a signed instrument, trustee acceptance, and a certification of trust for banks and title companies (Q13).
+
+## Decisions only Dalaun makes
+
+These are not for the lawyer to pick; the research states a working assumption for each and he can override it.
+
+- Who he asks to be the independent co-trustee, and whether a family member serves (Q30, Q31).
+- How many adult beneficiaries the trust has, and how the share for each is set (Q27).
+- Whether the trust is funded at all, and with what (Q11, Q12, Q26 in packet B's memo).
+- What share, if any, goes to the Foundation (Q33).
+- Which state's law governs, and where the trust is administered (Q22).
+
+## Coverage flags
+
+Stated first so the reader can see which A questions could read as a business or investment interest (the prepaid plan's exclusions):
 
 - Q2: none
 - Q4: none
@@ -15,6 +33,17 @@ Stated first so the reader can see which A questions could read as a business or
 - Q7: none
 - Q10: none
 - Q13: the trust would later hold LLC interests in a business or rental, which could read as a business or investment interest.
+- Q23: none
+- Q27: none
+- Q28: none
+
+## Risks
+
+- Packet A's trustee terms rest on packet B's answers (next section). If B answers Q3 or Q8 differently, the terms are redrafted.
+- The founder keeping powers over distributions can make the trust a grantor trust (IRC 674(a)) or pull property into his estate (Q7). Neither is settled.
+- Any part flagged above may be outside a prepaid plan's scope.
+- An Illinois trust protector may be given power to change beneficiaries' interests or to remove and appoint trustees (760 ILCS 3/808(d)(2), (d)(4)); without limits either power makes the trust a grantor trust (Q8). A trustee's acceptance should be signed before the trust takes title, since 120 days of silence is a decline (Q13).
+- A Wyoming or Delaware situs does not move the Family Trust's Illinois income tax while the founder is domiciled in Illinois (Illinois residence test, below).
 
 ## What packet A rests on from packet B
 
@@ -30,6 +59,21 @@ If packet B answers Q3 or Q8 differently, these A terms are redrafted. They are 
 
 Illinois situs for the Family Trust is the research's working assumption, not a finding. Q4, Q8 and Q13 each carry `- Assumes: Illinois situs for the Family Trust (see Q22)`; if Q22 picks Wyoming or Delaware, those answers are redrafted under that state's law.
 
+## What the lawyer must decide
+
+Each is `likely` or `open`; what the lawyer decides on each is stated in the cover and in the linked file.
+
+- **Q2. Will the Family Trust pay out all of its income each year, or keep part of it?** Confidence: likely. [Q2](../research/Q2.md)
+- **Q4. Can the instrument split the trusteeship (administrative trustee and special distribution trustee) and who serves as independent distribution trustee?** Confidence: open. [Q4](../research/Q4.md)
+- **Q5. Is his power to remove the distribution trustee limited to appointing an independent one?** Confidence: likely. [Q5](../research/Q5.md)
+- **Q6. Should income be mandatory in fixed shares, and how do shares adjust for a death or after-born child?** Confidence: open. [Q6](../research/Q6.md)
+- **Q7. Do the powers he keeps cause gift or estate tax problems for the funder?** Confidence: open. [Q7](../research/Q7.md)
+- **Q10. How do distributions for minor children stay separate from his support duties?** Confidence: likely. [Q10](../research/Q10.md)
+- **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. [Q13](../research/Q13.md)
+- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. [Q23](../research/Q23.md)
+- **Q27. How many adult beneficiaries will the Family Trust have?** Confidence: likely. [Q27](../research/Q27.md)
+- **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. [Q28](../research/Q28.md)
+
 ## Synthetic figures
 
 All figures come from the seeded synthetic year (`rehearsal/synthetic`), not anyone's real money. Every scenario figure here is an engine output on assumptions listed in `counsel-queue.md`. Run on 2026-11-25, 7 of 7 scorecard checks pass, 8 of 17 structure checks pass for the steward versions (the other 9 are amber until documents exist, none red).
@@ -40,36 +84,20 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 is about even with doing nothing (+13 a year; +1,592 before the PR 94 fix), consistent with the 20,200 extra the engine now needs on top of 150,000.
 - `asset_sized_pipeline` (350,000 a year, ASSUMPTION): route R2 beats doing nothing by 26,384 a year; with the 10 percent Foundation share, by 2,029.
 
-## Questions in packet A
+## Illinois residence test
 
-- **Q2. Will the Family Trust pay out all of its income each year, or keep part of it?** Confidence: likely.
-  - Lawyer decides: Whether the instrument makes the payout mandatory or discretionary; the CPA then reads the tax result.
-  - Trace file: [research/Q2.md](../research/Q2.md)
-- **Q4. Can the instrument split the trusteeship (administrative trustee and special distribution trustee) and who serves as independent distribution trustee?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim).
-  - Lawyer decides: Whether Illinois law allows the split and who can serve as the independent distribution trustee.
-  - Trace file: [research/Q4.md](../research/Q4.md)
-- **Q5. Is his power to remove the distribution trustee limited to appointing an independent one?** Confidence: likely.
-  - Lawyer decides: Whether the drafted removal power is limited enough that its exercise could not change the trust in a disqualifying way.
-  - Trace file: [research/Q5.md](../research/Q5.md)
-- **Q6. Should income be mandatory in fixed shares, and how do shares adjust for a death or after-born child?** Confidence: open.
-  - Lawyer decides: How shares adjust on a death; the after-born exception is traced below.
-  - Trace file: [research/Q6.md](../research/Q6.md)
-- **Q7. Do the powers he keeps cause gift or estate tax problems for the funder?** Confidence: open.
-  - Lawyer decides: Whether the powers the founder keeps as trustee (route R2 or R3) pull trust property into his estate or make his transfers incomplete gifts; the standard-limited power cases were not found in the pages read.
-  - Trace file: [research/Q7.md](../research/Q7.md)
-- **Q10. How do distributions for minor children stay separate from his support duties?** Confidence: likely.
-  - Lawyer decides: How the instrument words the trustee's power so that distributions never discharge his legal support duty, and whether his state law treats a given expense as support.
-  - Trace file: [research/Q10.md](../research/Q10.md)
-- **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim).
-  - Lawyer decides: What the Illinois instrument, trustee acceptance and signing authority must contain; the federal EIN step is traced below.
-  - Trace file: [research/Q13.md](../research/Q13.md)
-- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois claim pending, needs Dalaun (1 claim). Coverage flag: none
-  - Lawyer decides: Whether naming the Foundation as a beneficiary makes the Family Trust (or its set-aside) a charitable trust holding assets for a charitable purpose in Illinois, and so registrable.
-  - Trace file: [research/Q23.md](../research/Q23.md)
+Dalaun's standing check (2026-11-26): a trust named under another state's law can be an Illinois trust, and there is a way it is not. Illinois decides by the grantor's or decedent's domicile at one moment, never by the state the instrument names (35 ILCS 5/1501(a)(20); traced in [Q22](../research/Q22.md) claims 6, 9 and 17 to 19; the full test is in `rehearsal/synthetic/NON-GRANTOR-ROUTES.md`).
 
-## Pending Illinois text
+- **Illinois branch:** a living trust is resident if its grantor was domiciled in Illinois when it became irrevocable; a trust made by will, if the decedent died domiciled in Illinois.
+- **Not yet tested:** for this rule a trust counts as irrevocable only while the grantor is not taxed as its owner, so the test runs on the day it stops being a grantor trust. Counsel confirms that timing.
+- **Out branch:** a grantor domiciled outside Illinois on that day leaves it a nonresident; Linn held that Illinois cannot tax a trust with too few Illinois contacts (para. 33 still to be quoted).
+- **Either branch:** a nonresident trust still owes Illinois tax on Illinois-source income, such as an Illinois rental.
+- **Where the founder lands today:** the Illinois branch. He is domiciled in Illinois and would be the Illinois trustee. To land in the out branch, his domicile would have to be outside Illinois on the day the trust stops being a grantor trust, or the trust would need too few Illinois contacts under Linn, which an Illinois trustee rules out.
+- **Fails the check:** any claim that a Wyoming or Delaware situs, a Wyoming trustee, or a protector's move of situs by itself lowers the trust's Illinois income tax. Another state may still buy protection and control.
 
-The Illinois Trust Code pages (760 ILCS 3, Articles 4, 5, 8 and 12) would not load for the research runs. Claims that rest on them are marked `pending, needs Dalaun` in the research files and listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md). Q4, Q8 and Q13 are affected. Nothing here treats them as traced.
+## Illinois text
+
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Still pending, listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md): the Linn opinion's paragraph 33 (Q22), Wyoming's perpetuities period and revenue statement (Q22), and 35 ILCS 5/201(b) and (c) (Q34).
 
 ## What this memo does not do
 
