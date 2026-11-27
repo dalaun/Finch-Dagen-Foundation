@@ -185,19 +185,46 @@ def sc2(ctx):
     return True, "no failing or amber rule, and every counsel question has a queue entry with a working assumption"
 
 
+# Sensitivity rules (pstack hillclimb: a check must be able to fail on a known past mistake).
+# On 2026-11-24 SC3 and SC5 passed "by construction": the only winning scenario was sized at the
+# version's own break-even, so the win was a rounding hair above zero (+66/yr on a 150,000 asset).
+# A win now counts only when it clears a margin and holds at several asset sizes.
+# PROPOSED numbers, Dalaun's to set:
+MIN_SIZES = 3            # distinct asset-income sizes the win must hold at
+MARGIN_SHARE = 0.01      # structure value must exceed this share of the scenario's asset income
+
+
+def clears_margin(r: dict, v: dict) -> bool:
+    """A win that is not just sitting on its own break-even."""
+    income = r.get("inputs", {}).get("asset_income", 0)
+    return income > 0 and v.get("structure_value", -1) > MARGIN_SHARE * income and v.get("score_vs_A", 0) > 0
+
+
+def winning_sizes(ctx, vid, need_program=False) -> list:
+    """Distinct asset-income sizes where vid clears the margin (and, if asked, sends asset income to the Foundation)."""
+    sizes = set()
+    for r in (ctx.get("results") or {}).get("results", []):
+        v = r.get("versions", {}).get(vid)
+        if not v or not clears_margin(r, v):
+            continue
+        if need_program and not (v.get("program_output", 0) > 0 and v.get("program_source") == "asset_income"):
+            continue
+        sizes.add(r["inputs"]["asset_income"])
+    return sorted(sizes)
+
+
 def sc3_pairs(ctx) -> list:
-    """(scenario, version id) pairs where an SC1 version beats the status quo."""
+    """(scenario, version id) pairs where an SC1 version beats the status quo by the margin,
+    kept only for versions whose win holds at MIN_SIZES or more asset sizes."""
     results = ctx.get("results")
     if not results:
         return []
-    ids = [v for v, _ in sc1_versions(ctx)]
+    ids = [v for v, _ in sc1_versions(ctx) if len(winning_sizes(ctx, v)) >= MIN_SIZES]
     pairs = []
     for r in results.get("results", []):
-        if not r.get("inputs", {}).get("asset_income", 0) > 0:
-            continue
         for vid in ids:
             v = r.get("versions", {}).get(vid)
-            if v and v.get("structure_value", -1) >= 0 and v.get("score_vs_A", 0) > 0:
+            if v and clears_margin(r, v):
                 pairs.append((r.get("scenario"), vid))
     return pairs
 
@@ -209,8 +236,11 @@ def sc3(ctx):
         return False, "no SC1 version"
     pairs = sc3_pairs(ctx)
     if pairs:
-        return True, f"{pairs[0][1]} beats the status quo in scenario {pairs[0][0]}"
-    return False, "no scenario with asset income above 0 where an SC1 version has structure value >= 0 and score vs A > 0"
+        vid = pairs[0][1]
+        return True, f"{vid} beats the status quo by more than {MARGIN_SHARE:.0%} of asset income at {len(winning_sizes(ctx, vid))} asset sizes"
+    best = max(((len(winning_sizes(ctx, v)), v) for v, _ in sc1_versions(ctx)), default=(0, None))
+    return False, (f"no SC1 version beats the status quo by more than {MARGIN_SHARE:.0%} of asset income at {MIN_SIZES} or more "
+                   f"asset sizes (best: {best[1]} at {best[0]})")
 
 
 def sc4(ctx):
@@ -242,23 +272,63 @@ def has_4942_with_url(node) -> bool:
     return False
 
 
+def sibling(ctx, vid):
+    """The same route and terms with no Foundation share: the version this one would be without the gift."""
+    vs = ctx["stack"]["versions"]
+    ft = vs[vid]["family_trust"]
+    for oid, o in vs.items():
+        ot = o.get("family_trust", {})
+        if oid != vid and ot.get("route") == ft.get("route") and ot.get("terms") == ft.get("terms") \
+                and not ot.get("foundation_share_of_distribution"):
+            return oid
+    return None
+
+
+def double_count(ctx, vid):
+    """The family can't come out ahead by giving money away. Against its no-share sibling, a
+    Foundation-sending version must cost the family more than 0 and no more than what it sent
+    (a deduction saves part of the gift, never more than all of it). PR 45's first head counted
+    the Foundation's share as kept by the family and broke this. Returns a reason, or None."""
+    sib = sibling(ctx, vid)
+    if sib is None:
+        return None
+    w = ctx["stack"].get("legacy_weight_w", 0.0)
+    for r in ctx["results"].get("results", []):
+        v, s = r.get("versions", {}).get(vid), r.get("versions", {}).get(sib)
+        if not v or not s or not v.get("to_foundation", 0) > 0:
+            continue
+        cost = (s["score_vs_A"] - w * s.get("program_output", 0)) - (v["score_vs_A"] - w * v.get("program_output", 0))
+        if not (0 < cost <= v["to_foundation"] + 1):
+            return (f"{vid} in {r.get('scenario')}: the gift of {v['to_foundation']} costs the family {cost} against {sib}, "
+                    "outside 0 to the gift (Foundation money counted twice?)")
+    return None
+
+
 def sc5(ctx):
-    pairs = sc3_pairs(ctx)
-    if not pairs:
-        return False, "no SC3 scenario to check"
+    if not ctx.get("results"):
+        return False, "results file is missing"
     bench = ctx.get("bench")
     if bench is None:
         return False, "benchmarks-tax.json is missing"
     if not has_4942_with_url(bench):
         return False, "benchmarks-tax.json does not cite IRC 4942's minimum distribution with a URL"
-    for r in ctx["results"].get("results", []):
-        for scen, vid in pairs:
-            if r.get("scenario") != scen:
-                continue
-            v = r["versions"][vid]
-            if v.get("program_output", 0) > 0 and v.get("program_source") == "asset_income":
-                return True, f"{vid} program output {v['program_output']} comes from the asset's income in scenario {scen}"
-    return False, "no SC3 version has program output above 0 from the asset's income (results lack program_source: asset_income)"
+    senders = [v for v, _ in sc1_versions(ctx)
+               if any(r.get("versions", {}).get(v, {}).get("program_source") == "asset_income"
+                      for r in ctx["results"].get("results", []))]
+    for vid in senders:
+        bad = double_count(ctx, vid)
+        if bad:
+            return False, bad
+    for vid in senders:
+        sizes = winning_sizes(ctx, vid, need_program=True)
+        if len(sizes) >= MIN_SIZES:
+            return True, (f"{vid} sends asset income to the Foundation and beats the status quo by more than "
+                          f"{MARGIN_SHARE:.0%} of asset income at {len(sizes)} asset sizes")
+    if not senders:
+        return False, "no SC1 version sends asset income to the Foundation (results lack program_source: asset_income)"
+    best = max((len(winning_sizes(ctx, v, need_program=True)), v) for v in senders)
+    return False, (f"no version that sends asset income to the Foundation beats the status quo by more than "
+                   f"{MARGIN_SHARE:.0%} of asset income at {MIN_SIZES} or more sizes (best: {best[1]} at {best[0]})")
 
 
 def sc6(ctx):
@@ -333,15 +403,19 @@ def fixture() -> dict:
     question = "Can the instrument split the trusteeship this way?"
     return {
         "stack": {"versions": {
-            "good": {"family_trust": {"grantor": False, "terms": terms}},
+            "good": {"family_trust": {"grantor": False, "route": "RX", "terms": terms}},
+            "pipe": {"family_trust": {"grantor": False, "route": "RX", "terms": terms, "foundation_share_of_distribution": 0.1}},
             "bad": {"family_trust": {"grantor": False, "terms": bad_terms}},
-        }},
+        }, "legacy_weight_w": 0.0},
         "routes": {"routes": [{"id": "RX", "terms": terms, "ask_counsel": [question]}]},
-        "results": {"results": [{
-            "scenario": "s1", "inputs": {"asset_income": 100},
-            "versions": {"good": {"structure_value": 10, "score_vs_A": 5, "program_output": 50,
-                                  "program_source": "asset_income", "checks_red": [], "checks_amber": ["S5"]}},
-        }]},
+        "results": {"results": [
+            {"scenario": f"s{i}", "inputs": {"asset_income": size},
+             "versions": {
+                 "good": {"structure_value": 5000, "score_vs_A": 5000, "program_output": 0, "to_foundation": 0,
+                          "program_source": "fixed_assets", "checks_red": [], "checks_amber": ["S5"]},
+                 "pipe": {"structure_value": 4000, "score_vs_A": 4000, "program_output": 1000, "to_foundation": 1000,
+                          "program_source": "asset_income", "checks_red": [], "checks_amber": ["S5"]}}}
+            for i, size in enumerate((100000, 200000, 300000), 1)]},
         "next_moves": ("# Moves\n\n## Open\n\n"
                        "### 1. asset: size\n\n- Key: `size-key`\n- Step: B1\n- Working assumption: see queue\n\n"
                        "### 2. asset: classes\n\n- Key: `class-key`\n- Step: B2\n- Working assumption: see queue\n\n"
@@ -373,12 +447,43 @@ def selftest() -> int:
 
     def only_trustee_independent(ctx):
         ctx["stack"]["versions"].pop("good")
+        ctx["stack"]["versions"].pop("pipe")
 
     def drop_queue_question(ctx):
         ctx["queue"] = "# Queue\n\n## Size\n\nKey: `size-key`\nASSUMPTION: small.\n\n## Classes\n\nKey: `class-key`\nASSUMPTION: rental.\n"
 
     def negative_value(ctx):
-        ctx["results"]["results"][0]["versions"]["good"]["structure_value"] = -1
+        for r in ctx["results"]["results"]:
+            for v in r["versions"].values():
+                v["structure_value"] = -1
+
+    # Known-bad, 2026-11-24 (relay/state.md turn 9): SC3 passed on one scenario sized at the version's own
+    # break-even, +66/yr structure value on a 150,000 asset. The old rule (structure value >= 0 in any one
+    # scenario) passed this; the new one must not.
+    def nov24_break_even(ctx):
+        ctx["results"]["results"] = [{
+            "scenario": "asset_sized", "inputs": {"asset_income": 150000},
+            "versions": {"good": {"structure_value": 66, "score_vs_A": 1592, "program_output": 0, "to_foundation": 0,
+                                  "program_source": "fixed_assets", "checks_red": [], "checks_amber": ["S5"]}}}]
+
+    # Known-bad: a win at only two sizes, both well clear, still fails (one size short).
+    def two_sizes(ctx):
+        ctx["results"]["results"].pop()
+
+    # Known-bad: three sizes, but one sits on break-even (inside the margin), so only two count.
+    def one_at_break_even(ctx):
+        for r in ctx["results"]["results"]:
+            if r["inputs"]["asset_income"] == 300000:
+                r["versions"]["good"]["structure_value"] = 66
+                r["versions"]["pipe"]["structure_value"] = 66
+
+    # Known-bad, PR 45 first head c350736f: the Foundation's share was also counted as kept by the family,
+    # so the version that gives money away scores as well as or better than the one that doesn't.
+    def pr45_double_count(ctx):
+        for r in ctx["results"]["results"]:
+            v = r["versions"]["pipe"]
+            v["score_vs_A"] += v["to_foundation"]
+            v["structure_value"] += v["to_foundation"]
 
     def drop_b2(ctx):
         ctx["next_moves"] = ctx["next_moves"].replace("- Step: B2", "- Step: C2")
@@ -387,7 +492,9 @@ def selftest() -> int:
         ctx["bench"] = {"distribution": {"rule": "something else"}}
 
     def unlisted_amber(ctx):
-        ctx["results"]["results"][0]["versions"]["good"]["checks_amber"] = ["S9"]
+        for r in ctx["results"]["results"]:
+            for v in r["versions"].values():
+                v["checks_amber"] = ["S9"]
 
     def founder_version_is_grantor(ctx):
         # the founder trusts, but the terms make it a grantor trust (a 10% reversion, 673(a))
@@ -403,6 +510,12 @@ def selftest() -> int:
         ("SC1", only_trustee_independent),
         ("SC2", drop_queue_question),
         ("SC3", negative_value),
+        ("SC3", nov24_break_even),
+        ("SC5", nov24_break_even),
+        ("SC3", two_sizes),
+        ("SC5", two_sizes),
+        ("SC3", one_at_break_even),
+        ("SC5", pr45_double_count),
         ("SC4", drop_b2),
         ("SC5", drop_4942),
         ("SC6", unlisted_amber),
@@ -413,7 +526,14 @@ def selftest() -> int:
     ]
     for cid, change in cases:
         res = broken(change)
-        ok(not res[cid][0], f"{cid} fails on its failing fixture ({res[cid][1]})")
+        ok(not res[cid][0], f"{cid} fails on {change.__name__} ({res[cid][1]})")
+
+    # The Nov 24 case is only worth having if the old rule let it through.
+    nov = copy.deepcopy(fixture())
+    nov24_break_even(nov)
+    old_rule = any(v.get("structure_value", -1) >= 0 and v.get("score_vs_A", 0) > 0
+                   for r in nov["results"]["results"] for v in r["versions"].values())
+    ok(old_rule, "the old SC3 rule (structure value >= 0 in any one scenario) passed nov24_break_even")
 
     missing = run_all({})
     ok(all(not v[0] for v in missing.values()), "every criterion fails when every input is missing")
