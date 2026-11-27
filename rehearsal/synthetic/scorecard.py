@@ -389,6 +389,13 @@ def selftest() -> int:
     def unlisted_amber(ctx):
         ctx["results"]["results"][0]["versions"]["good"]["checks_amber"] = ["S9"]
 
+    def founder_version_is_grantor(ctx):
+        # the founder trusts, but the terms make it a grantor trust (a 10% reversion, 673(a))
+        ctx["stack"]["versions"]["good"]["family_trust"]["terms"]["reversion_value_share_at_inception"] = 0.10
+
+    def program_from_salary(ctx):
+        ctx["results"]["results"][0]["versions"]["good"]["program_source"] = "salary"
+
     def no_assumption(ctx):
         ctx["next_moves"] = ctx["next_moves"].replace("- Working assumption: see queue\n", "", 1)
 
@@ -400,6 +407,9 @@ def selftest() -> int:
         ("SC5", drop_4942),
         ("SC6", unlisted_amber),
         ("SC7", no_assumption),
+        # Added Nov 27 from the mutation guard: each was a rule loosening that stayed green.
+        ("SC1", founder_version_is_grantor),
+        ("SC5", program_from_salary),
     ]
     for cid, change in cases:
         res = broken(change)

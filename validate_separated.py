@@ -26,7 +26,8 @@ try:
     print(f"   - Disjointness axioms: {disjoint_count} (should be 0)")
 
     if functional_count > 0 or disjoint_count > 0:
-        print("   ⚠ WARNING: Authority axioms found in vocabulary layer!")
+        print("   ✗ FAILED: Authority axioms found in vocabulary layer!")
+        exit(1)
     else:
         print("   ✓ Clean semantic layer (no authority axioms)")
 
@@ -51,7 +52,8 @@ try:
     print(f"   - Disjointness axioms: {disjoint_count}")
 
     if functional_count == 0 and disjoint_count == 0:
-        print("   ⚠ WARNING: No authority axioms found!")
+        print("   ✗ FAILED: No authority axioms found!")
+        exit(1)
     else:
         print("   ✓ Contains authority axioms")
 

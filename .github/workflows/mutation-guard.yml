@@ -1,0 +1,38 @@
+name: Mutation guard
+
+# Every check must prove it can fail. For each check, .github/mutation/checks.json
+# lists known-bad cases (a loosened rule or a planted bad input); this job runs
+# each one and goes red if a check stays green on it, or if a check is not run
+# by any pull-request workflow. See .github/mutation/README.md.
+# Not a required check: whether to require it is the owner's setting.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 11 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: pip install rdflib pyshacl
+      - name: The guard's own known-bad cases
+        run: python3 .github/mutation/mutation_guard.py --selftest
+      - name: Every check is wired into CI and goes red on its known-bad cases
+        run: python3 .github/mutation/mutation_guard.py --jobs 4

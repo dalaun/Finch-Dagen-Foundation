@@ -60,3 +60,7 @@ jobs:
         run: python3 .github/lane/lane_guard.py --selftest
       - name: Verifier pass's own cases
         run: python3 .github/lane/verifier_pass.py --selftest
+      - name: Transition twin's own cases
+        run: python3 rehearsal/transition_twin.py --selftest
+      - name: Vocabulary and compliance layers stay separated, with the same content as the original
+        run: python3 validate_separated.py
