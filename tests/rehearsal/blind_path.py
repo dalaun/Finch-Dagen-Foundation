@@ -318,7 +318,8 @@ def grade(path: dict, key: list[dict], commitments: dict, lib: dict, heldout_log
 def privacy_scan(files: dict[str, str]) -> list[str]:
     """Tracked files that carry a counsel-private marker. The public repo, like
     any AI log, is not privileged; counsel material belongs in the private folder."""
-    me = {"tests/rehearsal/blind_path.py", "rehearsal/11-blind-goal-adversarial-path.md"}
+    # These files name the markers to define or plant them; they hold no counsel material.
+    me = {"tests/rehearsal/blind_path.py", "rehearsal/11-blind-goal-adversarial-path.md", ".github/mutation/checks.json"}
     return sorted(f for f, text in files.items() if f not in me and any(m in text for m in PRIVATE_MARKERS))
 
 
@@ -424,7 +425,9 @@ def selftest() -> int:
     print(f"  {'ok ' if g == {'path': demo['id'], 'result': 'pass'} else 'BAD'} grader on the demo path: {g}")
     if g != {"path": demo["id"], "result": "pass"}:
         fails.append("grader must pass the demo path, with path and result only")
-    expect("KB22 key moved after it was committed", lambda: grade(demo, [dict(key[0], verdict="deny")] + key[1:], com, lib), "GR1")
+    # The builder answered deny; someone moves the key to deny to make it pass. Only the commitment stops it.
+    expect("KB22 key moved after it was committed", lambda: grade(mut(lambda p: p["answer"].update(verdict="deny")),
+           [dict(key[0], verdict="deny")] + key[1:], com, lib), "GR1")
     expect("KB23 right answer, but a step fails", lambda: grade(mut(lambda p: s0(p)["facts"].update(deal_kind="property")), key, com, lib), "GR4")
     expect("KB24 wrong answer on a clean path", lambda: grade(mut(lambda p: p["answer"].update(verdict="deny")), key, com, lib), "GR4")
     ho = mut(lambda p: p.update(goal_id="HO-1"))
