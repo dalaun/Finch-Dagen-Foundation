@@ -1,0 +1,606 @@
+{
+ "about": "Known-bad cases for every check in this repo. See README.md. Each mutant must turn its check red.",
+ "workflows": ".github/workflows",
+ "discover": [
+  {
+   "glob": [
+    "*.py",
+    "*.sh",
+    "*.mjs"
+   ],
+   "not": [
+    ".github/mutation/*"
+   ]
+  }
+ ],
+ "exempt": [
+  {
+   "path": "extract_authority.py",
+   "why": "generator: writes the compliance layer; validate_separated checks its output"
+  },
+  {
+   "path": "extract_semantic.py",
+   "why": "generator: writes the vocabulary layer; validate_separated checks its output"
+  },
+  {
+   "path": "fast_sparql.py",
+   "why": "helper imported by the checks; no verdict of its own"
+  },
+  {
+   "path": "sync-wiki.sh",
+   "why": "publisher: copies pages to the wiki; no verdict"
+  },
+  {
+   "path": "formal/keystone/chart/view.mjs",
+   "why": "viewer for the keystone chart; no verdict"
+  },
+  {
+   "path": "validate_ontology.py",
+   "why": "prints syntax and counts for one file; its parse is also done by owl-lint and separated"
+  }
+ ],
+ "checks": [
+  {
+   "id": "owl-lint",
+   "source": [
+    "validate_owl_lint.py"
+   ],
+   "run": "python3 validate_owl_lint.py",
+   "mutants": [
+    {
+     "id": "L1-hasValue-class",
+     "why": "a restriction whose hasValue points at a class must be flagged (L1)",
+     "file": "zz-mutant.ttl",
+     "write": "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ex: <urn:mutant#> .\nex:C a owl:Class .\nex:R a owl:Restriction ; owl:onProperty ex:p ; owl:hasValue ex:C .\n",
+     "expect": "L1"
+    },
+    {
+     "id": "L2-on-rdf-type",
+     "why": "a restriction on rdf:type must be flagged (L2)",
+     "file": "zz-mutant.ttl",
+     "write": "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ex: <urn:mutant#> .\nex:C a owl:Class .\nex:R a owl:Restriction ; owl:onProperty rdf:type ; owl:someValuesFrom ex:C .\n",
+     "expect": "L2"
+    },
+    {
+     "id": "L3-two-properties",
+     "why": "one restriction with two onProperty values must be flagged (L3)",
+     "file": "zz-mutant.ttl",
+     "write": "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix ex: <urn:mutant#> .\nex:R a owl:Restriction ; owl:onProperty ex:p , ex:q ; owl:someValuesFrom ex:C .\n",
+     "expect": "L3"
+    }
+   ]
+  },
+  {
+   "id": "owl-lint-decision",
+   "source": [],
+   "run": "python3 validate_owl_lint.py decision/*.ttl tests/decision/*.ttl tests/decision/giftlaw-stories/*.ttl",
+   "mutants": [
+    {
+     "id": "L3-in-decision-model",
+     "why": "a malformed restriction added to a decision file must be flagged",
+     "file": "decision/spend-decision-model.ttl",
+     "append": "\n[] a <http://www.w3.org/2002/07/owl#Restriction> ; <http://www.w3.org/2002/07/owl#onProperty> <urn:mutant#p> , <urn:mutant#q> .\n",
+     "expect": "L3"
+    }
+   ]
+  },
+  {
+   "id": "keystone-shapes",
+   "source": [
+    "validate_keystone.py",
+    "trust-domain-keystone-shapes.ttl"
+   ],
+   "run": "python3 validate_keystone.py",
+   "mutants": [
+    {
+     "id": "pay-over-market-x100",
+     "why": "pay 100 times the market benchmark must still fail the reasonable-pay check (4941(d)(2)(E))",
+     "file": "trust-domain-keystone-shapes.ttl",
+     "find": "FILTER ( ?value > ?limit )",
+     "replace": "FILTER ( ?value > ?limit * 100 )",
+     "expect": "expected"
+    }
+   ]
+  },
+  {
+   "id": "decide-spend-A",
+   "source": [
+    "decide_spend.py",
+    "decision/spend-decision-shapes.ttl"
+   ],
+   "run": "python3 decide_spend.py",
+   "mutants": [
+    {
+     "id": "limit-x1000",
+     "why": "a spend over its limit must still be blocked when the limit is loosened 1000 times",
+     "file": "decision/spend-decision-shapes.ttl",
+     "find": "FILTER ( ?value > 0 && ?value > ?limit )",
+     "replace": "FILTER ( ?value > 0 && ?value > ?limit * 1000 )",
+     "expect": "mismatch"
+    }
+   ]
+  },
+  {
+   "id": "decide-spend-B",
+   "source": [],
+   "run": "python3 decide_spend.py --branch B",
+   "mutants": [
+    {
+     "id": "limit-x1000",
+     "why": "the same loosened limit must fail the branch B answer key too",
+     "file": "decision/spend-decision-shapes.ttl",
+     "find": "FILTER ( ?value > 0 && ?value > ?limit )",
+     "replace": "FILTER ( ?value > 0 && ?value > ?limit * 1000 )",
+     "expect": "mismatch"
+    }
+   ]
+  },
+  {
+   "id": "grade-stories",
+   "source": [
+    "grade_stories.py"
+   ],
+   "run": "python3 grade_stories.py",
+   "mutants": [
+    {
+     "id": "story-without-gift",
+     "why": "a story graded by the model with no gift is a malformed record",
+     "file": "tests/decision/giftlaw-stories/ch4.ttl",
+     "find": "    dm:storyGift :S4_19_gift ;\n",
+     "replace": "",
+     "expect": "MALFORMED"
+    }
+   ]
+  },
+  {
+   "id": "figures",
+   "source": [
+    "validate_figures.py"
+   ],
+   "run": "python3 validate_figures.py",
+   "mutants": [
+    {
+     "id": "shape-drifts-from-figure",
+     "why": "a shape that compares against 60 when the registry says 50 must fail FIG3",
+     "file": "decision/planned-giving-shapes.ttl",
+     "find": "?u > 50",
+     "replace": "?u > 60",
+     "expect": "FIG3"
+    }
+   ]
+  },
+  {
+   "id": "figures-selftest",
+   "source": [],
+   "run": "python3 validate_figures.py --selftest",
+   "mutants": [
+    {
+     "id": "FIG1-removed",
+     "why": "the figures selftest must notice when the undated-figure rule (FIG1) is removed",
+     "file": "validate_figures.py",
+     "find": "problems.append(f\"FIG1 {name}: no as-of date\")",
+     "replace": "None",
+     "expect": "Self-test FAILED"
+    }
+   ]
+  },
+  {
+   "id": "fail-closed",
+   "source": [
+    "validate_fail_closed.py"
+   ],
+   "run": "python3 validate_fail_closed.py",
+   "mutants": [
+    {
+     "id": "FC0-off-for-missing-facts",
+     "why": "with missing facts no longer making a case Insufficient, a case must be caught going Allow",
+     "file": "decide_spend.py",
+     "find": "    missing = missing_inputs(data) if fail_closed else {}",
+     "replace": "    missing = {}",
+     "expect": "FC-"
+    }
+   ]
+  },
+  {
+   "id": "fail-closed-selftest",
+   "source": [],
+   "run": "python3 validate_fail_closed.py --selftest",
+   "mutants": [
+    {
+     "id": "selftest-catches-nothing",
+     "why": "the selftest must go red when the test it guards stops recording problems",
+     "file": "validate_fail_closed.py",
+     "find": "problems.append(f\"FC-A {ds.short(case)}: {ds.label(was)}, but Allow {what}\")",
+     "replace": "None"
+    }
+   ]
+  },
+  {
+   "id": "synthetic-year",
+   "source": [
+    "rehearsal/synthetic/synthetic_year.py"
+   ],
+   "run": "python3 rehearsal/synthetic/synthetic_year.py --check",
+   "mutants": [
+    {
+     "id": "unseeded",
+     "why": "an unseeded year is not reproducible and must fail --check",
+     "file": "rehearsal/synthetic/synthetic_year.py",
+     "find": "rng = random.Random(sc[\"seed\"])",
+     "replace": "rng = random.Random()",
+     "expect": "reproducible=False"
+    }
+   ]
+  },
+  {
+   "id": "rehearsal-selftest",
+   "source": [
+    "rehearsal/synthetic/rehearsal_run.py"
+   ],
+   "run": "python3 rehearsal/synthetic/rehearsal_run.py --selftest",
+   "mutants": [
+    {
+     "id": "S6-allows-one",
+     "why": "structure check S6 must still fail at one instance, not only above one",
+     "file": "rehearsal/synthetic/rehearsal_run.py",
+     "find": "(\"fail\" if n > 0 else \"pass\")",
+     "replace": "(\"fail\" if n > 1 else \"pass\")"
+    },
+    {
+     "id": "grantor-673-loosened",
+     "why": "a loosened grantor rule must turn this run red, since CI reaches the grantor cases through it",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "\"fail\" if rev > 0.05 else \"pass\"",
+     "replace": "\"fail\" if rev > 0.06 else \"pass\""
+    }
+   ]
+  },
+  {
+   "id": "grantor",
+   "source": [
+    "rehearsal/synthetic/grantor_check.py"
+   ],
+   "run": "python3 rehearsal/synthetic/grantor_check.py --selftest",
+   "wired_via": "rehearsal-selftest",
+   "mutants": [
+    {
+     "id": "673a-five-to-six",
+     "why": "a reversion worth 5.1% is over 673(a)'s 5% and makes the founder the owner",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "\"fail\" if rev > 0.05 else \"pass\"",
+     "replace": "\"fail\" if rev > 0.06 else \"pass\""
+    },
+    {
+     "id": "674b6-principal",
+     "why": "674(b)(6) covers withholding income only; the same power over principal is a grantor power",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "if p[\"kind\"] == \"withhold_temporarily\" and p[\"over\"] == \"income\":",
+     "replace": "if p[\"kind\"] == \"withhold_temporarily\":"
+    },
+    {
+     "id": "674b7-principal",
+     "why": "674(b)(7) covers withholding income only; the same power over principal is a grantor power",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "if p[\"kind\"] == \"withhold_during_disability_or_under_21\" and p[\"over\"] == \"income\":",
+     "replace": "if p[\"kind\"] == \"withhold_during_disability_or_under_21\":"
+    },
+    {
+     "id": "674c-related-majority",
+     "why": "674(c) needs no more than half the holders related or subordinate",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "if related * 2 <= len(p[\"holders\"]):",
+     "replace": "if related <= len(p[\"holders\"]):"
+    },
+    {
+     "id": "674a-any-adverse",
+     "why": "674(a) is avoided only when every holder is adverse (or an adverse party must consent), not when any one is",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "holders <= ADVERSE:",
+     "replace": "holders & ADVERSE:"
+    },
+    {
+     "id": "674d-removed",
+     "why": "674(d) lets a related majority hold an income power under a definite external standard",
+     "file": "rehearsal/synthetic/grantor_check.py",
+     "find": "    if p[\"over\"] == \"income\" and p[\"standard\"] == \"reasonably_definite_external\":\n        return r(\"674(d)\"",
+     "replace": "    if False:\n        return r(\"674(d)\""
+    }
+   ]
+  },
+  {
+   "id": "scorecard",
+   "source": [
+    "rehearsal/synthetic/scorecard.py"
+   ],
+   "run": "python3 rehearsal/synthetic/scorecard.py --selftest",
+   "wired_via": "rehearsal-selftest",
+   "mutants": [
+    {
+     "id": "founder-trustee-any-status",
+     "why": "a version with the founder as trustee counts only when it is non-grantor",
+     "file": "rehearsal/synthetic/scorecard.py",
+     "find": "and res[\"status\"] == \"non-grantor\" and ft.get(\"grantor\") is False:",
+     "replace": "and ft.get(\"grantor\") is False:"
+    },
+    {
+     "id": "program-output-any-source",
+     "why": "program output counts for SC3 only when it comes from the asset's income",
+     "file": "rehearsal/synthetic/scorecard.py",
+     "find": "v.get(\"program_source\") == \"asset_income\":",
+     "replace": "v.get(\"program_source\") is not None:"
+    }
+   ]
+  },
+  {
+   "id": "pinned",
+   "source": [
+    "tests/rehearsal/pinned_checks.py"
+   ],
+   "run": "python3 tests/rehearsal/pinned_checks.py",
+   "mutants": [
+    {
+     "id": "bracket-rate-9pct",
+     "why": "a 2026 single bracket typed as 9% instead of Rev. Proc. 2025-32's 10% must fail the floor",
+     "file": "rehearsal/synthetic/benchmarks-tax.json",
+     "find": "\"single_brackets\": [\n      [\n        0,\n        0.1\n      ],",
+     "replace": "\"single_brackets\": [\n      [\n        0,\n        0.09\n      ],",
+     "expect": "FAIL"
+    },
+    {
+     "id": "legacy-weight-moved",
+     "why": "the legacy weight w is his setting; any value but 0 must fail",
+     "file": "rehearsal/synthetic/stack.json",
+     "find": "\"legacy_weight_w\": 0.0,",
+     "replace": "\"legacy_weight_w\": 0.1,",
+     "expect": "legacy weight"
+    }
+   ]
+  },
+  {
+   "id": "packet-scorecard",
+   "source": [
+    "tests/rehearsal/packet_scorecard.py"
+   ],
+   "run": "python3 tests/rehearsal/packet_scorecard.py --selftest",
+   "wired_via": "pinned",
+   "mutants": [
+    {
+     "id": "packet-A-no-flag",
+     "why": "a packet A question must carry its coverage flag line",
+     "file": "tests/rehearsal/packet_scorecard.py",
+     "find": "if r[\"packet\"] == \"A\" and words(r[\"flag\"]) < 1:",
+     "replace": "if r[\"packet\"] == \"A\" and words(r[\"flag\"]) < 0:"
+    }
+   ]
+  },
+  {
+   "id": "check-ledger",
+   "source": [
+    "tests/rehearsal/check_ledger.py"
+   ],
+   "run": "python3 tests/rehearsal/check_ledger.py",
+   "mutants": [
+    {
+     "id": "score-typed-by-hand",
+     "why": "a ledger score typed by hand, not computed by the engine, must fail",
+     "file": "rehearsal/loop/score-ledger.csv",
+     "find": "provisional (amber checks),8,-9915,-10953,10953,none,none,none",
+     "replace": "provisional (amber checks),8,-9915,-10000,10953,none,none,none",
+     "count": 2,
+     "expect": "rows differ"
+    }
+   ]
+  },
+  {
+   "id": "lane-guard",
+   "source": [
+    ".github/lane/lane_guard.py"
+   ],
+   "run": "python3 .github/lane/lane_guard.py --selftest",
+   "mutants": [
+    {
+     "id": "owner-files-pass",
+     "why": "a pull request touching Dalaun's files must go to his lane",
+     "file": ".github/lane/lane_guard.py",
+     "find": "if lane_of(name, rules) == \"owner\":",
+     "replace": "if lane_of(name, rules) == \"nobody\":"
+    },
+    {
+     "id": "history-rewrite-passes",
+     "why": "rewriting earlier lines of an append-only file must be refused",
+     "file": ".github/lane/lane_guard.py",
+     "find": "if rule == \"append-only\" and not head.startswith(base):",
+     "replace": "if rule == \"append-only\" and False:"
+    },
+    {
+     "id": "rename-passes",
+     "why": "renaming a guarded file must be refused like deleting it",
+     "file": ".github/lane/lane_guard.py",
+     "find": "if f.get(\"status\") in (\"removed\", \"renamed\"):",
+     "replace": "if f.get(\"status\") in (\"removed\",):"
+    }
+   ]
+  },
+  {
+   "id": "verifier-pass",
+   "source": [
+    ".github/lane/verifier_pass.py"
+   ],
+   "run": "python3 .github/lane/verifier_pass.py --selftest",
+   "mutants": [
+    {
+     "id": "failed-status-counts",
+     "why": "a verifier status that failed must not count as a pass",
+     "file": ".github/lane/verifier_pass.py",
+     "find": "if s.get(\"state\") != \"success\":",
+     "replace": "if s.get(\"state\") not in (\"success\", \"failure\"):"
+    },
+    {
+     "id": "self-verify",
+     "why": "the author of a pull request cannot verify it",
+     "file": ".github/lane/verifier_pass.py",
+     "find": "if login in wrote:",
+     "replace": "if login in wrote and False:"
+    },
+    {
+     "id": "any-commit",
+     "why": "a pass must name the commit it read",
+     "file": ".github/lane/verifier_pass.py",
+     "find": "if desc.split(\" \")[1:2] != [head_sha[:12]]:",
+     "replace": "if False:"
+    }
+   ]
+  },
+  {
+   "id": "transition-twin",
+   "source": [
+    "rehearsal/transition_twin.py"
+   ],
+   "run": "python3 rehearsal/transition_twin.py --selftest",
+   "mutants": [
+    {
+     "id": "standby-month-early",
+     "why": "a seller note on full standby must not be paid in its last standby month",
+     "file": "rehearsal/transition_twin.py",
+     "find": "if self.age <= self.standby:",
+     "replace": "if self.age < self.standby:"
+    }
+   ]
+  },
+  {
+   "id": "separated",
+   "source": [
+    "validate_separated.py"
+   ],
+   "run": "python3 validate_separated.py",
+   "mutants": [
+    {
+     "id": "axiom-moved-to-vocabulary",
+     "why": "an authority axiom moved from the compliance layer into the vocabulary layer must fail (same content, wrong layer)",
+     "edits": [
+      {
+       "file": "trust-domain-compliance.ttl",
+       "find": "ep:NonGrantorTrustStatus owl:disjointWith ep:GrantorTrustStatus .\n",
+       "replace": ""
+      },
+      {
+       "file": "trust-domain-vocabulary.ttl",
+       "find": "\n[] a owl:Class .\n",
+       "replace": "\n[] a owl:Class .\n\nep:NonGrantorTrustStatus owl:disjointWith ep:GrantorTrustStatus .\n"
+      }
+     ],
+     "expect": "Authority axioms found in vocabulary"
+    }
+   ]
+  },
+  {
+   "id": "keystone-model",
+   "source": [
+    "formal/keystone/run.sh",
+    "formal/keystone/Keystone.tla"
+   ],
+   "run": "sh formal/keystone/run.sh",
+   "timeout": 1500,
+   "mutants": [
+    {
+     "id": "law-forgets-self-dealing",
+     "why": "if the model's law stops recording a payment to a disqualified person as 4941 self-dealing, the break configs must stop ending as expected",
+     "file": "formal/keystone/Keystone.tla",
+     "find": "IF isFdn /\\ IsDP(to) /\\ ~excepted THEN {\"4941\"} ELSE {}",
+     "replace": "IF FALSE THEN {\"4941\"} ELSE {}",
+     "expect": "UNEXPECTED"
+    }
+   ]
+  },
+  {
+   "id": "declared-plan",
+   "source": [
+    "rehearsal/synthetic/declared_plan.py"
+   ],
+   "requires": [
+    "rehearsal/synthetic/declared_plan.py"
+   ],
+   "run": "python3 rehearsal/synthetic/declared_plan.py --selftest",
+   "wired_via": "rehearsal-selftest",
+   "mutants": [
+    {
+     "id": "early-advance-ok",
+     "why": "an advance paid too early under the plan must fail (Reg. 1.62-2)",
+     "file": "rehearsal/synthetic/declared_plan.py",
+     "find": "if ev.get(\"advance\", 0) > 0:",
+     "replace": "if ev.get(\"advance\", 0) > 10**9:"
+    },
+    {
+     "id": "home-office-unchecked",
+     "why": "a home rented to the employer must fail business connection",
+     "file": "rehearsal/synthetic/declared_plan.py",
+     "find": "if ev[\"line\"] == \"home_office\":",
+     "replace": "if ev[\"line\"] == \"nothing\":"
+    }
+   ]
+  },
+  {
+   "id": "substance",
+   "source": [
+    "rehearsal/synthetic/substance.py"
+   ],
+   "requires": [
+    "rehearsal/synthetic/substance.py"
+   ],
+   "run": "python3 rehearsal/synthetic/substance.py --selftest",
+   "wired_via": "rehearsal-selftest",
+   "mutants": [
+    {
+     "id": "tax-only-step-passes",
+     "why": "a step with only a tax purpose must fail SB2 (7701(o))",
+     "file": "rehearsal/synthetic/substance.py",
+     "find": "checks.append((\"SB2\", \"fail\" if tax_only and applies else",
+     "replace": "checks.append((\"SB2\", \"fail\" if False else"
+    }
+   ]
+  },
+  {
+   "id": "hiring",
+   "source": [
+    "rehearsal/synthetic/hiring.py"
+   ],
+   "requires": [
+    "rehearsal/synthetic/hiring.py"
+   ],
+   "run": "python3 rehearsal/synthetic/hiring.py --selftest",
+   "wired_via": "rehearsal-selftest",
+   "mutants": [
+    {
+     "id": "household-staff-arms-length",
+     "why": "household staff must fail arm's length (262; Schedule H)",
+     "file": "rehearsal/synthetic/hiring.py",
+     "find": "if h.get(\"work_for\") == \"owner_household\":",
+     "replace": "if h.get(\"work_for\") == \"nobody\":"
+    },
+    {
+     "id": "1563-off",
+     "why": "a parent at 50% or less is not owner-side under 1563",
+     "file": "rehearsal/synthetic/hiring.py",
+     "find": "if test == \"1563\":",
+     "replace": "if test == \"none\":"
+    }
+   ]
+  },
+  {
+   "id": "guard-selftest",
+   "source": [
+    ".github/mutation/mutation_guard.py"
+   ],
+   "run": "python3 .github/mutation/mutation_guard.py --selftest",
+   "mutants": [
+    {
+     "id": "survivor-ignored",
+     "why": "the guard must go red when a mutant survives",
+     "file": ".github/mutation/mutation_guard.py",
+     "find": "status, detail = \"SURVIVED\", f\"stayed green: {m['why']}\"",
+     "replace": "status, detail = \"ok\", f\"stayed green: {m['why']}\""
+    }
+   ]
+  }
+ ]
+}

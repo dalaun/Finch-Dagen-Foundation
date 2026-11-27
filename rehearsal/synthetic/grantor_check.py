@@ -315,6 +315,20 @@ def selftest() -> int:
                       ("swap_power_nonfiduciary", "675(4)(C)")]:
         ok(failing(with_(**{f"admin__{key}": True})) == {rule}, f"{key}: grantor ({rule})")
     ok(failing(with_(beneficiary_sole_power_to_vest_in_self=True)) == {"678(a)"}, "a beneficiary who can take it alone is its owner (678)")
+    # Known-bad cases the mutation guard found missing (Nov 27): each exception only for the power it names.
+    ok(failing(with_(reversion_value_share_at_inception=0.051)) == {"673(a)"}, "reversion worth 5.1%: over 5%, grantor (673)")
+    for kind, rule in [("withhold_temporarily", "674(b)(6)"), ("withhold_during_disability_or_under_21", "674(b)(7)")]:
+        ok(with_(powers__0__holders=["founder"], trustees=["founder"], powers__0__kind=kind)["status"] == "non-grantor",
+           f"founder holding only a power to withhold income ({kind}): non-grantor ({rule})")
+        ok(with_(powers__0__holders=["founder"], trustees=["founder"], powers__0__kind=kind,
+                 powers__0__over="corpus")["status"] == "grantor",
+           f"the same power over principal: {rule} covers income only, so grantor (674(a))")
+    res = with_(powers__0__holders=["related_subordinate", "related_subordinate", "independent"],
+                trustees=["related_subordinate", "related_subordinate", "independent"],
+                powers__0__standard="reasonably_definite_external")
+    ok(res["status"] == "non-grantor", "two of three trustees related, income under a definite external standard: 674(d) holds")
+    ok(with_(powers__0__holders=["founder", "adverse"], trustees=["founder", "adverse"])["status"] == "grantor",
+       "founder and an adverse party each able to use the power alone: the founder's power is enough, grantor (674(a))")
     # Fail closed: every missing term is an error, never a pass.
     for key in REQUIRED:
         t = base_terms()

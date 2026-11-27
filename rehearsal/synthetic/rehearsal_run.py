@@ -642,6 +642,9 @@ def selftest() -> int:
         renamed = {"".join(rng.choice(string.ascii_lowercase) for _ in range(8)): e for e in c.get("entities", [])}
         c2 = {"entities": list(renamed), "facts": c["facts"]}
         ok(structure_verdicts(c2["facts"]) == structure_verdicts(c["facts"]), f"{cid} renamed: same verdicts")
+    # Boundary added Nov 27 from the mutation guard: one personal line is already too many.
+    ok(structure_verdicts({"personal_lines_deducted": 1})["S6"] == "fail", "S6: one personal line deducted fails")
+    ok(structure_verdicts({"personal_lines_deducted": 0})["S6"] == "pass", "S6: no personal line deducted passes")
     missing = [k for k in expected if k not in cases and k not in ("SK15", "SK16")]
     ok(not missing, f"every structure case has facts ({missing or 'all'})")
     # Grantor trust rules (IRC 671-679): the check's own cases, and every stack version's

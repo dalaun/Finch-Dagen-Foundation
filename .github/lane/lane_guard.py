@@ -321,6 +321,8 @@ def selftest() -> int:
     ok(lane([rr], cv={rr: (base, dropped)}) == "owner", "a check removed: Dalaun's lane")
     ok(lane([rr]) == "owner", "engine file unreadable: Dalaun's lane (fail closed)")
     ok(lane([{"filename": rr, "status": "removed"}]) == "owner", "engine file deleted: Dalaun's lane")
+    ok(lane([{"filename": "rehearsal/synthetic/engine_renamed.py", "previous_filename": rr, "status": "renamed"}]) == "owner",
+       "engine file renamed inside the agent folder: Dalaun's lane, like a delete")
     real = (ROOT / rr).read_text()
     ok(len(block_lines(real, "selftest")) > 20, "the real selftest() is found")
     ok(len(block_lines((ROOT / "rehearsal/synthetic/synthetic_year.py").read_text(), "main")) > 5,
