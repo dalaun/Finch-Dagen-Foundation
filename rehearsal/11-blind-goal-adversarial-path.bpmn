@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs_blind_path" targetNamespace="http://example.org/trust-domain/rehearsal/blind-path">
+  <!-- Blind-goal adversarial path (rehearsal/11-blind-goal-adversarial-path.md). SYNTHETIC. Design and education, not legal or tax advice. Generated; edit the generator, not by hand. -->
+  <bpmn:collaboration id="Collab"><bpmn:participant id="P" name="Blind-goal adversarial path" processRef="Proc"/></bpmn:collaboration>
+  <bpmn:process id="Proc" isExecutable="false">
+    <bpmn:laneSet id="Lanes">
+      <bpmn:lane id="L_D" name="Dalaun">
+        <bpmn:flowNodeRef>start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>d_heldout</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>d_act</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>end</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_B" name="Builder">
+        <bpmn:flowNodeRef>b_read</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>b_step</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>b_src</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>b_gw</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>b_gw2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_A" name="Adversary checker">
+        <bpmn:flowNodeRef>a_check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>a_gw</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_K" name="Keystone checker">
+        <bpmn:flowNodeRef>k_check</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>k_gw</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_G" name="Grader (holds the key)">
+        <bpmn:flowNodeRef>g_commit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g_grade</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>g_out</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="L_C" name="Counsel">
+        <bpmn:flowNodeRef>c_packet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>c_advise</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="start" name="Goal and keystone claim set"><bpmn:outgoing>f0</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="d_heldout" name="Held-out cases written outside the builder; hashes committed"><bpmn:incoming>f0</bpmn:incoming><bpmn:outgoing>f1</bpmn:outgoing><bpmn:dataOutputAssociation id="da_do_commit"><bpmn:targetRef>do_commit</bpmn:targetRef></bpmn:dataOutputAssociation></bpmn:task>
+    <bpmn:task id="b_read" name="Read goal, facts, adversary library, practice set"><bpmn:incoming>f1</bpmn:incoming><bpmn:outgoing>f2</bpmn:outgoing><bpmn:dataInputAssociation id="da_do_practice"><bpmn:sourceRef>do_practice</bpmn:sourceRef></bpmn:dataInputAssociation></bpmn:task>
+    <bpmn:task id="b_step" name="Propose next step with every fact stated"><bpmn:incoming>f2</bpmn:incoming><bpmn:incoming>f5</bpmn:incoming><bpmn:incoming>f8</bpmn:incoming><bpmn:incoming>f11</bpmn:incoming><bpmn:incoming>f16</bpmn:incoming><bpmn:outgoing>f3</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="a_check" name="Score every pattern: closest, fact difference, contrary authority, no whole match (BG1-BG5)"><bpmn:incoming>f3</bpmn:incoming><bpmn:outgoing>f4</bpmn:outgoing><bpmn:dataInputAssociation id="da_do_lib"><bpmn:sourceRef>do_lib</bpmn:sourceRef></bpmn:dataInputAssociation></bpmn:task>
+    <bpmn:exclusiveGateway id="a_gw" name="Step clears the adversary?"><bpmn:incoming>f4</bpmn:incoming><bpmn:outgoing>f5</bpmn:outgoing><bpmn:outgoing>f6</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="k_check" name="Same claim held; supports, blocks, silent or unresolved; agrees with facts (BG6)"><bpmn:incoming>f6</bpmn:incoming><bpmn:outgoing>f7</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="k_gw" name="Link blocks?"><bpmn:incoming>f7</bpmn:incoming><bpmn:outgoing>f8</bpmn:outgoing><bpmn:outgoing>f9</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="b_src" name="Name the step's key source, or mark ASSUMPTION (BG7)"><bpmn:incoming>f9</bpmn:incoming><bpmn:outgoing>f10</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="b_gw" name="Path complete?"><bpmn:incoming>f10</bpmn:incoming><bpmn:outgoing>f11</bpmn:outgoing><bpmn:outgoing>f12</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="g_commit" name="Key matches its commitment (GR1); held-out budget left (GR3)"><bpmn:incoming>f12</bpmn:incoming><bpmn:outgoing>f13</bpmn:outgoing><bpmn:dataInputAssociation id="da_do_key"><bpmn:sourceRef>do_key</bpmn:sourceRef></bpmn:dataInputAssociation><bpmn:dataOutputAssociation id="da_do_log"><bpmn:targetRef>do_log</bpmn:targetRef></bpmn:dataOutputAssociation></bpmn:task>
+    <bpmn:task id="g_grade" name="Right answer and every step traceable? (GR4)"><bpmn:incoming>f13</bpmn:incoming><bpmn:outgoing>f14</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="g_out" name="Return pass or fail only (GR2)"><bpmn:incoming>f14</bpmn:incoming><bpmn:outgoing>f15</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="b_gw2" name="Pass?"><bpmn:incoming>f15</bpmn:incoming><bpmn:outgoing>f16</bpmn:outgoing><bpmn:outgoing>f17</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:task id="c_packet" name="Receive packet: every material fact, the path, the questions (CR2, private)"><bpmn:incoming>f17</bpmn:incoming><bpmn:outgoing>f18</bpmn:outgoing><bpmn:dataOutputAssociation id="da_do_rel"><bpmn:targetRef>do_rel</bpmn:targetRef></bpmn:dataOutputAssociation></bpmn:task>
+    <bpmn:task id="c_advise" name="Advise; sign off or not (CR1, CR3)"><bpmn:incoming>f18</bpmn:incoming><bpmn:outgoing>f19</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="d_act" name="Act only after the advice; reliance record kept (CR4)"><bpmn:incoming>f19</bpmn:incoming><bpmn:outgoing>f20</bpmn:outgoing></bpmn:task>
+    <bpmn:endEvent id="end" name="Step taken on the up and up"><bpmn:incoming>f20</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="f0" sourceRef="start" targetRef="d_heldout"/>
+    <bpmn:sequenceFlow id="f1" sourceRef="d_heldout" targetRef="b_read"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="b_read" targetRef="b_step"/>
+    <bpmn:sequenceFlow id="f3" sourceRef="b_step" targetRef="a_check"/>
+    <bpmn:sequenceFlow id="f4" sourceRef="a_check" targetRef="a_gw"/>
+    <bpmn:sequenceFlow id="f5" sourceRef="a_gw" targetRef="b_step" name="No: revise the step"/>
+    <bpmn:sequenceFlow id="f6" sourceRef="a_gw" targetRef="k_check" name="Yes"/>
+    <bpmn:sequenceFlow id="f7" sourceRef="k_check" targetRef="k_gw"/>
+    <bpmn:sequenceFlow id="f8" sourceRef="k_gw" targetRef="b_step" name="Yes: revise"/>
+    <bpmn:sequenceFlow id="f9" sourceRef="k_gw" targetRef="b_src" name="No"/>
+    <bpmn:sequenceFlow id="f10" sourceRef="b_src" targetRef="b_gw"/>
+    <bpmn:sequenceFlow id="f11" sourceRef="b_gw" targetRef="b_step" name="No: next step"/>
+    <bpmn:sequenceFlow id="f12" sourceRef="b_gw" targetRef="g_commit" name="Yes: submit path"/>
+    <bpmn:sequenceFlow id="f13" sourceRef="g_commit" targetRef="g_grade"/>
+    <bpmn:sequenceFlow id="f14" sourceRef="g_grade" targetRef="g_out"/>
+    <bpmn:sequenceFlow id="f15" sourceRef="g_out" targetRef="b_gw2" name="one bit"/>
+    <bpmn:sequenceFlow id="f16" sourceRef="b_gw2" targetRef="b_step" name="Fail: try a new route"/>
+    <bpmn:sequenceFlow id="f17" sourceRef="b_gw2" targetRef="c_packet" name="Pass: hand to counsel"/>
+    <bpmn:sequenceFlow id="f18" sourceRef="c_packet" targetRef="c_advise"/>
+    <bpmn:sequenceFlow id="f19" sourceRef="c_advise" targetRef="d_act"/>
+    <bpmn:sequenceFlow id="f20" sourceRef="d_act" targetRef="end"/>
+    <bpmn:dataStoreReference id="do_practice" name="Practice set K1-K33, SK1-SK16 (public)"/>
+    <bpmn:dataStoreReference id="do_key" name="Held-out key (secret, verifier environment)"/>
+    <bpmn:dataStoreReference id="do_commit" name="Commitments: salted hashes (public)"/>
+    <bpmn:dataStoreReference id="do_lib" name="Adversary library: sets A (97-24, sham, 7701(o)) and B (4941, 4943, 4945)"/>
+    <bpmn:dataStoreReference id="do_log" name="Held-out use log"/>
+    <bpmn:dataStoreReference id="do_rel" name="Reliance record and packet (private folder)"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Dia"><bpmndi:BPMNPlane id="Plane" bpmnElement="Collab">
+    <bpmndi:BPMNShape id="P_di" bpmnElement="P" isHorizontal="true"><dc:Bounds x="120" y="0" width="2925" height="900"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_D_di" bpmnElement="L_D" isHorizontal="true"><dc:Bounds x="150" y="0" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_B_di" bpmnElement="L_B" isHorizontal="true"><dc:Bounds x="150" y="150" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_A_di" bpmnElement="L_A" isHorizontal="true"><dc:Bounds x="150" y="300" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_K_di" bpmnElement="L_K" isHorizontal="true"><dc:Bounds x="150" y="450" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_G_di" bpmnElement="L_G" isHorizontal="true"><dc:Bounds x="150" y="600" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="L_C_di" bpmnElement="L_C" isHorizontal="true"><dc:Bounds x="150" y="750" width="2895" height="150"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="start_di" bpmnElement="start"><dc:Bounds x="227" y="57" width="36" height="36"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="d_heldout_di" bpmnElement="d_heldout"><dc:Bounds x="345" y="35" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="b_read_di" bpmnElement="b_read"><dc:Bounds x="345" y="185" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="b_step_di" bpmnElement="b_step"><dc:Bounds x="510" y="185" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="a_check_di" bpmnElement="a_check"><dc:Bounds x="675" y="335" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="a_gw_di" bpmnElement="a_gw"><dc:Bounds x="880" y="350" width="50" height="50"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="k_check_di" bpmnElement="k_check"><dc:Bounds x="1005" y="485" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="k_gw_di" bpmnElement="k_gw"><dc:Bounds x="1210" y="500" width="50" height="50"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="b_src_di" bpmnElement="b_src"><dc:Bounds x="1335" y="185" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="b_gw_di" bpmnElement="b_gw"><dc:Bounds x="1540" y="200" width="50" height="50"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="g_commit_di" bpmnElement="g_commit"><dc:Bounds x="1665" y="635" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="g_grade_di" bpmnElement="g_grade"><dc:Bounds x="1830" y="635" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="g_out_di" bpmnElement="g_out"><dc:Bounds x="1995" y="635" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="b_gw2_di" bpmnElement="b_gw2"><dc:Bounds x="2200" y="200" width="50" height="50"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="c_packet_di" bpmnElement="c_packet"><dc:Bounds x="2325" y="785" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="c_advise_di" bpmnElement="c_advise"><dc:Bounds x="2490" y="785" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="d_act_di" bpmnElement="d_act"><dc:Bounds x="2655" y="35" width="130" height="80"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="end_di" bpmnElement="end"><dc:Bounds x="2867" y="57" width="36" height="36"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_practice_di" bpmnElement="do_practice"><dc:Bounds x="220" y="252" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_key_di" bpmnElement="do_key"><dc:Bounds x="1540" y="702" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_commit_di" bpmnElement="do_commit"><dc:Bounds x="550" y="102" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_lib_di" bpmnElement="do_lib"><dc:Bounds x="550" y="402" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_log_di" bpmnElement="do_log"><dc:Bounds x="2200" y="702" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="do_rel_di" bpmnElement="do_rel"><dc:Bounds x="2695" y="852" width="50" height="40"/></bpmndi:BPMNShape>
+    <bpmndi:BPMNEdge id="f0_di" bpmnElement="f0"><di:waypoint x="245" y="75"/><di:waypoint x="410" y="75"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f1_di" bpmnElement="f1"><di:waypoint x="410" y="75"/><di:waypoint x="410" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f2_di" bpmnElement="f2"><di:waypoint x="410" y="225"/><di:waypoint x="575" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f3_di" bpmnElement="f3"><di:waypoint x="575" y="225"/><di:waypoint x="575" y="375"/><di:waypoint x="740" y="375"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f4_di" bpmnElement="f4"><di:waypoint x="740" y="375"/><di:waypoint x="905" y="375"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f5_di" bpmnElement="f5"><di:waypoint x="905" y="375"/><di:waypoint x="905" y="225"/><di:waypoint x="575" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f6_di" bpmnElement="f6"><di:waypoint x="905" y="375"/><di:waypoint x="905" y="525"/><di:waypoint x="1070" y="525"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f7_di" bpmnElement="f7"><di:waypoint x="1070" y="525"/><di:waypoint x="1235" y="525"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f8_di" bpmnElement="f8"><di:waypoint x="1235" y="525"/><di:waypoint x="1235" y="225"/><di:waypoint x="575" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f9_di" bpmnElement="f9"><di:waypoint x="1235" y="525"/><di:waypoint x="1235" y="225"/><di:waypoint x="1400" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f10_di" bpmnElement="f10"><di:waypoint x="1400" y="225"/><di:waypoint x="1565" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f11_di" bpmnElement="f11"><di:waypoint x="1565" y="225"/><di:waypoint x="575" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f12_di" bpmnElement="f12"><di:waypoint x="1565" y="225"/><di:waypoint x="1565" y="675"/><di:waypoint x="1730" y="675"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f13_di" bpmnElement="f13"><di:waypoint x="1730" y="675"/><di:waypoint x="1895" y="675"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f14_di" bpmnElement="f14"><di:waypoint x="1895" y="675"/><di:waypoint x="2060" y="675"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f15_di" bpmnElement="f15"><di:waypoint x="2060" y="675"/><di:waypoint x="2060" y="225"/><di:waypoint x="2225" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f16_di" bpmnElement="f16"><di:waypoint x="2225" y="225"/><di:waypoint x="575" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f17_di" bpmnElement="f17"><di:waypoint x="2225" y="225"/><di:waypoint x="2225" y="825"/><di:waypoint x="2390" y="825"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f18_di" bpmnElement="f18"><di:waypoint x="2390" y="825"/><di:waypoint x="2555" y="825"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f19_di" bpmnElement="f19"><di:waypoint x="2555" y="825"/><di:waypoint x="2555" y="75"/><di:waypoint x="2720" y="75"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="f20_di" bpmnElement="f20"><di:waypoint x="2720" y="75"/><di:waypoint x="2885" y="75"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_practice_di" bpmnElement="da_do_practice"><di:waypoint x="245" y="272"/><di:waypoint x="410" y="225"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_key_di" bpmnElement="da_do_key"><di:waypoint x="1565" y="722"/><di:waypoint x="1730" y="675"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_commit_di" bpmnElement="da_do_commit"><di:waypoint x="575" y="122"/><di:waypoint x="410" y="75"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_lib_di" bpmnElement="da_do_lib"><di:waypoint x="575" y="422"/><di:waypoint x="740" y="375"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_log_di" bpmnElement="da_do_log"><di:waypoint x="2225" y="722"/><di:waypoint x="1730" y="675"/></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="da_do_rel_di" bpmnElement="da_do_rel"><di:waypoint x="2720" y="872"/><di:waypoint x="2390" y="825"/></bpmndi:BPMNEdge>
+  </bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>

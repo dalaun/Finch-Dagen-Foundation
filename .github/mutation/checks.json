@@ -37,6 +37,10 @@
   {
    "path": "validate_ontology.py",
    "why": "prints syntax and counts for one file; its parse is also done by owl-lint and separated"
+  },
+  {
+   "path": "tests/rehearsal/blind-path/make_bpmn.py",
+   "why": "generator: writes the lane diagram rehearsal/11-blind-goal-adversarial-path.bpmn; it judges nothing"
   }
  ],
  "checks": [
