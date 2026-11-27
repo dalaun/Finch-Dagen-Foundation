@@ -25,7 +25,8 @@ Packet B covers what the trust's terms do to tax, the asset that would pay for t
 - A lender may refuse a trust-owned LLC or require the founder's guarantee, which bears on the non-grantor result (Q18).
 - Passive-loss and net investment income tax treatment depends on his own facts (Q1).
 - The yield assumed for sizing the asset has no authority behind it (Q11); a realistic size for the table is not yet cited.
-- Illinois text is pending for Q8 and Q22 (below).
+- A Wyoming or Delaware situs does not move the Family Trust's Illinois income tax while the founder is domiciled in Illinois; only Linn's contacts limit, a counsel question, could (Illinois residence test, below).
+- Illinois makes a distribution trust advisor a fiduciary, not a trustee, so whether an advisor fits 674(c) is still open (Q8).
 
 ## What packet A rests on from packet B
 
@@ -47,7 +48,7 @@ Each is `likely` or `open`; what the lawyer decides on each is stated in the lin
 
 - **Q1. Do the rentals, and a bought business run by a hired manager, count as passive?** Confidence: likely. [Q1](../research/Q1.md)
 - **Q3. Keep the Family Trust non-grantor while he stays its steward** Confidence: likely. [Q3](../research/Q3.md)
-- **Q8. Does a non-trustee distribution trust advisor satisfy the independent-trustee exception?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). [Q8](../research/Q8.md)
+- **Q8. Does a non-trustee distribution trust advisor satisfy the independent-trustee exception?** Confidence: open. [Q8](../research/Q8.md)
 - **Q9. How do we keep him and his family clear of self-dealing if the trust deducts payments to the foundation?** Confidence: likely. [Q9](../research/Q9.md)
 - **Q11. Is a 7 percent yield a fair stand-in for sizing the asset that clears break-even?** Confidence: open. [Q11](../research/Q11.md)
 - **Q12. Which classes of asset (rental building, bought business, other) can credibly produce that income?** Confidence: open. [Q12](../research/Q12.md)
@@ -56,7 +57,6 @@ Each is `likely` or `open`; what the lawyer decides on each is stated in the lin
 - **Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?** Confidence: open. [Q16](../research/Q16.md)
 - **Q17. How big must the asset be to fund a 10 percent Foundation share and still beat doing nothing?** Confidence: open. [Q17](../research/Q17.md)
 - **Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?** Confidence: open. [Q18](../research/Q18.md)
-- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Illinois or state text pending, needs Dalaun (4 claims). [Q22](../research/Q22.md)
 - **Q19. Can any operating-company or business-trust equity go to the Foundation, and how much?** Confidence: likely. [Q19](../research/Q19.md)
 - **Q25. Does the founder file as single or as married filing jointly, and how does that change what the structure saves?** Confidence: open. [Q25](../research/Q25.md)
 - **Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?** Confidence: likely. [Q29](../research/Q29.md)
@@ -79,9 +79,13 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 is about even with doing nothing (+13 a year; +1,592 before the PR 94 fix), consistent with the 20,200 extra the engine now needs on top of 150,000.
 - `asset_sized_pipeline` (350,000 a year, ASSUMPTION): route R2 beats doing nothing by 26,384 a year; with the 10 percent Foundation share, by 2,029.
 
-## Pending Illinois text
+## Illinois residence test
 
-The Illinois Trust Code pages (760 ILCS 3, Articles 4, 5, 8 and 12) would not load for the research runs. Claims that rest on them are marked `pending, needs Dalaun` in the research files and listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md). Q4, Q8 and Q13 are affected. Nothing here treats them as traced.
+Illinois decides a trust's residence by the grantor's domicile on the day it stops being a grantor trust (or a decedent's at death), not by the state the instrument names (35 ILCS 5/1501(a)(20); [Q22](../research/Q22.md) claims 6, 9 and 17 to 19). Today the founder lands in the Illinois branch: he is domiciled in Illinois and would be the Illinois trustee. The out branch would need his domicile outside Illinois on that day, or too few Illinois contacts under Linn. Illinois-source income stays taxable either way. Any claim that a Wyoming or Delaware situs by itself lowers the trust's Illinois income tax fails this check.
+
+## Illinois text
+
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Dalaun also copied the Linn opinion (paragraphs 29 and 33 traced in Q22). Wyoming's perpetuities section (34-1-139) and the State of Wyoming's no-income-tax statement are in Q22, copied by Grokbot and checked by Claude; nothing is pending on Dalaun's statute pages. The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
 
 ## What this memo does not do
 

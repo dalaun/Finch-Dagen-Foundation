@@ -18,7 +18,6 @@ Read in this order: the [memo](MEMO.md) first, then each question below with its
 - **Q16. How should the Family Trust hold the asset, and what must be on paper for the checks?** Confidence: open. [Q16](../research/Q16.md)
 - **Q17. How big must the asset be to fund a 10 percent Foundation share and still beat doing nothing?** Confidence: open. [Q17](../research/Q17.md)
 - **Q18. What financing, lender-consent and insurance questions does an LLC held by the Family Trust raise?** Confidence: open. [Q18](../research/Q18.md)
-- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. Illinois or state text pending, needs Dalaun (4 claims). [Q22](../research/Q22.md)
 - **Q19. Can any operating-company or business-trust equity go to the Foundation, and how much?** Confidence: likely. [Q19](../research/Q19.md)
 - **Q25. Does the founder file as single or as married filing jointly, and how does that change what the structure saves?** Confidence: open. [Q25](../research/Q25.md)
 - **Q29. If the beneficiaries are minors, does holding the asset in the Family Trust still make sense?** Confidence: likely. [Q29](../research/Q29.md)

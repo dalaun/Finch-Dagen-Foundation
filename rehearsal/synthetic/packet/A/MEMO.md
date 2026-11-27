@@ -33,16 +33,22 @@ Stated first so the reader can see which A questions could read as a business or
 - Q7: none
 - Q10: none
 - Q13: the trust would later hold LLC interests in a business or rental, which could read as a business or investment interest.
+- Q22: none
 - Q23: none
 - Q27: none
 - Q28: none
+- Q38: none
+- Q39: none
+- Q40: the benefits come through an operating or management company, which could read as a business or investment interest.
 
 ## Risks
 
 - Packet A's trustee terms rest on packet B's answers (next section). If B answers Q3 or Q8 differently, the terms are redrafted.
 - The founder keeping powers over distributions can make the trust a grantor trust (IRC 674(a)) or pull property into his estate (Q7). Neither is settled.
 - Any part flagged above may be outside a prepaid plan's scope.
-- Illinois Trust Code text could not be loaded by the research runs; claims resting on it are pending (see below). Nothing treats them as traced.
+- An Illinois trust protector may be given power to change beneficiaries' interests or to remove and appoint trustees (760 ILCS 3/808(d)(2), (d)(4)); without limits either power makes the trust a grantor trust (Q8). A trustee's acceptance should be signed before the trust takes title, since 120 days of silence is a decline (Q13).
+- A trust that fails the U.S. court test or control test is foreign; if the founder funds it and family in the U.S. benefit, it is his grantor trust and owes foreign-trust notices and returns, with penalties from $10,000 (Q39).
+- A Wyoming or Delaware situs does not move the Family Trust's Illinois income tax while the founder is domiciled in Illinois (Illinois residence test, below).
 
 ## What packet A rests on from packet B
 
@@ -63,15 +69,19 @@ Illinois situs for the Family Trust is the research's working assumption, not a 
 Each is `likely` or `open`; what the lawyer decides on each is stated in the cover and in the linked file.
 
 - **Q2. Will the Family Trust pay out all of its income each year, or keep part of it?** Confidence: likely. [Q2](../research/Q2.md)
-- **Q4. Can the instrument split the trusteeship (administrative trustee and special distribution trustee) and who serves as independent distribution trustee?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). [Q4](../research/Q4.md)
+- **Q4. Can the instrument split the trusteeship (administrative trustee and special distribution trustee) and who serves as independent distribution trustee?** Confidence: open. [Q4](../research/Q4.md)
 - **Q5. Is his power to remove the distribution trustee limited to appointing an independent one?** Confidence: likely. [Q5](../research/Q5.md)
 - **Q6. Should income be mandatory in fixed shares, and how do shares adjust for a death or after-born child?** Confidence: open. [Q6](../research/Q6.md)
 - **Q7. Do the powers he keeps cause gift or estate tax problems for the funder?** Confidence: open. [Q7](../research/Q7.md)
 - **Q10. How do distributions for minor children stay separate from his support duties?** Confidence: likely. [Q10](../research/Q10.md)
-- **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). [Q13](../research/Q13.md)
-- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. Illinois or state text pending, needs Dalaun (1 claim). [Q23](../research/Q23.md)
+- **Q13. What must the Family Trust have before it can hold title to an asset?** Confidence: open. [Q13](../research/Q13.md)
+- **Q22. Which state's law should govern the Family Trust, and where should it be administered?** Confidence: open. [Q22](../research/Q22.md)
+- **Q23. Does the Family Trust, or an Illinois Foundation, have to register or report to the Illinois Attorney General?** Confidence: open. [Q23](../research/Q23.md)
 - **Q27. How many adult beneficiaries will the Family Trust have?** Confidence: likely. [Q27](../research/Q27.md)
 - **Q28. What would an unrelated individual trustee really charge, and will one serve?** Confidence: open. [Q28](../research/Q28.md)
+- **Q38. Without moving, what can an Illinois founder lawfully get from a Delaware or Wyoming trust, and what can't he?** Confidence: open. [Q38](../research/Q38.md)
+- **Q39. Is each trust in the stack a domestic trust, and if any is foreign, who is taxed on it and what must be filed?** Confidence: likely. [Q39](../research/Q39.md)
+- **Q40. For each promise in the old trust paperwork, what is the lawful way to deliver it, and who provides it?** Confidence: likely. [Q40](../research/Q40.md)
 
 ## Synthetic figures
 
@@ -83,9 +93,30 @@ All figures come from the seeded synthetic year (`rehearsal/synthetic`), not any
 - `asset_sized` (150,000 a year of asset income, ASSUMPTION): route R2 is about even with doing nothing (+13 a year; +1,592 before the PR 94 fix), consistent with the 20,200 extra the engine now needs on top of 150,000.
 - `asset_sized_pipeline` (350,000 a year, ASSUMPTION): route R2 beats doing nothing by 26,384 a year; with the 10 percent Foundation share, by 2,029.
 
-## Pending Illinois text
+## Illinois residence test
 
-The Illinois Trust Code pages (760 ILCS 3, Articles 4, 5, 8 and 12) would not load for the research runs. Claims that rest on them are marked `pending, needs Dalaun` in the research files and listed in [../NEEDS-DALAUN.md](../NEEDS-DALAUN.md). Q4, Q8 and Q13 are affected. Nothing here treats them as traced.
+Dalaun's standing check (2026-11-26): a trust named under another state's law can be an Illinois trust, and there is a way it is not. Illinois decides by the grantor's or decedent's domicile at one moment, never by the state the instrument names (35 ILCS 5/1501(a)(20); traced in [Q22](../research/Q22.md) claims 6, 9 and 17 to 19; the full test is in `rehearsal/synthetic/NON-GRANTOR-ROUTES.md`).
+
+- **Illinois branch:** a living trust is resident if its grantor was domiciled in Illinois when it became irrevocable; a trust made by will, if the decedent died domiciled in Illinois.
+- **Not yet tested:** for this rule a trust counts as irrevocable only while the grantor is not taxed as its owner, so the test runs on the day it stops being a grantor trust. Counsel confirms that timing.
+- **Out branch:** a grantor domiciled outside Illinois on that day leaves it a nonresident; Linn held that Illinois cannot tax a trust whose only Illinois contact is the grantor's residence (para. 29) and that had nothing in and sought nothing from Illinois (para. 33).
+- **Either branch:** a nonresident trust still owes Illinois tax on Illinois-source income, such as an Illinois rental.
+- **Where the founder lands today:** the Illinois branch, if he is the grantor; the test runs on the grantor's domicile, so counsel confirms who the grantor is (Q38). He is domiciled in Illinois and would be the Illinois trustee. To land in the out branch, his domicile would have to be outside Illinois on the day the trust stops being a grantor trust, or the trust would need too few Illinois contacts under Linn, which an Illinois trustee rules out.
+- **Fails the check:** any claim that a Wyoming or Delaware situs, a Wyoming trustee, or a protector's move of situs by itself lowers the trust's Illinois income tax. Another state may still buy protection and control.
+
+## Out-of-state routes without moving
+
+How Illinois residents hold Delaware or Wyoming trusts without moving, each graded for this founder ([Q38](../research/Q38.md)). Illinois's rate on trust income is 4.95 percent plus 1.5 percent replacement tax.
+
+- **Grantor trust in Delaware or Wyoming** (asset protection or dynasty trust): no Illinois tax change; buys protection, duration and directed-trust tools.
+- **Founder as Delaware investment adviser:** Delaware allows it, not as trustee; keeps investment control; no tax change, and an Illinois advisor is an Illinois contact under Linn.
+- **Non-grantor trust with too few Illinois contacts:** the only route that changes Illinois tax, and only if trustee, protector, beneficiaries, property and administration all leave Illinois; his own trusteeship rules it out.
+- **Incomplete-gift non-grantor trust (ING):** no gain in Illinois; it becomes an Illinois resident trust the day it is non-grantor.
+- **P.O. box, registered agent or shell company:** changes nothing; Illinois tests his domicile, and a real Delaware trust needs a Delaware trustee who does real work there.
+
+## Illinois text
+
+Dalaun copied the Illinois Trust Code (760 ILCS 3), the Charitable Trust Act (760 ILCS 55) and 35 ILCS 5/1501 on 2026-11-26, and Q4, Q8, Q13, Q22, Q23 and Q28 are traced to that text. Dalaun also copied the Linn opinion (paragraphs 29 and 33 traced in Q22). Wyoming's perpetuities section (34-1-139) and the State of Wyoming's no-income-tax statement are in Q22, copied by Grokbot and checked by Claude; nothing is pending on Dalaun's statute pages. The Illinois rates in 35 ILCS 5/201 were read on 2026-11-26 and are traced in Q34.
 
 ## What this memo does not do
 
