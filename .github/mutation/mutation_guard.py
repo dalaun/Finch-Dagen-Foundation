@@ -76,7 +76,7 @@ def norm(s: str) -> str:
 def workflow_runs(root: Path, wf_dir: str) -> dict[str, str]:
     """Workflow file -> its text, for workflows that run on pull requests."""
     out = {}
-    d = root / wf_dir
+    d = root.joinpath(wf_dir)
     for f in sorted(list(d.glob("*.yml")) + list(d.glob("*.yaml"))) if d.is_dir() else []:
         text = f.read_text()
         if re.search(r"^\s*pull_request(_target)?\s*:", text, re.M) or re.search(r"^on:\s*\[?.*pull_request", text, re.M):
@@ -116,7 +116,7 @@ def discovered(root: Path, rules: list[dict]) -> set[str]:
                 continue
             if rx:
                 try:
-                    if not rx.search((root / f).read_text(errors="replace")):
+                    if not rx.search(root.joinpath(f).read_text(errors="replace")):
                         continue
                 except (OSError, UnicodeDecodeError):
                     continue
@@ -154,7 +154,7 @@ def static(root: Path, cfg: dict) -> list[tuple[str, str, str]]:
 
 
 def skipped(root: Path, c: dict) -> bool:
-    return any(not (root / r).exists() for r in c.get("requires", []))
+    return any(not (root.joinpath(r)).exists() for r in c.get("requires", []))
 
 
 # ------------------------------------------------------------------ mutants
@@ -212,8 +212,8 @@ def run_check(root: Path, cfg: dict, c: dict, verbose: bool) -> list[tuple[str, 
         if r.returncode:
             return [("CONFIG", c["id"], "could not make a worktree: " + r.stderr.strip())]
         for link in cfg.get("link", []):
-            if (root / link).exists() and not (wt / link).exists():
-                os.symlink(root / link, wt / link)
+            if (root.joinpath(link)).exists() and not (wt / link).exists():
+                os.symlink(root.joinpath(link), wt / link)
         for step in c.get("setup", []):
             code, out, _ = sh(step, wt, c.get("timeout", 900))
             if code:
