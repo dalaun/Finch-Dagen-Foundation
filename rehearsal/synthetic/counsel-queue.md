@@ -441,3 +441,232 @@ Each entry has a stable id (Q1, Q2, ...). Moves in [../loop/NEXT-MOVES.md](../lo
 - If counsel says otherwise: scratch runs on the base year (not committed): 40,000 gives a break-even of 224,500 a year with an unrelated individual trustee (route R2), 120,000 gives 116,800, against 170,300 at 73,382.
 - Status: assumed, awaiting Dalaun
 
+
+## Q38. How many failed reimbursements make a "pattern of abuse" under Reg. 1.62-2(k)?
+
+- Key: `accountable-plan-abuse-threshold`
+- Raised by: DECLARED-PLAN.md, check AP5
+- For: CPA
+- Question: How many late receipts or unreturned advances can the management company's accountable plan have in a year before the IRS could treat every reimbursement under it as wages?
+- Changes decision: whether one bad month costs only that payment or the whole year's reimbursements, and so how strict the monthly close must be.
+- ASSUMPTION: half or more of a year's payments failing a test is a pattern; below that, only the failed payments are wages (see Q40). A flag, not a safe harbor.
+- Primary cite: Treas. Reg. 1.62-2(k), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26, LII reproduction).
+- What the text says (as read, not a conclusion): (k) says a pattern of abuse makes "all payments made under the arrangement" nonaccountable. It gives no number.
+- If counsel says otherwise: a lower threshold turns more synthetic years red; AP5's ABUSE_SHARE changes in declared_plan.py.
+- Status: assumed, awaiting counsel
+
+## Q39. Must the accountable plan be in writing and adopted before the first reimbursement?
+
+- Key: `accountable-plan-written-first`
+- Raised by: DECLARED-PLAN.md, check DP0
+- For: CPA
+- Question: Does the management company need a written accountable plan adopted before it reimburses me, or can an unwritten practice qualify?
+- Changes decision: whether adopting the plan is a step before the first reimbursement or can follow it.
+- ASSUMPTION: the rehearsal requires a written plan dated before the first payment, as the evidence that an arrangement existed.
+- Primary cite: Treas. Reg. 1.62-2(c)(1) and (d)(1), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26).
+- What the text says (as read, not a conclusion): the regulation tests an "arrangement" against (d), (e) and (f); the parts read do not say it must be written.
+- If counsel says otherwise: DP0 becomes advice rather than a test.
+- Status: assumed, awaiting counsel
+
+## Q40. If one reimbursement fails, is only that payment wages?
+
+- Key: `accountable-plan-single-failure`
+- Raised by: DECLARED-PLAN.md, reconcile step
+- For: CPA
+- Question: Under a plan that otherwise meets Reg. 1.62-2, if I miss the deadline on one receipt or one advance, is only that amount wages, or does the whole plan fail?
+- Changes decision: how much one late receipt costs.
+- ASSUMPTION: only the failed payment (or the unreturned excess) is wages, unless AP0 or AP5 fails.
+- Primary cite: Treas. Reg. 1.62-2(c)(3)(i) and (k), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26). The per-payment rule was not read.
+- What the text says (as read, not a conclusion): (c)(3)(i) treats all amounts as nonaccountable when the arrangement does not satisfy (d), (e) or (f); whether one employee's single lapse is an arrangement failure was not settled by the parts read.
+- If counsel says otherwise: one late receipt makes the year's reimbursements wages; the reconcile step in declared_plan.py changes.
+- Status: assumed, awaiting counsel
+
+## Q41. Should the Foundation reimburse a foundation manager only under an accountable-plan-style policy, approved by others?
+
+- Key: `foundation-expense-policy`
+- Raised by: DECLARED-PLAN.md, checks FR3 and FR4
+- For: lawyer
+- Question: When the Foundation reimburses me as a foundation manager, should it use a written expense policy like an accountable plan, approved by people other than me, to show the payment is reasonable, necessary and not excessive?
+- Changes decision: whether FR3 and FR4 are required controls or optional good practice.
+- ASSUMPTION: both are required in the rehearsal.
+- Primary cite: IRC 4941(d)(2)(E); Treas. Reg. 53.4941(d)-3(c)(1) (register D2).
+- What the text says (as read, not a conclusion): the regulation excepts reimbursement that is reasonable, necessary to the exempt purpose and not excessive; it does not name a policy or an approver.
+- If counsel says otherwise: FR3 and FR4 become advice.
+- Status: assumed, awaiting counsel
+
+## Q42. What does Reg. 53.4945-5 require before an expenditure-responsibility grant is paid?
+
+- Key: `expenditure-responsibility-agreement`
+- Raised by: DECLARED-PLAN.md, check ER1
+- For: lawyer
+- Question: Before the Foundation pays a grant to an organization that is not a public charity, what written agreement, pre-grant inquiry and report schedule does the regulation require?
+- Changes decision: what the grant file must hold before money moves.
+- ASSUMPTION: a written agreement stating the purpose, signed before payment.
+- Primary cite: IRC 4945(h) (traced, packet/research/Q35.md). Treas. Reg. 53.4945-5 not traced.
+- What the text says (as read, not a conclusion): 4945(h) names three duties; the regulation that spells them out was not read.
+- If counsel says otherwise: ER1 changes to the regulation's list.
+- Status: assumed, awaiting counsel
+
+## Q43. What happens if the Foundation's activities drift from what it described in Form 1023?
+
+- Key: `form-1023-narrative-drift`
+- Raised by: DECLARED-PLAN.md, checks EX2 and EX3
+- For: lawyer
+- Question: If the Foundation later runs programs different from those described in its Form 1023, what must it report, where, and what is at risk?
+- Changes decision: how tightly the Form 1023 narrative should be written, and whether new programs need a report before they start.
+- ASSUMPTION: activities must stay inside the narrative and material changes must be reported; the consequence is unknown. EX2 and EX3 stay amber.
+- Primary cite: IRC 508(a); Reg. 1.508-1(a)(2)(i) (register D11). No text on drift was read.
+- What the text says (as read, not a conclusion): 508(a) requires notice on Form 1023; nothing read says what drifting from it costs.
+- If counsel says otherwise: EX2 and EX3 get a traced consequence.
+- Status: assumed, awaiting counsel
+
+## Q44. Can an accountable plan be amended to cover a reimbursement already paid?
+
+- Key: `accountable-plan-no-retro-amendment`
+- Raised by: DECLARED-PLAN.md, check DP3
+- For: CPA
+- Question: If the management company changes its accountable plan (for example, a longer receipt deadline), does the change reach payments made before it was adopted, or only later ones?
+- Changes decision: whether fixing a missed deadline by amending the plan is ever possible, and whether amendments need a dated adoption record.
+- ASSUMPTION: an amendment counts only from the day it is adopted, whatever effective date it claims; each payment is held to the terms in force when it was paid. The 60/120-day fixed date method still caps any declared term.
+- Primary cite: Treas. Reg. 1.62-2(c)(1), (d), (e), (f), (g)(2)(i), https://www.law.cornell.edu/cfr/text/26/1.62-2 (read 2026-11-26). No text on amendments was read.
+- What the text says (as read, not a conclusion): the regulation tests the "arrangement" and the time each step took; the parts read do not mention amending a plan.
+- If counsel says otherwise: DP3 loosens, and terms_in_force in declared_plan.py honours a stated effective date.
+- Status: assumed, awaiting counsel
+
+## Q45. Is the economic substance doctrine relevant to the routes that use a tool Congress wrote for that purpose?
+
+- Key: `economic-substance-relevance`
+- Raised by: SUBSTANCE.md, check SB0
+- For: lawyer
+- Question: For routes like a company health plan, a 401(k) or a non-grantor trust with independent trustees, is the economic substance doctrine relevant at all, or does using the tool as Congress designed it settle the question?
+- Changes decision: whether SB2 to SB4 can ever deny the benefit on those routes, and how much paper each route needs.
+- ASSUMPTION: every route with a federal tax benefit is treated as relevant, except an individual's personal transaction. This is the cautious reading: a route that passes here passes even if relevance is found.
+- Primary cite: IRC 7701(o)(1), (o)(5)(B), (o)(5)(C); Patel v. Commissioner, 165 T.C. No. 10 (2025) (relevance is a separate question); Liberty Global (D. Colo. 2023) (contrary view); Notice 2010-62 (no list of transactions). Read 2026-11-26, through The Tax Adviser's quotes; the official statute text and the Joint Committee explanation were not read.
+- What the text says (as read, not a conclusion): (o)(5)(C) sends relevance back to the law before 2010; the IRS says it won't publish a list either way.
+- If counsel says otherwise: SB0 marks those routes "not relevant" and SB2 to SB4 become advice for them, not tests.
+- Status: assumed, awaiting counsel
+
+## Q46. Does the non-tax purpose have to be written down before the route starts?
+
+- Key: `substance-purpose-written-first`
+- Raised by: SUBSTANCE.md, check SB1
+- For: lawyer
+- Question: To show a substantial non-tax purpose, does it help, or matter, that the purpose was written and dated before the first step, rather than explained later?
+- Changes decision: whether every route opens with a dated purpose statement.
+- ASSUMPTION: the rehearsal requires a dated written purpose before the first step, as evidence, the same as the accountable plan's DP0 (Q39).
+- Primary cite: IRC 7701(o)(1)(B) (read 2026-11-26). Nothing read says the purpose must be written.
+- What the text says (as read, not a conclusion): (o)(1)(B) asks for a substantial purpose apart from federal income tax; it says nothing about when or how it is recorded.
+- If counsel says otherwise: SB1 becomes good practice rather than a fail.
+- Status: assumed, awaiting counsel
+
+## Q47. Is each step tested on its own, or only the whole series?
+
+- Key: `substance-per-step`
+- Raised by: SUBSTANCE.md, check SB2
+- For: lawyer
+- Question: If one step of a route does nothing apart from tax but the route as a whole has substance, can that step's tax result be denied?
+- Changes decision: whether a route can include a tax-only step at all.
+- ASSUMPTION: every step must change something real apart from tax. This is stricter than the statute, which judges the transaction and lets a series count as one; it is never looser.
+- Primary cite: IRC 7701(o)(5)(D) ("The term "transaction" includes a series of transactions."); Notice 2010-62 Background; Court Holding (register A3). Read 2026-11-26.
+- What the text says (as read, not a conclusion): the statute lets a series be judged together; nothing read says a single step inside a sound series is tested alone.
+- If counsel says otherwise: SB2 turns amber for a tax-only step inside a series that passes SB3.
+- Status: assumed, awaiting counsel
+
+## Q48. Is a board independent when the owner can appoint and remove its members?
+
+- Key: `hiring-board-independence`
+- Raised by: HIRING.md, check HA4
+- For: lawyer
+- Question: If the owner appoints and can remove the directors who approve hires and pay, does their approval still count as independent evidence of reasonable pay?
+- Changes decision: who sits on the approving board, and whether removal needs cause.
+- ASSUMPTION: approvers with no stake who aren't the owner's 318 family count as independent. An independence_unsettled flag turns HA4 amber.
+- Primary cite: IRC 162(a)(1); 4941(d)(2)(E) for the Foundation. Nothing read defines board independence for these purposes.
+- Status: assumed, awaiting counsel
+
+## Q49. What pay band counts as market?
+
+- Key: `hiring-market-band`
+- Raised by: HIRING.md, check HA1
+- For: CPA
+- Question: How far from a market comparable can pay be and still be reasonable compensation?
+- Changes decision: what pay the board can approve.
+- ASSUMPTION: 80% to 110% of a market comparable.
+- Primary cite: IRC 162(a)(1) ("a reasonable allowance for salaries"). The band is not in the statute.
+- Status: assumed, awaiting counsel
+
+## Q50. Are sham hires left out of the owner-limit tests?
+
+- Key: `hiring-disregard-sham`
+- Raised by: HIRING.md, checks HA1 and HA2
+- For: lawyer
+- Question: A hire with no real work, made only so the owner's share falls under 5% or 25%: is that person left out of the 127, 129 and 125 tests?
+- Changes decision: whether the run's choice to disregard such hires is right.
+- ASSUMPTION: disregarded, so they never help the owner pass.
+- Primary cite: IRC 7701(o)(1); substance over form (SUBSTANCE.md).
+- Status: assumed, awaiting counsel
+
+## Q51. Does Lender Management fit a manager whose clients are the founder's own trusts?
+
+- Key: `hiring-lender-family-office`
+- Raised by: HIRING.md, checks FO1 to FO5
+- For: lawyer
+- Question: Lender Management was held to carry on a trade or business under 162. Would Canon Management managing the stack's trusts and Foundation for a fee or profits interest qualify, when the founder is trustee of the clients and owner of the manager? Does an independent co-trustee approving the agreement meet the heightened scrutiny?
+- Changes decision: whether the management company's costs are 162 business expenses or 212 investment expenses.
+- ASSUMPTION: FO5 stays amber until counsel reads it.
+- Primary cite: Lender Management, LLC v. Commissioner, T.C. Memo. 2017-246 (caption read; opinion text not read; facts from The Tax Adviser, Aug. 2018, and EY and Shearman summaries); Higgins v. Commissioner, 312 U.S. 212 (1941). A Foundation paying a disqualified manager is also a 4941 question.
+- Status: assumed, awaiting counsel
+
+## Q52. Are AI tools an ordinary business cost and never employees?
+
+- Key: `hiring-ai-cost`
+- Raised by: HIRING.md, check AI0
+- For: CPA
+- Question: Are AI tool subscriptions a deductible 162 cost, and is it right that they count for nothing in headcount or the owner-limit tests?
+- Changes decision: how the run prices AI and whether it moves any limit.
+- ASSUMPTION: deductible cost; never employees.
+- Primary cite: IRC 162(a); the benefit sections speak of employees, who are people (127(c)(2), 129(e)(3), 125(d)(1)(A)).
+- Status: assumed, awaiting counsel
+
+## Q53. If the company pays household staff, what is the payment to the owner?
+
+- Key: `hiring-household-payment`
+- Raised by: HIRING.md, household case
+- For: CPA
+- Question: When a C corporation pays a maid or butler who serves the owner's home, is it pay to the owner, a dividend, or both, and what does the owner then owe as household employer?
+- Changes decision: how the household case is taxed.
+- ASSUMPTION: not deductible to the company; treated as a payment to the owner; the owner files Schedule H.
+- Primary cite: IRC 262(a); IRS Topic 756; Pub. 926 (2026).
+- Status: assumed, awaiting counsel
+
+## Q54. Can the company deduct rent for board meetings at the founder's home?
+
+- Key: `home-board-meeting-rent`
+- Raised by: SUBSTANCE.md, route R-280Ag
+- For: CPA
+- Question: 280A(g) leaves out of the founder's income rent for a home rented under 15 days a year. Can Canon Management deduct that rent under 162 for real board meetings at fair rent, and what records does it need?
+- Changes decision: whether the route is worth running at all.
+- ASSUMPTION: deductible only for real meetings, with minutes, an outside approver and a fair-rent comparable; and the rented space then can't also be claimed as a home office (280A(c)(6)).
+- Primary cite: IRC 280A(g) (read 2026-11-26). It speaks only to the owner's side. The payer's deduction, and any cases on it, were not read.
+- Status: assumed, awaiting counsel
+
+## Q55. Does Canon Management's stock qualify under 1202?
+
+- Key: `qsbs-canon-management`
+- Raised by: SUBSTANCE.md, route R-1202
+- For: lawyer
+- Question: If most of Canon Management's income is consulting, is it outside 1202 under (e)(3)(A)? What mix of software or product income, and what share of assets, would bring it inside?
+- Changes decision: whether to keep consulting and software in one company or split them.
+- ASSUMPTION: amber; likely fails while consulting is most of the business.
+- Primary cite: IRC 1202(c)(1), (e)(1)(A), (e)(3)(A) (read 2026-11-26). Holding period, the gross-assets limit and the exclusion amounts were not read.
+- Status: assumed, awaiting counsel
+
+## Q56. Can notices go to a designated representative instead of a beneficiary?
+
+- Key: `quiet-trust-representative`
+- Raised by: SUBSTANCE.md, promise map, secrecy row
+- For: lawyer
+- Question: Under the Illinois Trust Code, does notice to a designated representative under Section 307 satisfy the trustee's duty to tell a qualified beneficiary (813.1)? And would a Delaware or Wyoming trust allow a longer quiet period?
+- Changes decision: how much the family trust's beneficiaries must be told, and when.
+- ASSUMPTION: the duty stands; a representative helps only for beneficiaries under 30 or not yet born, if Section 301 lets notice go through the representative.
+- Primary cite: 760 ILCS 3/307 (read 2026-11-26; it says "represent and bind" and doesn't mention notices). 760 ILCS 3/301, 105(b) and the Delaware and Wyoming statutes were not read here.
+- Status: assumed, awaiting counsel

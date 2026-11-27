@@ -1,0 +1,359 @@
+{
+  "label": "SYNTHETIC. Roles only, no real amounts, names or accounts. Every amount and rate is a placeholder labelled ASSUMPTION. Design and education, not legal or tax advice.",
+  "year": 2026,
+  "rates": {
+    "label": "ASSUMPTION placeholders for showing the cost of failing a plan; not the founder's brackets",
+    "employee_income_tax_marginal": 0.22,
+    "state_income_tax": 0.0495,
+    "employee_fica": 0.0765,
+    "employer_fica": 0.0765
+  },
+  "plans": [
+    {
+      "id": "AP-mgmt",
+      "instance": "accountable_plan",
+      "label": "Management company (C corporation) reimburses the founder, its employee, under a written accountable plan",
+      "payor_role": "management_company",
+      "payee_role": "founder_employee",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "substantiation_days": 60,
+        "advance_max_days_before_expense": 30,
+        "return_excess_days": 120,
+        "method": "fixed_date",
+        "covered_lines": [
+          "home_office",
+          "mileage",
+          "phone"
+        ]
+      },
+      "facts": {
+        "home_office_for_convenience_of_employer": true,
+        "home_rented_to_employer": false,
+        "founder_is_employee_not_disregarded_owner": true
+      },
+      "events": [
+        {
+          "id": "e1",
+          "line": "home_office",
+          "business_purpose": "administrative work for client engagements",
+          "incurred": "2026-01-31",
+          "paid": "2026-02-05",
+          "advance": 0,
+          "amount": 150,
+          "substantiated": "2026-02-03",
+          "excess_returned": null,
+          "evidence": [
+            "square_footage_worksheet",
+            "utility_bills"
+          ]
+        },
+        {
+          "id": "e2",
+          "line": "mileage",
+          "business_purpose": "client site visit",
+          "incurred": "2026-02-10",
+          "paid": "2026-02-20",
+          "advance": 0,
+          "amount": 84,
+          "substantiated": "2026-02-12",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "e3",
+          "line": "phone",
+          "business_purpose": "client calls, business share from a 30-day log",
+          "incurred": "2026-02-28",
+          "paid": "2026-03-05",
+          "advance": 0,
+          "amount": 40,
+          "substantiated": "2026-03-02",
+          "excess_returned": null,
+          "evidence": [
+            "bill",
+            "business_use_log"
+          ]
+        },
+        {
+          "id": "e4",
+          "line": "mileage",
+          "business_purpose": "conference travel",
+          "incurred": "2026-03-20",
+          "paid": "2026-03-01",
+          "advance": 300,
+          "amount": 210,
+          "substantiated": "2026-04-02",
+          "excess_returned": "2026-04-10",
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP-mgmt-late",
+      "instance": "accountable_plan",
+      "label": "Same plan, run badly: one receipt 95 days late and one unreturned advance excess, two of three payments, which crosses the pattern threshold",
+      "payor_role": "management_company",
+      "payee_role": "founder_employee",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "substantiation_days": 60,
+        "advance_max_days_before_expense": 30,
+        "return_excess_days": 120,
+        "method": "fixed_date",
+        "covered_lines": [
+          "home_office",
+          "mileage",
+          "phone"
+        ]
+      },
+      "facts": {
+        "home_office_for_convenience_of_employer": true,
+        "home_rented_to_employer": false,
+        "founder_is_employee_not_disregarded_owner": true
+      },
+      "events": [
+        {
+          "id": "f1",
+          "line": "phone",
+          "business_purpose": "client calls",
+          "incurred": "2026-01-31",
+          "paid": "2026-02-05",
+          "advance": 0,
+          "amount": 40,
+          "substantiated": "2026-05-06",
+          "excess_returned": null,
+          "evidence": [
+            "bill",
+            "business_use_log"
+          ]
+        },
+        {
+          "id": "f2",
+          "line": "mileage",
+          "business_purpose": "client site visit",
+          "incurred": "2026-02-10",
+          "paid": "2026-02-01",
+          "advance": 500,
+          "amount": 120,
+          "substantiated": "2026-02-15",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "f3",
+          "line": "home_office",
+          "business_purpose": "administrative work",
+          "incurred": "2026-02-28",
+          "paid": "2026-03-05",
+          "advance": 0,
+          "amount": 150,
+          "substantiated": "2026-03-03",
+          "excess_returned": null,
+          "evidence": [
+            "square_footage_worksheet",
+            "utility_bills"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP-mgmt-windows",
+      "instance": "accountable_plan",
+      "label": "Known bad: declared windows longer than the fixed date method (45-day advance, 150-day return); an advance paid 40 days early and excess returned on day 130",
+      "payor_role": "management_company",
+      "payee_role": "founder_employee",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "substantiation_days": 60,
+        "advance_max_days_before_expense": 45,
+        "return_excess_days": 150,
+        "method": "fixed_date",
+        "covered_lines": [
+          "home_office",
+          "mileage",
+          "phone"
+        ]
+      },
+      "facts": {
+        "home_office_for_convenience_of_employer": true,
+        "home_rented_to_employer": false,
+        "founder_is_employee_not_disregarded_owner": true
+      },
+      "events": [
+        {
+          "id": "e1",
+          "line": "mileage",
+          "business_purpose": "conference travel",
+          "incurred": "2026-03-20",
+          "paid": "2026-02-08",
+          "advance": 300,
+          "amount": 300,
+          "substantiated": "2026-03-25",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "e2",
+          "line": "mileage",
+          "business_purpose": "client site visits",
+          "incurred": "2026-04-10",
+          "paid": "2026-04-01",
+          "advance": 400,
+          "amount": 250,
+          "substantiated": "2026-04-20",
+          "excess_returned": "2026-08-18",
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "AP-mgmt-abuse",
+      "instance": "accountable_plan",
+      "label": "Same plan, with late receipts and unreturned excess as the routine (the pattern-of-abuse case)",
+      "payor_role": "management_company",
+      "payee_role": "founder_employee",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "substantiation_days": 60,
+        "advance_max_days_before_expense": 30,
+        "return_excess_days": 120,
+        "method": "fixed_date",
+        "covered_lines": [
+          "home_office",
+          "mileage",
+          "phone"
+        ]
+      },
+      "facts": {
+        "home_office_for_convenience_of_employer": true,
+        "home_rented_to_employer": false,
+        "founder_is_employee_not_disregarded_owner": true
+      },
+      "events": [
+        {
+          "id": "g1",
+          "line": "phone",
+          "business_purpose": "client calls",
+          "incurred": "2026-01-31",
+          "paid": "2026-02-05",
+          "advance": 0,
+          "amount": 40,
+          "substantiated": "2026-05-06",
+          "excess_returned": null,
+          "evidence": [
+            "bill"
+          ]
+        },
+        {
+          "id": "g2",
+          "line": "mileage",
+          "business_purpose": "client site visit",
+          "incurred": "2026-02-10",
+          "paid": "2026-02-01",
+          "advance": 500,
+          "amount": 120,
+          "substantiated": "2026-02-15",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "g3",
+          "line": "mileage",
+          "business_purpose": "client site visit",
+          "incurred": "2026-03-10",
+          "paid": "2026-03-01",
+          "advance": 500,
+          "amount": 100,
+          "substantiated": "2026-06-30",
+          "excess_returned": null,
+          "evidence": [
+            "log_time_place_purpose"
+          ]
+        },
+        {
+          "id": "g4",
+          "line": "home_office",
+          "business_purpose": "",
+          "incurred": "2026-03-31",
+          "paid": "2026-04-05",
+          "advance": 0,
+          "amount": 150,
+          "substantiated": null,
+          "excess_returned": null,
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "id": "FR-trustee",
+      "instance": "foundation_reimbursement",
+      "label": "Foundation reimburses a foundation manager's travel to a program site",
+      "payor_role": "foundation",
+      "payee_role": "foundation_manager",
+      "declared_on": "2026-01-02",
+      "terms": {
+        "policy": "written expense policy adopted by the board, rates capped at the management company's plan"
+      },
+      "facts": {
+        "expense_tied_to_named_program": true,
+        "approved_without_payee_vote": true,
+        "amount_at_or_below_documented_benchmark": true,
+        "substantiated_under_declared_policy": true
+      },
+      "events": []
+    },
+    {
+      "id": "ER-grant",
+      "instance": "expenditure_responsibility",
+      "label": "Foundation grant to a non-public-charity grantee for a named project",
+      "payor_role": "foundation",
+      "payee_role": "grantee_organization",
+      "declared_on": "2026-02-01",
+      "terms": {
+        "declared_purpose": "curriculum pilot",
+        "report_due_days_after_year_end": 90
+      },
+      "facts": {
+        "grantee_is_public_charity_or_exempt_operating": false,
+        "written_grant_agreement_states_purpose": true,
+        "spent_solely_for_declared_purpose": true,
+        "full_reports_obtained_from_grantee": true,
+        "reported_to_irs_on_990pf": null
+      },
+      "events": []
+    },
+    {
+      "id": "EX-1023",
+      "instance": "exemption_narrative",
+      "label": "Foundation's activities against the narrative it gave in Form 1023",
+      "payor_role": "foundation",
+      "payee_role": "none",
+      "declared_on": "2026-03-01",
+      "terms": {
+        "declared_activities": [
+          "program_A_grants",
+          "program_B_curriculum"
+        ]
+      },
+      "facts": {
+        "form_1023_filed_with_narrative": true,
+        "actual_activities_within_narrative": true,
+        "material_change_reported_on_990pf": null
+      },
+      "events": []
+    }
+  ]
+}
