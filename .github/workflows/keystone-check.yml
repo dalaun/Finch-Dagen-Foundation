@@ -62,5 +62,9 @@ jobs:
         run: python3 .github/lane/verifier_pass.py --selftest
       - name: Transition twin's own cases
         run: python3 rehearsal/transition_twin.py --selftest
+      - name: Blind-goal adversarial path - builder never sees the key, closest bad pattern and keystone at every step, counsel packet, grader says pass or fail only
+        run: python3 tests/rehearsal/blind_path.py --selftest
+      - name: No counsel-private material in the public repo
+        run: python3 tests/rehearsal/blind_path.py --privacy-scan
       - name: Vocabulary and compliance layers stay separated, with the same content as the original
         run: python3 validate_separated.py

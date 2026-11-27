@@ -600,6 +600,88 @@
      "replace": "status, detail = \"ok\", f\"stayed green: {m['why']}\""
     }
    ]
+  },
+  {
+   "id": "blind-path",
+   "source": [
+    "tests/rehearsal/blind_path.py",
+    "tests/rehearsal/blind-path/adversaries.json",
+    "rehearsal/synthetic/paths/demo-foundation-pay.json"
+   ],
+   "run": "python3 tests/rehearsal/blind_path.py --selftest",
+   "mutants": [
+    {
+     "id": "strawman-ok",
+     "why": "a builder that names an easy pattern instead of the closest must fail BG2",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "ok2 = scored[named][0] >= best",
+     "replace": "ok2 = True"
+    },
+    {
+     "id": "whole-match-ok",
+     "why": "a step that matches a known-bad pattern whole (lease to an insider, the abandoned trust text) must fail BG5",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "v5 = \"fail\" if known_whole else",
+     "replace": "v5 = \"pass\" if known_whole else"
+    },
+    {
+     "id": "keystone-trusts-builder",
+     "why": "a keystone verdict of supports on foundation value moving to an insider must fail BG6",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "elif must_block and verdict == \"supports\":",
+     "replace": "elif False:"
+    },
+    {
+     "id": "key-leak-unchecked",
+     "why": "key material in the builder's file must fail BG0 (answer flows one way)",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "res[\"path_checks\"].append((\"BG0\", \"fail\" if leaks or bad_in else \"pass\",",
+     "replace": "res[\"path_checks\"].append((\"BG0\", \"pass\","
+    },
+    {
+     "id": "key-moved-ok",
+     "why": "a key changed after its commitment must be refused (GR1)",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "if want is None or commit_of(k[\"case\"], k[\"verdict\"], k[\"salt\"]) != want:",
+     "replace": "if want is None:"
+    },
+    {
+     "id": "heldout-unlimited",
+     "why": "the held-out set graded past its budget must be refused (GR3)",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "if used >= cap:",
+     "replace": "if used >= cap + 99:"
+    },
+    {
+     "id": "partial-disclosure-ok",
+     "why": "a packet that leaves a material fact out of what counsel saw must fail CR2 (Reg. 1.6664-4(c)(1)(i))",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "v2 = \"fail\" if missing or changed else \"pass\"",
+     "replace": "v2 = \"pass\""
+    },
+    {
+     "id": "plr-as-key",
+     "why": "a private letter ruling used as a full answer key must fail BG7",
+     "file": "tests/rehearsal/blind_path.py",
+     "find": "\"plr\": \"weak\"",
+     "replace": "\"plr\": \"key\""
+    }
+   ]
+  },
+  {
+   "id": "blind-path-privacy",
+   "source": [],
+   "run": "python3 tests/rehearsal/blind_path.py --privacy-scan",
+   "mutants": [
+    {
+     "id": "counsel-memo-in-repo",
+     "why": "a counsel-private memo committed to the public repo must turn the scan red (the repo and AI logs are not privileged)",
+     "file": "rehearsal/planted-counsel-memo.md",
+     "write": "COUNSEL-PRIVATE\nSynthetic planted memo for the mutation guard.\n",
+     "track": true,
+     "expect": "PV1 fail"
+    }
+   ]
   }
  ]
 }

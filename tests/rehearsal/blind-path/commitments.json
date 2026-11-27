@@ -1,0 +1,6 @@
+{
+  "about": "Salted SHA-256 commitments to the held-out answer key: sha256('<case>|<verdict>|<salt>'). The case ids and goal questions are public; the verdicts and salts are not. The key itself lives where no builder session can read it (see rehearsal/11-blind-goal-adversarial-path.md, 'Where the key lives'). Empty until a person outside the builder writes the first held-out cases.",
+  "design_version": null,
+  "budget_per_design_version": 1,
+  "cases": {}
+}
