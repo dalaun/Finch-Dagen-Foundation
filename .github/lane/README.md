@@ -27,6 +27,12 @@ Green checks and a bot review are not a verdict (Lauren Tan's rule, from the not
 - **After the fact:** [lane-audit](../workflows/lane-audit.yml) runs daily (a github-actions merge starts no push workflow) and goes red if any merge not made by Dalaun lacked a valid pass. Red means: open a revert pull request for him.
 - **Who verifies whom:** the foundation badge (`dalaun-finchdagen-claude[bot]`) writes the rehearsal loop's pull requests; the verifier app (`dalaun-finchdagen-verifier`, a different GitHub App) only posts verdicts and never writes code. One cheap pass per head is enough; a fresh full run only for new behavior.
 
+## Copilot approval (a second reader for engine changes)
+
+The Verifier pass proves the verifier isn't the writer, but both are Claude. For a pull request that changes the engine or its inputs (the globs in `.github/lane/copilot-paths`), `copilot-approval.yml` also wants Copilot's approval on the exact head commit. Copilot runs models from other vendors. It only reads the code, so it adds to the Verifier pass and never replaces it. Every other pull request gets "Copilot approval" green straight away, at no cost.
+
+The verifier run asks for the review as Dalaun, so it comes out of his monthly Copilot AI credits; a review asked for automatically is billed to the author, and the badges have no Copilot license. Copilot's approval only counts once "Copilot can approve" is on for this repository. Until "Copilot approval" is a required check, the status is advice only.
+
 ## Why the line sits where it does
 
 An agent that could edit its own checks could make anything pass. So the agent lane holds the work and Dalaun's lane holds everything that judges the work:
