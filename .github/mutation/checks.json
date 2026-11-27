@@ -111,11 +111,11 @@
    "run": "python3 decide_spend.py",
    "mutants": [
     {
-     "id": "limit-x1000",
-     "why": "a spend over its limit must still be blocked when the limit is loosened 1000 times",
+     "id": "limit-plus-1000",
+     "why": "a holding over the 4943 line must still be flagged when the line is moved up 1000 points (a multiplier tightens a negative limit, so add)",
      "file": "decision/spend-decision-shapes.ttl",
      "find": "FILTER ( ?value > 0 && ?value > ?limit )",
-     "replace": "FILTER ( ?value > 0 && ?value > ?limit * 1000 )",
+     "replace": "FILTER ( ?value > 0 && ?value > ?limit + 1000 )",
      "expect": "mismatch"
     }
    ]
@@ -126,11 +126,11 @@
    "run": "python3 decide_spend.py --branch B",
    "mutants": [
     {
-     "id": "limit-x1000",
+     "id": "limit-plus-1000",
      "why": "the same loosened limit must fail the branch B answer key too",
      "file": "decision/spend-decision-shapes.ttl",
      "find": "FILTER ( ?value > 0 && ?value > ?limit )",
-     "replace": "FILTER ( ?value > 0 && ?value > ?limit * 1000 )",
+     "replace": "FILTER ( ?value > 0 && ?value > ?limit + 1000 )",
      "expect": "mismatch"
     }
    ]
@@ -208,7 +208,7 @@
    "mutants": [
     {
      "id": "selftest-catches-nothing",
-     "why": "the selftest must go red when the test it guards stops recording problems",
+     "why": "the selftest must go red when the check stops reporting a case that fails open on its own missing fact",
      "file": "validate_fail_closed.py",
      "find": "problems.append(f\"FC-A {ds.short(case)}: {ds.label(was)}, but Allow {what}\")",
      "replace": "None"
@@ -485,8 +485,7 @@
       },
       {
        "file": "trust-domain-vocabulary.ttl",
-       "find": "\n[] a owl:Class .\n",
-       "replace": "\n[] a owl:Class .\n\nep:NonGrantorTrustStatus owl:disjointWith ep:GrantorTrustStatus .\n"
+       "append": "\nep:NonGrantorTrustStatus owl:disjointWith ep:GrantorTrustStatus .\n"
       }
      ],
      "expect": "Authority axioms found in vocabulary"

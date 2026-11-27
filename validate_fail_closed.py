@@ -232,10 +232,12 @@ def main():
             print("  " + p)
         want = {"FC-A", "FC-B", "FC-C"}
         linked = any("linked record" in p for p in problems)
-        ok = caught == only and kinds == want and linked and sibling
+        # FC-A on the case itself, not only through a sibling ("... when X has ...").
+        direct = any(p.startswith("FC-A ") and " when " not in p for p in problems)
+        ok = caught == only and kinds == want and linked and sibling and direct
         print("selftest " + ("passed: the test catches missing facts, missing facts on linked records, "
                              "misspelled values in every model, and a missing fact that loosens another case." if ok
-                             else f"FAILED: missed {sorted(only - caught) or sorted(want - kinds) or ('a linked record' if not linked else 'a sibling case')}"))
+                             else f"FAILED: missed {sorted(only - caught) or sorted(want - kinds) or ('a linked record' if not linked else 'a sibling case' if not sibling else 'a case that fails open on its own missing fact')}"))
         return 0 if ok else 1
 
     branches = [args[args.index("--branch") + 1].upper()] if "--branch" in args else ["A", "B"]
